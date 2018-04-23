@@ -1,1 +1,1 @@
-print ("is it work?")
+print("is it work?")
