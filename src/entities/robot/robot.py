@@ -15,5 +15,13 @@ class Robot(object):
     def get_name(self):
         return self.name
 
+    @property
+    def get_limb_count(self):
+        return len(self.limbs)
+
+    @property
+    def get_light_count(self):
+        return len(self.lights)
+
 
 
