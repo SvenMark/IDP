@@ -1,11 +1,11 @@
-class Climbing(object):
+class Climb(object):
     """
     Should implement methods for climbing
     """
     raise NotImplementedError
 
 
-class Dancing(object):
+class Dance(object):
     """
     Should implement methods for dancing
     """
