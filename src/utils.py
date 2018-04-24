@@ -1,0 +1,1 @@
+# USE_GLOBAL_VAR_IN_CAPS = 'nani'
