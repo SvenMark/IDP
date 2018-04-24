@@ -1,6 +1,6 @@
 class Boris(object):
     """
-    Robot class
+    Boris class
     """
     raise NotImplementedError
 
