@@ -5,31 +5,33 @@ import cv2
 def run():
     print("run element7")
 
+    # define the list of boundaries: red, blue, yellow
+    boundaries = [
+        ([17, 15, 100], [50, 56, 200]),
+        ([86, 31, 4], [220, 88, 50]),
+        ([25, 146, 190], [62, 174, 250])
+    ]
+
     cap = cv2.VideoCapture(0)
     while True:
         ret, img = cap.read()
 
-        hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+        output = None
+        cnts = []
 
-        lower_blue = np.array([110, 100, 100])
-        upper_blue = np.array([130, 255, 255])
+        for (lower, upper) in boundaries:
+            # create NumPy arrays from the boundaries
+            lower = np.array(lower, "uint8")
+            upper = np.array(upper, "uint8")
 
-        lower_red = np.array([0, 100, 100])
-        upper_red = np.array([10, 255, 255])
+            # find the colors within the specified boundaries and apply
+            # the mask
+            mask = cv2.inRange(img, lower, upper)
+            output = cv2.bitwise_and(img, img, mask)
+            cnts += cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
+                                    cv2.CHAIN_APPROX_SIMPLE)[-2]
 
-        lower_green = np.array([50, 100, 100])
-        upper_green = np.array([70, 255, 255])
-
-        mask_blue = cv2.inRange(hsv, lower_blue, upper_blue)
-        mask_red = cv2.inRange(hsv, lower_red, upper_red)
-        mask_green = cv2.inRange(hsv, lower_green, upper_green)
-
-        cnts = cv2.findContours(mask_blue.copy(), cv2.RETR_EXTERNAL,
-                                cv2.CHAIN_APPROX_SIMPLE)[-2]
-        cnts += cv2.findContours(mask_red.copy(), cv2.RETR_EXTERNAL,
-                                 cv2.CHAIN_APPROX_SIMPLE)[-2]
-        cnts += cv2.findContours(mask_green.copy(), cv2.RETR_EXTERNAL,
-                                 cv2.CHAIN_APPROX_SIMPLE)[-2]
+        # draw dots
         if len(cnts) > 0:
             for c in cnts:
                 moments = cv2.moments(c)
@@ -40,7 +42,7 @@ def run():
                     cv2.drawContours(img, [hull], -1, (0, 255, 255), 3)
                     cv2.circle(img, (cx, cy), 3, (0, 255, 255), 3)
 
-        cv2.imshow('frame', img)
+        cv2.imshow('frame',  np.hstack([img, output]))
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
