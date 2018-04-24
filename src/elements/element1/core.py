@@ -4,6 +4,7 @@ from entities.movement.limb.track import Track
 from entities.robot.robot import Robot
 
 
+# todo implement according to truth
 def run():
     lights = []
     limbs = [
@@ -14,5 +15,3 @@ def run():
     name = 'Boris'
 
     boris = Robot(name, limbs, lights)
-
-    print(boris.limbs[0].get_limb_type)
