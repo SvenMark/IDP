@@ -1,14 +1,20 @@
 from entities.movement.movement import Movement
 
 
-class Climb(Movement):
+class Advanced(Movement):
+    """
+    Base class for advanced movements
+    """
+
+
+class Climb(Advanced):
     """
     Should implement methods for climbing
     """
     raise NotImplementedError
 
 
-class Dance(Movement):
+class Dance(Advanced):
     """
     Should implement methods for dancing
     """
