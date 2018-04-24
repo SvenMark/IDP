@@ -1,6 +1,15 @@
 import sys
 
-from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, element10
+from elements.elements10 import element10
+from elements.elements9 import element9
+from elements.elements8 import element8
+from elements.elements7 import element7
+from elements.elements6 import element6
+from elements.elements5 import element5
+from elements.elements4 import element4
+from elements.elements3 import element3
+from elements.elements2 import element2
+from elements.elements1 import element1
 
 FUNC_MAP = {
     "1": element1,
