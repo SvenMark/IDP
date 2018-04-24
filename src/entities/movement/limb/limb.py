@@ -1,5 +1,5 @@
-class Audio(object):
+class Limb(object):
     """
-    Base class for audio
+    Base class for limb
     """
     raise NotImplementedError
