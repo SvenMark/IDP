@@ -7,6 +7,6 @@ class Speaker(object):
 
 class Input(object):
     """
-    Should implement methods for music input(optional)
+    Should implement methods for music input
     """
     raise NotImplementedError
