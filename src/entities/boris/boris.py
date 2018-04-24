@@ -1,5 +1,7 @@
-class Audio(object):
+class Boris(object):
     """
-    Base class for audio
+    Robot class
     """
     raise NotImplementedError
+
+
