@@ -8,5 +8,5 @@ install:
   - pip install -r requirements.txt
 
 script:
-  - coverage run python -m unittest discover
+  - coverage run runtests.sh
   - codecov --token=b26cfa94-4123-44a2-a0ff-b60a6a410d83
