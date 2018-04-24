@@ -1,5 +1,7 @@
 language: python
 
+cache: pip
+
 python:
   - "3.6"
 
@@ -9,5 +11,5 @@ install:
 
 script:
   -
-  - coverage run - m unittest discover
+  - coverage run -m unittest discover
   - codecov --token=b26cfa94-4123-44a2-a0ff-b60a6a410d83
