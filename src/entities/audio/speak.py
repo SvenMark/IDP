@@ -1,6 +1,7 @@
-from entities.audio.audio import Audio
+from audio import Audio
 import sounddevice as sd
 from gtts import gTTS
+import os
 
 
 class Speak(Audio):
@@ -20,8 +21,9 @@ class Speak(Audio):
 
 def main():
     sp = Speak()
-    #sp.tts("ik ben dik en ik hou van kaas")
-    sp.play("good.wav")
+    sp.tts("Ik ben een robot. biep bliep")
+    #sp.play("test.wav")
+    os.system("mpg321 ../../../resources/good.wav")
 
 
 main()
