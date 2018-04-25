@@ -1,5 +1,10 @@
+import soundfile as sf
+
+
 class Audio(object):
-    """
-    Base class for audio
-    """
-    raise NotImplementedError
+    @staticmethod
+    def getfile(filename):
+
+        return sf.read("../../../resources/" + filename)
+
+

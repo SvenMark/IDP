@@ -1,22 +1,27 @@
 from entities.audio.audio import Audio
 import sounddevice as sd
-import soundfile as sf
+from gtts import gTTS
 
 
 class Speak(Audio):
     @staticmethod
-    def play():
-        data, fs = sf.read('../../../resources/test.wav', dtype="float32")
+    def play(filename):
+        data, fs = Audio.getfile(filename)
         sd.wait()
         sd.play(data, fs, device=sd.default.device)
         sd.wait()
 
+    def tts(self, text):
+        # using google text to speech api
+        tts = gTTS(text=text, lang='nl')
+        tts.save('../../../resources/good.wav')
+        # self.play("good.wav")
 
-# Just for testing purposes
+
 def main():
-    x = Speak()
-    x.play()
+    sp = Speak()
+    #sp.tts("ik ben dik en ik hou van kaas")
+    sp.play("test.wav")
 
 
 main()
-
