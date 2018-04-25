@@ -1,6 +1,7 @@
 from entities.audio.audio import Audio
 import sounddevice as sd
-import win32com.client as wincl
+from gtts import gTTS
+
 
 class Speak(Audio):
     @staticmethod
@@ -10,16 +11,17 @@ class Speak(Audio):
         sd.play(data, fs, device=sd.default.device)
         sd.wait()
 
-    @staticmethod
-    def tts(text):
-        speak = wincl.Dispatch("SAPI.SpVoice")
-        speak.Speak(text)
+    def tts(self, text):
+        # using google text to speech api
+        tts = gTTS(text=text, lang='nl')
+        tts.save('../../../resources/good.wav')
+        # self.play("good.wav")
 
 
 def main():
     sp = Speak()
-    sp.tts("Hello my name is")
-    # sp.play("good")
+    #sp.tts("ik ben dik en ik hou van kaas")
+    sp.play("good.wav")
 
 
 main()

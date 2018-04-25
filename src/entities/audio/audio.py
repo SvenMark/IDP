@@ -5,6 +5,6 @@ class Audio(object):
     @staticmethod
     def getfile(filename):
 
-        return "../../../resources/" + filename
+        return sf.read("../../../resources/" + filename)
 
 
