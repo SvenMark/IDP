@@ -2,4 +2,7 @@ class Movement(object):
     """
     Base class for movement
     """
-    raise NotImplementedError
+
+    def __init__(self, limbs, lights):
+        self.limbs = limbs
+        self.lights = lights
