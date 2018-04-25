@@ -7,7 +7,7 @@ python:
 
 install:
   - cd src
-  - sudo apt install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0 ffmpeg libav-tools
+  - sudo apt-get install libportaudio2 portaudio19-dev
   - pip install -r requirements.txt
 
 script:
