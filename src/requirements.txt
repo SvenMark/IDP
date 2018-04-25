@@ -10,6 +10,7 @@ coverage==4.5.1
 idna==2.6
 PyAudio==0.2.11
 pycparser==2.18
+pypiwin32==223
 requests==2.18.4
 sounddevice==0.3.10
 SoundFile==0.10.2
