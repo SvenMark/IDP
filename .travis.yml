@@ -9,6 +9,7 @@ install:
   - cd src
   #  only for linux
   - sudo apt-get install libportaudio2 portaudio19-dev
+  - pip install pywin32
   - pip install -r requirements.txt
 
 script:
