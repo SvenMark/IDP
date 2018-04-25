@@ -15,3 +15,5 @@ def run():
     name = 'Boris'
 
     boris = Robot(name, limbs, lights)
+    boris.movement.forward()
+    boris.movement.backward()
