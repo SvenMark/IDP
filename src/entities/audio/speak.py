@@ -21,7 +21,7 @@ class Speak(Audio):
 def main():
     sp = Speak()
     #sp.tts("ik ben dik en ik hou van kaas")
-    sp.play("good.wav")
+    sp.play("test.wav")
 
 
 main()
