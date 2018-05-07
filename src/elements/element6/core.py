@@ -61,4 +61,5 @@ def run():
     cap.release()
     cv2.destroyAllWindows()
 
-run()
+
+# run()  # disabled for travis
