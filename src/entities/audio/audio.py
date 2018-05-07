@@ -1,10 +1,7 @@
-import soundfile as sf
-
-
 class Audio(object):
     @staticmethod
-    def getfile(filename):
+    def getfile():
 
-        return sf.read("../../../resources/" + filename)
+        return 1
 
 
