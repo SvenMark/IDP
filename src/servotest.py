@@ -1,23 +1,14 @@
-import RPi.GPIO as GPIO
-import time
+from pyax12.connection import Connection
 
-GPIO.setmode(GPIO.BOARD)
+# Connect to the serial port
+serial_connection = Connection(port="/dev/ttyAMA0", rpi_gpio=True)
 
-GPIO.setup(7, GPIO.OUT)
+dynamixel_id = 3
 
-pwm = GPIO.PWM(7,50)
-pwm.start(7.5)
+# Ping the third dynamixel unit
+is_available = serial_connection.ping(dynamixel_id)
 
-try:
-	while True:
-		pwm.ChangeDutyCycle(7.5)
-		time.sleep(1)
-		pwm.ChangeDutyCycle(12.5)
-                time.sleep(1)
-		pwm.ChangeDutyCycle(2.5)
-                time.sleep(1)
+print(is_available)
 
-
-except KeyboardInterrupt:
-	pwm.stop()
-	GPIO.cleanup()
+# Close the serial connection
+serial_connection.close()
