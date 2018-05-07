@@ -23,11 +23,11 @@ def run():
         upper_red = np.array([190, 255, 255])
 
         # green 70,90
-        lower_green = np.array([70, 0, 0])
+        lower_green = np.array([60, 100, 50])
         upper_green = np.array([90, 255, 255])
 
         # blue 110,120
-        lower_blue = np.array([110, 100, 100])
+        lower_blue = np.array([90, 100, 100])
         upper_blue = np.array([120, 255, 255])
 
         maskBlue = cv2.inRange(hsv, lower_blue, upper_blue)
@@ -36,9 +36,9 @@ def run():
         maskOrange = cv2.inRange(hsv, lower_orange, upper_orange)
         maskYellow = cv2.inRange(hsv, lower_yellow, upper_yellow)
 
-        # mask = maskBlue + maskGreen + maskOrange + maskRed + maskYellow
+        mask = maskBlue + maskGreen + maskOrange + maskRed + maskYellow
 
-        ret, thresh = cv2.threshold(maskRed, 127, 255, 0)
+        ret, thresh = cv2.threshold(mask, 127, 255, 0)
         im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
         for i in range(len(contours)):
@@ -48,12 +48,12 @@ def run():
             (x, y, w, h) = cv2.boundingRect(approx)
             ar = w / float(h)
             area = cv2.contourArea(c)
-            if len(approx) == 4 and area > 1000:
-                cv2.drawContours(img, [c], -1, (0, 255, 255), 3)
+            if len(approx) == 4 and area > 4000:
+                cv2.drawContours(img, [c], 0, (255, 255, 255), 3)
 
-        img = cv2.bitwise_and(img, img, mask=maskRed)
+        img = cv2.bitwise_and(img, img, mask=mask)
 
-        cv2.imshow('red', img)
+        cv2.imshow('camservice', img)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
