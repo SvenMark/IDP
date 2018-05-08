@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import numpy as np
 import cv2
 
@@ -38,22 +39,27 @@ def run():
 
         mask = maskBlue + maskGreen + maskOrange + maskRed + maskYellow
 
+        imgmask = cv2.bitwise_and(img, img, mask=mask)
+
         ret, thresh = cv2.threshold(mask, 127, 255, 0)
         im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
         for i in range(len(contours)):
             c = cv2.convexHull(contours[i])
             peri = cv2.arcLength(c, True)
-            approx = cv2.approxPolyDP(c, 0.04 * peri, True)
+            approx = cv2.approxPolyDP(c, 0.02 * peri, True)
             (x, y, w, h) = cv2.boundingRect(approx)
             ar = w / float(h)
             area = cv2.contourArea(c)
             if len(approx) == 4 and area > 4000:
-                cv2.drawContours(img, [c], 0, (255, 255, 255), 3)
+                M = cv2.moments(c)
+                cx = int(M['m10'] / M['m00'])
+                cy = int(M['m01'] / M['m00'])
+                cv2.drawContours(imgmask, [c], 0, (255, 255, 255), 3)
+                text = "{} {}".format("Color:", "")
+                cv2.putText(imgmask, text, (cx, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
-        img = cv2.bitwise_and(img, img, mask=mask)
-
-        cv2.imshow('camservice', img)
+        cv2.imshow('camservice', imgmask)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -62,4 +68,18 @@ def run():
     cv2.destroyAllWindows()
 
 
-# run()  # disabled for travis
+def colordetector(img, col, c):
+    low_colors = OrderedDict({
+        "red": np.array([170, 100, 100]),
+        "blue": np.array([90, 100, 100])})
+    high_colors = OrderedDict({
+        "red": np.array([190, 255, 255]),
+        "blue": np.array([120, 255, 255])})
+
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+    for col, low in low_colors.items():
+        mask = cv2.inRange(hsv, low, high_colors.get(col))
+
+
+run()  # disabled for travis
