@@ -1,7 +1,7 @@
 from pyax12.connection import Connection
 
 # Connect to the serial port
-serial_connection = Connection(port="/dev/ttyAMA0", rpi_gpio=True)
+serial_connection = Connection(port="/dev/serial0", rpi_gpio=True)
 
 dynamixel_id = 13
 
