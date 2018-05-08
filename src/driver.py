@@ -50,10 +50,10 @@ class Driver:
         self.ser.flushInput()
         length = 2 + len(params)
         checksum = 255 - ((index + length + ins + sum(params))%256)
-        self.ser.write(chr(0xFF)+chr(0xFF)+chr(index)+chr(length)+chr(ins))
+        self.ser.write((chr(0xFF)+chr(0xFF)+chr(index)+chr(length)+chr(ins)).encode())
         for val in params:
-            self.ser.write(chr(val))
-        self.ser.write(chr(checksum))
+            self.ser.write(chr(val).encode())
+        self.ser.write(chr(checksum).encode())
         return self.getPacket(0)
 
     def setReg(self, index, regstart, values):
@@ -71,7 +71,7 @@ class Driver:
             return None
 
         # now process our byte
-        if mode == 0:           # get our first 0xFF
+        if mode == 0 and len(d) == 1:           # get our first 0xFF
             if ord(d) == 0xff:
                 self.logger.debug("Oxff found")
                 return self.getPacket(1)
