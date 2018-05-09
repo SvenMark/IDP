@@ -56,4 +56,4 @@ def main():
     dvigatel.backward(5, 1)
     dvigatel.cleanUp()
 
-#main()
+main()
