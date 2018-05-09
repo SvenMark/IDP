@@ -9,15 +9,17 @@ class DCMotor(object):
     """
 
     def __init__(self, frequency):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
         self.pinMotorForward = 10
         self.pinMotorBackward = 9
         self.pinPwm = 18
         self.stop = 0
         self.frequency = frequency
-        self.pwmMotor = GPIO.PWM(self.pinPwm, self.frequency)
         GPIO.setup(self.pinPwm, GPIO.OUT)
         GPIO.setup(self.pinMotorForward, GPIO.OUT)
         GPIO.setup(self.pinMotorBackward, GPIO.OUT)
+        self.pwmMotor = GPIO.PWM(self.pinPwm, self.frequency)
         self.pwmMotor.start(self.stop)
 
     # Turn all motors off
