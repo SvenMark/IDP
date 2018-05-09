@@ -2,57 +2,59 @@ from collections import OrderedDict
 import numpy as np
 import cv2
 
-img = cv2.imread('../../../resources/test.jpg')
-
 
 def run():
     print("run element6")
     inp = (2,2,2,2,2,2)
     cap = cv2.VideoCapture(0)
 
-    # ret, img = cap.read()
-    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    while True:
+        ret, img = cap.read()
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-    # orange g00d 0,10
-    lower_orange = np.array([0, 100, 100])
-    upper_orange = np.array([10, 255, 255])
+        # orange 0,10
+        lower_orange = np.array([0, 100, 100])
+        upper_orange = np.array([10, 255, 255])
 
-    # yellow g00d 20,30
-    lower_yellow = np.array([20, 100, 100])
-    upper_yellow = np.array([30, 255, 255])
+        # yellow 20,30
+        lower_yellow = np.array([20, 100, 100])
+        upper_yellow = np.array([30, 255, 255])
 
-    # red 170,180
-    lower_red = np.array([170, 100, 100])
-    upper_red = np.array([190, 255, 255])
+        # red 170,180
+        lower_red = np.array([170, 100, 100])
+        upper_red = np.array([190, 255, 255])
 
-    # green 70,90
-    lower_green = np.array([60, 100, 50])
-    upper_green = np.array([90, 255, 255])
+        # green 70,90
+        lower_green = np.array([60, 100, 50])
+        upper_green = np.array([90, 255, 255])
 
-    # blue 110,120
-    lower_blue = np.array([90, 100, 100])
-    upper_blue = np.array([120, 255, 255])
+        # blue 110,120
+        lower_blue = np.array([90, 100, 100])
+        upper_blue = np.array([120, 255, 255])
 
-    maskBlue = cv2.inRange(hsv, lower_blue, upper_blue)
-    maskRed = cv2.inRange(hsv, lower_red, upper_red)
-    maskGreen = cv2.inRange(hsv, lower_green, upper_green)
-    maskOrange = cv2.inRange(hsv, lower_orange, upper_orange)
-    maskYellow = cv2.inRange(hsv, lower_yellow, upper_yellow)
+        masks = OrderedDict({
+            "red": cv2.inRange(hsv, lower_red, upper_red),
+            "blue": cv2.inRange(hsv, lower_blue, upper_blue),
+            "green": cv2.inRange(hsv, lower_green, upper_green),
+            "orange": cv2.inRange(hsv, lower_orange, upper_orange),
+            "yellow": cv2.inRange(hsv, lower_yellow, upper_yellow)})
 
-    imgmask = setcontours(maskBlue, "blue")
-    imgmask += setcontours(maskRed, "red")
-    imgmask += setcontours(maskGreen, "green")
-    imgmask += setcontours(maskOrange, "orange")
-    imgmask += setcontours(maskYellow, "yellow")
+        imgmask = setcontours(masks.get("red"), "red", img)
+        for col, mask in masks.items():
+            if col == "red":
+                continue
+            imgmask += setcontours(mask, col, img)
 
-    cv2.imshow('camservice', imgmask)
+        cv2.imshow('camservice', imgmask)
 
-    k = cv2.waitKey(0)
-    print k
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cap.release()
     cv2.destroyAllWindows()
 
 
-def setcontours(mask, color):
+def setcontours(mask, color, img):
 
     imgmask = cv2.bitwise_and(img, img, mask=mask)
 
@@ -77,4 +79,4 @@ def setcontours(mask, color):
     return imgmask
 
 
-# run()  # disabled for travis
+run()  # disabled for travis
