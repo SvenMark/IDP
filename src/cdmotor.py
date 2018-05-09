@@ -12,18 +12,14 @@ pinPwm = 18
 
 # How many times to turn the pin on and off each second
 Frequency = 20
-# How long the pin stays on each cycle, as a percent (here, it's 30%)
-DutyCycle = 30
-# Setting the duty cycle to 0 means the motors will not turn
+
 Stop = 0
+
+GPIO.setup(pinPwm, GPIO.OUT)
 
 # Set the GPIO Pin mode to be Output
 GPIO.setup(pinMotorForward, GPIO.OUT)
 GPIO.setup(pinMotorBackward, GPIO.OUT)
-
-# Set the motor to go forward
-GPIO.output(pinMotorForward, GPIO.HIGH)
-GPIO.output(pinMotorBackward, GPIO.LOW)
 
 pwmMotor = GPIO.PWM(pinPwm, Frequency)
 
@@ -34,21 +30,35 @@ def StopMotors():
 	pwmMotor.ChangeDutyCycle(Stop)
 
 # Turn both motors forwards
-def Forwards():
-        GPIO.output(pinMotorForward, GPIO.HIGH)
-        GPIO.output(pinMotorBackward, GPIO.LOW)
-        pwmMotor.ChangeDutyCycle(DutyCycle)
+def Forwards(dutyCycle):
+	print("Forwards " + str(dutyCycle))
+	GPIO.output(pinMotorForward, GPIO.HIGH)
+	GPIO.output(pinMotorBackward, GPIO.LOW)
+	pwmMotor.ChangeDutyCycle(dutyCycle)
 
-def Backwards():
-        GPIO.output(pinMotorForward, GPIO.LOW)
-        GPIO.output(pinMotorBackward, GPIO.HIGH)
-        pwmMotor.ChangeDutyCycle(DutyCycle)
+def Backwards(dutyCycle):
+	print("Backwards " + str(dutyCycle))
+	GPIO.output(pinMotorForward, GPIO.LOW)
+	GPIO.output(pinMotorBackward, GPIO.HIGH)
+	pwmMotor.ChangeDutyCycle(dutyCycle)
 
-Forwards()
-time.sleep(1)
+for cycle in range(0, 20):
+	Forwards(cycle)
+	time.sleep(0.5)
 
-Backwards()
-time.sleep(0.5)
+for cycle in range(0,20):
+	Forwards(20 - cycle)
+	time.sleep(0.5)
+
+for cycle in range(0,20):
+	Backwards(cycle)
+	time.sleep(0.5)
+
+for cycle in range(0,20):
+	Backwards(20 - cycle)
+	time.sleep(0.5)
+
+time.sleep(2)
 
 StopMotors()
 GPIO.cleanup()
