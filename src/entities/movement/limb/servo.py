@@ -1,7 +1,10 @@
 #!/bin/python
 
-from libs.ax12 import Ax12
+
 import time
+
+from libs.ax12 import Ax12
+
 
 class Servo(object):
     """

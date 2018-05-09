@@ -9,8 +9,8 @@ class DCMotor(object):
     """
 
     def __init__(self):
-	GPIO.setmode(GPIO.BCM)
-	GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)
+	    GPIO.setwarnings(False)
         self.pinMotorForward = 10
         self.pinMotorBackward = 9
         self.pinPwm = 18
