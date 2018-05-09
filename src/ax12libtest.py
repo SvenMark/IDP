@@ -1,12 +1,13 @@
 from ax12 import Ax12
 import time
 
-roby = Ax12()
-roby.port = Serial("/dev/ttyS0", baudrate=1000000, timeout=0.001)
+boris = Ax12()
+
+ax12id = 13
 
 while True :
-  roby.move(19,200)
+  boris.move(ax12id,200)
   time.sleep(5)
 
-  roby.move(19,800)
+  boris.move(ax12id,800)
   time.sleep(5)

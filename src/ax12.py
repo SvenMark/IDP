@@ -16,7 +16,7 @@ class Ax12:
     AX_MODEL_NUMBER_L = 0
     AX_MODEL_NUMBER_H = 1
     AX_VERSION = 2
-    AX_ID = 3
+    AX_ID = 13
     AX_BAUD_RATE = 4
     AX_RETURN_DELAY_TIME = 5
     AX_CW_ANGLE_LIMIT_L = 6
@@ -137,7 +137,7 @@ class Ax12:
 
     def __init__(self):
         if(Ax12.port == None):
-            Ax12.port = Serial("/dev/ttyS0", baudrate=1000000, timeout=0.001)
+            Ax12.port = Serial("/dev/serial0", baudrate=1000000, timeout=0.001)
         if(not Ax12.gpioSet):
             GPIO.setwarnings(False)
             GPIO.setmode(GPIO.BCM)
