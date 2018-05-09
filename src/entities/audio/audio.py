@@ -1,5 +1,7 @@
 class Audio(object):
-    """
-    Base class for audio
-    """
-    raise NotImplementedError
+    @staticmethod
+    def getfile():
+
+        return 1
+
+
