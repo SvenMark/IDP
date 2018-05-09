@@ -1,6 +1,6 @@
 import sys
 
-from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, \
+from elements import element1, element2, element3, element4, element5, element67, element6, element8, element9, \
     element10
 
 FUNC_MAP = {
@@ -9,8 +9,8 @@ FUNC_MAP = {
     "3": element3.core,
     "4": element4.core,
     "5": element5.core,
-    "6": element6.core,
-    "7": element7.core,
+    "6": element67.core,
+    "7": element6.core,
     "8": element8.core,
     "9": element9.core,
     "10": element10.core
