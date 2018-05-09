@@ -2,10 +2,8 @@
 
 class Servo(object):
     """
-    Base class for servi
+    Base class for servo
     """
-    def __init__(self):
-        super(Servo, self).__init__('servi')
 
     @property
     def turn(self):
