@@ -1,4 +1,4 @@
-from ax12 import Ax12
+from Libs.ax12 import Ax12
 import time
 
 boris = Ax12()
