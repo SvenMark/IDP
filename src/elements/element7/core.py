@@ -1,9 +1,11 @@
 from collections import OrderedDict
 import time
+import positions
 from helpers import Color
 import numpy as np
 import cv2
 import keyboard
+import os
 
 
 print "uncomment run before starting.."
@@ -35,6 +37,9 @@ def run():
             if col == "red":
                 continue
             imgmask += setcontours(mask, col, img)
+
+        for i in range(len(positions.positions)):
+            cv2.drawContours(imgmask, np.array(positions.positions[i]), 0, (0, 0, 255), 3)
 
         cv2.imshow('camservice', imgmask)
 
@@ -95,26 +100,31 @@ def setcontours(mask, color, img):
                             [[419, 252]]])
 
             # imgmask += cv2.drawContours(imgmask, [savedcontour], 0, (30, 255, 255), -1)
+            # contour,
 
-            if len(c) > 0 and len(c) == len(savedcontour) and comparenumpy(savedcontour, c):
+            if len(c) > 0 and len(c) == len(savedcontour) and comparenumpy(c, positions.positions):
                 print "{}".format("detected position")
 
             if len(c) > 0 and keyboard.is_pressed('s'):
-                savecontour(c)
+                savecontour(c, color)
                 time.sleep(1)
 
     return imgmask
 
 
-def savecontour(c):
+def savecontour(c, color):
     try:
         filename = "positions.py"
         filelen = file_len(filename)
         output = open(filename, "a")
-        output.write("var{} = [".format(filelen))
+        output.seek(-1, os.SEEK_END)
+        output.truncate()
+        output.write(",[")
         for i in range(len(c)):
             output.write("[[{} {} {}]],".format(str(c[i][0][0]).strip(), ",", str(c[i][0][1]).strip()))
-        output.write("]\n")
+        output.seek(-1, os.SEEK_END)
+        output.truncate()
+        output.write("]\n]")
         output.close()
         print "succesfully saved"
     except ValueError:
@@ -126,14 +136,15 @@ def file_len(filename):
 
 
 def comparenumpy(x, y):
-    for i in range(len(x)):
-        # 500 = 400 - 600.. 400: 500 - 100 >= 400 or 500 + 100 <= 600
-        sensitivity = 100
-        if x[i][0][0] - sensitivity >= y[i][0][0] \
-                or x[i][0][0] + sensitivity <= y[i][0][0] \
-                or x[i][0][1] - sensitivity >= y[i][0][1] \
-                or x[i][0][1] + sensitivity <= y[i][0][1]:
-            return False
+    for j in range(len(y)):
+        for i in range(len(x)):
+            # 500 = 400 - 600.. 400: 500 - 100 >= 400 or 500 + 100 <= 600
+            sensitivity = 100
+            if x[i][0][0] - sensitivity >= y[j][i][0][0] \
+                    or x[i][0][0] + sensitivity <= y[j][i][0][0] \
+                    or x[i][0][1] - sensitivity >= y[j][i][0][1] \
+                    or x[i][0][1] + sensitivity <= y[j][i][0][1]:
+                return False
 
     return True
 
