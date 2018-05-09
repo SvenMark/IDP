@@ -33,3 +33,24 @@ pwmMotor.start(Stop)
 def StopMotors():
 	pwmMotor.ChangeDutyCycle(Stop)
 
+# Turn both motors forwards
+def Forwards():
+        GPIO.output(pinMotorForward, GPIO.HIGH)
+        GPIO.output(pinMotorBackward, GPIO.LOW)
+        pwmMotor.ChangeDutyCycle(DutyCycle)
+
+def Backwards():
+        GPIO.output(pinMotorForward, GPIO.LOW)
+        GPIO.output(pinMotorBackward, GPIO.HIGH)
+        pwmMotor.ChangeDutyCycle(DutyCycle)
+
+Forwards()
+time.sleep(1)
+
+Backwards()
+time.sleep(0.5)
+
+StopMotors()
+GPIO.cleanup()
+
+
