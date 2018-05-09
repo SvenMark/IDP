@@ -1,43 +1,30 @@
 from collections import OrderedDict
-import numpy as np
+from helpers import Color
 import cv2
+
+print "uncomment run before starting.."
 
 
 def run():
     print("run element6")
-    inp = (2,2,2,2,2,2)
     cap = cv2.VideoCapture(0)
+
+    orange = Color([0, 100, 100], [10, 255, 255])
+    yellow = Color([20, 100, 100], [30, 255, 255])
+    red = Color([170, 100, 100], [190, 255, 255])
+    green = Color([60, 100, 50], [90, 255, 255])
+    blue = Color([90, 100, 100], [120, 255, 255])
 
     while True:
         ret, img = cap.read()
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-        # orange 0,10
-        lower_orange = np.array([0, 100, 100])
-        upper_orange = np.array([10, 255, 255])
-
-        # yellow 20,30
-        lower_yellow = np.array([20, 100, 100])
-        upper_yellow = np.array([30, 255, 255])
-
-        # red 170,180
-        lower_red = np.array([170, 100, 100])
-        upper_red = np.array([190, 255, 255])
-
-        # green 70,90
-        lower_green = np.array([60, 100, 50])
-        upper_green = np.array([90, 255, 255])
-
-        # blue 110,120
-        lower_blue = np.array([90, 100, 100])
-        upper_blue = np.array([120, 255, 255])
-
         masks = OrderedDict({
-            "red": cv2.inRange(hsv, lower_red, upper_red),
-            "blue": cv2.inRange(hsv, lower_blue, upper_blue),
-            "green": cv2.inRange(hsv, lower_green, upper_green),
-            "orange": cv2.inRange(hsv, lower_orange, upper_orange),
-            "yellow": cv2.inRange(hsv, lower_yellow, upper_yellow)})
+            "red": cv2.inRange(hsv, red.lower, red.upper),
+            "blue": cv2.inRange(hsv, blue.lower, blue.upper),
+            "green": cv2.inRange(hsv, green.lower, green.upper),
+            "orange": cv2.inRange(hsv, orange.lower, orange.upper),
+            "yellow": cv2.inRange(hsv, yellow.lower, yellow.upper)})
 
         imgmask = setcontours(masks.get("red"), "red", img)
         for col, mask in masks.items():
@@ -79,4 +66,4 @@ def setcontours(mask, color, img):
     return imgmask
 
 
-run()  # disabled for travis
+# run()  # disabled for travis
