@@ -14,8 +14,8 @@ class DCMotor(object):
         self.pinMotorForward = 10
         self.pinMotorBackward = 9
         self.pinPwm = 18
-        self.stop = 0
         self.frequency = frequency
+        self.stop = 0
         GPIO.setup(self.pinPwm, GPIO.OUT)
         GPIO.setup(self.pinMotorForward, GPIO.OUT)
         GPIO.setup(self.pinMotorBackward, GPIO.OUT)
@@ -27,17 +27,17 @@ class DCMotor(object):
         self.pwmMotor.ChangeDutyCycle(self.stop)
 
     # Turn both motors forwards
-    def forward(self, dutyCycle):
-        print("Forwards " + str(dutyCycle))
+    def forward(self, dutycycle):
+        print("Forwards " + str(dutycycle))
         GPIO.output(self.pinMotorForward, GPIO.HIGH)
         GPIO.output(self.pinMotorBackward, GPIO.LOW)
-        self.pwmMotor.ChangeDutyCycle(dutyCycle)
+        self.pwmMotor.ChangeDutyCycle(dutycycle)
 
-    def backward(self, dutyCycle):
-        print("Backwards " + str(dutyCycle))
+    def backward(self, dutycycle):
+        print("Backwards " + str(dutycycle))
         GPIO.output(self.pinMotorForward, GPIO.LOW)
         GPIO.output(self.pinMotorBackward, GPIO.HIGH)
-        self.pwmMotor.ChangeDutyCycle(dutyCycle)
+        self.pwmMotor.ChangeDutyCycle(dutycycle)
 
 
 def main():
