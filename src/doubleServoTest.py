@@ -52,14 +52,14 @@ servo2 = 31
 
 boris.setLedStatus(servo1, 1)
 boris.setLedStatus(servo2, 1)
+Forwards(10)
 
 while True:
-    Forwards(10)
     boris.move(servo1, 0)
     boris.move(servo2, 1000)
-    time.sleep(0.5)
+    time.sleep(2)
 
     boris.move(servo1, 1000)
     boris.move(servo2, 0)
-    time.sleep(0.5)
+    time.sleep(2)
 
