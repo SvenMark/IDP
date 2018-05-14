@@ -3,7 +3,7 @@ import time
 
 boris = Ax12()
 
-ax12id = 13
+ax12id = 31
 
 while True :
 	boris.move(ax12id, 500)
