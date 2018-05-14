@@ -1,8 +1,9 @@
 import random
 from collections import OrderedDict
+from imutils.video import WebcamVideoStream
+from helpers import Color
 import time
 import positions
-from helpers import Color
 import numpy as np
 import cv2
 import os
@@ -12,8 +13,7 @@ print ("uncomment run before starting..")
 
 def run():
     print("run element7")
-    url = "http://169.254.104.108:8090"
-    cap = cv2.VideoCapture(0)
+    cap = WebcamVideoStream(src=0).start()
     time.sleep(1)
 
     orange = Color([0, 100, 100], [10, 255, 255])
@@ -23,7 +23,7 @@ def run():
     blue = Color([90, 100, 100], [120, 255, 255])
 
     while True:
-        ret, img = cap.read()
+        img = cap.read()
         img = cv2.GaussianBlur(img, (9, 9), 0)
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
@@ -63,7 +63,7 @@ def run():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    cap.release()
+    cap.stop()
     cv2.destroyAllWindows()
 
 
@@ -78,8 +78,6 @@ def setcontours(mask, color, img):
         c = cv2.convexHull(contours[i])
         peri = cv2.arcLength(c, True)
         approx = cv2.approxPolyDP(c, 0.02 * peri, True)
-        (x, y, w, h) = cv2.boundingRect(approx)
-        ar = w / float(h)
         area = cv2.contourArea(c)
         if len(approx) == 4 and area > 4000:
             M = cv2.moments(c)
@@ -91,7 +89,7 @@ def setcontours(mask, color, img):
 
             for j in range(len(positions.positions)):
                 if comparenumpy(c, positions.positions[j].array):
-                    print "detected position"
+                    print(str(time.ctime()) + " detected position")
 
             if len(c) > 0 and cv2.waitKey(1) & 0xFF == ord('s'):
                 savecontour(c, color)
@@ -132,15 +130,8 @@ def comparenumpy(x, y):
     result = True
 
     for i in range(len(x)):
-        if i == len(x) or i == len(y):
+        if cv2.matchShapes(y, x, 1, parameter=0) < 0.5:
             return False
-        else:
-            # 500 = 400 - 600.. 400: 500 - 100 >= 400 or 500 + 100 <= 600
-            if x[i][0][0] - sensitivity >= y[i][0][0] \
-                    or x[i][0][0] + sensitivity <= y[i][0][0] \
-                    or x[i][0][1] - sensitivity >= y[i][0][1] \
-                    or x[i][0][1] + sensitivity <= y[i][0][1]:
-                return False
 
     return True
 
