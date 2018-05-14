@@ -89,8 +89,9 @@ def setcontours(mask, color, img):
             text = "{} {}".format("Color:", color)
             cv2.putText(imgmask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
-            if len(c) > 0 and comparenumpy(c, positions.positions):
-                print "detected position"
+            for j in range(len(positions.positions)):
+                if comparenumpy(c, positions.positions[j].array):
+                    print "detected position"
 
             if len(c) > 0 and cv2.waitKey(1) & 0xFF == ord('s'):
                 savecontour(c, color)
@@ -117,7 +118,7 @@ def savecontour(c, color):
         output.write("]])\n]")
         output.close()
         print("succesfully saved")
-        reload(positions)
+        # reload(positions)
     except ValueError:
         print("failed to save")
 
@@ -127,17 +128,19 @@ def file_len(filename):
 
 
 def comparenumpy(x, y):
-    for j in range(len(y)):
-        if len(x) == len(y[j].array):
-            for i in range(len(x)):
-                print("{}, {}".format(x[i][0][0], y[j].array[i][0][0]))
-                # 500 = 400 - 600.. 400: 500 - 100 >= 400 or 500 + 100 <= 600
-                sensitivity = 100
-                if x[i][0][0] - sensitivity >= y[j].array[i][0][0] \
-                        or x[i][0][0] + sensitivity <= y[j].array[i][0][0] \
-                        or x[i][0][1] - sensitivity >= y[j].array[i][0][1] \
-                        or x[i][0][1] + sensitivity <= y[j].array[i][0][1]:
-                    return False
+    sensitivity = 100
+    result = True
+
+    for i in range(len(x)):
+        if i == len(x) or i == len(y):
+            return False
+        else:
+            # 500 = 400 - 600.. 400: 500 - 100 >= 400 or 500 + 100 <= 600
+            if x[i][0][0] - sensitivity >= y[i][0][0] \
+                    or x[i][0][0] + sensitivity <= y[i][0][0] \
+                    or x[i][0][1] - sensitivity >= y[i][0][1] \
+                    or x[i][0][1] + sensitivity <= y[i][0][1]:
+                return False
 
     return True
 
