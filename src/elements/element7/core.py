@@ -88,8 +88,9 @@ def setcontours(mask, color, img):
             cv2.putText(imgmask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
             for j in range(len(positions.positions)):
-                if comparenumpy(c, positions.positions[j].array):
-                    print(str(time.ctime()) + " detected position")
+                if positions.positions[j].color == color:
+                    if comparenumpy(c, positions.positions[j].array):
+                        print(str(time.ctime()) + " detected position of " + color)
 
             if len(c) > 0 and cv2.waitKey(1) & 0xFF == ord('s'):
                 savecontour(c, color)
@@ -126,8 +127,7 @@ def file_len(filename):
 
 
 def comparenumpy(x, y):
-    sensitivity = 40
-    result = True
+    sensitivity = 30
 
     for i in range(len(x)):
         point_close = False;
