@@ -54,7 +54,6 @@ class DCMotor(object):
 
 def main():
     dvigatel = DCMotor()
-    dvigatel.backward(5, 1)
     dvigatel.cleanUp()
 
 
