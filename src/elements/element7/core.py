@@ -3,15 +3,17 @@ import time
 from helpers import Color
 import numpy as np
 import cv2
-import keyboard
+# import keyboard
 
 
-print "uncomment run before starting.."
+print ("uncomment run before starting..")
 
 
 def run():
     print("run element7")
+    url = "http://169.254.104.108:8090"
     cap = cv2.VideoCapture(0)
+    time.sleep(1)
 
     orange = Color([0, 100, 100], [10, 255, 255])
     yellow = Color([20, 100, 100], [30, 255, 255])
@@ -21,6 +23,7 @@ def run():
 
     while True:
         ret, img = cap.read()
+        img = cv2.GaussianBlur(img, (9, 9), 0)
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
         masks = OrderedDict({
@@ -60,21 +63,12 @@ def setcontours(mask, color, img):
         ar = w / float(h)
         area = cv2.contourArea(c)
         if len(approx) == 4 and area > 4000:
-            # determine the most extreme points along the contour
-            extLeft = tuple(c[c[:, :, 0].argmin()][0])
-            extRight = tuple(c[c[:, :, 0].argmax()][0])
-            extTop = tuple(c[c[:, :, 1].argmin()][0])
-            extBot = tuple(c[c[:, :, 1].argmax()][0])
             M = cv2.moments(c)
             cx = int(M['m10'] / M['m00'])
             cy = int(M['m01'] / M['m00'])
             cv2.drawContours(imgmask, [c], 0, (255, 255, 255), 3)
             text = "{} {}".format("Color:", color)
             cv2.putText(imgmask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
-            cv2.circle(imgmask, extLeft, 2, (0, 0, 255), 2)
-            cv2.circle(imgmask, extRight, 2, (0, 0, 255), 2)
-            cv2.circle(imgmask, extTop, 2, (0, 0, 255), 2)
-            cv2.circle(imgmask, extBot, 2, (0, 0, 255), 2)
 
             savedcontour = np.array([[[419, 264]],
                             [[417, 286]],
@@ -97,9 +91,9 @@ def setcontours(mask, color, img):
             # imgmask += cv2.drawContours(imgmask, [savedcontour], 0, (30, 255, 255), -1)
 
             if len(c) > 0 and len(c) == len(savedcontour) and comparenumpy(savedcontour, c):
-                print "{}".format("detected position")
+                print("{}".format("detected position"))
 
-            if len(c) > 0 and keyboard.is_pressed('s'):
+            if len(c) > 0 and cv2.waitKey(1) & 0xFF == ord('s'):
                 savecontour(c)
                 time.sleep(1)
 
@@ -116,9 +110,9 @@ def savecontour(c):
             output.write("[[{} {} {}]],".format(str(c[i][0][0]).strip(), ",", str(c[i][0][1]).strip()))
         output.write("]\n")
         output.close()
-        print "succesfully saved"
+        print("succesfully saved")
     except ValueError:
-        print "failed to save"
+        print("failed to save")
 
 
 def file_len(filename):
