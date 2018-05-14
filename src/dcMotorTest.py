@@ -42,25 +42,30 @@ def Backwards(dutyCycle):
 	GPIO.output(pinMotorBackward, GPIO.HIGH)
 	pwmMotor.ChangeDutyCycle(dutyCycle)
 
-for cycle in range(0, 20):
-	Forwards(cycle)
-	time.sleep(0.5)
+def main():
+	for cycle in range(0, 20):
+		Forwards(cycle)
+		time.sleep(0.5)
 
-for cycle in range(0,20):
-	Forwards(20 - cycle)
-	time.sleep(0.5)
+	for cycle in range(0, 20):
+		Forwards(20 - cycle)
+		time.sleep(0.5)
 
-for cycle in range(0,20):
-	Backwards(cycle)
-	time.sleep(0.5)
+	for cycle in range(0, 20):
+		Backwards(cycle)
+		time.sleep(0.5)
 
-for cycle in range(0,20):
-	Backwards(20 - cycle)
-	time.sleep(0.5)
+	for cycle in range(0, 20):
+		Backwards(20 - cycle)
+		time.sleep(0.5)
 
-time.sleep(2)
+	time.sleep(2)
 
-StopMotors()
-GPIO.cleanup()
+	StopMotors()
+	GPIO.cleanup()
+
+
+if __name__ == "__main__":
+    main()
 
 
