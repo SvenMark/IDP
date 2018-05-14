@@ -5,6 +5,7 @@ class Robot(object):
     """
     Robot class
     """
+
     def __init__(self, name, limbs, lights):
         self.name = name
         self.limbs = limbs
@@ -22,6 +23,3 @@ class Robot(object):
     @property
     def get_light_count(self):
         return len(self.lights)
-
-
-

@@ -1,9 +1,9 @@
-from entities.audio.audio import Audio
 import sounddevice as sd
+
+from entities.audio.audio import Audio
 
 
 class Listen(Audio):
-
     SAMPLE_RATE = 44100
     DURATION = 5  # seconds
     CHANNELS = 2  # stereo
