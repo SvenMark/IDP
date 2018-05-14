@@ -5,8 +5,7 @@ boris = Ax12()
 
 ax12id = 13
 
-while True:
-	boris.move(ax12id, 0)
+boris.move(ax12id, 0)
 
 #while True :
 #	boris.move(ax12id, 500)
