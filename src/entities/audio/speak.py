@@ -1,7 +1,8 @@
-from audio import Audio
-from gtts import gTTS
 import os
 import platform
+
+from audio import Audio
+from gtts import gTTS
 
 
 class Speak(Audio):

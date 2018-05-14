@@ -3,7 +3,6 @@
 
 import time
 
-
 from ax12 import Ax12
 
 
@@ -24,10 +23,10 @@ class Servo(object):
     def turn(self):
         raise NotImplementedError('Should be overridden in the child class')
 
+
 def test():
-	servo = Servo(13)
-	servo.move(500, 0.5)
-	servo.move(1000, 0.5)
+    servo = Servo(13)
+    servo.move(500, 0.5)
+    servo.move(1000, 0.5)
 
-#test()
-
+# test()

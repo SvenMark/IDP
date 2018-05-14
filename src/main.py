@@ -1,11 +1,11 @@
 import sys
+
+from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, \
+    element10
 from entities.movement.limb.leg import Leg
 from entities.movement.limb.tire import Tire
 from entities.movement.limb.track import Track
 from entities.robot.robot import Robot
-
-from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, \
-    element10
 
 FUNC_MAP = {
     "1": element1.core,
