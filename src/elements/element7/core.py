@@ -128,20 +128,18 @@ def file_len(filename):
 
 
 def comparenumpy(x, y):
-    sensitivity = 100
+    sensitivity = 25
     result = True
 
     for i in range(len(x)):
-        if i == len(x) or i == len(y):
-            return False
-        else:
-            # 500 = 400 - 600.. 400: 500 - 100 >= 400 or 500 + 100 <= 600
-            if x[i][0][0] - sensitivity >= y[i][0][0] \
-                    or x[i][0][0] + sensitivity <= y[i][0][0] \
-                    or x[i][0][1] - sensitivity >= y[i][0][1] \
-                    or x[i][0][1] + sensitivity <= y[i][0][1]:
-                return False
+        point_close = False;
+        for t in range(len(y)):
+            distance = np.linalg.norm(x[i] - y[t])
+            if distance <= sensitivity:
+                point_close = True
 
+        if not point_close:
+            return False
     return True
 
 
