@@ -1,3 +1,5 @@
+#!/bin/python
+
 from libs.ax12 import Ax12
 import time
 
