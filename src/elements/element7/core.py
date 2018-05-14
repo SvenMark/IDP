@@ -91,7 +91,7 @@ def setcontours(mask, color, img):
 
             for j in range(len(positions.positions)):
                 if comparenumpy(c, positions.positions[j].array):
-                    print "detected position"
+                    print "detected position" + str(c)
 
             if len(c) > 0 and cv2.waitKey(1) & 0xFF == ord('s'):
                 savecontour(c, color)
@@ -128,7 +128,7 @@ def file_len(filename):
 
 
 def comparenumpy(x, y):
-    sensitivity = 25
+    sensitivity = 40
     result = True
 
     for i in range(len(x)):
