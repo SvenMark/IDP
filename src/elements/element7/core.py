@@ -126,13 +126,18 @@ def file_len(filename):
 
 
 def comparenumpy(x, y):
-    sensitivity = 100
+    sensitivity = 40
     result = True
 
     for i in range(len(x)):
-        if cv2.matchShapes(y, x, 1, parameter=0) < 0.5:
-            return False
+        point_close = False;
+        for t in range(len(y)):
+            distance = np.linalg.norm(x[i] - y[t])
+            if distance <= sensitivity:
+                point_close = True
 
+        if not point_close:
+            return False
     return True
 
 
