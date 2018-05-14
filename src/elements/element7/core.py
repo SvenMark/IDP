@@ -1,3 +1,4 @@
+import random
 from collections import OrderedDict
 import time
 import positions
@@ -33,6 +34,13 @@ def run():
             "orange": cv2.inRange(hsv, orange.lower, orange.upper),
             "yellow": cv2.inRange(hsv, yellow.lower, yellow.upper)})
 
+        colors = OrderedDict({
+            "red": (0, 0, 255),
+            "blue": (255, 0, 0),
+            "green": (0, 255, 0),
+            "orange": (0, 165, 255),
+            "yellow": (0, 255, 255)})
+
         imgmask = setcontours(masks.get("red"), "red", img)
         for col, mask in masks.items():
             if col == "red":
@@ -41,12 +49,13 @@ def run():
 
         for i in range(len(positions.positions)):
             cnt = np.array(positions.positions[i].array)
+            color = positions.positions[i].color
             c = cv2.convexHull(cnt)
             M = cv2.moments(c)
             cx = int(M['m10'] / M['m00'])
             cy = int(M['m01'] / M['m00'])
-            text = "{} {}".format("Color", positions.positions[i].color)
-            cv2.drawContours(imgmask, [cnt], 0, (0, 0, 255), -1)
+            text = "{} {}".format("Color", color)
+            cv2.drawContours(imgmask, [c], 0, colors.get(color), 3, -1)
             cv2.putText(imgmask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
         cv2.imshow('camservice', imgmask)
@@ -80,12 +89,12 @@ def setcontours(mask, color, img):
             text = "{} {}".format("Color:", color)
             cv2.putText(imgmask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
-            if len(c) > 0 and len(c) == len(positions.positions) and comparenumpy(c, positions.positions):
+            if len(c) > 0 and comparenumpy(c, positions.positions):
                 print "detected position"
 
             if len(c) > 0 and cv2.waitKey(1) & 0xFF == ord('s'):
                 savecontour(c, color)
-                time.sleep(1)
+                time.sleep(0.1)
 
     return imgmask
 
@@ -108,6 +117,7 @@ def savecontour(c, color):
         output.write("]])\n]")
         output.close()
         print("succesfully saved")
+        reload(positions)
     except ValueError:
         print("failed to save")
 
@@ -117,18 +127,19 @@ def file_len(filename):
 
 
 def comparenumpy(x, y):
-    print "hi"
     for j in range(len(y)):
-        for i in range(len(x)):
-            # 500 = 400 - 600.. 400: 500 - 100 >= 400 or 500 + 100 <= 600
-            sensitivity = 100
-            if x[i][0][0] - sensitivity >= y[j].array[i][0][0] \
-                    or x[i][0][0] + sensitivity <= y[j].array[i][0][0] \
-                    or x[i][0][1] - sensitivity >= y[j].array[i][0][1] \
-                    or x[i][0][1] + sensitivity <= y[j].array[i][0][1]:
-                return False
+        if len(x) == len(y[j].array):
+            for i in range(len(x)):
+                print("{}, {}".format(x[i][0][0], y[j].array[i][0][0]))
+                # 500 = 400 - 600.. 400: 500 - 100 >= 400 or 500 + 100 <= 600
+                sensitivity = 100
+                if x[i][0][0] - sensitivity >= y[j].array[i][0][0] \
+                        or x[i][0][0] + sensitivity <= y[j].array[i][0][0] \
+                        or x[i][0][1] - sensitivity >= y[j].array[i][0][1] \
+                        or x[i][0][1] + sensitivity <= y[j].array[i][0][1]:
+                    return False
 
     return True
 
 
-# run()  # disabled for travis
+run()  # disabled for travis
