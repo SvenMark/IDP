@@ -39,7 +39,14 @@ def run():
             imgmask += setcontours(mask, col, img)
 
         for i in range(len(positions.positions)):
-            cv2.drawContours(imgmask, np.array(positions.positions[i]), 0, (0, 0, 255), 3)
+            cnt = np.array(positions.positions[i].array)
+            c = cv2.convexHull(cnt)
+            M = cv2.moments(c)
+            cx = int(M['m10'] / M['m00'])
+            cy = int(M['m01'] / M['m00'])
+            text = "{} {}".format("Color", positions.positions[i].color)
+            cv2.drawContours(imgmask, [cnt], 0, (0, 0, 255), -1)
+            cv2.putText(imgmask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
         cv2.imshow('camservice', imgmask)
 
@@ -81,29 +88,8 @@ def setcontours(mask, color, img):
             cv2.circle(imgmask, extTop, 2, (0, 0, 255), 2)
             cv2.circle(imgmask, extBot, 2, (0, 0, 255), 2)
 
-            savedcontour = np.array([[[419, 264]],
-                            [[417, 286]],
-                            [[415, 307]],
-                            [[413, 311]],
-                            [[395, 311]],
-                            [[355, 308]],
-                            [[232, 298]],
-                            [[228, 297]],
-                            [[226, 295]],
-                            [[226, 274]],
-                            [[230, 237]],
-                            [[231, 236]],
-                            [[243, 235]],
-                            [[339, 243]],
-                            [[409, 250]],
-                            [[417, 251]],
-                            [[419, 252]]])
-
-            # imgmask += cv2.drawContours(imgmask, [savedcontour], 0, (30, 255, 255), -1)
-            # contour,
-
-            if len(c) > 0 and len(c) == len(savedcontour) and comparenumpy(c, positions.positions):
-                print "{}".format("detected position")
+            if len(c) > 0 and len(c) == len(positions.positions) and comparenumpy(c, positions.positions):
+                print "detected position"
 
             if len(c) > 0 and keyboard.is_pressed('s'):
                 savecontour(c, color)
@@ -119,12 +105,15 @@ def savecontour(c, color):
         output = open(filename, "a")
         output.seek(-1, os.SEEK_END)
         output.truncate()
-        output.write(",[")
+        output.write(", Position(\"" + color + "\", [")
         for i in range(len(c)):
-            output.write("[[{} {} {}]],".format(str(c[i][0][0]).strip(), ",", str(c[i][0][1]).strip()))
+            if i == 0:
+                output.write("[[{}{}{}]]".format(str(c[i][0][0]).strip(), ", ", str(c[i][0][1]).strip()))
+            else:
+                output.write(", [[{}{}{}]]".format(str(c[i][0][0]).strip(), ", ", str(c[i][0][1]).strip()))
         output.seek(-1, os.SEEK_END)
         output.truncate()
-        output.write("]\n]")
+        output.write("]])\n]")
         output.close()
         print "succesfully saved"
     except ValueError:
@@ -136,14 +125,15 @@ def file_len(filename):
 
 
 def comparenumpy(x, y):
+    print "hi"
     for j in range(len(y)):
         for i in range(len(x)):
             # 500 = 400 - 600.. 400: 500 - 100 >= 400 or 500 + 100 <= 600
             sensitivity = 100
-            if x[i][0][0] - sensitivity >= y[j][i][0][0] \
-                    or x[i][0][0] + sensitivity <= y[j][i][0][0] \
-                    or x[i][0][1] - sensitivity >= y[j][i][0][1] \
-                    or x[i][0][1] + sensitivity <= y[j][i][0][1]:
+            if x[i][0][0] - sensitivity >= y[j].array[i][0][0] \
+                    or x[i][0][0] + sensitivity <= y[j].array[i][0][0] \
+                    or x[i][0][1] - sensitivity >= y[j].array[i][0][1] \
+                    or x[i][0][1] + sensitivity <= y[j].array[i][0][1]:
                 return False
 
     return True
