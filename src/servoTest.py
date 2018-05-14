@@ -3,12 +3,15 @@ import time
 
 boris = Ax12()
 
-ax12id = 31
+ax12id = 13
 
-while True :
-	boris.move(ax12id, 500)
-	time.sleep(1)
+while True:
 	boris.move(ax12id, 0)
-	time.sleep(1)
-	boris.move(ax12id, 1000)
-	time.sleep(1)
+
+#while True :
+#	boris.move(ax12id, 500)
+#	time.sleep(1)
+#	boris.move(ax12id, 0)
+#	time.sleep(1)
+#	boris.move(ax12id, 1000)
+#	time.sleep(1)
