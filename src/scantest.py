@@ -3,12 +3,11 @@ from pyax12.connection import Connection
 # Connect to the serial port
 serial_connection = Connection(port="/dev/serial0", rpi_gpio=True)
 
-dynamixel_id = 13
+# Ping the dynamixel unit(s)
+ids_available = serial_connection.scan()
 
-# Ping the third dynamixel unit
-is_available = serial_connection.ping(dynamixel_id)
-
-print(is_available)
+for dynamixel_id in ids_available:
+    print(dynamixel_id)
 
 # Close the serial connection
 serial_connection.close()
