@@ -16,15 +16,9 @@ class Speak(Audio):
 
     def tts(self, text):
         # using google text to speech api
-        tts = gTTS(text=text, lang='nl')
+        tts = gTTS(text=text, lang='en')
         filename = "tts.wav"
         tts.save(self.resources + filename)
         self.play(filename)
 
 
-def main():
-    sp = Speak()
-    sp.tts("Ik ben een robot. biep bliep")
-
-
-main()
