@@ -1,4 +1,8 @@
 import sys
+from entities.movement.limb.leg import Leg
+from entities.movement.limb.tire import Tire
+from entities.movement.limb.track import Track
+from entities.robot.robot import Robot
 
 from elements import element1, element2, element3, element4, element5, element67, element6, element8, element9, \
     element10
@@ -22,6 +26,15 @@ def main():
     if len(sys.argv) < 2:
         print("Please pass commandline args")
         return sys.exit(2)
+
+    lights = []
+    limbs = [
+        Leg(),
+        Tire(),
+        Track()
+    ]
+    name = 'Boris'
+    boris = Robot(name, limbs, lights)
 
     part = sys.argv[1]
 
