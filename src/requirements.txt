@@ -15,4 +15,5 @@ sounddevice==0.3.10
 SoundFile==0.10.2
 urllib3==1.22
 gTTS==1.2.2
-
+SpeechRecognition==3.8.1
+pocketsphinx==0.1.3
