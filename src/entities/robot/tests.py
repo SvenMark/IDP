@@ -6,6 +6,10 @@ from entities.movement.limb.tire import Tire
 from entities.movement.limb.track import Track
 from entities.robot.robot import Robot
 
+TYPES = ['leg',
+         'tire',
+         'track']
+
 
 class CommonTestClass(unittest.TestCase):
 
@@ -22,10 +26,16 @@ class CommonTestClass(unittest.TestCase):
 
     def test_limbs(self):
         self.assertEqual(self.boris.get_limb_count, 3)
+
+        count = 0
         for limb in self.boris.limbs:
             # Inherited of Limb
             self.assertIsInstance(limb, Limb)
             self.assertIsNotNone(limb.limb_type)
+
+            # check correct type
+            self.assertEqual(limb.limb_type, TYPES[count])
+            count += 1
 
 
 if __name__ == '__main__':
