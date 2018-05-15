@@ -1,7 +1,7 @@
 #!/bin/python
 
 import time
-from entities.movement.limb.dcmotor import DCMotor
+from entities.movement.limb.joints.dcmotor import DCMotor
 
 motor = DCMotor(18)
 othermotor = DCMotor(13)
