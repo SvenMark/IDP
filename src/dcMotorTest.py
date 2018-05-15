@@ -1,74 +1,18 @@
-import time  # Import the Time library
-import RPi.GPIO as GPIO  # Import the GPIO Library
+#!/bin/python
 
-# Set the GPIO modes
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
+import time
+from entities.movement.limb.dcmotor import DCMotor
 
-pinMotorForward = 10
-pinMotorBackward = 9
+motor = DCMotor()
 
-pinPwm = 18
+for cycle in range(0, 20):
+    motor.forward(cycle, 0.5)
 
-# How many times to turn the pin on and off each second
-Frequency = 20
+for cycle in range(0, 20):
+    motor.forward(20 - cycle, 0.5)
 
-Stop = 0
+for cycle in range(0, 20):
+    motor.backward(cycle, 0.5)
 
-GPIO.setup(pinPwm, GPIO.OUT)
-
-# Set the GPIO Pin mode to be Output
-GPIO.setup(pinMotorForward, GPIO.OUT)
-GPIO.setup(pinMotorBackward, GPIO.OUT)
-
-pwmMotor = GPIO.PWM(pinPwm, Frequency)
-
-pwmMotor.start(Stop)
-
-
-# Turn all motors off
-def StopMotors():
-    pwmMotor.ChangeDutyCycle(Stop)
-
-
-# Turn both motors forwards
-def Forwards(dutyCycle):
-    print("Forwards " + str(dutyCycle))
-    GPIO.output(pinMotorForward, GPIO.HIGH)
-    GPIO.output(pinMotorBackward, GPIO.LOW)
-    pwmMotor.ChangeDutyCycle(dutyCycle)
-
-
-def Backwards(dutyCycle):
-    print("Backwards " + str(dutyCycle))
-    GPIO.output(pinMotorForward, GPIO.LOW)
-    GPIO.output(pinMotorBackward, GPIO.HIGH)
-    pwmMotor.ChangeDutyCycle(dutyCycle)
-
-def main():
-	for cycle in range(0, 20):
-		Forwards(cycle)
-		time.sleep(0.5)
-
-	for cycle in range(0, 20):
-		Forwards(20 - cycle)
-		time.sleep(0.5)
-
-	for cycle in range(0, 20):
-		Backwards(cycle)
-		time.sleep(0.5)
-
-	for cycle in range(0, 20):
-		Backwards(20 - cycle)
-		time.sleep(0.5)
-
-	time.sleep(2)
-
-	StopMotors()
-	GPIO.cleanup()
-
-
-if __name__ == "__main__":
-    main()
-
-
+for cycle in range(0, 20):
+    motor.backward(20 - cycle, 0.5)
