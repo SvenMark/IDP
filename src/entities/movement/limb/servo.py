@@ -20,7 +20,7 @@ class Servo(object):
         time.sleep(delay)
 
     def readPosition(self):
-        self.ax12.readPosition(self, self.servo_id)
+        self.ax12.readPosition(self.servo_id)
 
 def main():
     servoprivod = Servo(13)
