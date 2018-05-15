@@ -15,10 +15,17 @@ def run():
         img = cap.read()
         blur = cv2.GaussianBlur(img, (5, 5), 0)
         blurgray = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
+        hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
 
+        #Cranny edges
         low_threshold = 100
         high_threshold = 200
         edges = cv2.Canny(blurgray, low_threshold, high_threshold)
+        
+        #Mask
+        low_white = np.array([0, 0, 0])   
+        high_white = np.array([180,255,30])
+        mask = cv2.inRange(hsv,low_white,high_white) 
 
         rho = 1  # distance resolution in pixels of the Hough grid
         theta = np.pi / 180  # angular resolution in radians of the Hough grid
@@ -28,7 +35,7 @@ def run():
 
         # Run Hough on edge detected image
         # Output "lines" is an array containing endpoints of detected line segments
-        lines = cv2.HoughLinesP(edges, rho, theta, threshold, np.array([]),
+        lines = cv2.HoughLinesP(mask, rho, theta, threshold, np.array([]),
                     min_line_length, max_line_gap)
 
         imgClone = img.copy()
