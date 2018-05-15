@@ -16,7 +16,7 @@ class DCMotor(object):
         self.pin_motor_forward = 10
         self.pin_motor_backward = 9
         self.pin_pwm = pin
-        self.frequency = 20
+        self.frequency = 60
         self.stop = 0
 
         GPIO.setup(self.pin_pwm, GPIO.OUT)
