@@ -10,12 +10,12 @@ class DCMotor(object):
     Base class for dc motor
     """
 
-    def __init__(self):
+    def __init__(self, pin):
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         self.pinMotorForward = 10
         self.pinMotorBackward = 9
-        self.pinPwm = 18
+        self.pinPwm = pin
         self.frequency = 20
         self.stop = 0
 
@@ -53,8 +53,8 @@ class DCMotor(object):
 
 
 def main():
-    dvigatel = DCMotor()
+    dvigatel = DCMotor(18)
     dvigatel.cleanUp()
 
 
-main()
+#main()

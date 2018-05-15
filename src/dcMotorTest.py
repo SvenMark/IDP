@@ -3,7 +3,7 @@
 import time
 from entities.movement.limb.dcmotor import DCMotor
 
-motor = DCMotor()
+motor = DCMotor(18)
 
 for cycle in range(0, 20):
     motor.forward(cycle, 0.5)
