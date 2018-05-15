@@ -25,7 +25,7 @@ class Servo(object):
         self.ax12.move(self.servo_id, degrees)
         time.sleep(delay)
 
-    def readPosition(self):
+    def read_position(self):
         return self.ax12.read_position(self.servo_id)
 
 def main():
