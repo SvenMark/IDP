@@ -7,8 +7,10 @@ http://savageelectronics.blogspot.it/2011/01/arduino-y-dynamixel-ax-12.html
 '''
 
 from time import sleep
-from serial import Serial
+
 import RPi.GPIO as GPIO
+from serial import Serial
+
 
 class Ax12:
     # important AX-12 constants
@@ -136,46 +138,48 @@ class Ax12:
     gpioSet = False
 
     def __init__(self):
-        if(Ax12.port == None):
+        if (Ax12.port == None):
             Ax12.port = Serial("/dev/serial0", baudrate=1000000, timeout=0.001)
-        if(not Ax12.gpioSet):
+        if (not Ax12.gpioSet):
             GPIO.setwarnings(False)
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(Ax12.RPI_DIRECTION_PIN, GPIO.OUT)
             Ax12.gpioSet = True
         self.direction(Ax12.RPI_DIRECTION_RX)
 
-    connectedServos = []
+    connected_servos = []
 
     # Error lookup dictionary for bit masking
-    dictErrors = {  1 : "Input Voltage",
-            2 : "Angle Limit",
-            4 : "Overheating",
-            8 : "Range",
-            16 : "Checksum",
-            32 : "Overload",
-            64 : "Instruction"
-            }
+    dict_errors = {1: "Input Voltage",
+                  2: "Angle Limit",
+                  4: "Overheating",
+                  8: "Range",
+                  16: "Checksum",
+                  32: "Overload",
+                  64: "Instruction"
+                  }
 
     # Custom error class to report AX servo errors
-    class axError(Exception) : pass
+    class ax_error(Exception):
+        pass
 
     # Servo timeout
-    class timeoutError(Exception) : pass
+    class timeout_error(Exception):
+        pass
 
-    def direction(self,d):
+    def direction(self, d):
         GPIO.output(Ax12.RPI_DIRECTION_PIN, d)
         sleep(Ax12.RPI_DIRECTION_SWITCH_DELAY)
 
-    def readData(self,id):
+    def read_data(self, id):
         self.direction(Ax12.RPI_DIRECTION_RX)
-        reply = Ax12.port.read(5) # [0xff, 0xff, origin, length, error]
+        reply = Ax12.port.read(5)  # [0xff, 0xff, origin, length, error]
         try:
             # assert ord(reply[0]) == 0xFF
             assert reply[0] == 0xFF
         except:
             e = "Timeout on servo " + str(id)
-            raise Ax12.timeoutError(e)
+            raise Ax12.timeout_error(e)
 
         try:
             # length = ord(reply[3]) - 2
@@ -183,523 +187,536 @@ class Ax12:
             length = reply[3] - 2
             error = reply[4]
 
-            if(error != 0):
-                print("Error from servo: " + Ax12.dictErrors[error] + ' (code  ' + hex(error) + ')')
+            if (error != 0):
+                print("Error from servo: " + Ax12.dict_errors[error] + ' (code  ' + hex(error) + ')')
                 return -error
             # just reading error bit
-            elif(length == 0):
+            elif (length == 0):
                 return error
             else:
-                if(length > 1):
+                if (length > 1):
                     reply = Ax12.port.read(2)
-                    # returnValue = (ord(reply[1])<<8) + (ord(reply[0])<<0)
-                    returnValue = (reply[1]<<8) + (reply[0]<<0)
+                    # return_value = (ord(reply[1])<<8) + (ord(reply[0])<<0)
+                    return_value = (reply[1] << 8) + (reply[0] << 0)
                 else:
                     reply = Ax12.port.read(1)
-                    returnValue = reply[0]
-                return returnValue
+                    return_value = reply[0]
+                return return_value
         except:
             pass
         # except Exception, detail:
-        #     raise Ax12.axError(detail)
+        #     raise Ax12.ax_error(detail)
 
-    def ping(self,id):
+    def ping(self, id):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_READ_DATA + Ax12.AX_PING))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_READ_DATA])
-        outData += bytes([Ax12.AX_PING])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(id + Ax12.AX_READ_DATA + Ax12.AX_PING)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_READ_DATA])
+        out_data += bytes([Ax12.AX_PING])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def factoryReset(self,id, confirm = False):
-        if(confirm):
+    def factory_reset(self, id, confirm=False):
+        if (confirm):
             self.direction(Ax12.RPI_DIRECTION_TX)
             Ax12.port.flushInput()
-            checksum = (~(id + Ax12.AX_RESET_LENGTH + Ax12.AX_RESET))&0xff
-            outData = bytes([Ax12.AX_START])
-            outData += bytes([Ax12.AX_START])
-            outData += bytes([id])
-            outData += bytes([Ax12.AX_RESET_LENGTH])
-            outData += bytes([Ax12.AX_RESET])
-            outData += bytes([checksum])
-            Ax12.port.write(outData)
+            checksum = (~(id + Ax12.AX_RESET_LENGTH + Ax12.AX_RESET)) & 0xff
+            out_data = bytes([Ax12.AX_START])
+            out_data += bytes([Ax12.AX_START])
+            out_data += bytes([id])
+            out_data += bytes([Ax12.AX_RESET_LENGTH])
+            out_data += bytes([Ax12.AX_RESET])
+            out_data += bytes([checksum])
+            Ax12.port.write(out_data)
             sleep(Ax12.TX_DELAY_TIME)
-            return self.readData(id)
+            return self.read_data(id)
         else:
-            print("nothing done, please send confirm = True as this fuction reset to the factory default value, i.e reset the motor ID")
+            print(
+                "nothing done, please send confirm = True as this fuction reset to the factory default value, i.e reset the motor ID")
             return
 
-    def setID(self, id, newId):
+    def set_id(self, id, new_id):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_ID_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_ID + newId))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_ID_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_ID])
-        outData += bytes([newId])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(id + Ax12.AX_ID_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_ID + new_id)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_ID_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_ID])
+        out_data += bytes([new_id])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def setBaudRate(self, id, baudRate):
+    def set_baudrate(self, id, baudrate):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        br = ((2000000/long(baudRate))-1)
-        checksum = (~(id + Ax12.AX_BD_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_BAUD_RATE + br))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_BD_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_BAUD_RATE])
-        outData += bytes([br])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        br = ((2000000 / long(baudrate)) - 1)
+        checksum = (~(id + Ax12.AX_BD_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_BAUD_RATE + br)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_BD_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_BAUD_RATE])
+        out_data += bytes([br])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def setStatusReturnLevel(self, id, level):
+    def set_status_return_level(self, id, level):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_SRL_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_RETURN_LEVEL + level))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_SRL_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_RETURN_LEVEL])
-        outData += bytes([level])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(id + Ax12.AX_SRL_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_RETURN_LEVEL + level)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_SRL_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_RETURN_LEVEL])
+        out_data += bytes([level])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def setReturnDelayTime(self, id, delay):
+    def set_return_delay_time(self, id, delay):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_RDT_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_RETURN_DELAY_TIME + (int(delay)/2)&0xff))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_RDT_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_RETURN_DELAY_TIME])
-        outData += bytes([(int(delay)/2)&0xff])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(id + Ax12.AX_RDT_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_RETURN_DELAY_TIME + (
+                    int(delay) / 2) & 0xff)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_RDT_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_RETURN_DELAY_TIME])
+        out_data += bytes([(int(delay) / 2) & 0xff])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def lockRegister(self, id):
+    def lock_register(self, id):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_LR_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_LOCK + Ax12.AX_LOCK_VALUE))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_LR_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_LOCK])
-        outData += bytes([Ax12.AX_LOCK_VALUE])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(id + Ax12.AX_LR_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_LOCK + Ax12.AX_LOCK_VALUE)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_LR_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_LOCK])
+        out_data += bytes([Ax12.AX_LOCK_VALUE])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
     def move(self, id, position):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        p = [position&0xff, position>>8]
-        checksum = (~(id + Ax12.AX_GOAL_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_GOAL_POSITION_L + p[0] + p[1]))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_GOAL_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_GOAL_POSITION_L])
-        outData += bytes([p[0]])
-        outData += bytes([p[1]])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        p = [position & 0xff, position >> 8]
+        checksum = (~(id + Ax12.AX_GOAL_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_GOAL_POSITION_L + p[0] + p[1])) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_GOAL_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_GOAL_POSITION_L])
+        out_data += bytes([p[0]])
+        out_data += bytes([p[1]])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def moveSpeed(self, id, position, speed):
+    def move_speed(self, id, position, speed):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        p = [position&0xff, position>>8]
-        s = [speed&0xff, speed>>8]
-        checksum = (~(id + Ax12.AX_GOAL_SP_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_GOAL_POSITION_L + p[0] + p[1] + s[0] + s[1]))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_GOAL_SP_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_GOAL_POSITION_L])
-        outData += bytes([p[0]])
-        outData += bytes([p[1]])
-        outData += bytes([s[0]])
-        outData += bytes([s[1]])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        p = [position & 0xff, position >> 8]
+        s = [speed & 0xff, speed >> 8]
+        checksum = (~(
+                    id + Ax12.AX_GOAL_SP_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_GOAL_POSITION_L + p[0] + p[1] + s[0] + s[
+                1])) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_GOAL_SP_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_GOAL_POSITION_L])
+        out_data += bytes([p[0]])
+        out_data += bytes([p[1]])
+        out_data += bytes([s[0]])
+        out_data += bytes([s[1]])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def moveRW(self, id, position):
+    def move_rw(self, id, position):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        p = [position&0xff, position>>8]
-        checksum = (~(id + Ax12.AX_GOAL_LENGTH + Ax12.AX_REG_WRITE + Ax12.AX_GOAL_POSITION_L + p[0] + p[1]))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_GOAL_LENGTH])
-        outData += bytes([Ax12.AX_REG_WRITE])
-        outData += bytes([Ax12.AX_GOAL_POSITION_L])
-        outData += bytes([p[0]])
-        outData += bytes([p[1]])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        p = [position & 0xff, position >> 8]
+        checksum = (~(id + Ax12.AX_GOAL_LENGTH + Ax12.AX_REG_WRITE + Ax12.AX_GOAL_POSITION_L + p[0] + p[1])) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_GOAL_LENGTH])
+        out_data += bytes([Ax12.AX_REG_WRITE])
+        out_data += bytes([Ax12.AX_GOAL_POSITION_L])
+        out_data += bytes([p[0]])
+        out_data += bytes([p[1]])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def moveSpeedRW(self, id, position, speed):
+    def move_speed_rw(self, id, position, speed):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        p = [position&0xff, position>>8]
-        s = [speed&0xff, speed>>8]
-        checksum = (~(id + Ax12.AX_GOAL_SP_LENGTH + Ax12.AX_REG_WRITE + Ax12.AX_GOAL_POSITION_L + p[0] + p[1] + s[0] + s[1]))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_GOAL_SP_LENGTH])
-        outData += bytes([Ax12.AX_REG_WRITE])
-        outData += bytes([Ax12.AX_GOAL_POSITION_L])
-        outData += bytes([p[0]])
-        outData += bytes([p[1]])
-        outData += bytes([s[0]])
-        outData += bytes([s[1]])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        p = [position & 0xff, position >> 8]
+        s = [speed & 0xff, speed >> 8]
+        checksum = (~(
+                    id + Ax12.AX_GOAL_SP_LENGTH + Ax12.AX_REG_WRITE + Ax12.AX_GOAL_POSITION_L + p[0] + p[1] + s[0] + s[
+                1])) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_GOAL_SP_LENGTH])
+        out_data += bytes([Ax12.AX_REG_WRITE])
+        out_data += bytes([Ax12.AX_GOAL_POSITION_L])
+        out_data += bytes([p[0]])
+        out_data += bytes([p[1]])
+        out_data += bytes([s[0]])
+        out_data += bytes([s[1]])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
     def action(self):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_BROADCAST_ID])
-        outData += bytes([Ax12.AX_ACTION_LENGTH])
-        outData += bytes([Ax12.AX_ACTION])
-        outData += bytes([Ax12.AX_ACTION_CHECKSUM])
-        Ax12.port.write(outData)
-        #sleep(Ax12.TX_DELAY_TIME)
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_BROADCAST_ID])
+        out_data += bytes([Ax12.AX_ACTION_LENGTH])
+        out_data += bytes([Ax12.AX_ACTION])
+        out_data += bytes([Ax12.AX_ACTION_CHECKSUM])
+        Ax12.port.write(out_data)
+        # sleep(Ax12.TX_DELAY_TIME)
 
-    def setTorqueStatus(self, id, status):
+    def set_torque_status(self, id, status):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
         ts = 1 if ((status == True) or (status == 1)) else 0
-        checksum = (~(id + Ax12.AX_TORQUE_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_TORQUE_STATUS + ts))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_TORQUE_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_TORQUE_STATUS])
-        outData += bytes([ts])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(id + Ax12.AX_TORQUE_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_TORQUE_STATUS + ts)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_TORQUE_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_TORQUE_STATUS])
+        out_data += bytes([ts])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def setLedStatus(self, id, status):
+    def set_led_status(self, id, status):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
         ls = 1 if ((status == True) or (status == 1)) else 0
-        checksum = (~(id + Ax12.AX_LED_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_LED_STATUS + ls))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_LED_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_LED_STATUS])
-        outData += bytes([ls])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(id + Ax12.AX_LED_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_LED_STATUS + ls)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_LED_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_LED_STATUS])
+        out_data += bytes([ls])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def setTemperatureLimit(self, id, temp):
+    def set_temperature_limit(self, id, temp):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_TL_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_LIMIT_TEMPERATURE + temp))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_TL_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_LIMIT_TEMPERATURE])
-        outData += bytes([temp])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(id + Ax12.AX_TL_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_LIMIT_TEMPERATURE + temp)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_TL_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_LIMIT_TEMPERATURE])
+        out_data += bytes([temp])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def setVoltageLimit(self, id, lowVolt, highVolt):
+    def set_voltage_limit(self, id, low_volt, high_volt):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_VL_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_DOWN_LIMIT_VOLTAGE + lowVolt + highVolt))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_VL_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_DOWN_LIMIT_VOLTAGE])
-        outData += bytes([lowVolt])
-        outData += bytes([highVolt])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(
+                    id + Ax12.AX_VL_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_DOWN_LIMIT_VOLTAGE + low_volt + high_volt)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_VL_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_DOWN_LIMIT_VOLTAGE])
+        out_data += bytes([low_volt])
+        out_data += bytes([high_volt])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def setAngleLimit(self, id, cwLimit, ccwLimit):
+    def set_angle_limit(self, id, cw_limit, ccw_limit):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        cw = [cwLimit&0xff, cwLimit>>8]
-        ccw = [ccwLimit&0xff, ccwLimit>>8]
-        checksum = (~(id + Ax12.AX_AL_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_CW_ANGLE_LIMIT_L + cw[0] + cw[1] + ccw[0] + ccw[1]))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_AL_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_CW_ANGLE_LIMIT_L])
-        outData += bytes([cw[0]])
-        outData += bytes([cw[1]])
-        outData += bytes([ccw[0]])
-        outData += bytes([ccw[1]])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        cw = [cw_limit & 0xff, cw_limit >> 8]
+        ccw = [ccw_limit & 0xff, ccw_limit >> 8]
+        checksum = (~(id + Ax12.AX_AL_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_CW_ANGLE_LIMIT_L + cw[0] + cw[1] + ccw[0] +
+                      ccw[1])) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_AL_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_CW_ANGLE_LIMIT_L])
+        out_data += bytes([cw[0]])
+        out_data += bytes([cw[1]])
+        out_data += bytes([ccw[0]])
+        out_data += bytes([ccw[1]])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def setTorqueLimit(self, id, torque):
+    def set_torque_limit(self, id, torque):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        mt = [torque&0xff, torque>>8]
-        checksum = (~(id + Ax12.AX_MT_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_MAX_TORQUE_L + mt[0] + mt[1]))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_MT_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_MAX_TORQUE_L])
-        outData += bytes([mt[0]])
-        outData += bytes([mt[1]])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        mt = [torque & 0xff, torque >> 8]
+        checksum = (~(id + Ax12.AX_MT_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_MAX_TORQUE_L + mt[0] + mt[1])) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_MT_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_MAX_TORQUE_L])
+        out_data += bytes([mt[0]])
+        out_data += bytes([mt[1]])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def setPunchLimit(self, id, punch):
+    def set_punch_limit(self, id, punch):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        p = [punch&0xff, punch>>8]
-        checksum = (~(id + Ax12.AX_PUNCH_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_PUNCH_L + p[0] + p[1]))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_PUNCH_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_PUNCH_L])
-        outData += bytes([p[0]])
-        outData += bytes([p[1]])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        p = [punch & 0xff, punch >> 8]
+        checksum = (~(id + Ax12.AX_PUNCH_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_PUNCH_L + p[0] + p[1])) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_PUNCH_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_PUNCH_L])
+        out_data += bytes([p[0]])
+        out_data += bytes([p[1]])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def setCompliance(self, id, cwMargin, ccwMargin, cwSlope, ccwSlope):
+    def set_compliance(self, id, cw_margin, ccw_margin, cw_slope, ccw_slope):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_COMPLIANCE_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_CW_COMPLIANCE_MARGIN + cwMargin + ccwMargin + cwSlope + ccwSlope))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_COMPLIANCE_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_CW_COMPLIANCE_MARGIN])
-        outData += bytes([cwMargin])
-        outData += bytes([ccwMArgin])
-        outData += bytes([cwSlope])
-        outData += bytes([ccwSlope])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(
+                    id + Ax12.AX_COMPLIANCE_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_CW_COMPLIANCE_MARGIN + cw_margin + ccw_margin + cw_slope + ccw_slope)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_COMPLIANCE_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_CW_COMPLIANCE_MARGIN])
+        out_data += bytes([cw_margin])
+        out_data += bytes([ccw_margin])
+        out_data += bytes([cw_slope])
+        out_data += bytes([ccw_slope])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def setLedAlarm(self, id, alarm):
+    def set_led_alarm(self, id, alarm):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_LEDALARM_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_ALARM_LED + alarm))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_LEDALARM_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_ALARM_LED])
-        outData += bytes([alarm])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(id + Ax12.AX_LEDALARM_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_ALARM_LED + alarm)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_LEDALARM_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_ALARM_LED])
+        out_data += bytes([alarm])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def setShutdownAlarm(self, id, alarm):
+    def set_shutdown_alarm(self, id, alarm):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_SHUTDOWNALARM_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_ALARM_SHUTDOWN + alarm))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_SHUTDOWNALARM_LENGTH])
-        outData += bytes([Ax12.AX_WRITE_DATA])
-        outData += bytes([Ax12.AX_ALARM_SHUTDOWN])
-        outData += bytes([alarm])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(id + Ax12.AX_SHUTDOWNALARM_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_ALARM_SHUTDOWN + alarm)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_SHUTDOWNALARM_LENGTH])
+        out_data += bytes([Ax12.AX_WRITE_DATA])
+        out_data += bytes([Ax12.AX_ALARM_SHUTDOWN])
+        out_data += bytes([alarm])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def readTemperature(self, id):
+    def read_temperature(self, id):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_TEM_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_PRESENT_TEMPERATURE + Ax12.AX_BYTE_READ))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_TEM_LENGTH])
-        outData += bytes([Ax12.AX_READ_DATA])
-        outData += bytes([Ax12.AX_PRESENT_TEMPERATURE])
-        outData += bytes([Ax12.AX_BYTE_READ])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(
+                    id + Ax12.AX_TEM_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_PRESENT_TEMPERATURE + Ax12.AX_BYTE_READ)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_TEM_LENGTH])
+        out_data += bytes([Ax12.AX_READ_DATA])
+        out_data += bytes([Ax12.AX_PRESENT_TEMPERATURE])
+        out_data += bytes([Ax12.AX_BYTE_READ])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def readPosition(self, id):
+    def read_position(self, id):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_POS_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_PRESENT_POSITION_L + Ax12.AX_INT_READ))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_POS_LENGTH])
-        outData += bytes([Ax12.AX_READ_DATA])
-        outData += bytes([Ax12.AX_PRESENT_POSITION_L])
-        outData += bytes([Ax12.AX_INT_READ])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(
+                    id + Ax12.AX_POS_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_PRESENT_POSITION_L + Ax12.AX_INT_READ)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_POS_LENGTH])
+        out_data += bytes([Ax12.AX_READ_DATA])
+        out_data += bytes([Ax12.AX_PRESENT_POSITION_L])
+        out_data += bytes([Ax12.AX_INT_READ])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def readVoltage(self, id):
+    def read_voltage(self, id):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_VOLT_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_PRESENT_VOLTAGE + Ax12.AX_BYTE_READ))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_VOLT_LENGTH])
-        outData += bytes([Ax12.AX_READ_DATA])
-        outData += bytes([Ax12.AX_PRESENT_VOLTAGE])
-        outData += bytes([Ax12.AX_BYTE_READ])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(
+                    id + Ax12.AX_VOLT_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_PRESENT_VOLTAGE + Ax12.AX_BYTE_READ)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_VOLT_LENGTH])
+        out_data += bytes([Ax12.AX_READ_DATA])
+        out_data += bytes([Ax12.AX_PRESENT_VOLTAGE])
+        out_data += bytes([Ax12.AX_BYTE_READ])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def readSpeed(self, id):
+    def read_speed(self, id):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_SPEED_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_PRESENT_SPEED_L + Ax12.AX_INT_READ))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_SPEED_LENGTH])
-        outData += bytes([Ax12.AX_READ_DATA])
-        outData += bytes([Ax12.AX_PRESENT_SPEED_L])
-        outData += bytes([Ax12.AX_INT_READ])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(
+                    id + Ax12.AX_SPEED_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_PRESENT_SPEED_L + Ax12.AX_INT_READ)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_SPEED_LENGTH])
+        out_data += bytes([Ax12.AX_READ_DATA])
+        out_data += bytes([Ax12.AX_PRESENT_SPEED_L])
+        out_data += bytes([Ax12.AX_INT_READ])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def readLoad(self, id):
+    def read_load(self, id):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_LOAD_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_PRESENT_LOAD_L + Ax12.AX_INT_READ))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_LOAD_LENGTH])
-        outData += bytes([Ax12.AX_READ_DATA])
-        outData += bytes([Ax12.AX_PRESENT_LOAD_L])
-        outData += bytes([Ax12.AX_INT_READ])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(id + Ax12.AX_LOAD_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_PRESENT_LOAD_L + Ax12.AX_INT_READ)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_LOAD_LENGTH])
+        out_data += bytes([Ax12.AX_READ_DATA])
+        out_data += bytes([Ax12.AX_PRESENT_LOAD_L])
+        out_data += bytes([Ax12.AX_INT_READ])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def readMovingStatus(self, id):
+    def read_moving_status(self, id):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_MOVING_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_MOVING + Ax12.AX_BYTE_READ))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_MOVING_LENGTH])
-        outData += bytes([Ax12.AX_READ_DATA])
-        outData += bytes([Ax12.AX_MOVING])
-        outData += bytes([Ax12.AX_BYTE_READ])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(id + Ax12.AX_MOVING_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_MOVING + Ax12.AX_BYTE_READ)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_MOVING_LENGTH])
+        out_data += bytes([Ax12.AX_READ_DATA])
+        out_data += bytes([Ax12.AX_MOVING])
+        out_data += bytes([Ax12.AX_BYTE_READ])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-    def readRWStatus(self, id):
+    def read_rw_status(self, id):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        checksum = (~(id + Ax12.AX_RWS_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_REGISTERED_INSTRUCTION + Ax12.AX_BYTE_READ))&0xff
-        outData = bytes([Ax12.AX_START])
-        outData += bytes([Ax12.AX_START])
-        outData += bytes([id])
-        outData += bytes([Ax12.AX_RWS_LENGTH])
-        outData += bytes([Ax12.AX_READ_DATA])
-        outData += bytes([Ax12.AX_REGISTERED_INSTRUCTION])
-        outData += bytes([Ax12.AX_BYTE_READ])
-        outData += bytes([checksum])
-        Ax12.port.write(outData)
+        checksum = (~(
+                    id + Ax12.AX_RWS_LENGTH + Ax12.AX_READ_DATA + Ax12.AX_REGISTERED_INSTRUCTION + Ax12.AX_BYTE_READ)) & 0xff
+        out_data = bytes([Ax12.AX_START])
+        out_data += bytes([Ax12.AX_START])
+        out_data += bytes([id])
+        out_data += bytes([Ax12.AX_RWS_LENGTH])
+        out_data += bytes([Ax12.AX_READ_DATA])
+        out_data += bytes([Ax12.AX_REGISTERED_INSTRUCTION])
+        out_data += bytes([Ax12.AX_BYTE_READ])
+        out_data += bytes([checksum])
+        Ax12.port.write(out_data)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.read_data(id)
 
-
-    def learnServos(self,minValue=1, maxValue=6, verbose=False) :
-        servoList = []
-        for i in range(minValue, maxValue + 1):
-            try :
+    def learn_servos(self, min_value=1, max_value=6, verbose=False):
+        servo_list = []
+        for i in range(min_value, max_value + 1):
+            try:
                 temp = self.ping(i)
-                servoList.append(i)
+                servo_list.append(i)
                 if verbose: print("Found servo #" + str(i))
                 time.sleep(0.1)
 
@@ -707,10 +724,10 @@ class Ax12:
             except:
                 # if verbose : print("Error pinging servo #" + str(i) + ': ' + str(detail))
                 pass
-        return servoList
+        return servo_list
 
 #
-#def playPose() :
+# def playPose() :
 #    '''
 #    Open a file and move the servos to specified positions in a group move
 #    '''
@@ -726,12 +743,12 @@ class Ax12:
 #
 #
 #
-#def writePose() :
+# def writePose() :
 #    '''
 #    Read the servos and save the positions to a file
 #    '''
 #    of = open(Arguments.savepose, 'w')      # open the output file
-#    pose = getPose2(connectedServos)        # get the positions
+#    pose = getPose2(connected_servos)        # get the positions
 #    if Arguments.verbose :
 #        print "Servo Positions"
 #        print "---------------"

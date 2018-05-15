@@ -1,7 +1,9 @@
-import random
 from collections import OrderedDict
+from threading import Timer
+
 from imutils.video import WebcamVideoStream
-from helpers import Color
+from elements.element7.helpers import Color
+
 import time
 import positions as db
 import numpy as np
@@ -9,8 +11,10 @@ import cv2
 import os
 import keyboard
 
-print ("uncomment run before starting..")
 
+# print("uncomment run before starting..")
+
+_C, _COLOR = 1, 1
 
 def run():
     print("run element7")
@@ -23,6 +27,8 @@ def run():
     red = Color([170, 100, 100], [190, 255, 255])
     green = Color([60, 100, 50], [90, 255, 255])
     blue = Color([90, 100, 100], [120, 255, 255])
+
+    routine()
 
     colors = OrderedDict({
         "red": (0, 0, 255),
@@ -44,13 +50,13 @@ def run():
             "yellow": cv2.inRange(hsv, yellow.lower, yellow.upper)})
 
         # set contours
-        imgmask = setcontours(masks.get("red"), "red", img)
+        imgmask = set_contours(masks.get("red"), "red", img)
         for col, mask in masks.items():
             if col == "red":
                 continue
-            imgmask += setcontours(mask, col, img)
+            imgmask += set_contours(mask, col, img)
 
-        drawsavedpositions(imgmask, colors)
+        draw_saved_positions(imgmask, colors)
 
         cv2.imshow('camservice', imgmask)
 
@@ -62,11 +68,11 @@ def run():
 
 
 # draw saved positions
-def drawsavedpositions(imgmask, colors):
+def draw_saved_positions(imgmask, colors):
 
     for i in range(len(db.buildings[1])):
-        cnt = np.array(db.positions[i].array)
-        color = db.positions[i].color
+        cnt = np.array(db.buildings[1][i].array)
+        color = db.buildings[1][i].color
         c = cv2.convexHull(cnt)
         M = cv2.moments(c)
         cx = int(M['m10'] / M['m00'])
@@ -77,9 +83,8 @@ def drawsavedpositions(imgmask, colors):
 
 
 # sets contours for selected masks
-def setcontours(mask, color, img):
-
-    imgmask = cv2.bitwise_and(img, img, mask=mask)
+def set_contours(mask, color, img):
+    img_mask = cv2.bitwise_and(img, img, mask=mask)
 
     ret, thresh = cv2.threshold(mask, 127, 255, 0)
     im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -91,8 +96,8 @@ def setcontours(mask, color, img):
             peri = cv2.arcLength(c, True)
             approx = cv2.approxPolyDP(c, 0.02 * peri, True)
             area = cv2.contourArea(c)
-            if len(approx) == 4 and area > 4000 and not isduplicate(contours[x], db.positions):
-                savecontour(contours[x], color)
+            if len(approx) == 4 and area > 4000 and not is_duplicate(contours[x], db.positions):
+                save_contour(contours[x], color)
 
     # draw all correct contours
     for i in range(len(contours)):
@@ -101,16 +106,24 @@ def setcontours(mask, color, img):
         approx = cv2.approxPolyDP(c, 0.02 * peri, True)
         area = cv2.contourArea(c)
         if len(approx) == 4 and area > 4000:
-            M = cv2.moments(c)
-            cx = int(M['m10'] / M['m00'])
-            cy = int(M['m01'] / M['m00'])
-            cv2.drawContours(imgmask, [c], 0, (255, 255, 255), 3)
+            moment = cv2.moments(c)
+            cx = int(moment['m10'] / moment['m00'])
+            cy = int(moment['m01'] / moment['m00'])
+            cv2.drawContours(img_mask, [c], 0, (255, 255, 255), 3)
             text = "{} {}".format("Color:", color)
-            cv2.putText(imgmask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+            cv2.putText(img_mask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
-            recognizebuilding(c, color)
+            global _C, _COLOR
+            _C = c
+            _COLOR = color
 
-    return imgmask
+    return img_mask
+
+
+def routine():
+    t = Timer(7200, routine)
+    t.start()
+    recognizebuilding(_C, _COLOR)
 
 
 def recognizebuilding(c, color):
@@ -120,7 +133,7 @@ def recognizebuilding(c, color):
         for k in range(len(db.buildings[j])):
             for l in range(len(db.buildings[j][k].array)):
                 if db.buildings[j][k].color == color:
-                    if comparenumpy(c, db.buildings[j][k].array):  # found block
+                    if compare_numpy(c, db.buildings[j][k].array):  # found block
                         currentbuilding = True
                     else:  # wrong block
                         currentbuilding = False
@@ -131,7 +144,7 @@ def recognizebuilding(c, color):
 
 
 # checks if contour is duplicate
-def isduplicate(x, y):
+def is_duplicate(x, y):
 
     reload(db)
     time.sleep(.1)
@@ -146,7 +159,7 @@ def isduplicate(x, y):
 
 
 # saves the current correct contours to positions.py array
-def savecontour(c, color):
+def save_contour(c, color):
     try:
         filename = "positions.py"
         output = open(filename, "a")
@@ -165,14 +178,14 @@ def savecontour(c, color):
         output.truncate()
         output.write("]])\n]")
         output.close()
-        print("succesfully saved")
+        print("successfully saved")
         reload(db)
     except ValueError:
         print("failed to save")
 
 
 # compares two contours for detection
-def comparenumpy(x, y):
+def compare_numpy(x, y):
 
     sensitivity = 30
 

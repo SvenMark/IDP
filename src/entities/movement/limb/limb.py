@@ -2,6 +2,7 @@ class Limb(object):
     """
     Base class for limb
     """
+
     def __init__(self, limb_type):
         self.limb_type = limb_type
 
