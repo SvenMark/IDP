@@ -19,6 +19,9 @@ class Servo(object):
         self.ax12.move(self.servo_id, degrees)
         time.sleep(delay)
 
+    def readPosition(self):
+        self.ax12.readPosition(self, self.servo_id)
+
 def main():
     servoprivod = Servo(13)
     servoprivod.move(500, 0)
