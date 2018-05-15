@@ -3,6 +3,7 @@ from threading import Timer
 
 from imutils.video import WebcamVideoStream
 from elements.element7.helpers import Color
+from elements.element7.helpers import Position
 
 import time
 import positions as db
@@ -14,7 +15,8 @@ import keyboard
 
 # print("uncomment run before starting..")
 
-_C, _COLOR = 1, 1
+_POSITIONS = []
+
 
 def run():
     print("run element7")
@@ -103,6 +105,9 @@ def set_contours(mask, color, img):
         peri = cv2.arcLength(c, True)
         approx = cv2.approxPolyDP(c, 0.02 * peri, True)
         area = cv2.contourArea(c)
+
+        positions = []
+
         if len(approx) == 4 and area > 4000:
             moment = cv2.moments(c)
             cx = int(moment['m10'] / moment['m00'])
@@ -111,9 +116,19 @@ def set_contours(mask, color, img):
             text = "{} {}".format("Color:", color)
             cv2.putText(img_mask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
-            recognize_building(c, color)
+            # dit klopt maar half omdat het maar 1 kleur en contour meegeeft :')
+            # iets met global variables en lists
+            positions.append(Position(color, c))
+
+        global _POSITIONS
+        _POSITIONS = positions
 
     return img_mask
+
+
+def routine():
+    a = 1
+    # recognize_building(_POSITIONS)
 
 
 def recognize_building(c, color):

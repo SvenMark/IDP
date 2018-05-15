@@ -1,8 +1,4 @@
-class Position:
-    def __init__(self, color, array):
-        self.color = color
-        self.array = array
-
+from elements.element7.helpers import Position
 
 buildings = [
         [
