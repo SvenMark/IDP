@@ -13,6 +13,7 @@ class Servo(object):
         self.ax12 = Ax12()
         self.servo_id = servo_id
         self.last_position = initial_position
+        self.ax12.move(servo_id, initial_position)
 
     #Degrees are 0 - 998
     def move(self, degrees, delay):
