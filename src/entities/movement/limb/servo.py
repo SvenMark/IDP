@@ -1,9 +1,8 @@
 #!/bin/python
 
-
 import time
 
-from ax12 import Ax12
+from libs.ax12 import Ax12
 
 
 class Servo(object):
@@ -15,18 +14,13 @@ class Servo(object):
         self.ax12 = Ax12()
         self.servo_id = servo_id
 
+    #Degrees are 0 - 1000
     def move(self, degrees, delay):
         self.ax12.move(self.servo_id, degrees)
         time.sleep(delay)
 
-    @property
-    def turn(self):
-        raise NotImplementedError('Should be overridden in the child class')
+def main():
+    servoprivod = Servo(13)
+    servoprivod.move(500, 0)
 
-
-def test():
-    servo = Servo(13)
-    servo.move(500, 0.5)
-    servo.move(1000, 0.5)
-
-# test()
+#main()
