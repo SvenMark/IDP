@@ -1,7 +1,8 @@
 #!/bin/python
 
-from entities.movement.limb.servo import Servo
 import time
+
+from entities.movement.limb.servo import Servo
 
 servoprivod = Servo(31, 500)
 otherservo = Servo(13, 500)
