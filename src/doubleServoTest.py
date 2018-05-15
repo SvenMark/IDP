@@ -11,11 +11,9 @@ boris.setLedStatus(servo2, 1)
 
 while True:
     boris.move(servo1, 0)
-    boris.move(servo2, 1000)
+    boris.move(servo2, 998)
     time.sleep(2)
 
-    boris.move(servo1, 1000)
+    boris.move(servo1, 998)
     boris.move(servo2, 0)
     time.sleep(2)
-
-GPIO.cleanup()
