@@ -8,7 +8,7 @@ import numpy as np
 from elements.element7 import positions
 from elements.element7.helpers import Color
 
-print("uncomment run before starting..")
+# print("uncomment run before starting..")
 
 
 def run():
@@ -138,4 +138,3 @@ def compare_numpy(x, y):
 
     return True
 
-# run()  # disabled for travis
