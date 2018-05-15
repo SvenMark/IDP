@@ -13,48 +13,49 @@ class DCMotor(object):
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
-        self.pinMotorForward = 10
-        self.pinMotorBackward = 9
-        self.pinPwm = 18
+        self.pin_motor_forward = 10
+        self.pin_motor_backward = 9
+        self.pin_pwm = 18
         self.frequency = 20
         self.stop = 0
 
-        GPIO.setup(self.pinPwm, GPIO.OUT)
-        GPIO.setup(self.pinMotorForward, GPIO.OUT)
-        GPIO.setup(self.pinMotorBackward, GPIO.OUT)
+        GPIO.setup(self.pin_pwm, GPIO.OUT)
+        GPIO.setup(self.pin_motor_forward, GPIO.OUT)
+        GPIO.setup(self.pin_motor_backward, GPIO.OUT)
 
-        self.pwmMotor = GPIO.PWM(self.pinPwm, self.frequency)
-        self.pwmMotor.start(self.stop)
+        self.pwm_motor = GPIO.PWM(self.pin_pwm, self.frequency)
+        self.pwm_motor.start(self.stop)
 
         print("Setup")
 
     # Turn all motors off
-    def stopMotor(self):
-        self.pwmMotor.ChangeDutyCycle(self.stop)
+    def stop_motor(self):
+        self.pwm_motor.ChangeDutyCycle(self.stop)
 
     # Turn both motors forwards
-    def forward(self, dutycycle, delay):
-        print("Forwards " + str(dutycycle))
-        GPIO.output(self.pinMotorForward, GPIO.HIGH)
-        GPIO.output(self.pinMotorBackward, GPIO.LOW)
-        self.pwmMotor.ChangeDutyCycle(dutycycle)
+    def forward(self, duty_cycle, delay):
+        print("Forwards " + str(duty_cycle))
+        GPIO.output(self.pin_motor_forward, GPIO.HIGH)
+        GPIO.output(self.pin_motor_backward, GPIO.LOW)
+        self.pwm_motor.ChangeDutyCycle(duty_cycle)
         time.sleep(delay)
 
-    def backward(self, dutycycle, delay):
-        print("Backwards " + str(dutycycle))
-        GPIO.output(self.pinMotorForward, GPIO.LOW)
-        GPIO.output(self.pinMotorBackward, GPIO.HIGH)
-        self.pwmMotor.ChangeDutyCycle(dutycycle)
+    def backward(self, duty_cycle, delay):
+        print("Backwards " + str(duty_cycle))
+        GPIO.output(self.pin_motor_forward, GPIO.LOW)
+        GPIO.output(self.pin_motor_backward, GPIO.HIGH)
+        self.pwm_motor.ChangeDutyCycle(duty_cycle)
         time.sleep(delay)
 
-    def cleanUp(self):
-        self.stopMotor()
+    def clean_up(self):
+        self.stop_motor()
         GPIO.cleanup()
 
 
 def main():
     dvigatel = DCMotor()
-    dvigatel.cleanUp()
+    dvigatel.clean_up()
 
 
-main()
+if __name__ == "__main__":
+    main()

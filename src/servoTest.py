@@ -1,18 +1,17 @@
 #!/bin/python
 
-from libs.ax12 import Ax12
-import time
+from entities.movement.limb.servo import Servo
 
-boris = Ax12()
+servoprivod = Servo(13, 0)
+servoprivod.move(998, 0)
 
-ax12id = 13
-
-boris.move(ax12id, 0)
-
-#while True :
-#	boris.move(ax12id, 500)
-#	time.sleep(1)
-#	boris.move(ax12id, 0)
-#	time.sleep(1)
-#	boris.move(ax12id, 1000)
-#	time.sleep(1)
+while True:
+    if servoprivod.read_position() == 998:
+        print(servoprivod.read_position())
+        servoprivod.move(500, 1)
+    if servoprivod.read_position() == 500:
+        print(servoprivod.read_position())
+        servoprivod.move(0, 1)
+    if servoprivod.read_position() == 0:
+        print(servoprivod.read_position())
+        servoprivod.move(998, 1)
