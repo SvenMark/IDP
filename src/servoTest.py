@@ -6,12 +6,12 @@ servoprivod = Servo(13)
 servoprivod.move(998, 0)
 
 while True:
-    if servoprivod.readPosition() == 998:
-        print(servoprivod.readPosition())
+    if servoprivod.read_position() == 998:
+        print(servoprivod.read_position())
         servoprivod.move(500, 1)
-    if servoprivod.readPosition() == 500:
-        print(servoprivod.readPosition())
+    if servoprivod.read_position() == 500:
+        print(servoprivod.read_position())
         servoprivod.move(0, 1)
-    if servoprivod.readPosition() == 0:
-        print(servoprivod.readPosition())
+    if servoprivod.read_position() == 0:
+        print(servoprivod.read_position())
         servoprivod.move(998, 1)
