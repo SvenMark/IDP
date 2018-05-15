@@ -30,8 +30,11 @@ class Servo(object):
     def read_position(self):
         return self.ax12.read_position(self.servo_id)
 
+
 def main():
     servoprivod = Servo(13, 0)
     servoprivod.move(500, 0)
 
-#main()
+
+if __name__ == "__main__":
+    main()
