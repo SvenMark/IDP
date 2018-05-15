@@ -22,9 +22,16 @@ def run():
     green = Color([60, 100, 50], [90, 255, 255])
     blue = Color([90, 100, 100], [120, 255, 255])
 
+    colors = OrderedDict({
+        "red": (0, 0, 255),
+        "blue": (255, 0, 0),
+        "green": (0, 255, 0),
+        "orange": (0, 165, 255),
+        "yellow": (0, 255, 255)})    
+
     while True:
         img = cap.read()
-        img = cv2.GaussianBlur(img, (9, 9), 0)
+        img = cv2.GaussianBlur(img, (5, 5), 0)
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
         masks = OrderedDict({
@@ -33,13 +40,6 @@ def run():
             "green": cv2.inRange(hsv, green.lower, green.upper),
             "orange": cv2.inRange(hsv, orange.lower, orange.upper),
             "yellow": cv2.inRange(hsv, yellow.lower, yellow.upper)})
-
-        colors = OrderedDict({
-            "red": (0, 0, 255),
-            "blue": (255, 0, 0),
-            "green": (0, 255, 0),
-            "orange": (0, 165, 255),
-            "yellow": (0, 255, 255)})
 
         imgmask = setcontours(masks.get("red"), "red", img)
         for col, mask in masks.items():
