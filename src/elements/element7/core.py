@@ -28,8 +28,6 @@ def run():
     green = Color([60, 100, 50], [90, 255, 255])
     blue = Color([90, 100, 100], [120, 255, 255])
 
-    routine()
-
     colors = OrderedDict({
         "red": (0, 0, 255),
         "blue": (255, 0, 0),
@@ -113,20 +111,12 @@ def set_contours(mask, color, img):
             text = "{} {}".format("Color:", color)
             cv2.putText(img_mask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
-            global _C, _COLOR
-            _C = c
-            _COLOR = color
+            recognize_building(c, color)
 
     return img_mask
 
 
-def routine():
-    t = Timer(7200, routine)
-    t.start()
-    recognizebuilding(_C, _COLOR)
-
-
-def recognizebuilding(c, color):
+def recognize_building(c, color):
     # check if you recognize position
     for j in range(len(db.buildings)):
         currentbuilding = True
