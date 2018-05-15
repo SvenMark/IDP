@@ -7,7 +7,7 @@ def run():
 
     np.set_printoptions(suppress=True)  # don't use scientific notation
 
-    CHUNK = 2000  # speed of data point reading, smaller is less datapoints is faster updates
+    CHUNK = 1500  # speed of data point reading, smaller == less datapoints == faster updates
     RATE = 44100  # time resolution of the recording device (Hz)
     OUTPUTS = 12000  # number of outputs
 
