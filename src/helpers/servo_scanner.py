@@ -7,6 +7,6 @@ tester = Ax12()
 for i in range(0, 255):
     try:
         tester.ping(i)
-        print("Servo found with id: " + i)
+        print("Servo found with id: " + str(i))
     except tester.timeout_error:
         not_found = True
