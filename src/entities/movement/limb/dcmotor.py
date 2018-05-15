@@ -23,32 +23,32 @@ class DCMotor(object):
         GPIO.setup(self.pin_motor_forward, GPIO.OUT)
         GPIO.setup(self.pin_motor_backward, GPIO.OUT)
 
-        self.pwmMotor = GPIO.PWM(self.pin_pwm, self.frequency)
-        self.pwmMotor.start(self.stop)
+        self.pwm_motor = GPIO.PWM(self.pin_pwm, self.frequency)
+        self.pwm_motor.start(self.stop)
 
         print("Setup")
 
     # Turn all motors off
     def stop_motor(self):
-        self.pwmMotor.ChangeDutyCycle(self.stop)
+        self.pwm_motor.ChangeDutyCycle(self.stop)
 
     # Turn both motors forwards
-    def forward(self, dutycycle, delay):
-        print("Forwards " + str(dutycycle))
+    def forward(self, duty_cycle, delay):
+        print("Forwards " + str(duty_cycle))
         GPIO.output(self.pin_motor_forward, GPIO.HIGH)
         GPIO.output(self.pin_motor_backward, GPIO.LOW)
-        self.pwmMotor.ChangeDutyCycle(dutycycle)
+        self.pwm_motor.ChangeDutyCycle(duty_cycle)
         time.sleep(delay)
 
-    def backward(self, dutycycle, delay):
-        print("Backwards " + str(dutycycle))
+    def backward(self, duty_cycle, delay):
+        print("Backwards " + str(duty_cycle))
         GPIO.output(self.pin_motor_forward, GPIO.LOW)
         GPIO.output(self.pin_motor_backward, GPIO.HIGH)
-        self.pwmMotor.ChangeDutyCycle(dutycycle)
+        self.pwm_motor.ChangeDutyCycle(duty_cycle)
         time.sleep(delay)
 
     def clean_up(self):
-        self.stopMotor()
+        self.stop_motor()
         GPIO.cleanup()
 
 
@@ -57,4 +57,5 @@ def main():
     dvigatel.clean_up()
 
 
-main()
+if __name__ == "__main__":
+    main()
