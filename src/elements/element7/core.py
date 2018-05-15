@@ -8,6 +8,8 @@ import numpy as np
 from elements.element7 import positions
 from elements.element7.helpers import Color
 
+# print("uncomment run before starting..")
+
 
 def run():
     print("run element7")
@@ -135,3 +137,4 @@ def compare_numpy(x, y):
                 return False
 
     return True
+
