@@ -16,11 +16,7 @@ class CommonTestClass(unittest.TestCase):
     def test_directory(self):
         self.assertIn(self.audio.resources, RESOURCES)
 
-    def test_speak(self):
-        self.speak.play('test.wav')
-        self.speak.tts('this is a test sentence')
-
-    def test_listen(self):
-        self.listen.record()
-        self.listen.record(save=True, play_recording=True, file_name='test_rec.wav')
-        self.assertEqual(self.listen.get_file_path('test_rec.wav'), RESOURCES + 'test_rec.wav')
+    def test_instances(self):
+        self.assertIsInstance(self.audio, Audio)
+        self.assertIsInstance(self.speak, Speak)
+        self.assertIsInstance(self.listen, Listen)
