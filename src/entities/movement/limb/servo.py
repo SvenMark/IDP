@@ -4,7 +4,6 @@ import time
 
 from libs.ax12 import Ax12
 
-
 class Servo(object):
     """
     Base class for servo
@@ -20,7 +19,7 @@ class Servo(object):
         time.sleep(delay)
 
     def readPosition(self):
-        self.ax12.readPosition(self.servo_id)
+        return self.ax12.readPosition(self.servo_id)
 
 def main():
     servoprivod = Servo(13)
