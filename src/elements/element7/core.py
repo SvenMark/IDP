@@ -64,7 +64,7 @@ def run():
 # draw saved positions
 def drawsavedpositions(imgmask, colors):
 
-    for i in range(len(db.positions)):
+    for i in range(len(db.buildings[1])):
         cnt = np.array(db.positions[i].array)
         color = db.positions[i].color
         c = cv2.convexHull(cnt)
@@ -108,14 +108,26 @@ def setcontours(mask, color, img):
             text = "{} {}".format("Color:", color)
             cv2.putText(imgmask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
-            # check if you recognize position
-            for j in range(len(db.positions)):
-                if db.positions[j].color == color:
-                    if comparenumpy(c, db.positions[j].array):
-                        # print(str(time.ctime()) + " detected position of " + color)
-                        x = 'b'
+            recognizebuilding(c, color)
 
     return imgmask
+
+
+def recognizebuilding(c, color):
+    # check if you recognize position
+    for j in range(len(db.buildings)):
+        currentbuilding = True
+        for k in range(len(db.buildings[j])):
+            for l in range(len(db.buildings[j][k].array)):
+                if db.buildings[j][k].color == color:
+                    if comparenumpy(c, db.buildings[j][k].array):  # found block
+                        currentbuilding = True
+                    else:  # wrong block
+                        currentbuilding = False
+                        # look for next building
+                        break
+        if currentbuilding:
+            print("{} detected position of building {}".format(time.ctime(), j))
 
 
 # checks if contour is duplicate
