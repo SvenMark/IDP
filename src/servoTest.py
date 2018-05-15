@@ -1,17 +1,11 @@
 #!/bin/python
 
 from entities.movement.limb.servo import Servo
+import time
 
-servoprivod = Servo(13, 0)
-servoprivod.move(998, 0)
+servoprivod = Servo(31, 500)
 
 while True:
-    if servoprivod.read_position() == 998:
-        print(servoprivod.read_position())
-        servoprivod.move(500, 1)
-    if servoprivod.read_position() == 500:
-        print(servoprivod.read_position())
-        servoprivod.move(0, 1)
-    if servoprivod.read_position() == 0:
-        print(servoprivod.read_position())
-        servoprivod.move(998, 1)
+    servoprivod.move(500, 0)
+    servoprivod.move(300, 0)
+
