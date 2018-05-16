@@ -33,12 +33,12 @@ class Tracks(object):
         speed2 = self.motor2.currentspeed
 
         for i in range(0, 100 * acceleration):
+            speed1 += step
+            speed2 += step2
+
             self.motor1.forward(speed1, 0)
             self.motor2.forward(speed2, 0)
 
-            speed1 += step
-            speed2 += step2
-            
             time.sleep(0.01)
 
         time.sleep(delay)
