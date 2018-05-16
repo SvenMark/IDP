@@ -1,11 +1,12 @@
 import pyaudio
 import numpy as np
+import pylab
 
 
 def run():
     print("run element4")
 
-    OPTION = 2  # 0 is laatste versie, 1 is misschien beter, kijk zelf maar. 2 is freq plot
+    OPTION = 3  # 0 is laatste versie, 1 is misschien beter, kijk zelf maar. 2 is freq plot
 
     if OPTION == 0:
         np.set_printoptions(suppress=True)  # don't use scientific notation
@@ -76,7 +77,6 @@ def run():
         p.terminate()
 
     elif OPTION == 1:
-        import pylab as pl
         np.set_printoptions(suppress=True)  # don't use scientific notation
 
         CHUNK = 2000  # speed of data point reading, smaller is less datapoints is faster updates
@@ -106,7 +106,6 @@ def run():
 
     elif OPTION == 2:
         import time
-        import pylab
 
         class SWHear(object):
             """
@@ -206,8 +205,6 @@ def run():
         ear.tape_forever()
         ear.close()
         print("DONE")
-    elif OPTION == 3:
-        print("Nothing to see here.")
     # Exit program
 # End of def run
 if __name__ == '__main__':
