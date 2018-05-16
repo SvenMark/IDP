@@ -13,9 +13,19 @@ def run():
         from matplotlib.ticker import FuncFormatter
 
         np.set_printoptions(suppress=True)  # don't use scientific notation
+
         CHUNK = 700  # speed of data point reading, smaller == less datapoints == faster updates
-        RATE = 11025  # time resolution of the recording device (Hz)
+        RATE = 11025  # time resolution of the recording device (Hz) Higher == Better accuracy
         OUTPUTS = 1000  # number of outputs
+
+        LOWLOWS = 0
+        HIGHLOWS = 50  # low value borders
+
+        LOWMEDS = 50
+        HIGHMEDS = 100  # med value borders
+
+        LOWHIGHS = 100
+        HIGHHIGHS = 175  # high value borders
 
         p = pyaudio.PyAudio()  # start the PyAudio class
         stream = p.open(format=pyaudio.paInt16, channels=1, rate=RATE, input=True,
@@ -23,34 +33,32 @@ def run():
 
         pylab.interactive(True)
         for i in range(OUTPUTS):  # Number of outputs
-            t1 = time.time()
             data = np.fromstring(stream.read(CHUNK), dtype=np.int16)
             left = data[0::2]
             lf = np.fft.rfft(left)
 
-            #Plot the graph
-            #pylab.clf()
-            #pylab.figure(1)
-            #b = pylab.subplot(212)
-            #b.set_xscale('log')
-            #b.set_xlabel('frequency [Hz]')
-            #b.set_ylabel('|amplitude|')
+            # Plot the graph
+            # pylab.clf()
+            # pylab.figure(1)
+            # b = pylab.subplot(212)
+            # b.set_xscale('log')
+            # b.set_xlabel('frequency [Hz]')
+            # b.set_ylabel('|amplitude|')
 
-            #b.set_ylim([0, 50000])
-            #pylab.plot(abs(lf))
-            #pylab.savefig('frequency.png')
-            #pylab.show()
+            # b.set_ylim([0, 50000])
+            # pylab.plot(abs(lf))
+            # pylab.savefig('frequency.png')
+            # pylab.show()
 
             lows = 0
-            for i in range(0, 50):
+            for i in range(LOWLOWS, HIGHLOWS):
                 lows = lows + abs(lf)[i]
             meds = 0
-            for i in range(50, 100):
+            for i in range(LOWMEDS, HIGHMEDS):
                 meds = meds + abs(lf)[i]
             high = 0
-            for i in range(100, 175):
+            for i in range(LOWHIGHS, HIGHHIGHS):
                 high = high + abs(lf)[i]
-
 
             value = [lows, meds, high]
             pylab.ylim(0, 2000000)
@@ -58,8 +66,8 @@ def run():
             pylab.xticks(np.arange(3), ('Low', 'Med', 'High'))
             pylab.show()
 
-            print("Low: "+ str(lows) + ", Med: "+str(meds)+", High: "+str(high))
-            print("Time: %.02f ms" % ((time.time() - t1) * 1000))
+            print("Low: " + str(lows) + ", Med: " + str(meds) + ", High: " + str(high))
+
         stream.stop_stream()
         stream.close()
         p.terminate()
@@ -260,6 +268,8 @@ def run():
         stream.close()
         p.terminate()
         # Exit program
+
+
 # End of def run
 if __name__ == '__main__':
     run()
