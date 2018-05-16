@@ -12,10 +12,11 @@ import cv2
 import os
 import keyboard
 
-
 # print("uncomment run before starting..")
 
-_POSITIONS = []
+POSITIONS = []
+LAST_POS_LEN = 100
+STOP_POSITIONS = False
 
 
 def run():
@@ -36,6 +37,8 @@ def run():
         "green": (0, 255, 0),
         "orange": (0, 165, 255),
         "yellow": (0, 255, 255)})
+
+    routine()
 
     while True:
         img = cap.read()
@@ -69,10 +72,9 @@ def run():
 
 # draw saved positions
 def draw_saved_positions(imgmask, colors):
-
-    for i in range(len(db.buildings[1])):
-        cnt = np.array(db.buildings[1][i].array)
-        color = db.buildings[1][i].color
+    for i in range(len(db.buildings[0])):
+        cnt = np.array(db.buildings[0][i].array)
+        color = db.buildings[0][i].color
         c = cv2.convexHull(cnt)
         M = cv2.moments(c)
         cx = int(M['m10'] / M['m00'])
@@ -90,14 +92,11 @@ def set_contours(mask, color, img):
     im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     # save correct contours when key 's' is pressed
-    if cv2.waitKey(1) & 0xFF == ord('s') or keyboard.is_pressed('s'):
-        for x in range(len(contours)):
-            c = cv2.convexHull(contours[x])
-            peri = cv2.arcLength(c, True)
-            approx = cv2.approxPolyDP(c, 0.02 * peri, True)
-            area = cv2.contourArea(c)
-            if len(approx) == 4 and area > 4000 and not is_duplicate(contours[x], db.positions):
-                save_contour(contours[x], color)
+    # if cv2.waitKey(1) & 0xFF == ord('s') or keyboard.is_pressed('s'):
+    #     for i in range(len(POSITIONS)):
+    #         color = POSITIONS[i].color
+    #         cnt = POSITIONS[i].array
+    #         save_contour(cnt, color)
 
     # draw all correct contours
     for i in range(len(contours)):
@@ -105,8 +104,6 @@ def set_contours(mask, color, img):
         peri = cv2.arcLength(c, True)
         approx = cv2.approxPolyDP(c, 0.02 * peri, True)
         area = cv2.contourArea(c)
-
-        positions = []
 
         if len(approx) == 4 and area > 4000:
             moment = cv2.moments(c)
@@ -116,33 +113,53 @@ def set_contours(mask, color, img):
             text = "{} {}".format("Color:", color)
             cv2.putText(img_mask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
-            # dit klopt maar half omdat het maar 1 kleur en contour meegeeft :')
-            # iets met global variables en lists
-            positions.append(Position(color, c))
+            global LAST_POS_LEN, STOP_POSITIONS
 
-        global _POSITIONS
-        _POSITIONS = positions
+            if not STOP_POSITIONS:
+                if not is_duplicate(contours[i], POSITIONS):
+                    POSITIONS.append(Position(color, contours[i]))
+                    print("Found {}, color {}".format(len(POSITIONS), color))
 
     return img_mask
 
 
 def routine():
-    a = 1
-    # recognize_building(_POSITIONS)
+    t = Timer(2, routine)
+    t.start()
+    global STOP_POSITIONS, LAST_POS_LEN
+    if LAST_POS_LEN == len(POSITIONS):
+        STOP_POSITIONS = True
+
+        # save current positions to file
+        for i in range(len(POSITIONS)):
+            color = POSITIONS[i].color
+            cnt = POSITIONS[i].array
+            save_contour(cnt, color)
+            reload(db)
+
+        # start recognizing building
+        print"napalm"
+        t.cancel()
+        recognize_building(POSITIONS)
+
+    LAST_POS_LEN = len(POSITIONS)
 
 
-def recognize_building(c, color):
+def recognize_building(positions):
     # check if you recognize position
     for j in range(len(db.buildings)):
         currentbuilding = True
         for k in range(len(db.buildings[j])):
+            if not len(positions) == len(db.buildings[j]):
+                break
             for l in range(len(db.buildings[j][k].array)):
-                if db.buildings[j][k].color == color:
-                    if compare_numpy(c, db.buildings[j][k].array):  # found block
+                if db.buildings[j][k].color == positions[j].color:
+                    print "{}, {}\n".format(db.buildings[j][k].color, positions[j].color)
+
+                    if compare_numpy(positions[j].array, db.buildings[j][k].array):  # found block
                         currentbuilding = True
                     else:  # wrong block
                         currentbuilding = False
-                        # look for next building
                         break
         if currentbuilding:
             print("{} detected position of building {}".format(time.ctime(), j))
@@ -150,7 +167,6 @@ def recognize_building(c, color):
 
 # checks if contour is duplicate
 def is_duplicate(x, y):
-
     reload(db)
     time.sleep(.1)
     if len(y) == 0:
@@ -170,10 +186,11 @@ def save_contour(c, color):
         output = open(filename, "a")
         output.seek(-1, os.SEEK_END)
         output.truncate()
-        if len(db.positions) == 0:
-            output.write("        Position(\"" + color + "\", [")
-        else:
+        if len(db.positions) > 0:
             output.write("        , Position(\"" + color + "\", [")
+        else:
+            output.write("        Position(\"" + color + "\", [")
+
         for i in range(len(c)):
             if i == 0:
                 output.write("[[{}{}{}]]".format(str(c[i][0][0]).strip(), ", ", str(c[i][0][1]).strip()))
@@ -183,16 +200,16 @@ def save_contour(c, color):
         output.truncate()
         output.write("]])\n]")
         output.close()
-        print("successfully saved")
         reload(db)
+        # print("successfully saved")
     except ValueError:
         print("failed to save")
+        reload(db)
 
 
 # compares two contours for detection
 def compare_numpy(x, y):
-
-    sensitivity = 30
+    sensitivity = 100
 
     for i in range(len(x)):
         point_close = False
@@ -206,4 +223,4 @@ def compare_numpy(x, y):
     return True
 
 
-run()  # disabled for travis
+# run()  # disabled for travis
