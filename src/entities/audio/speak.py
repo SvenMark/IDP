@@ -2,15 +2,16 @@ from audio import Audio
 from gtts import gTTS
 import os
 import platform
-
+import sys
 
 class Speak(Audio):
     resources = "../../../resources/"
 
     def play(self, filename):
         path = self.resources + filename
+        print(path)
         if platform.system() == "Windows":  # windows
-            os.system("vlc -q --no-qt-system-tray --qt-start-minimized --play-and-exit " + path)
+            os.system("\"C:\Program Files\VideoLAN\VLC\VLC.exe\" -q --no-qt-system-tray --qt-start-minimized --play-and-exit " + path)
         else:  # linux
             os.system("mpg321 " + path)
 
