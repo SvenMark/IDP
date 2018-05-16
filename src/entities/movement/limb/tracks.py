@@ -2,9 +2,9 @@ from entities.movement.limb.limb import Limb
 from entities.movement.limb.joints.dcmotor import DCMotor
 
 
-class Track(object):
+class Tracks(object):
     """
-    Base class for track
+    Base class for track implements DC motors
     """
 
     def __init__(self):
