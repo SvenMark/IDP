@@ -2,23 +2,23 @@ from entities.movement.limb.limb import Limb
 from entities.movement.limb.joints.servo import Servo
 
 
-class Leg(Limb):
+class Leg(object):
     def __init__(self):
 
-        # Define the id`s of the servo`s
+        # Define the id`s of the servo`s.
         servo_0_id = 13
         servo_1_id = 31
         servo_2_id = 63
 
-        # Create the servo instances with correct id and starting position
+        # Create the servo instances with correct id and starting position.
         self.servo_0 = Servo(servo_0_id, 500)
         self.servo_1 = Servo(servo_1_id, 500)
         self.servo_2 = Servo(servo_2_id, 500)
 
-        print("Tracks setup")
+        print("Leg setup")
 
-    def forward(self):
-        print('{} forward'.format(self.limb_type))
-
-    def backward(self):
-        print('{} backward'.format(self.limb_type))
+    # Function that moves the legs in the specified directions.
+    def move(self, servo_0_position, servo_1_position, servo_2_position, delay):
+        self.servo_0.move(servo_0_position, 0)
+        self.servo_1.move(servo_1_position, 0)
+        self.servo_2.move(servo_2_position, delay)
