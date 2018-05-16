@@ -1,82 +1,78 @@
 import pyaudio
 import numpy as np
+import pylab
+import time
 
 
 def run():
     print("run element4")
 
-    OPTION = 2  # 0 is laatste versie, 1 is misschien beter, kijk zelf maar. 2 is freq plot
+    OPTION = 0  # 0 is best
 
     if OPTION == 0:
+        from matplotlib.ticker import FuncFormatter
+
         np.set_printoptions(suppress=True)  # don't use scientific notation
-        CHUNK = 1000  # speed of data point reading, smaller == less datapoints == faster updates
-        RATE = 44100  # time resolution of the recording device (Hz)
-        OUTPUTS = 12000  # number of outputs
 
-        # Frequency borders
-        LOWBORDER = 300
-        MEDBORDER = 600
-        HIGHBORDER = 1200
+        CHUNK = 700  # speed of data point reading, smaller == less datapoints == faster updates
+        RATE = 11025  # time resolution of the recording device (Hz) Higher == Better accuracy
+        OUTPUTS = 1000  # number of outputs
 
-        # Set counters
-        COUNT = 1
-        LOWS = 1
-        MEDS = 1
-        HIGHS = 1
+        LOWLOWS = 0
+        HIGHLOWS = 50  # low value borders
+
+        LOWMEDS = 50
+        HIGHMEDS = 100  # med value borders
+
+        LOWHIGHS = 100
+        HIGHHIGHS = 175  # high value borders
 
         p = pyaudio.PyAudio()  # start the PyAudio class
         stream = p.open(format=pyaudio.paInt16, channels=1, rate=RATE, input=True,
                         frames_per_buffer=CHUNK)  # uses default input device
 
+        pylab.interactive(True)
         for i in range(OUTPUTS):  # Number of outputs
-            COUNT = COUNT + 1
             data = np.fromstring(stream.read(CHUNK), dtype=np.int16)
-            data = data * np.hanning(len(data))  # smooth the FFT by windowing data
-            fft = abs(np.fft.fft(data).real)
-            fft = fft[:int(len(fft) / 2)]  # keep only first half
-            freq = np.fft.fftfreq(CHUNK, 1.0 / RATE)
-            freq = freq[:int(len(freq) / 2)]  # keep only first half
-            freqPeak = freq[np.where(fft == np.max(fft))[0][0]] + 1
-            # print("Peak frequency: %d Hz" % freqPeak)
-            bars = "#" * int(500 * freqPeak / 2 ** 16)
+            left = data[0::2]
+            lf = np.fft.rfft(left)
 
-            if LOWBORDER <= freqPeak <= MEDBORDER:
-                # print("LOW PEAK: %05d hz %s" % (freqPeak, bars))
-                LOWS = LOWS + 1
-            elif MEDBORDER <= freqPeak <= HIGHBORDER:
-                # print("MED PEAK: %05d hz %s" % (freqPeak, bars))
-                MEDS = MEDS + 1
-            elif HIGHBORDER <= freqPeak <= 99999:
-                # print("BIG PEAK: %05d hz %s" % (freqPeak, bars))
-                HIGHS = HIGHS + 1
-            if COUNT == 10:
-                print()
-                print('LOWS ', end='')
-                for x in range(0, LOWS):
-                    print('#', end='')
-                print()
-                print('MEDS ', end='')
-                for x in range(0, MEDS):
-                    print('#', end='')
-                print()
-                print('HIGH ', end='')
-                for x in range(0, HIGHS):
-                    print('#', end='')
-                print()
-                # Reset counters
-                COUNT = 1
-                LOWS = 1
-                HIGHS = 1
-                MEDS = 1
-            # Go back to top of loop
+            # Plot the graph
+            # pylab.clf()
+            # pylab.figure(1)
+            # b = pylab.subplot(212)
+            # b.set_xscale('log')
+            # b.set_xlabel('frequency [Hz]')
+            # b.set_ylabel('|amplitude|')
 
-        # close the stream
+            # b.set_ylim([0, 50000])
+            # pylab.plot(abs(lf))
+            # pylab.savefig('frequency.png')
+            # pylab.show()
+
+            lows = 0
+            for i in range(LOWLOWS, HIGHLOWS):
+                lows = lows + abs(lf)[i]
+            meds = 0
+            for i in range(LOWMEDS, HIGHMEDS):
+                meds = meds + abs(lf)[i]
+            high = 0
+            for i in range(LOWHIGHS, HIGHHIGHS):
+                high = high + abs(lf)[i]
+
+            value = [lows, meds, high]
+            pylab.ylim(0, 2000000)
+            pylab.bar(np.arange(3), value)
+            pylab.xticks(np.arange(3), ('Low', 'Med', 'High'))
+            pylab.show()
+
+            print("Low: " + str(lows) + ", Med: " + str(meds) + ", High: " + str(high))
+
         stream.stop_stream()
         stream.close()
         p.terminate()
 
     elif OPTION == 1:
-        import pylab as pl
         np.set_printoptions(suppress=True)  # don't use scientific notation
 
         CHUNK = 2000  # speed of data point reading, smaller is less datapoints is faster updates
@@ -105,8 +101,6 @@ def run():
         p.terminate()
 
     elif OPTION == 2:
-        import time
-        import pylab
 
         class SWHear(object):
             """
@@ -188,7 +182,7 @@ def run():
                     print(" ~~ exception (keyboard?)")
                     return
 
-            def tape_plot(self, saveAs="03.png"):
+            def tape_plot(self, saveAs="garbage.png"):
                 """plot what's in the tape."""
                 pylab.plot(np.arange(len(self.tape)) / self.rate, self.tape)
                 pylab.axis([0, self.tapeLength, -2 ** 13 / 2, 2 ** 13 / 2])
@@ -206,9 +200,76 @@ def run():
         ear.tape_forever()
         ear.close()
         print("DONE")
+
     elif OPTION == 3:
-        print("Nothing to see here.")
-    # Exit program
+        np.set_printoptions(suppress=True)  # don't use scientific notation
+        CHUNK = 1000  # speed of data point reading, smaller == less datapoints == faster updates
+        RATE = 44100  # time resolution of the recording device (Hz)
+        OUTPUTS = 12000  # number of outputs
+
+        # Frequency borders
+        LOWBORDER = 300
+        MEDBORDER = 600
+        HIGHBORDER = 1200
+
+        # Set counters
+        COUNT = 1
+        LOWS = 1
+        MEDS = 1
+        HIGHS = 1
+
+        p = pyaudio.PyAudio()  # start the PyAudio class
+        stream = p.open(format=pyaudio.paInt16, channels=1, rate=RATE, input=True,
+                        frames_per_buffer=CHUNK)  # uses default input device
+
+        for i in range(OUTPUTS):  # Number of outputs
+            COUNT = COUNT + 1
+            data = np.fromstring(stream.read(CHUNK), dtype=np.int16)
+            data = data * np.hanning(len(data))  # smooth the FFT by windowing data
+            fft = abs(np.fft.fft(data).real)
+            fft = fft[:int(len(fft) / 2)]  # keep only first half
+            freq = np.fft.fftfreq(CHUNK, 1.0 / RATE)
+            freq = freq[:int(len(freq) / 2)]  # keep only first half
+            freqPeak = freq[np.where(fft == np.max(fft))[0][0]] + 1
+            # print("Peak frequency: %d Hz" % freqPeak)
+            bars = "#" * int(500 * freqPeak / 2 ** 16)
+
+            if LOWBORDER <= freqPeak <= MEDBORDER:
+                # print("LOW PEAK: %05d hz %s" % (freqPeak, bars))
+                LOWS = LOWS + 1
+            elif MEDBORDER <= freqPeak <= HIGHBORDER:
+                # print("MED PEAK: %05d hz %s" % (freqPeak, bars))
+                MEDS = MEDS + 1
+            elif HIGHBORDER <= freqPeak <= 99999:
+                # print("BIG PEAK: %05d hz %s" % (freqPeak, bars))
+                HIGHS = HIGHS + 1
+            if COUNT == 10:
+                print()
+                print('LOWS ', end='')
+                for x in range(0, LOWS):
+                    print('#', end='')
+                print()
+                print('MEDS ', end='')
+                for x in range(0, MEDS):
+                    print('#', end='')
+                print()
+                print('HIGH ', end='')
+                for x in range(0, HIGHS):
+                    print('#', end='')
+                print()
+                # Reset counters
+                COUNT = 1
+                LOWS = 1
+                HIGHS = 1
+                MEDS = 1
+            # Go back to top of loop
+        # close the stream
+        stream.stop_stream()
+        stream.close()
+        p.terminate()
+        # Exit program
+
+
 # End of def run
 if __name__ == '__main__':
     run()
