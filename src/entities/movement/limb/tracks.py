@@ -20,6 +20,7 @@ class Tracks(object):
 
     def forward(self, duty_cycle, delay, steps):
         for step in range(0, steps, (duty_cycle // steps)):
+            print(step)
             self.motor1.forward(step, 0)
             self.motor2.forward(step, delay)
 
