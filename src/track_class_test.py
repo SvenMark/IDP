@@ -1,8 +1,10 @@
 #!/bin/python
+from entities.movement.limb.track import Track
+from entities.movement.tracks import Tracks
 
-from entities.movement.limb.tracks import Tracks
-
-tracks = Tracks()
+track1 = Track()
+track2 = Track()
+tracks = Tracks([track1, track2])
 
 for cycle in range(0, 20):
     tracks.turn_right(cycle, cycle, 0.5)
