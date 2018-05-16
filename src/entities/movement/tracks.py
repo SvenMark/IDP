@@ -10,48 +10,62 @@ class Tracks(object):
     """
 
     def __init__(self):
-        motor1pin = 18
-        motor2pin = 13
+        track1pin = 18
+        track2pin = 13
 
-        self.motor1 = DCMotor(motor1pin)
-        self.motor2 = DCMotor(motor2pin)
+        self.track_left = DCMotor(track1pin)
+        self.track_right = DCMotor(track2pin)
 
         print("Tracks setup")
 
-    def forward(self, duty_cycle, delay, acceleration):
-
+    def move_helper(self, duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, track1direction,
+                    track2direction):
         if acceleration <= 0:
             print("Warning, setting acceleration to 0.01")
             acceleration = 0.01
 
-        diff1 = duty_cycle - self.motor1.currentspeed
-        diff2 = duty_cycle - self.motor2.currentspeed
+        diff_1 = duty_cycle_track_left - self.track_left.currentspeed
+        diff_2 = duty_cycle_track_right - self.track_right.currentspeed
 
-        step = diff1 / acceleration / 100
-        step2 = diff2 / acceleration / 100
+        step_1 = diff_1 / acceleration / 100
+        step_2 = diff_2 / acceleration / 100
 
-        speed1 = self.motor1.currentspeed
-        speed2 = self.motor2.currentspeed
+        speed_1 = self.track_left.currentspeed
+        speed_2 = self.track_right.currentspeed
 
         for i in range(0, 100 * acceleration):
-            speed1 += step
-            speed2 += step2
+            speed_1 += step_1
+            speed_2 += step_2
 
-            self.motor1.forward(speed1, 0)
-            self.motor2.forward(speed2, 0)
+            # track direction 1 is forwards, direction 0 is backwards
+            if track1direction == 1 and track2direction == 1:
+                self.track_left.forward(speed_1, 0)
+                self.track_right.forward(speed_2, 0)
+
+            if track1direction == 0 and track2direction == 0:
+                self.track_left.backward(speed_1, 0)
+                self.track_right.backward(speed_2, 0)
+
+            if track1direction == 1 and track2direction == 0:
+                self.track_left.forward(speed_1, 0)
+                self.track_right.backward(speed_2, 0)
+
+            if track1direction == 0 and track2direction == 1:
+                self.track_left.backward(speed_1, 0)
+                self.track_right.forward(speed_2, 0)
 
             time.sleep(0.01)
 
         time.sleep(delay)
 
-    def backward(self, duty_cycle, delay, steps):
-        self.motor1.backward(duty_cycle, 0)
-        self.motor2.backward(duty_cycle, delay)
+    def forward(self, duty_cycle, delay, acceleration):
+        self.move_helper(duty_cycle, duty_cycle, delay, acceleration, 1, 1)
 
-    def turn_right(self, duty_cycle_track_right, duty_cycle_track_left, delay, steps):
-        self.motor1.backward(duty_cycle_track_right, 0)
-        self.motor2.forward(duty_cycle_track_left, delay)
+    def backward(self, duty_cycle, delay, acceleration):
+        self.move_helper(duty_cycle, duty_cycle, delay, acceleration, 0, 0)
 
-    def turn_left(self, duty_cycle_track_right, duty_cycle_track_left, delay, steps):
-        self.motor1.forward(duty_cycle_track_right, 0)
-        self.motor2.backward(duty_cycle_track_left, delay)
+    def turn_right(self, duty_cycle_track_left, duty_cycle_track_right, delay, acceleration):
+        self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 1, 0)
+
+    def turn_left(self, duty_cycle_track_right, duty_cycle_track_left, delay, acceleration):
+        self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 0, 1)
