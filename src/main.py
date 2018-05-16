@@ -34,8 +34,7 @@ def main():
     lights = []
     # expects 2 Tracks
     limbs = [
-        Track(pin=18),
-        Track(pin=13)
+        Tracks()
     ]
     name = 'Boris'
     boris = Robot(name, limbs, lights)
