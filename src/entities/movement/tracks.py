@@ -37,6 +37,11 @@ class Tracks(object):
             speed_1 += step_1
             speed_2 += step_2
 
+            if speed_1 < 0:
+                speed_1 = 0
+            if speed_2 < 0:
+                speed_2 = 0
+
             # track direction 1 is forwards, direction 0 is backwards
             if track1direction == 1 and track2direction == 1:
                 self.track_left.forward(speed_1, 0)
