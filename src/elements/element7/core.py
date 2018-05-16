@@ -10,7 +10,6 @@ import positions as db
 import numpy as np
 import cv2
 import os
-import keyboard
 
 # print("uncomment run before starting..")
 
@@ -131,15 +130,10 @@ def routine():
         STOP_POSITIONS = True
 
         # save current positions to file
-        for i in range(len(POSITIONS)):
-            color = POSITIONS[i].color
-            cnt = POSITIONS[i].array
-            save_contour(cnt, color)
-            reload(db)
+        # save_contour(POSITIONS)
 
         # start recognizing building
-        print"napalm"
-        t.cancel()
+        print("napalm")
         recognize_building(POSITIONS)
 
     LAST_POS_LEN = len(POSITIONS)
@@ -147,31 +141,28 @@ def routine():
 
 def recognize_building(positions):
     # check if you recognize position
-    for j in range(len(db.buildings)):
-        currentbuilding = True
-        for k in range(len(db.buildings[j])):
-            if not len(positions) == len(db.buildings[j]):
+    for building in range(len(db.buildings)):
+        currentbuilding = False
+        for contour in range(len(db.buildings[building])):
+            if not len(positions) == len(db.buildings[building]):
                 break
-            for l in range(len(db.buildings[j][k].array)):
-                if db.buildings[j][k].color == positions[j].color:
-                    print "{}, {}\n".format(db.buildings[j][k].color, positions[j].color)
+            for position in range(len(db.buildings[building][contour].array)):
+                if db.buildings[building][contour].color == positions[building].color:
+                    print "{}, {}\n".format(db.buildings[building][contour].color, positions[building].color)
 
-                    if compare_numpy(positions[j].array, db.buildings[j][k].array):  # found block
+                    if compare_numpy(positions[contour].array, db.buildings[building][contour].array):  # found block
                         currentbuilding = True
                     else:  # wrong block
                         currentbuilding = False
                         break
         if currentbuilding:
-            print("{} detected position of building {}".format(time.ctime(), j))
+            print("{} detected position of building {}".format(time.ctime(), building))
 
 
 # checks if contour is duplicate
-def is_duplicate(x, y):
-    reload(db)
-    time.sleep(.1)
+def is_duplicate(x, y, sensitivity=50):
     if len(y) == 0:
         return False
-    sensitivity = 30
     for i in range(len(y)):
         if abs(x[0][0][0] - y[i].array[0][0][0]) < sensitivity:
             return True
@@ -180,31 +171,39 @@ def is_duplicate(x, y):
 
 
 # saves the current correct contours to positions.py array
-def save_contour(c, color):
+def save_contour(positions):
     try:
+        reload(db)
         filename = "positions.py"
         output = open(filename, "a")
         output.seek(-1, os.SEEK_END)
         output.truncate()
-        if len(db.positions) > 0:
-            output.write("        , Position(\"" + color + "\", [")
-        else:
-            output.write("        Position(\"" + color + "\", [")
+        first = True
+        for i in range(len(positions)):
+            c = positions[i].array
+            color = positions[i].color
+            print("{}, {}".format(i, color))
 
-        for i in range(len(c)):
-            if i == 0:
-                output.write("[[{}{}{}]]".format(str(c[i][0][0]).strip(), ", ", str(c[i][0][1]).strip()))
+            if not first:
+                output.write("        , Position(\"" + color + "\", [")
             else:
-                output.write(", [[{}{}{}]]".format(str(c[i][0][0]).strip(), ", ", str(c[i][0][1]).strip()))
-        output.seek(-1, os.SEEK_END)
-        output.truncate()
-        output.write("]])\n]")
+                output.write("        Position(\"" + color + "\", [")
+                first = False
+
+            for j in range(len(c)):
+                if j == 0:
+                    output.write("[[{}{}{}]]".format(str(c[j][0][0]).strip(), ", ", str(c[j][0][1]).strip()))
+                else:
+                    output.write(", [[{}{}{}]]".format(str(c[j][0][0]).strip(), ", ", str(c[j][0][1]).strip()))
+            output.seek(-1, os.SEEK_END)
+            output.truncate()
+            output.write("]])\n")
+        output.write(']')
         output.close()
         reload(db)
-        # print("successfully saved")
+        print("successfully saved")
     except ValueError:
         print("failed to save")
-        reload(db)
 
 
 # compares two contours for detection
@@ -214,7 +213,7 @@ def compare_numpy(x, y):
     for i in range(len(x)):
         point_close = False
         for t in range(len(y)):
-            distance = np.linalg.norm(x[i] - y[t])
+            distance = np.linalg.norm(x[i] - y[t]) # x[i] = [520,137] y[430,180]
             if distance <= sensitivity:
                 point_close = True
 
@@ -223,4 +222,4 @@ def compare_numpy(x, y):
     return True
 
 
-# run()  # disabled for travis
+run()  # disabled for travis
