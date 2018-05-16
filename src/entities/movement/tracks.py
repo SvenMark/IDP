@@ -38,9 +38,6 @@ class Tracks(object):
             speed_1 += step_1
             speed_2 += step_2
 
-            speed_1 = math.floor(speed_1)
-            speed_2 = math.floor(speed_2)
-
             if speed_1 < 0:
                 speed_1 = 0
             if speed_2 < 0:
