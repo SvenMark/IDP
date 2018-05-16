@@ -1,5 +1,6 @@
 from entities.movement.limb.limb import Limb
 from entities.movement.limb.joints.dcmotor import DCMotor
+import time
 
 
 class Tracks(object):
@@ -16,10 +17,24 @@ class Tracks(object):
 
         print("Tracks setup")
 
-    def forward(self, duty_cycle, delay):
-        self.motor1.forward(duty_cycle, 0)
-        self.motor2.forward(duty_cycle, delay)
 
+    # 100, 4, 2
+    def forward(self, duty_cycle, delay, acceleration):
+        #4
+        diff1 = duty_cycle - self.motor1.currentspeed
+        diff2 = duty_cycle - self.motor2.currentspeed
+        
+        #0.02
+        step = diff1 / acceleration / 100
+        step2 = diff2 / acceleration / 100
+
+        for i in range(0, 100 * acceleration):
+            self.motor1.forward(step, 0)
+            self.motor2.forward(step2, 0)
+            time.sleep(0.01)
+
+        time.sleep(delay)
+        
     def backward(self, duty_cycle, delay):
         self.motor1.backward(duty_cycle, 0)
         self.motor2.backward(duty_cycle, delay)
