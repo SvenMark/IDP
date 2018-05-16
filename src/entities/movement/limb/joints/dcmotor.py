@@ -32,7 +32,7 @@ class DCMotor(object):
     # Turn all motors off
     def stop_motor(self):
         self.pwm_motor.ChangeDutyCycle(self.stop)
-         self.currentspeed = 0
+        self.currentspeed = 0
 
     # Turn both motors forwards
     def forward(self, duty_cycle, delay):
