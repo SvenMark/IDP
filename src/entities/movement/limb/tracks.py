@@ -28,12 +28,15 @@ class Tracks(object):
         step = diff1 / acceleration / 100
         step2 = diff2 / acceleration / 100
 
-        for i in range(0, 100 * acceleration):
-            self.motor1.forward(step, 0)
-            self.motor2.forward(step2, 0)
+        speed1 = step
+        speed2 = step2
 
-            step += step
-            step2 += step2
+        for i in range(0, 100 * acceleration):
+            self.motor1.forward(speed1, 0)
+            self.motor2.forward(speed2, 0)
+
+            speed1 += step
+            speed2 += step2
             
             time.sleep(0.01)
 
