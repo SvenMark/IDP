@@ -4,7 +4,7 @@ from entities.movement.limb.joints.dcmotor import DCMotor
 
 class Tracks(object):
     """
-    Base class for track implements DC motors
+    Base class for tracks that implements DC motors
     """
 
     def __init__(self):
@@ -14,7 +14,7 @@ class Tracks(object):
         self.motor1 = DCMotor(motor1pin)
         self.motor2 = DCMotor(motor2pin)
 
-        print("Track setup")
+        print("Tracks setup")
 
     def forward(self, duty_cycle, delay):
         self.motor1.forward(duty_cycle, delay)
