@@ -23,19 +23,19 @@ def run():
     while True:
         img = cap.read()
         imgCropped = setregion(img, np.array([vertices], np.int32))
-        blur = cv2.GaussianBlur(img, (9, 9), 0)
-        hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
+        blur = cv2.GaussianBlur(imgCropped, (9, 9), 0)
 
-        # Mask
+        # Hsv Mask
+        hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
         low_black = np.array([0, 0, 0])
         high_black = np.array([180, 255, 30])
-        mask = cv2.inRange(imgCropped, low_black, high_black)
+        mask = cv2.inRange(hsv, low_black, high_black)
 
-        theta = np.pi / 60
-        threshold = 160
-        min_line_length = 40  
+        theta = np.pi / 180
+        threshold = 150
+        min_line_length = 40
         max_line_gap = 25
-        
+    
         lines = cv2.HoughLinesP(mask, 6, theta, threshold, np.array([]),
                                 min_line_length, max_line_gap)
 
@@ -55,19 +55,11 @@ def run():
 
 
 def setregion(img, vertices):
-    # Define a blank matrix that matches the image height/width.
     mask = np.zeros_like(img)
-    
-    # Retrieve the number of color channels of the image.
-    channel_count = img.shape[2]
-    
-    # Create a match color with the same color channel counts.
+    channel_count = img.shape[2]   
     match_mask_color = (255,) * channel_count
-      
-    # Fill inside the polygon
     cv2.fillPoly(mask, vertices, match_mask_color)
     
-    # Returning the image only where mask pixels match
     masked_img = cv2.bitwise_and(img, mask)
 
     new_mask = np.zeros(masked_img.shape[:2], np.uint8)
