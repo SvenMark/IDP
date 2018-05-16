@@ -1,16 +1,36 @@
+from entities.movement.limb.track import Track
+from entities.movement.tracks import Tracks
+
+
 class Movement(object):
     """
     Base class for movement
     """
 
     def __init__(self, limbs, lights):
+        tracks = []
+        legs = []
+        tire = []
+        for limb in limbs:
+            if limb.type == 'track':
+                tracks.append(limb)
+            elif limb.type == 'leg':
+                legs.append(limb)
+            elif limb.type == 'tire':
+                tire.append(limb)
+
         self.limbs = limbs
         self.lights = lights
+        self.tracks = Tracks(tracks)
 
     def forward(self):
-        for limb in self.limbs:
-            limb.forward()
+        self.tracks.forward()
 
     def backward(self):
-        for limb in self.limbs:
-            limb.backward()
+        self.tracks.backward()
+
+    def turn_left(self):
+        self.tracks.turn_left()
+
+    def turn_right(self):
+        self.tracks.turn_right()
