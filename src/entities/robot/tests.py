@@ -3,12 +3,12 @@ import unittest
 from entities.movement.limb.leg import Leg
 from entities.movement.limb.limb import Limb
 from entities.movement.limb.tire import Tire
-from entities.movement.limb.track import Track
+from entities.movement.limb.tracks import Tracks
 from entities.robot.robot import Robot
 
 TYPES = ['leg',
          'tire',
-         'track']
+         'tracks']
 
 
 class CommonTestClass(unittest.TestCase):
@@ -17,7 +17,7 @@ class CommonTestClass(unittest.TestCase):
         limbs = [
             Leg(),
             Tire(),
-            Track()
+            Tracks()
         ]
         self.boris = Robot('Boris', limbs, [])
 
