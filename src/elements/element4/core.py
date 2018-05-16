@@ -1,5 +1,3 @@
-from tkinter import Tk, mainloop
-
 import pyaudio
 import numpy as np
 
@@ -212,3 +210,5 @@ def run():
         print("Nothing to see here.")
     # Exit program
 # End of def run
+if __name__ == '__main__':
+    run()
