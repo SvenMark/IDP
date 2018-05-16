@@ -26,8 +26,8 @@ class Tracks(object):
 
     def turn_right(self, duty_cycle_track_right, duty_cycle_track_left, delay):
         self.motor1.backward(duty_cycle_track_right, 0)
-        self.motor1.forward(duty_cycle_track_left, delay)
+        self.motor2.forward(duty_cycle_track_left, delay)
 
     def turn_left(self, duty_cycle_track_right, duty_cycle_track_left, delay):
         self.motor1.forward(duty_cycle_track_right, 0)
-        self.motor1.backward(duty_cycle_track_left, delay)
+        self.motor2.backward(duty_cycle_track_left, delay)
