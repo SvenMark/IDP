@@ -5,7 +5,7 @@ from elements import element1, element2, element3, element4, element5, element6,
     element10
 from entities.movement.limb.leg import Leg
 from entities.movement.limb.tire import Tire
-from entities.movement.limb.track import Track
+from entities.movement.limb.tracks import Tracks
 from entities.robot.robot import Robot
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
@@ -35,7 +35,7 @@ def main():
     limbs = [
         Leg(),
         Tire(),
-        Track()
+        Tracks()
     ]
     name = 'Boris'
     boris = Robot(name, limbs, lights)
