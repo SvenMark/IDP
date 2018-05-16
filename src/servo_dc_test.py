@@ -1,7 +1,7 @@
 #!/bin/python
 
 from libs.ax12 import Ax12
-from entities.movement.limb.dcmotor import DCMotor
+from entities.movement.limb.joints.dcmotor import DCMotor
 import time
 
 motor = DCMotor()

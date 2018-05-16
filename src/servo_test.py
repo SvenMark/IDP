@@ -1,6 +1,6 @@
 #!/bin/python
 
-from entities.movement.limb.servo import Servo
+from entities.movement.limb.joints.servo import Servo
 
 servoprivod = Servo(13, 0)
 servoprivod.move(998, 0)
