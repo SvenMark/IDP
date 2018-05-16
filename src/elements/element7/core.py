@@ -140,21 +140,23 @@ def routine():
 
 
 def recognize_building(positions):
+    for i in range(len(positions)):
+        print("POSITION: {}, {}, {}".format(i, positions[i].color, positions[i].array[0]))
+    print('\n')
+
     # check if you recognize position
     for building in range(len(db.buildings)):
         currentbuilding = False
         for contour in range(len(db.buildings[building])):
-            if not len(positions) == len(db.buildings[building]):
-                break
-            for position in range(len(db.buildings[building][contour].array)):
-                if db.buildings[building][contour].color == positions[building].color:
-                    print "{}, {}\n".format(db.buildings[building][contour].color, positions[building].color)
+            print("BUILDING: {}, {}, {}".format(contour, db.buildings[building][contour].color,
+                                                db.buildings[building][contour].array[0]))
+            if db.buildings[building][contour].color == positions[building].color:
 
-                    if compare_numpy(positions[contour].array, db.buildings[building][contour].array):  # found block
-                        currentbuilding = True
-                    else:  # wrong block
-                        currentbuilding = False
-                        break
+                if compare_numpy(positions[contour].array, db.buildings[building][contour].array):  # found block
+                    currentbuilding = True
+                else:  # wrong block
+                    currentbuilding = False
+                    break
         if currentbuilding:
             print("{} detected position of building {}".format(time.ctime(), building))
 
@@ -164,8 +166,9 @@ def is_duplicate(x, y, sensitivity=50):
     if len(y) == 0:
         return False
     for i in range(len(y)):
-        if abs(x[0][0][0] - y[i].array[0][0][0]) < sensitivity:
-            return True
+        if abs(x[0][0][0] - y[i].array[0][0][0]) < sensitivity \
+                and abs(x[0][0][1] - y[i].array[0][0][1]) < sensitivity:
+                return True
 
     return False
 
@@ -213,7 +216,7 @@ def compare_numpy(x, y):
     for i in range(len(x)):
         point_close = False
         for t in range(len(y)):
-            distance = np.linalg.norm(x[i] - y[t]) # x[i] = [520,137] y[430,180]
+            distance = np.linalg.norm(x[i] - y[t])  # x[i] = [520,137] y[430,180]
             if distance <= sensitivity:
                 point_close = True
 
