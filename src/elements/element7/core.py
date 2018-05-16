@@ -146,18 +146,23 @@ def recognize_building(positions):
 
     # check if you recognize position
     for building in range(len(db.buildings)):
-        currentbuilding = False
+        current_building = True
         for contour in range(len(db.buildings[building])):
             print("BUILDING: {}, {}, {}".format(contour, db.buildings[building][contour].color,
                                                 db.buildings[building][contour].array[0]))
-            if db.buildings[building][contour].color == positions[building].color:
 
-                if compare_numpy(positions[contour].array, db.buildings[building][contour].array):  # found block
-                    currentbuilding = True
-                else:  # wrong block
-                    currentbuilding = False
-                    break
-        if currentbuilding:
+            found_saved = False
+            for saved_position in range(len(positions)):
+                if db.buildings[building][contour].color == positions[positions].color \
+                        and compare_numpy(positions[saved_position].array, db.buildings[building][contour].array):
+                    found_saved = True
+
+            current_building = found_saved
+
+            if not current_building:
+                break
+
+        if current_building:
             print("{} detected position of building {}".format(time.ctime(), building))
 
 
@@ -168,7 +173,7 @@ def is_duplicate(x, y, sensitivity=50):
     for i in range(len(y)):
         if abs(x[0][0][0] - y[i].array[0][0][0]) < sensitivity \
                 and abs(x[0][0][1] - y[i].array[0][0][1]) < sensitivity:
-                return True
+            return True
 
     return False
 
