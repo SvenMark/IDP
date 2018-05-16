@@ -3,12 +3,7 @@ from entities.movement.limb.joints.servo import Servo
 
 
 class Leg(object):
-    def __init__(self):
-
-        # Define the id`s of the servo`s.
-        servo_0_id = 13
-        servo_1_id = 31
-        servo_2_id = 63
+    def __init__(self, servo_0_id, servo_1_id, servo_2_id):
 
         # Create the servo instances with correct id and starting position.
         self.servo_0 = Servo(servo_0_id, 500)
