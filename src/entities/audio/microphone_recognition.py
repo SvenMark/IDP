@@ -2,7 +2,7 @@
 
 # NOTE: this example requires PyAudio because it uses the Microphone class
 
-#import speak
+import speak
 import speech_recognition as sr
 from chatterbot import ChatBot
 import sys
@@ -13,9 +13,6 @@ chatbot = ChatBot(
     trainer='chatterbot.trainers.ChatterBotCorpusTrainer'
 )
 
-engine = pyttsx.init()
-engine.say("Shit")
-engine.runAndWait()
 
 # Train based on the english corpus
 #chatbot.train("chatterbot.corpus.english.conversations")
