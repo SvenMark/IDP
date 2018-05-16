@@ -18,11 +18,31 @@ class Tracks(object):
 
         print("Tracks setup")
 
-    def forward(self, duty_cycle, delay, steps):
-        for step in range((duty_cycle // steps), duty_cycle, (duty_cycle // steps)):
-            print(step)
-            self.motor1.forward(step, 0)
-            self.motor2.forward(step, delay)
+    def forward(self, duty_cycle, delay, acceleration):
+
+        if acceleration <= 0:
+            print("Warning, setting acceleration to 0.01")
+            acceleration = 0.01
+
+        diff1 = duty_cycle - self.motor1.currentspeed
+        diff2 = duty_cycle - self.motor2.currentspeed
+
+        step = diff1 / acceleration / 100
+        step2 = diff2 / acceleration / 100
+
+        speed1 = self.motor1.currentspeed
+        speed2 = self.motor2.currentspeed
+
+        for i in range(0, 100 * acceleration):
+            speed1 += step
+            speed2 += step2
+
+            self.motor1.forward(speed1, 0)
+            self.motor2.forward(speed2, 0)
+
+            time.sleep(0.01)
+
+        time.sleep(delay)
 
     def backward(self, duty_cycle, delay, steps):
         self.motor1.backward(duty_cycle, 0)
