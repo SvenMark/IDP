@@ -35,7 +35,7 @@ def main():
     limbs = [
         Leg(),
         Tire(),
-        Track()
+        Tracks()
     ]
     name = 'Boris'
     boris = Robot(name, limbs, lights)
