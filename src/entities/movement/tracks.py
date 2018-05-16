@@ -1,4 +1,5 @@
 import time
+import math
 
 from entities.movement.limb.limb import Limb
 from entities.movement.limb.joints.dcmotor import DCMotor
@@ -36,6 +37,9 @@ class Tracks(object):
         for i in range(0, 100 * acceleration):
             speed_1 += step_1
             speed_2 += step_2
+
+            speed_1 = math.floor(speed_1)
+            speed_2 = math.floor(speed_2)
 
             if speed_1 < 0:
                 speed_1 = 0
