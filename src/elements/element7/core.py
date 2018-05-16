@@ -51,14 +51,26 @@ def run():
             "orange": cv2.inRange(hsv, orange.lower, orange.upper),
             "yellow": cv2.inRange(hsv, yellow.lower, yellow.upper)})
 
-        # set contours
-        imgmask = set_contours(masks.get("red"), "red", img)
-        for col, mask in masks.items():
+        # calculate contours
+        all_masks = masks.get("red") + masks.get("blue") + masks.get("green") + masks.get("orange") + masks.get(
+            "yellow")
+        img = crop_to_contours(all_masks, img)
+        hsv2 = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+        masks2 = OrderedDict({
+            "red": cv2.inRange(hsv2, red.lower, red.upper),
+            "blue": cv2.inRange(hsv2, blue.lower, blue.upper),
+            "green": cv2.inRange(hsv2, green.lower, green.upper),
+            "orange": cv2.inRange(hsv2, orange.lower, orange.upper),
+            "yellow": cv2.inRange(hsv2, yellow.lower, yellow.upper)})
+
+        imgmask = set_contours(masks2.get("red"), "red", img)
+        for col, mask in masks2.items():
             if col == "red":
                 continue
             imgmask += set_contours(mask, col, img)
 
-        draw_saved_positions(imgmask, colors)
+        # draw_saved_positions(imgmask, colors)
 
         cv2.imshow('camservice', imgmask)
 
@@ -83,6 +95,77 @@ def draw_saved_positions(imgmask, colors):
         cv2.putText(imgmask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
 
+def crop_to_contours(mask, img):
+    ret, thresh = cv2.threshold(mask, 127, 255, 0)
+    im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+    extremes = [999999, -99999, 99999, -9999]  # min x, max x, min y, max y
+
+    # draw all correct contours
+    for i in range(len(contours)):
+        c = cv2.convexHull(contours[i])
+        peri = cv2.arcLength(c, True)
+        approx = cv2.approxPolyDP(c, 0.02 * peri, True)
+        area = cv2.contourArea(c)
+
+        if len(approx) == 4 and area > 4000:
+            a = tuple(contours[i][contours[i][:, :, 0].argmin()][0])
+            b = tuple(contours[i][contours[i][:, :, 0].argmax()][0])
+            c = tuple(contours[i][contours[i][:, :, 1].argmin()][0])
+            d = tuple(contours[i][contours[i][:, :, 1].argmax()][0])
+            if a[0] < extremes[0]:
+                extremes[0] = a[0]
+            if b[0] > extremes[1]:
+                extremes[1] = b[0]
+            if c[1] < extremes[2]:
+                extremes[2] = c[1]
+            if d[1] > extremes[3]:
+                extremes[3] = d[1]
+
+    y = extremes[2]
+    h = extremes[3] - y
+    x = extremes[0]
+    w = extremes[1] - x
+
+    if y + h > 0 and x + w > 0:
+        img = img[y:y + h, x:x + w]
+
+    img = image_resize(img, height=400)
+    return img
+
+
+def image_resize(image, width=None, height=None, inter=cv2.INTER_AREA):
+    # initialize the dimensions of the image to be resized and
+    # grab the image size
+    dim = None
+    (h, w) = image.shape[:2]
+
+    # if both the width and height are None, then return the
+    # original image
+    if width is None and height is None:
+        return image
+
+    # check to see if the width is None
+    if width is None:
+        # calculate the ratio of the height and construct the
+        # dimensions
+        r = height / float(h)
+        dim = (int(w * r), height)
+
+    # otherwise, the height is None
+    else:
+        # calculate the ratio of the width and construct the
+        # dimensions
+        r = width / float(w)
+        dim = (width, int(h * r))
+
+    # resize the image
+    resized = cv2.resize(image, dim, interpolation=inter)
+
+    # return the resized image
+    return resized
+
+
 # sets contours for selected masks
 def set_contours(mask, color, img):
     img_mask = cv2.bitwise_and(img, img, mask=mask)
@@ -96,6 +179,7 @@ def set_contours(mask, color, img):
     #         color = POSITIONS[i].color
     #         cnt = POSITIONS[i].array
     #         save_contour(cnt, color)
+    a, b, c, d = 0, 0, 0, 0
 
     # draw all correct contours
     for i in range(len(contours)):
@@ -115,9 +199,11 @@ def set_contours(mask, color, img):
             global LAST_POS_LEN, STOP_POSITIONS
 
             if not STOP_POSITIONS:
-                if not is_duplicate(contours[i], POSITIONS):
-                    POSITIONS.append(Position(color, contours[i]))
-                    print("Found {}, color {}".format(len(POSITIONS), color))
+                for j in POSITIONS:
+                    print("{}\n{}".format(contours[i], POSITIONS[j].array))
+                    if not compare_numpy(contours[i], POSITIONS[j].array):
+                        POSITIONS.append(Position(color, contours[i]))
+                        print("Found {}, color {}".format(len(POSITIONS), color))
 
     return img_mask
 
@@ -130,7 +216,8 @@ def routine():
         STOP_POSITIONS = True
 
         # save current positions to file
-        # save_contour(POSITIONS)
+        if not is_duplicate(POSITIONS, db.positions):
+            save_contour(POSITIONS)
 
         # start recognizing building
         print("napalm")
@@ -153,12 +240,12 @@ def recognize_building(positions):
 
             found_saved = False
             for saved_position in range(len(positions)):
-                if db.buildings[building][contour].color == positions[positions].color \
+                if db.buildings[building][contour].color == positions[saved_position].color \
                         and compare_numpy(positions[saved_position].array, db.buildings[building][contour].array):
                     found_saved = True
 
             current_building = found_saved
-
+            print(found_saved)
             if not current_building:
                 break
 
