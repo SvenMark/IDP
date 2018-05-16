@@ -1,25 +1,57 @@
+import time
+
+from entities.movement.limb.limb import Limb
+from entities.movement.limb.joints.dcmotor import DCMotor
+
+
 class Tracks(object):
-    def __init__(self, tracks):
-        self.tracks = tracks
+    """
+    Base class for tracks that implements DC motors
+    """
 
-    @property
-    def get_tracks_count(self):
-        return len(self.tracks)
+    def __init__(self):
+        motor1pin = 18
+        motor2pin = 13
 
-    def forward(self):
-        for track in self.tracks:
-            track.forward(1, 0)
+        self.motor1 = DCMotor(motor1pin)
+        self.motor2 = DCMotor(motor2pin)
 
-    def backward(self):
-        for track in self.tracks:
-            track.backward(1, 0)
+        print("Tracks setup")
 
-    def turn_right(self, duty_cycle_track_right, duty_cycle_track_left, delay):
-        self.tracks[0].backward(duty_cycle_track_right, 0)
+    def forward(self, duty_cycle, delay, acceleration):
 
-        self.tracks[1].forward(duty_cycle_track_left, delay)
+        if acceleration <= 0:
+            print("Warning, setting acceleration to 0.01")
+            acceleration = 0.01
 
-    def turn_left(self, duty_cycle_track_right, duty_cycle_track_left, delay):
-        self.tracks[1].forward(duty_cycle_track_right, 0)
+        diff1 = duty_cycle - self.motor1.currentspeed
+        diff2 = duty_cycle - self.motor2.currentspeed
 
-        self.tracks[0].backward(duty_cycle_track_left, delay)
+        step = diff1 / acceleration / 100
+        step2 = diff2 / acceleration / 100
+
+        speed1 = self.motor1.currentspeed
+        speed2 = self.motor2.currentspeed
+
+        for i in range(0, 100 * acceleration):
+            speed1 += step
+            speed2 += step2
+
+            self.motor1.forward(speed1, 0)
+            self.motor2.forward(speed2, 0)
+
+            time.sleep(0.01)
+
+        time.sleep(delay)
+
+    def backward(self, duty_cycle, delay, steps):
+        self.motor1.backward(duty_cycle, 0)
+        self.motor2.backward(duty_cycle, delay)
+
+    def turn_right(self, duty_cycle_track_right, duty_cycle_track_left, delay, steps):
+        self.motor1.backward(duty_cycle_track_right, 0)
+        self.motor2.forward(duty_cycle_track_left, delay)
+
+    def turn_left(self, duty_cycle_track_right, duty_cycle_track_left, delay, steps):
+        self.motor1.forward(duty_cycle_track_right, 0)
+        self.motor2.backward(duty_cycle_track_left, delay)
