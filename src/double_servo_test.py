@@ -7,8 +7,8 @@ servo1 = Servo(13, 500)
 servo2 = Servo(31, 500)
 
 while True:
-    servo1.move(servo1, 400)
-    servo2.move(servo2, 600)
+    servo1.move(400, 0)
+    servo2.move(600, 0)
 
-    servo1.move(servo1, 600)
-    servo2.move(servo2, 400)
+    servo1.move(600, 0)
+    servo2.move(400, 0)
