@@ -2,7 +2,7 @@
 
 import time
 
-from entities.movement.limb.servo import Servo
+from entities.movement.limb.joints.servo import Servo
 
 servoprivod = Servo(31, 500)
 otherservo = Servo(13, 500)

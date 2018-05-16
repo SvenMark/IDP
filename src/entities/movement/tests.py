@@ -2,7 +2,7 @@ import unittest
 
 from entities.movement.limb.leg import Leg
 from entities.movement.limb.tire import Tire
-from entities.movement.limb.track import Track
+from entities.movement.tracks import Tracks
 from entities.movement.movement import Movement
 
 
@@ -11,7 +11,7 @@ class CommonTestClass(unittest.TestCase):
         limbs = [
             Leg(),
             Tire(),
-            Track()
+            Tracks()
         ]
         lights = []
         self.movement = Movement(limbs, lights)
