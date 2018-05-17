@@ -113,4 +113,4 @@ def main():
 
 
 print ("uncomment main before starting..")
-main()  # disabled for travis
+# main()  # disabled for travis
