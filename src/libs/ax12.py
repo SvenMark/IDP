@@ -228,7 +228,7 @@ class Ax12:
             checksum = (~(id + Ax12.AX_RESET_LENGTH + Ax12.AX_RESET)) & 0xff
             out_data = bytes([Ax12.AX_START])
             out_data += bytes([Ax12.AX_START])
-            out_data += bytes([id])
+            out_data += bytes([2])
             out_data += bytes([Ax12.AX_RESET_LENGTH])
             out_data += bytes([Ax12.AX_RESET])
             out_data += bytes([checksum])
