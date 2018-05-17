@@ -1,5 +1,5 @@
 from imutils.video import WebcamVideoStream
-from helpers import Point
+from helpers import Point, Color
 from decimal import Decimal
 import time
 import numpy as np
@@ -34,6 +34,9 @@ class Element6(object):
             low_black = np.array([0, 0, 0])
             high_black = np.array([180, 255, 30])
             mask = cv2.inRange(hsv, low_black, high_black)
+
+            if Element6.detectred(img, hsv):
+                print("red detected (possible sleep)")
 
             # Get lines
             theta = np.pi / 180
@@ -105,6 +108,22 @@ class Element6(object):
         percentageright = Decimal((Decimal(Decimal(totaldr) / Decimal(count)) / Decimal(width)) * Decimal(100))
         print("Percentage left: " + str(round(percentageleft)) + "%")
         print("Percentage right: " + str(round(percentageright)) + "%")
+        return percentageleft, percentageright
+
+    @staticmethod
+    def detectred(img, hsv):
+        red = Color([170, 100, 100], [190, 255, 255])
+        mask = cv2.inRange(hsv, red.lower, red.upper)
+        red = cv2.bitwise_and(img, img, mask=mask)
+        ret, thresh = cv2.threshold(mask, 127, 255, 0)
+        im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        for cnt in contours:
+            red = cv2.drawContours(red, [cnt], -1, (255, 255, 255), 10)
+            cv2.imshow("red", red)
+        if len(contours) < 2:
+            return False
+        else:
+            return True
 
 
 def main():
@@ -113,4 +132,4 @@ def main():
 
 
 print ("uncomment main before starting..")
-# main()  # disabled for travis
+main()  # disabled for travis
