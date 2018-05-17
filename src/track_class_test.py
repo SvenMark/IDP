@@ -1,17 +1,13 @@
 #!/bin/python
 
-from entities.movement.limb.tracks import Tracks
+from entities.movement.limb.joints.dcmotor import DCMotor
+from entities.movement.tracks import Tracks
 
 tracks = Tracks()
 
-for cycle in range(0, 20):
-    tracks.turn_right(cycle, cycle, 0.5)
+tracks.forward(100, 2, 1)
+tracks.forward(20, 4, 4)
+tracks.forward(0, 1, 1)
+tracks.turn_right(70, 20, 8, 12)
+tracks.turn_right(10, 15, 8, 7)
 
-for cycle in range(0, 20):
-    tracks.turn_right(20 - cycle, 20 - cycle, 0.5)
-
-for cycle in range(0, 20):
-    tracks.turn_left(cycle, cycle, 0.5)
-
-for cycle in range(0, 20):
-    tracks.turn_left(20 - cycle, 20 - cycle, 0.5)
