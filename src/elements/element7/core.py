@@ -3,14 +3,13 @@ from threading import Timer
 
 from imutils.video import WebcamVideoStream
 from elements.element7.helpers import Color
-from elements.element7.helpers import Position
+from elements.element7.helpers import Block
 from elements.element7.helpers import ColorRange
 
 import time
-import positions as db
+import buildings as db
 import numpy as np
 import cv2
-import os
 
 # print("uncomment run before starting..")
 
@@ -192,16 +191,16 @@ def set_contours(mask, color, img):
             cv2.putText(img_mask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
             cv2.circle(img_mask, (cx, cy), 2, (255, 255, 255),5)
 
-            global LAST_POS_LEN, STOP_POSITIONS
+            global LAST_POS_LEN
 
             if not STOP_POSITIONS:
                 if len(POSITIONS) == 0:
-                    POSITIONS.append(Position(color, contours[i]))
+                    POSITIONS.append(Block(color, (cx, cy)))
                     print("Found {}, color {}, loc {}".format(len(POSITIONS), color, contours[i][0]))
                 else:
                     for j in range(len(POSITIONS)):
                         if not is_duplicate((cx, cy), POSITIONS, 5):
-                            POSITIONS.append(Position(color, contours[i]))
+                            POSITIONS.append(Block(color, (cx, cy)))
                             print("Found {}, color {}, loc {}".format(len(POSITIONS), color, contours[i][0]))
 
     return img_mask
@@ -215,13 +214,12 @@ def routine():
     if LAST_POS_LEN == len(POSITIONS):
         STOP_POSITIONS = True
 
-        db.clear_positions()
-
         # save current positions to file
-        save_contour(POSITIONS)
+        # db.save_contour(POSITIONS)
 
         # start recognizing building
         print("Looped timer..")
+
         recognize_building(POSITIONS)
         t.cancel()
 
@@ -230,95 +228,36 @@ def routine():
 
 def recognize_building(positions):
     # check if you recognize position
+    result = []
     for building in range(len(db.buildings)):
-        current_building = True
-        for contour in range(len(db.buildings[building])):
-            found_saved = False
-            for saved_position in range(len(positions)):
-                if db.buildings[building][contour].color == positions[saved_position].color \
-                        and compare_numpy(positions[saved_position].array, db.buildings[building][contour].array):
-                    found_saved = True
+        b = db.buildings[building]
+        for block in range(len(b.front)):
+            bl = b.front[block]
+            result = [building, "front"]
+            if not is_duplicate(bl.centre, positions, 10, bl.color):
+                return False
 
-            current_building = found_saved
-            if not current_building:
-                break
-
-        if current_building:
-            print("{} detected position of building {}".format(time.ctime(), building))
+    print("Recognized building {}, {} side".format(result[0], result[1]))
+    return True
 
 
 # checks if contour is duplicate
-def is_duplicate(x, y, sensitivity=50):
+def is_duplicate(x, y, sensitivity=10, color=None):
     for i in range(len(y)):
-        c = cv2.convexHull(y[i].array)
+        cx = y[i].centre[0]
+        cy = y[i].centre[1]
 
-        moment = cv2.moments(c)
-        cx = int(moment['m10'] / moment['m00'])
-        cy = int(moment['m01'] / moment['m00'])
+        b = np.array((cx, cy))
+        a = np.array(x)
 
-        if abs(cx - x[0]) < sensitivity and \
-           abs(cy - x[1]) < sensitivity:  # ex. 100 - 50 = 50 dist. min 10 dist(sensitivity) dist < sensitivity = duplicate
+        distance = np.linalg.norm(a - b)  # x[i] = [520,137] y[t] = [430,180]
+
+        if color and color == y[i].color and distance <= sensitivity:
+            return True
+        elif not color and distance <= sensitivity:
             return True
 
     return False
-
-
-# saves the current correct contours to positions.py array
-def save_contour(positions):
-    try:
-        reload(db)
-        filename = "positions.py"
-        output = open(filename, "a")
-        output.seek(-1, os.SEEK_END)
-        output.truncate()
-        first = True
-        for i in range(len(positions)):
-            c = positions[i].array
-            color = positions[i].color
-            print("Saving {}, {}..".format(i, color))
-
-            if not first:
-                output.write("        , Position(\"" + color + "\", [")
-            else:
-                output.write("        Position(\"" + color + "\", [")
-                first = False
-
-            for j in range(len(c)):
-                if j == 0:
-                    output.write("[[{}{}{}]]".format(str(c[j][0][0]).strip(), ", ", str(c[j][0][1]).strip()))
-                else:
-                    output.write(", [[{}{}{}]]".format(str(c[j][0][0]).strip(), ", ", str(c[j][0][1]).strip()))
-            output.seek(-1, os.SEEK_END)
-            output.truncate()
-            output.write("]])\n")
-        output.write(']')
-        output.close()
-        reload(db)
-        print("successfully saved")
-    except ValueError:
-        print("failed to save")
-
-
-# compares two contours for detection
-def compare_numpy(x, y, sensitivity=100):
-    """
-    Compares two numpy arrays.
-    :param sensitivity: sensitivy of distance
-    :param x: contours array
-    :param y: contours array
-    :return: true if duplicate array
-    """
-    for i in range(len(x)):
-        point_close = False
-        for t in range(len(y)):
-            distance = np.linalg.norm(x[i] - y[t])  # x[i] = [520,137] y[t] = [430,180]
-            if distance <= sensitivity:
-                point_close = True
-
-        if not point_close:
-            return False
-
-    return True
 
 
 run()  # disabled for travis
