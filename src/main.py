@@ -48,7 +48,7 @@ def main():
             ],
             leg_2_servos=[
                 53,
-                31,
+                1,
                 63
             ],
             leg_3_servos=[
