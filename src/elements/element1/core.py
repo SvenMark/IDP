@@ -1,6 +1,6 @@
 from entities.movement.limb.leg import Leg
 from entities.movement.limb.tire import Tire
-from entities.movement.limb.track import Track
+from entities.movement.tracks import Tracks
 from entities.robot.robot import Robot
 
 
@@ -8,9 +8,9 @@ from entities.robot.robot import Robot
 def run():
     lights = []
     limbs = [
-        Leg(),
-        Tire(),
-        Track()
+        # Leg(),
+        # Tire(),
+        # Tracks()
     ]
     name = 'Boris'
 
