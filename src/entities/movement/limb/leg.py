@@ -17,6 +17,6 @@ class Leg(object):
 
     # Function that moves the legs in the specified directions.
     def move(self, servo_0_position, servo_1_position, servo_2_position, delay):
-        self.servo_0.move(servo_0_position, 0)
-        self.servo_1.move(servo_1_position, 0)
+        self.servo_0.move(servo_0_position, delay)
+        self.servo_1.move(servo_1_position, delay)
         self.servo_2.move(servo_2_position, delay)
