@@ -37,24 +37,24 @@ def main():
     limbs = [
         Tracks(track1pin=18, track2pin=13),
         Legs(leg_0_servos=[
+                1,
                 13,
-                31,
-                63
+                14
             ],
             leg_1_servos=[
-                14,
-                18,
-                61
+                21,
+                31,
+                53
             ],
             leg_2_servos=[
-                53,
-                1,
-                63
+                61,
+                63,
+                111
             ],
             leg_3_servos=[
-                13,
-                31,
-                63
+                111,
+                111,
+                111
             ]
         )
     ]
