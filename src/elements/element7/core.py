@@ -193,7 +193,7 @@ def set_contours(mask, color, img):
 
             global LAST_POS_LEN, STOP_POSITIONS
 
-            print STOP_POSITIONS
+            print (STOP_POSITIONS)
             if not STOP_POSITIONS:
                 if not len(POSITIONS) > 0:
                     POSITIONS.append(Position(color, contours[i]))
