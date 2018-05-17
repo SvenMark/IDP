@@ -4,6 +4,7 @@ from threading import Timer
 from imutils.video import WebcamVideoStream
 from elements.element7.helpers import Color
 from elements.element7.helpers import Position
+from elements.element7.helpers import ColorRange
 
 import time
 import positions as db
@@ -17,18 +18,18 @@ POSITIONS = []
 LAST_POS_LEN = 100
 STOP_POSITIONS = False
 
+# initialize color ranges for detection
+orange = Color([0, 100, 100], [10, 255, 255])
+yellow = Color([20, 100, 100], [30, 255, 255])
+red = Color([170, 100, 100], [190, 255, 255])
+green = Color([60, 100, 50], [90, 255, 255])
+blue = Color([90, 100, 100], [120, 255, 255])
+
 
 def run():
     print("run element7")
-    cap = WebcamVideoStream(src=1).start()
+    cap = WebcamVideoStream(src=0).start()
     time.sleep(1)
-
-    # initialize color ranges for detection
-    orange = Color([0, 100, 100], [10, 255, 255])
-    yellow = Color([20, 100, 100], [30, 255, 255])
-    red = Color([170, 100, 100], [190, 255, 255])
-    green = Color([60, 100, 50], [90, 255, 255])
-    blue = Color([90, 100, 100], [120, 255, 255])
 
     colors = OrderedDict({
         "red": (0, 0, 255),
@@ -42,43 +43,45 @@ def run():
     while True:
         img = cap.read()
         img = cv2.GaussianBlur(img, (9, 9), 0)
-        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-        masks = OrderedDict({
-            "red": cv2.inRange(hsv, red.lower, red.upper),
-            "blue": cv2.inRange(hsv, blue.lower, blue.upper),
-            "green": cv2.inRange(hsv, green.lower, green.upper),
-            "orange": cv2.inRange(hsv, orange.lower, orange.upper),
-            "yellow": cv2.inRange(hsv, yellow.lower, yellow.upper)})
+        # calculate the masks
+        mask = calculate_mask(img)
 
-        # calculate contours
-        all_masks = masks.get("red") + masks.get("blue") + masks.get("green") + masks.get("orange") + masks.get(
-            "yellow")
-        img = crop_to_contours(all_masks, img)
-        hsv2 = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        # crop to the contours
+        img = crop_to_contours(mask, img)
 
-        masks2 = OrderedDict({
-            "red": cv2.inRange(hsv2, red.lower, red.upper),
-            "blue": cv2.inRange(hsv2, blue.lower, blue.upper),
-            "green": cv2.inRange(hsv2, green.lower, green.upper),
-            "orange": cv2.inRange(hsv2, orange.lower, orange.upper),
-            "yellow": cv2.inRange(hsv2, yellow.lower, yellow.upper)})
-
-        imgmask = set_contours(masks2.get("red"), "red", img)
-        for col, mask in masks2.items():
-            if col == "red":
-                continue
-            imgmask += set_contours(mask, col, img)
+        # calculate new cropped masks
+        mask_cropped = calculate_mask(img, set_contour=True)
 
         # draw_saved_positions(imgmask, colors)
 
-        cv2.imshow('camservice', imgmask)
+        cv2.imshow('camservice', mask_cropped)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
     cap.stop()
     cv2.destroyAllWindows()
+
+
+def calculate_mask(img, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
+    hsv = cv2.cvtColor(img, conversion)
+
+    masks = [ColorRange("red", cv2.inRange(hsv, red.lower, red.upper)),
+             ColorRange("blue", cv2.inRange(hsv, blue.lower, blue.upper)),
+             ColorRange("green", cv2.inRange(hsv, green.lower, green.upper)),
+             ColorRange("orange", cv2.inRange(hsv, orange.lower, orange.upper)),
+             ColorRange("yellow", cv2.inRange(hsv, yellow.lower, yellow.upper))]
+
+    if set_contour:
+        img_mask = set_contours(masks[0].range, masks[0].color, img)
+        for i in range(1, len(masks)):
+            img_mask += set_contours(masks[i].range, masks[i].color, img)
+    else:
+        img_mask = masks[0].range
+        for i in range(1, len(masks)):
+            img_mask += masks[i].range
+    return img_mask
 
 
 # draw saved positions
@@ -173,14 +176,6 @@ def set_contours(mask, color, img):
     ret, thresh = cv2.threshold(mask, 127, 255, 0)
     im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    # save correct contours when key 's' is pressed
-    # if cv2.waitKey(1) & 0xFF == ord('s') or keyboard.is_pressed('s'):
-    #     for i in range(len(POSITIONS)):
-    #         color = POSITIONS[i].color
-    #         cnt = POSITIONS[i].array
-    #         save_contour(cnt, color)
-    a, b, c, d = 0, 0, 0, 0
-
     # draw all correct contours
     for i in range(len(contours)):
         c = cv2.convexHull(contours[i])
@@ -198,45 +193,54 @@ def set_contours(mask, color, img):
 
             global LAST_POS_LEN, STOP_POSITIONS
 
+            print STOP_POSITIONS
             if not STOP_POSITIONS:
-                for j in POSITIONS:
-                    print("{}\n{}".format(contours[i], POSITIONS[j].array))
-                    if not compare_numpy(contours[i], POSITIONS[j].array):
-                        POSITIONS.append(Position(color, contours[i]))
-                        print("Found {}, color {}".format(len(POSITIONS), color))
+                if not len(POSITIONS) > 0:
+                    POSITIONS.append(Position(color, contours[i]))
+                else:
+                    for j in range(len(POSITIONS)):
+                        if not compare_numpy(contours[i], POSITIONS[j].array):
+                            POSITIONS.append(Position(color, contours[i]))
+                            print("Found {}, color {}".format(len(POSITIONS), color))
 
     return img_mask
 
 
 def routine():
-    t = Timer(2, routine)
+    t = Timer(20, routine)
     t.start()
+
     global STOP_POSITIONS, LAST_POS_LEN
     if LAST_POS_LEN == len(POSITIONS):
         STOP_POSITIONS = True
 
+        db.positions = []
+
         # save current positions to file
-        if not is_duplicate(POSITIONS, db.positions):
-            save_contour(POSITIONS)
+        for i in range(len(POSITIONS)):
+            if not len(db.positions) > 0:
+                save_contour(POSITIONS[i])
+            elif not compare_numpy(POSITIONS[i], db.positions):
+                save_contour(POSITIONS[i])
 
         # start recognizing building
-        print("napalm")
+        print("Looped timer..")
         recognize_building(POSITIONS)
 
     LAST_POS_LEN = len(POSITIONS)
 
 
 def recognize_building(positions):
-    for i in range(len(positions)):
-        print("POSITION: {}, {}, {}".format(i, positions[i].color, positions[i].array[0]))
-    print('\n')
+    # for i in range(len(positions)):
+    #     print("POSITION: {}, {}, {}".format(i, positions[i].color, positions[i].array[0]))
+    # print('\n')
 
     # check if you recognize position
     for building in range(len(db.buildings)):
         current_building = True
         for contour in range(len(db.buildings[building])):
-            print("BUILDING: {}, {}, {}".format(contour, db.buildings[building][contour].color,
-                                                db.buildings[building][contour].array[0]))
+            # print("BUILDING: {}, {}, {}".format(contour, db.buildings[building][contour].color,
+            #                                     db.buildings[building][contour].array[0]))
 
             found_saved = False
             for saved_position in range(len(positions)):
@@ -245,7 +249,6 @@ def recognize_building(positions):
                     found_saved = True
 
             current_building = found_saved
-            print(found_saved)
             if not current_building:
                 break
 
@@ -296,14 +299,22 @@ def save_contour(positions):
         output.write(']')
         output.close()
         reload(db)
+        for i in range(len(db.positions)):
+            print db.positions[i].array
         print("successfully saved")
     except ValueError:
         print("failed to save")
 
 
 # compares two contours for detection
-def compare_numpy(x, y):
-    sensitivity = 100
+def compare_numpy(x, y, sensitivity=100):
+    """
+    Compares two numpy arrays.
+    :param sensitivity: sensitivy of distance
+    :param x: contours array
+    :param y: contours array
+    :return: true if duplicate array
+    """
 
     for i in range(len(x)):
         point_close = False
