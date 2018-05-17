@@ -22,6 +22,7 @@ class Servo(object):
         self.last_position = initial_position
         self.ax12.move(servo_id, initial_position)
         self.sensitivity = 2
+        time.sleep(0.1)
 
     # Function that checks if the servo already completed it`s last move or not.
     def is_ready(self):
