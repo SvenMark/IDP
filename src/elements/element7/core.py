@@ -190,58 +190,49 @@ def set_contours(mask, color, img):
             cv2.drawContours(img_mask, [c], 0, (255, 255, 255), 3)
             text = "{} {}".format("Color:", color)
             cv2.putText(img_mask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+            cv2.circle(img_mask, (cx, cy), 2, (255, 255, 255),5)
 
             global LAST_POS_LEN, STOP_POSITIONS
 
-            print STOP_POSITIONS
             if not STOP_POSITIONS:
-                if not len(POSITIONS) > 0:
+                if len(POSITIONS) == 0:
                     POSITIONS.append(Position(color, contours[i]))
+                    print("Found {}, color {}, loc {}".format(len(POSITIONS), color, contours[i][0]))
                 else:
                     for j in range(len(POSITIONS)):
-                        if not compare_numpy(contours[i], POSITIONS[j].array):
+                        if not is_duplicate((cx, cy), POSITIONS, 5):
                             POSITIONS.append(Position(color, contours[i]))
-                            print("Found {}, color {}".format(len(POSITIONS), color))
+                            print("Found {}, color {}, loc {}".format(len(POSITIONS), color, contours[i][0]))
 
     return img_mask
 
 
 def routine():
-    t = Timer(20, routine)
+    t = Timer(2, routine)
     t.start()
 
     global STOP_POSITIONS, LAST_POS_LEN
     if LAST_POS_LEN == len(POSITIONS):
         STOP_POSITIONS = True
 
-        db.positions = []
+        db.clear_positions()
 
         # save current positions to file
-        for i in range(len(POSITIONS)):
-            if not len(db.positions) > 0:
-                save_contour(POSITIONS[i])
-            elif not compare_numpy(POSITIONS[i], db.positions):
-                save_contour(POSITIONS[i])
+        save_contour(POSITIONS)
 
         # start recognizing building
         print("Looped timer..")
         recognize_building(POSITIONS)
+        t.cancel()
 
     LAST_POS_LEN = len(POSITIONS)
 
 
 def recognize_building(positions):
-    # for i in range(len(positions)):
-    #     print("POSITION: {}, {}, {}".format(i, positions[i].color, positions[i].array[0]))
-    # print('\n')
-
     # check if you recognize position
     for building in range(len(db.buildings)):
         current_building = True
         for contour in range(len(db.buildings[building])):
-            # print("BUILDING: {}, {}, {}".format(contour, db.buildings[building][contour].color,
-            #                                     db.buildings[building][contour].array[0]))
-
             found_saved = False
             for saved_position in range(len(positions)):
                 if db.buildings[building][contour].color == positions[saved_position].color \
@@ -258,11 +249,15 @@ def recognize_building(positions):
 
 # checks if contour is duplicate
 def is_duplicate(x, y, sensitivity=50):
-    if len(y) == 0:
-        return False
     for i in range(len(y)):
-        if abs(x[0][0][0] - y[i].array[0][0][0]) < sensitivity \
-                and abs(x[0][0][1] - y[i].array[0][0][1]) < sensitivity:
+        c = cv2.convexHull(y[i].array)
+
+        moment = cv2.moments(c)
+        cx = int(moment['m10'] / moment['m00'])
+        cy = int(moment['m01'] / moment['m00'])
+
+        if abs(cx - x[0]) < sensitivity and \
+           abs(cy - x[1]) < sensitivity:  # ex. 100 - 50 = 50 dist. min 10 dist(sensitivity) dist < sensitivity = duplicate
             return True
 
     return False
@@ -280,7 +275,7 @@ def save_contour(positions):
         for i in range(len(positions)):
             c = positions[i].array
             color = positions[i].color
-            print("{}, {}".format(i, color))
+            print("Saving {}, {}..".format(i, color))
 
             if not first:
                 output.write("        , Position(\"" + color + "\", [")
@@ -299,8 +294,6 @@ def save_contour(positions):
         output.write(']')
         output.close()
         reload(db)
-        for i in range(len(db.positions)):
-            print db.positions[i].array
         print("successfully saved")
     except ValueError:
         print("failed to save")
@@ -315,16 +308,16 @@ def compare_numpy(x, y, sensitivity=100):
     :param y: contours array
     :return: true if duplicate array
     """
-
     for i in range(len(x)):
         point_close = False
         for t in range(len(y)):
-            distance = np.linalg.norm(x[i] - y[t])  # x[i] = [520,137] y[430,180]
+            distance = np.linalg.norm(x[i] - y[t])  # x[i] = [520,137] y[t] = [430,180]
             if distance <= sensitivity:
                 point_close = True
 
         if not point_close:
             return False
+
     return True
 
 
