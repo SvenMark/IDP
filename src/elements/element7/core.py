@@ -5,9 +5,9 @@ from threading import Timer
 from elements.element7.helpers import Color
 from elements.element7.helpers import Position
 from elements.element7.helpers import ColorRange
+from elements.element7.positions import positions as db
 
 import time
-import elements.element7.positions as db
 import numpy as np
 import cv2
 import os
