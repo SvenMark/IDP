@@ -6,5 +6,5 @@ from libs.ax12 import Ax12
 
 servo = Ax12()
 
-servo.set_id(13, 15)
+servo.factory_reset(13, True)
 
