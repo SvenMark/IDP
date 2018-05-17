@@ -4,9 +4,9 @@ from threading import Timer
 from elements.element7.helpers import Color
 from elements.element7.helpers import Block
 from elements.element7.helpers import ColorRange
+import buildings as db
 
 import time
-import buildings as db
 import numpy as np
 import cv2
 
@@ -56,7 +56,7 @@ def run():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    cap.stop()
+    cap.release()
     cv2.destroyAllWindows()
 
 
@@ -191,25 +191,28 @@ def set_contours(mask, color, img):
             global LAST_POS_LEN
 
             if not STOP_POSITIONS:
+                if len(POSITIONS) > 10:
+                    print("Cleared POSITIONS of length ", len(POSITIONS))
+                    del POSITIONS[:]
                 if len(POSITIONS) == 0:
                     POSITIONS.append(Block(color, (cx, cy)))
-                    print("Found {}, color {}, loc {}".format(len(POSITIONS), color, contours[i][0]))
+                    print("Block(\"{}\", {}),".format(color, (cx, cy)))
                 else:
-                    for j in range(len(POSITIONS)):
-                        if not is_duplicate((cx, cy), POSITIONS, 5):
-                            POSITIONS.append(Block(color, (cx, cy)))
-                            print("Found {}, color {}, loc {}".format(len(POSITIONS), color, contours[i][0]))
+                    if len(POSITIONS) > 0:
+                        for j in range(len(POSITIONS)):
+                            if not is_duplicate((cx, cy), POSITIONS, 5):
+                                POSITIONS.append(Block(color, (cx, cy)))
+                                print("Block(\"{}\", {}),".format(color, (cx, cy)))
 
     return img_mask
 
 
 def routine():
-    t = Timer(.5, routine)
+    t = Timer(2, routine)
     t.start()
 
     global STOP_POSITIONS, LAST_POS_LEN
     if LAST_POS_LEN == len(POSITIONS):
-        STOP_POSITIONS = True
 
         # save current positions to file
         # db.save_contour(POSITIONS)
@@ -218,8 +221,8 @@ def routine():
         print("Looped timer..")
 
         recognize_building(POSITIONS)
+        del POSITIONS[:]
 
-        STOP_POSITIONS = False
         LAST_POS_LEN = 100
 
     LAST_POS_LEN = len(POSITIONS)
@@ -228,13 +231,23 @@ def routine():
 def recognize_building(positions):
     # check if you recognize position
     result = []
+    found = True
+    if not len(positions) > 0:
+        return False
     for building in range(len(db.buildings)):
         b = db.buildings[building]
-        for block in range(len(b.front)):
-            bl = b.front[block]
+        for block_front in range(len(b.front)):
+            bl = b.front[block_front]
             result = [building, "front"]
             if not is_duplicate(bl.centre, positions, 10, bl.color):
-                return False
+                found = False
+
+        if not found:
+            for block_back in range(len(b.back)):
+                bl = b.front[block_back]
+                result = [building, "back"]
+                if not is_duplicate(bl.centre, positions, 10, bl.color):
+                    return False
 
     print("Recognized building {}, {} side".format(result[0], result[1]))
     return True
@@ -259,5 +272,5 @@ def is_duplicate(x, y, sensitivity=10, color=None):
     return False
 
 
-run()  # disabled for travis
 routine()
+run()  # disabled for travis

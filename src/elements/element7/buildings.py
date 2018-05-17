@@ -32,16 +32,15 @@ def save_contour(blocks):
 
 
 buildings = [
-        Building(front=[Block("red", (147, 90)),
-                        Block("blue", (41, 317)),
-                        Block("green", (92, 206)),
-                        Block("orange", (31, 89)),
-                        Block("yellow", (143, 313))],
-                 back=[Block("red", (112, 175)),
-                       Block("blue", (44, 304)),
-                       Block("green", (36, 68)),
-                       Block("orange", (184, 70)),
-                       Block("yellow", (180, 307))],
+        Building(front=[Block("red", (140, 92)),
+                        Block("blue", (28, 317)),
+                        Block("orange", (28, 90)),
+                        Block("yellow", (140, 317)),
+                        Block("green", (83, 208))],
+                 back=[Block("blue", (31, 316)),
+                       Block("green", (86, 209)),
+                       Block("orange", (30, 91)),
+                       Block("yellow", (144, 317))],
                  left=[Block("red", (112, 175)),
                        Block("blue", (44, 304)),
                        Block("green", (36, 68)),
@@ -57,4 +56,8 @@ buildings = [
 
 
 positions = [
+        Block("blue", (30, 316)),
+        Block("green", (85, 209)),
+        Block("orange", (29, 91)),
+        Block("yellow", (143, 317))
 ]
