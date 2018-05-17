@@ -35,8 +35,10 @@ class Element6(object):
             high_black = np.array([180, 255, 30])
             mask = cv2.inRange(hsv, low_black, high_black)
 
+            # Red detection
             if Element6.detectred(img, hsv):
                 print("red detected (possible sleep)")
+                # time.sleep(10)
 
             # Get lines
             theta = np.pi / 180
@@ -57,7 +59,9 @@ class Element6(object):
                         p1 = Point(x1, y1)
                         p2 = Point(x2, y2)
                         cv2.line(imgClone, (p1.x, p1.y), (p2.x, p2.y), linecolor, 5)
-                Element6.averagedistance(lines, width)
+                left, right = Element6.averagedistance(lines, width)
+                print("Percentage left: " + str(round(left)) + "%")
+                print("Percentage right: " + str(round(right)) + "%")
 
             cv2.imshow('camservice-lijn', imgClone)
 
@@ -68,7 +72,7 @@ class Element6(object):
         cv2.destroyAllWindows()
 
     @staticmethod
-    def setregion(img, vertices):
+    def setregion(img, vertices):       # Region for search
         mask = np.zeros_like(img)
         channel_count = img.shape[2]
         match_mask_color = (255,) * channel_count
@@ -103,11 +107,11 @@ class Element6(object):
                 totaldr += (width - midp.x)  # Distance to right
                 totaldl += (0 + midp.x)  # Distance to right
                 count += 1
+
         # Average to sides (x-as)
         percentageleft = Decimal((Decimal(Decimal(totaldl) / Decimal(count)) / Decimal(width)) * Decimal(100))
         percentageright = Decimal((Decimal(Decimal(totaldr) / Decimal(count)) / Decimal(width)) * Decimal(100))
-        print("Percentage left: " + str(round(percentageleft)) + "%")
-        print("Percentage right: " + str(round(percentageright)) + "%")
+
         return percentageleft, percentageright
 
     @staticmethod
@@ -115,10 +119,12 @@ class Element6(object):
         red = Color([170, 100, 100], [190, 255, 255])
         mask = cv2.inRange(hsv, red.lower, red.upper)
         red = cv2.bitwise_and(img, img, mask=mask)
+
         ret, thresh = cv2.threshold(mask, 127, 255, 0)
         im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
         for cnt in contours:
-            red = cv2.drawContours(red, [cnt], -1, (255, 255, 255), 10)
+            cv2.drawContours(img, [cnt], -1, (0, 0, 255), 10)
             cv2.imshow("red", red)
         if len(contours) < 2:
             return False
