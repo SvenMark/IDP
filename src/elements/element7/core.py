@@ -1,7 +1,6 @@
 from collections import OrderedDict
 from threading import Timer
 
-from imutils.video import WebcamVideoStream
 from elements.element7.helpers import Color
 from elements.element7.helpers import Block
 from elements.element7.helpers import ColorRange
@@ -27,7 +26,7 @@ blue = Color([90, 100, 100], [120, 255, 255])
 
 def run():
     print("run element7")
-    cap = WebcamVideoStream(src=0).start()
+    cap = cv2.VideoCapture(0)
     time.sleep(1)
 
     colors = OrderedDict({
@@ -37,10 +36,8 @@ def run():
         "orange": (0, 165, 255),
         "yellow": (0, 255, 255)})
 
-    routine()
-
     while True:
-        img = cap.read()
+        ret, img = cap.read()
         img = cv2.GaussianBlur(img, (9, 9), 0)
 
         # calculate the masks
@@ -189,7 +186,7 @@ def set_contours(mask, color, img):
             cv2.drawContours(img_mask, [c], 0, (255, 255, 255), 3)
             text = "{} {}".format("Color:", color)
             cv2.putText(img_mask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
-            cv2.circle(img_mask, (cx, cy), 2, (255, 255, 255),5)
+            cv2.circle(img_mask, (cx, cy), 2, (255, 255, 255), 5)
 
             global LAST_POS_LEN
 
@@ -207,7 +204,7 @@ def set_contours(mask, color, img):
 
 
 def routine():
-    t = Timer(2, routine)
+    t = Timer(.5, routine)
     t.start()
 
     global STOP_POSITIONS, LAST_POS_LEN
@@ -221,7 +218,9 @@ def routine():
         print("Looped timer..")
 
         recognize_building(POSITIONS)
-        t.cancel()
+
+        STOP_POSITIONS = False
+        LAST_POS_LEN = 100
 
     LAST_POS_LEN = len(POSITIONS)
 
@@ -261,3 +260,4 @@ def is_duplicate(x, y, sensitivity=10, color=None):
 
 
 run()  # disabled for travis
+routine()
