@@ -300,7 +300,7 @@ def save_contour(positions):
         output.close()
         reload(db)
         for i in range(len(db.positions)):
-            print db.positions[i].array
+            print (db.positions[i].array)
         print("successfully saved")
     except ValueError:
         print("failed to save")
