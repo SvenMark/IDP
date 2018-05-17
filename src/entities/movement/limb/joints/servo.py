@@ -36,11 +36,8 @@ class Servo(object):
             print("In servo " + str(self.servo_id) + ", degrees: " + str(degrees) + ", must be between 0 and 998")
 
         # While the servo has not completed it last command wait a bit and check again.
-        #while not self.is_ready():
-            #self.is_ready()
-
-        if not self.is_ready():
-            return False
+        while not self.is_ready():
+            time.sleep(0.1)
 
         # Move the servo using the ax12 library with the servo id and degrees.
         self.ax12.move(self.servo_id, degrees)
