@@ -7,7 +7,7 @@ from elements.element7.helpers import Position
 from elements.element7.helpers import ColorRange
 
 import time
-import positions as db
+import elements.element7.positions as db
 import numpy as np
 import cv2
 import os
