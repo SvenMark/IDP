@@ -1,6 +1,4 @@
 #!/bin/python
-
-from entities.movement.limb.joints.dcmotor import DCMotor
 from entities.movement.tracks import Tracks
 
 tracks = Tracks(track1pin=18, track2pin=13)

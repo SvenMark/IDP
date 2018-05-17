@@ -1,7 +1,4 @@
 #!/bin/python
-
-import time
-
 from entities.movement.limb.joints.servo import Servo
 
 servo0 = Servo(1, 500)

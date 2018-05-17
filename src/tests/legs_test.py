@@ -1,3 +1,4 @@
+#!/bin/python
 import time
 
 from entities.movement.legs import Legs
