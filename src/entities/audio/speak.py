@@ -21,7 +21,7 @@ class Speak(Audio):
         """
         path = self.get_file_path(file_name)
         if self.windows:  # windows
-            os.system("start -q --no-qt-system-tray --qt-start-minimized --play-and-exit " + path)
+            os.system("vlc -I null -q --no-qt-system-tray --qt-start-minimized --play-and-exit " + path)
         else:  # linux
             os.system("mpg321 " + path)
 
