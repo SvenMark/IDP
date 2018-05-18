@@ -1,6 +1,6 @@
 import pyaudio
 import numpy as np
-import pylab
+#import pylab
 import time
 
 
@@ -14,24 +14,26 @@ def run():
 
         np.set_printoptions(suppress=True)  # don't use scientific notation
 
-        CHUNK = 700  # speed of data point reading, smaller == less datapoints == faster updates
-        RATE = 11025  # time resolution of the recording device (Hz) Higher == Better accuracy
-        OUTPUTS = 1000  # number of outputs
+        CHUNK = 10000  # speed of data point reading, smaller == less datapoints == faster updates
+        RATE = 44100  # time resolution of the recording device (Hz) Higher == Better accuracy
+        OUTPUTS = 500  # number of outputs
 
         LOWLOWS = 0
-        HIGHLOWS = 50  # low value borders
+        HIGHLOWS = 200  # low value borders
 
-        LOWMEDS = 50
-        HIGHMEDS = 100  # med value borders
+        LOWMEDS = 200
+        HIGHMEDS = 2000  # med value borders
 
-        LOWHIGHS = 100
-        HIGHHIGHS = 175  # high value borders
+        LOWHIGHS = 2000
+        HIGHHIGHS = 2500  # high value borders
 
         p = pyaudio.PyAudio()  # start the PyAudio class
         stream = p.open(format=pyaudio.paInt16, channels=1, rate=RATE, input=True,
                         frames_per_buffer=CHUNK)  # uses default input device
 
         pylab.interactive(True)
+        count = 0
+
         for i in range(OUTPUTS):  # Number of outputs
             data = np.fromstring(stream.read(CHUNK), dtype=np.int16)
             left = data[0::2]
@@ -60,13 +62,16 @@ def run():
             for i in range(LOWHIGHS, HIGHHIGHS):
                 high = high + abs(lf)[i]
 
-            value = [lows, meds, high]
-            pylab.ylim(0, 2000000)
-            pylab.bar(np.arange(3), value)
-            pylab.xticks(np.arange(3), ('Low', 'Med', 'High'))
-            pylab.show()
+            value = [int(lows), int(meds), int(high)]
+            # pylab.ylim(0, 20000000)
+            # pylab.bar(np.arange(3), value)
+            # pylab.xticks(np.arange(3), ('Low', 'Med', 'High'))
+            # pylab.show()
 
-            print("Low: " + str(lows) + ", Med: " + str(meds) + ", High: " + str(high))
+            # print("Low: " + str(value[0]) + ", Med: " + str(value[1]) + ", High: " + str(value[2]))
+            if lows > 5000000:
+                count += 1
+                print("bass " +str(count))
 
         stream.stop_stream()
         stream.close()

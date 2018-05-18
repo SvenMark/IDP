@@ -1,6 +1,6 @@
 #!/bin/python
-
 import time
+
 from entities.movement.limb.joints.dcmotor import DCMotor
 
 motor = DCMotor(18)
