@@ -1,7 +1,14 @@
+import os
 import sys
 
 from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, \
     element10
+from entities.movement.limb.leg import Leg
+from entities.movement.limb.tire import Tire
+from entities.movement.limb.tracks import Tracks
+from entities.robot.robot import Robot
+
+RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
 
 FUNC_MAP = {
     "1": element1.core,
@@ -18,10 +25,20 @@ FUNC_MAP = {
 
 
 def main():
+    print(RESOURCES)
     # print command line arguments
     if len(sys.argv) < 2:
         print("Please pass commandline args")
         return sys.exit(2)
+
+    lights = []
+    limbs = [
+        Leg(),
+        Tire(),
+        Tracks()
+    ]
+    name = 'Boris'
+    boris = Robot(name, limbs, lights)
 
     part = sys.argv[1]
 
