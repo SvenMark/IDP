@@ -16,7 +16,7 @@ class DCMotor(object):
         self.pin_motor_forward = 10
         self.pin_motor_backward = 9
         self.pin_pwm = pin
-        self.frequency = 60
+        self.frequency = 12000
         self.stop = 0
         self.currentspeed = 0
 
