@@ -240,14 +240,14 @@ def recognize_building(positions):
             bl = b.front[block_front]
             result = [building, "front"]
             if not is_duplicate(bl.centre, positions, 10, bl.color):
-                found = False
-
-        if not found:
-            for block_back in range(len(b.back)):
-                bl = b.front[block_back]
-                result = [building, "back"]
-                if not is_duplicate(bl.centre, positions, 10, bl.color):
-                    return False
+                return False
+        #
+        # if not found:
+        #     for block_back in range(len(b.back)):
+        #         bl = b.front[block_back]
+        #         result = [building, "back"]
+        #         if not is_duplicate(bl.centre, positions, 10, bl.color):
+        #             return False
 
     print("Recognized building {}, {} side".format(result[0], result[1]))
     return True
