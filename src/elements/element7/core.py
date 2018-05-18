@@ -1,13 +1,13 @@
 from collections import OrderedDict
 from threading import Timer
 
-from imutils.video import WebcamVideoStream
+#from imutils.video import WebcamVideoStream
 from elements.element7.helpers import Color
 from elements.element7.helpers import Position
 from elements.element7.helpers import ColorRange
+from elements.element7.positions import positions as db
 
 import time
-import positions as db
 import numpy as np
 import cv2
 import os
@@ -28,7 +28,7 @@ blue = Color([90, 100, 100], [120, 255, 255])
 
 def run():
     print("run element7")
-    cap = WebcamVideoStream(src=0).start()
+    cap = cv2.VideoCapture(src=0)
     time.sleep(1)
 
     colors = OrderedDict({
@@ -41,7 +41,7 @@ def run():
     routine()
 
     while True:
-        img = cap.read()
+        ret, img = cap.read()
         img = cv2.GaussianBlur(img, (9, 9), 0)
 
         # calculate the masks
@@ -193,7 +193,6 @@ def set_contours(mask, color, img):
 
             global LAST_POS_LEN, STOP_POSITIONS
 
-            print STOP_POSITIONS
             if not STOP_POSITIONS:
                 if not len(POSITIONS) > 0:
                     POSITIONS.append(Position(color, contours[i]))
@@ -299,8 +298,6 @@ def save_contour(positions):
         output.write(']')
         output.close()
         reload(db)
-        for i in range(len(db.positions)):
-            print db.positions[i].array
         print("successfully saved")
     except ValueError:
         print("failed to save")
