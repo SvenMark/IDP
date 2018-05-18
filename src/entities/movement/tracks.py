@@ -25,14 +25,14 @@ class Tracks(object):
             print("Warning, setting acceleration to 0.01")
             acceleration = 0.01
 
-        diff_1 = duty_cycle_track_left - self.track_left.currentspeed
-        diff_2 = duty_cycle_track_right - self.track_right.currentspeed
+        diff_1 = duty_cycle_track_left - self.track_left.current_speed
+        diff_2 = duty_cycle_track_right - self.track_right.current_speed
 
         step_1 = diff_1 / acceleration / 100
         step_2 = diff_2 / acceleration / 100
 
-        speed_1 = self.track_left.currentspeed
-        speed_2 = self.track_right.currentspeed
+        speed_1 = self.track_left.current_speed
+        speed_2 = self.track_right.current_speed
 
         for i in range(0, 100 * acceleration):
             speed_1 += step_1
