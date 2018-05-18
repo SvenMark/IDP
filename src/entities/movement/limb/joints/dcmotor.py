@@ -43,8 +43,8 @@ class DCMotor(object):
     def forward(self, duty_cycle, delay):
         """
         Turn the motor forward
-        :param duty_cycle: the percentage of available power the motor uses
-        :param delay: time to wait after executing
+        :param duty_cycle: The percentage of available power the motor uses
+        :param delay: Time to wait after executing
         :return: None
         """
         print("Forwards " + str(duty_cycle))
@@ -57,8 +57,8 @@ class DCMotor(object):
     def backward(self, duty_cycle, delay):
         """
         Turn the motor backward
-        :param duty_cycle: the percentage of available power the motor uses
-        :param delay: time to wait after executing
+        :param duty_cycle: The percentage of available power the motor uses
+        :param delay: Time to wait after executing
         :return: None
         """
         print("Backwards " + str(duty_cycle))
