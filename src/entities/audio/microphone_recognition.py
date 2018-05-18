@@ -7,17 +7,24 @@ import speech_recognition as sr
 from chatterbot import ChatBot
 import sys
 import subprocess
+import pickle
 
 chatbot = ChatBot(
     'Ron Obvious',
     trainer='chatterbot.trainers.ChatterBotCorpusTrainer'
 )
 
+response = chatbot.get_response("Are you gay")
+print(response)
+spoke = speak.Speak()
+spoke.tts(str(response))
 
 # Train based on the english corpus
 #chatbot.train("chatterbot.corpus.english.conversations")
+#chatbot.train("chatterbot.corpus.english")
 
-def run(chatbot):
+
+def run():
     # obtain audio from the microphone
     r = sr.Recognizer()
     with sr.Microphone() as source:
@@ -38,14 +45,14 @@ def run(chatbot):
 
         # Get a response to an input statement
         response = chatbot.get_response(shit)
-        
+        print(response)
         spoke = speak.Speak()
         spoke.tts(str(response))
 
-        run(chatbot)
+        run()
     except:
         print(sys.exc_info())
-        run(chatbot)
+        run()
         
-run(chatbot)
+run()
 
