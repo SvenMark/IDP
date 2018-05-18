@@ -11,6 +11,10 @@ class DCMotor(object):
     """
 
     def __init__(self, pin):
+        """
+        Constructor for the dc motor class
+        :param pin: The GPIO pin the dc motor is connected to
+        """
 
         # Set up the gpio and pins for the use of DC motors
         GPIO.setmode(GPIO.BCM)
