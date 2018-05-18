@@ -10,9 +10,12 @@ class Servo(object):
     Base class for servo
     """
 
-    # Constructor for servo class.
-    # It expects the id of the servo and the initial position.
     def __init__(self, servo_id, initial_position):
+        """
+        Constructor for servo class
+        :param servo_id: ID of the servo
+        :param initial_position: The position you want to set the servo at on initialising
+        """
 
         # Create an instance of the Ax12 servo class from the Ax12 library.
         self.ax12 = Ax12()
@@ -24,13 +27,20 @@ class Servo(object):
         self.sensitivity = 2
         time.sleep(0.1)
 
-    # Function that checks if the servo already completed it`s last move or not.
     def is_ready(self):
+        """
+        Function that checks if a servo completed it`s last move
+        :return: Whether or not the servo has completed it`s last move
+        """
         return abs(self.ax12.read_position(self.servo_id) - self.last_position) <= self.sensitivity
 
-    # Function that moves the servo.
-    # It expects the position it needs to move to and a delay.
     def move(self, degrees, delay):
+        """
+        Function that moves the servo using the ax12 library move function
+        :param degrees: Position to move to
+        :param delay: Time to wait after executing
+        :return: None
+        """
 
         # If degrees are out of range print an error
         if degrees < 0 or degrees > 998:
@@ -48,8 +58,11 @@ class Servo(object):
 
         time.sleep(delay)
 
-    # Read the current position of the servo.
     def read_position(self):
+        """
+        Read the position of the servo
+        :return: Current position of this servo
+        """
         return self.ax12.read_position(self.servo_id)
 
 
