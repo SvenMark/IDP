@@ -32,11 +32,10 @@ class DCMotor(object):
 
         print("Setup")
 
-    # Turn motor off
     def stop_motor(self):
         """
         Set the motor speed to 0
-        :return: none
+        :return: None
         """
         self.pwm_motor.ChangeDutyCycle(self.stop)
         self.current_speed = 0
@@ -46,7 +45,7 @@ class DCMotor(object):
         Turn the motor forward
         :param duty_cycle: the percentage of available power the motor uses
         :param delay: time to wait after executing
-        :return: none
+        :return: None
         """
         print("Forwards " + str(duty_cycle))
         GPIO.output(self.pin_motor_forward, GPIO.HIGH)
@@ -60,7 +59,7 @@ class DCMotor(object):
         Turn the motor backward
         :param duty_cycle: the percentage of available power the motor uses
         :param delay: time to wait after executing
-        :return: none
+        :return: None
         """
         print("Backwards " + str(duty_cycle))
         GPIO.output(self.pin_motor_forward, GPIO.LOW)
@@ -72,7 +71,7 @@ class DCMotor(object):
     def clean_up(self):
         """
         Stop the motors and clean up variables and GPIO
-        :return: none
+        :return: None
         """
         self.stop_motor()
         self.current_speed = 0
