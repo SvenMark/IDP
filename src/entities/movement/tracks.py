@@ -10,10 +10,7 @@ class Tracks(object):
     Base class for tracks that implements DC motors
     """
 
-    def __init__(self):
-        track1pin = 18
-        track2pin = 13
-
+    def __init__(self, track1pin, track2pin):
         self.track_left = DCMotor(track1pin)
         self.track_right = DCMotor(track2pin)
 
@@ -25,14 +22,14 @@ class Tracks(object):
             print("Warning, setting acceleration to 0.01")
             acceleration = 0.01
 
-        diff_1 = duty_cycle_track_left - self.track_left.currentspeed
-        diff_2 = duty_cycle_track_right - self.track_right.currentspeed
+        diff_1 = duty_cycle_track_left - self.track_left.current_speed
+        diff_2 = duty_cycle_track_right - self.track_right.current_speed
 
         step_1 = diff_1 / acceleration / 100
         step_2 = diff_2 / acceleration / 100
 
-        speed_1 = self.track_left.currentspeed
-        speed_2 = self.track_right.currentspeed
+        speed_1 = self.track_left.current_speed
+        speed_2 = self.track_right.current_speed
 
         for i in range(0, 100 * acceleration):
             speed_1 += step_1
@@ -78,3 +75,7 @@ class Tracks(object):
 
     def turn_left(self, duty_cycle_track_right, duty_cycle_track_left, delay, acceleration):
         self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 0, 1)
+
+    def stop(self):
+        self.track_left.stop_motor()
+        self.track_right.stop_motor()
