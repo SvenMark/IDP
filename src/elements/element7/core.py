@@ -4,7 +4,8 @@ from threading import Timer
 from elements.element7.helpers import Color
 from elements.element7.helpers import Block
 from elements.element7.helpers import ColorRange
-import buildings as db
+from elements.element7.helpers import SavedBuildings as db
+import importlib
 
 import time
 import numpy as np
@@ -27,7 +28,6 @@ blue = Color([90, 100, 100], [120, 255, 255])
 def run():
     print("run element7")
     cap = cv2.VideoCapture(0)
-    time.sleep(1)
 
     colors = OrderedDict({
         "red": (0, 0, 255),
