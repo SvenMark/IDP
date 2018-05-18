@@ -10,11 +10,7 @@ class Tracks(object):
     Base class for tracks that implements DC motors
     """
 
-    def __init__(self):
-
-        # Initialise the pins used for the dc motors
-        track_0_pin = 18
-        track_1_pin = 13
+    def __init__(self, track_0_pin, track_1_pin):
 
         # Initialise both motors as tracks. Each track has 1 motor.
         self.track_left = DCMotor(track_0_pin)
@@ -35,16 +31,16 @@ class Tracks(object):
             acceleration = 0.01
 
         # Calculate the difference between the required duty cycle and current duty cycle.
-        diff_1 = duty_cycle_track_left - self.track_left.currentspeed
-        diff_2 = duty_cycle_track_right - self.track_right.currentspeed
+        diff_1 = duty_cycle_track_left - self.track_left.current_speed
+        diff_2 = duty_cycle_track_right - self.track_right.current_speed
 
         # Calculate the step size of the acceleration.
         step_1 = diff_1 / acceleration / 100
         step_2 = diff_2 / acceleration / 100
 
         # Get the current speed.
-        speed_1 = self.track_left.currentspeed
-        speed_2 = self.track_right.currentspeed
+        speed_1 = self.track_left.current_speed
+        speed_2 = self.track_right.current_speed
 
         # Loop which accelerates the tracks.
         for i in range(0, 100 * acceleration):
@@ -108,6 +104,11 @@ class Tracks(object):
     # Function for moving tracks in a right direction by turning left track backward and right track forward.
     def turn_left(self, duty_cycle_track_right, duty_cycle_track_left, delay, acceleration):
         self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 0, 1)
+
+    # Function that stops the tracks moving
+    def stop(self):
+        self.track_left.stop_motor()
+        self.track_right.stop_motor()
 
     # Function to clean up the GPIO for both motors
     def clean_up(self):
