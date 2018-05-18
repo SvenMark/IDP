@@ -10,10 +10,7 @@ class Tracks(object):
     Base class for tracks that implements DC motors
     """
 
-    def __init__(self):
-        track1pin = 18
-        track2pin = 13
-
+    def __init__(self, track1pin, track2pin):
         self.track_left = DCMotor(track1pin)
         self.track_right = DCMotor(track2pin)
 
@@ -78,3 +75,7 @@ class Tracks(object):
 
     def turn_left(self, duty_cycle_track_right, duty_cycle_track_left, delay, acceleration):
         self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 0, 1)
+
+    def stop(self):
+        self.track_left.stop_motor()
+        self.track_right.stop_motor()
