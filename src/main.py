@@ -35,7 +35,7 @@ def main():
     lights = []
 
     limbs = [
-        Tracks(track1pin=18, track2pin=13),
+        Tracks(track_0_pin=18, track_1_pin=13),
         Legs(leg_0_servos=[
                 1,
                 13,
