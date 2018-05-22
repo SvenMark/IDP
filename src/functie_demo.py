@@ -28,7 +28,7 @@ legs = Legs(leg_0_servos=[
 
 legs.deploy(150)
 walk_forward(legs, 200, 10)
-wave(legs, 250, 15)
+wave(legs, 250, 10)
 enge_dab(legs, 140)
 time.sleep(3)
 legs.retract(150)
