@@ -58,6 +58,7 @@ def walk_backward(legs, speed):
 
 
 def enge_dab(legs, speed):
+    print("ENGE DAB")
     legs.move(leg_0_moves=[315, 678, 1023],
               leg_1_moves=[650, 400, 400],
               leg_2_moves=[400, 400, 400],
