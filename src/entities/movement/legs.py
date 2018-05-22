@@ -13,7 +13,7 @@ class Legs(object):
         """
 
         # Initialise a leg for each corner of the robot
-        self.leg_front_left = Leg(leg_0_servos[0], leg_0_servos[1], leg_0_servos[2], 530, 450, 850)
+        self.leg_front_left = Leg(leg_0_servos[0], leg_0_servos[1], leg_0_servos[2], 530, 210, 475)
         # self.leg_front_right = Leg(leg_1_servos[0], leg_1_servos[1], leg_1_servos[2], 600, 450, 850)
         # self.leg_rear_left = Leg(leg_2_servos[0], leg_2_servos[1], leg_2_servos[2], 600, 450, 850)
         # self.leg_rear_right = Leg(leg_3_servos[0], leg_3_servos[1], leg_3_servos[2], 600, 450, 850)
