@@ -28,7 +28,7 @@ class Legs(object):
         :param leg_2_moves: Array of positions for leg 2
         :param leg_3_moves: Array of positions for leg 3
         :param delay: Time to wait after executing
-        :param speed: The speed at which the servo moves
+        :param speeds: The speeds at which the servo moves
         :return: None
         """
         self.leg_front_left.move(leg_0_moves, delay, speeds)
@@ -49,7 +49,7 @@ class Legs(object):
         leg_3_deploy = [0, 0, 0]
         delay = 0.1
 
-        self.leg_front_left.move(leg_0_deploy[0], leg_0_deploy[1], leg_0_deploy[2], delay, speed)
+        self.leg_front_left.move(leg_0_deploy, delay, [speed, speed, speed])
         # self.leg_front_right.move(leg_1_deploy[0], leg_1_deploy[1], leg_1_deploy[2], delay, speed)
         # self.leg_rear_left.move(leg_2_deploy[0], leg_2_deploy[1], leg_2_deploy[2], delay, speed)
         # self.leg_rear_right.move(leg_3_deploy[0], leg_3_deploy[1], leg_3_deploy[2], delay, speed)
@@ -67,7 +67,7 @@ class Legs(object):
         leg_3_retract = [0, 0, 0]
         delay = 0.1
         
-        self.leg_front_left.move(leg_0_retract[0], leg_0_retract[1], leg_0_retract[2], delay, speed)
+        self.leg_front_left.move(leg_0_retract, delay, [speed, speed, speed])
         # self.leg_front_right.move(leg_1_retract[0], leg_1_retract[1], leg_1_retract[2], delay)
         # self.leg_rear_left.move(leg_2_retract[0], leg_2_retract[1], leg_2_retract[2], delay)
         # self.leg_rear_right.move(leg_3_retract[0], leg_3_retract[1], leg_3_retract[2], delay)
