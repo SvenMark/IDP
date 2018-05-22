@@ -61,7 +61,7 @@ class Legs(object):
         :return: None
         """
         
-        leg_0_retract = [530, 600, 470]
+        leg_0_retract = [530, 300, 470]
         leg_1_retract = [0, 0, 0]
         leg_2_retract = [0, 0, 0]
         leg_3_retract = [0, 0, 0]
