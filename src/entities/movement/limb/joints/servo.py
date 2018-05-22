@@ -2,6 +2,7 @@
 
 import time
 
+import numpy as np
 from libs.ax12 import Ax12
 
 
@@ -44,6 +45,15 @@ class Servo(object):
         # While the servo has not completed it last command wait a bit and check again.
         while not self.is_ready():
             time.sleep(0.1)
+
+        # Calculating de difference that has to be moved
+        current_step = self.ax12.read_position(self.servo_id)
+        difference = degrees - current_step
+        acceleration = speed / 100
+
+        step = difference / acceleration / 100
+
+
 
         # Move the servo using the ax12 library with the servo id and degrees.
         self.ax12.move_speed(self.servo_id, degrees, speed)
