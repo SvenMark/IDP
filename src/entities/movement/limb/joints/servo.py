@@ -65,6 +65,13 @@ class Servo(object):
         """
         return self.ax12.read_position(self.servo_id)
 
+    def read_speed(self):
+        """
+        Read the speed of the servo
+        :return: The servo speed
+        """
+        return self.ax12.read_speed(self.servo_id)
+
 
 def main():
     servo = Servo(13, 0)
