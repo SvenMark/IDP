@@ -22,15 +22,16 @@ class Leg(object):
 
         print("Leg setup")
 
-    def move(self, servo_0_position, servo_1_position, servo_2_position, delay):
+    def move(self, servo_0_position, servo_1_position, servo_2_position, delay, speed):
         """
         Function that moves the legs in the specified directions
         :param servo_0_position: Position to move servo 0 to
         :param servo_1_position: Position to move servo 1 to
         :param servo_2_position: Position to move servo 2 to
         :param delay: Time to wait after executing
+        :param speed: The speed at which the servo moves
         :return: None
         """
-        self.servo_0.move(servo_0_position, delay)
-        self.servo_1.move(servo_1_position, delay)
-        self.servo_2.move(servo_2_position, delay)
+        self.servo_0.move_speed(servo_0_position, delay, speed)
+        self.servo_1.move_speed(servo_1_position, delay, speed)
+        self.servo_2.move_speed(servo_2_position, delay, speed)

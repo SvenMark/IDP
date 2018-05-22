@@ -78,6 +78,7 @@ class Servo(object):
         Function that moves the servo using the ax12 library move function
         :param degrees: Position to move to
         :param delay: Time to wait after executing
+        :param speed: The speed at which the servo moves
         :return: None
         """
 
