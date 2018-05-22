@@ -26,16 +26,16 @@ legs = Legs(leg_0_servos=[
             )
 
 
-legs.retract(190)
+legs.retract(300)
 
 time.sleep(4)
 
-legs.deploy(190)
+legs.deploy(250)
 
 time.sleep(3)
 
 
-legs.retract(200)
+legs.retract(520)
 
 time.sleep(2)
 

@@ -26,23 +26,20 @@ legs = Legs(leg_0_servos=[
             )
 
 
-legs.retract(190)
+legs.retract(100)
 
-time.sleep(2)
+time.sleep(3)
 
-
-legs.deploy(150)
+spood = 250
 
 count = 0
 
-spood = 200
-
 while True:
-    if spood >= 10:
-        spood -= 10
-    legs.move([430, 766, 850], [650, 400, 400], [400, 400, 400], [600, 400, 400], delay=0.1, speed=spood)
-    legs.move([430, 666, 850], [500, 500, 500], [500, 500, 500], [500, 500, 500], delay=0.1, speed=spood)
-    legs.move([530, 766, 850], [600, 600, 600], [600, 600, 600], [600, 600, 600], delay=0.1, speed=spood)
-    legs.move([530, 666, 850], [500, 500, 500], [500, 500, 500], [500, 500, 500], delay=0.1, speed=spood)
+    legs.move([527, 680, 998], [650, 400, 400], [400, 400, 400], [600, 400, 400], delay=0.1, speed=spood)
+    legs.move([527, 750, 900], [650, 400, 400], [400, 400, 400], [600, 400, 400], delay=0.1, speed=spood)
     print(str(count))
     count += 1
+    if count > 8:
+        spood = 120
+        legs.move([315, 684, 998], [500, 500, 500], [500, 500, 500], [500, 500, 500], delay=0.1, speed=140)
+        break
