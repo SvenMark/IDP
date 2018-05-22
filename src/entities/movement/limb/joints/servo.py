@@ -20,10 +20,11 @@ class Servo(object):
         # Create an instance of the Ax12 servo class from the Ax12 library.
         self.ax12 = Ax12()
 
+        print("Setting servo " + servo_id + " to " + initial_position)
         # Set the servo variables and move servo to initial position.
         self.servo_id = servo_id
         self.last_position = initial_position
-        self.ax12.move(servo_id, initial_position)
+        # self.ax12.move(servo_id, initial_position)
         self.sensitivity = 2
         time.sleep(0.1)
 
