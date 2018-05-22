@@ -18,7 +18,8 @@ class Legs(object):
         # self.leg_rear_left = Leg(leg_2_servos[0], leg_2_servos[1], leg_2_servos[2], 600, 450, 850)
         # self.leg_rear_right = Leg(leg_3_servos[0], leg_3_servos[1], leg_3_servos[2], 600, 450, 850)
 
-        print("Legs setup")
+        print("Legs setup, retracting")
+        self.retract(300)
 
     def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speed):
         """
