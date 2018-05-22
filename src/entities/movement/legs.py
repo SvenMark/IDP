@@ -13,7 +13,7 @@ class Legs(object):
         """
 
         # Initialise a leg for each corner of the robot
-        self.leg_front_left = Leg(leg_0_servos[0], leg_0_servos[1], leg_0_servos[2], 600, 450, 850)
+        self.leg_front_left = Leg(leg_0_servos[0], leg_0_servos[1], leg_0_servos[2], 530, 450, 850)
         # self.leg_front_right = Leg(leg_1_servos[0], leg_1_servos[1], leg_1_servos[2], 600, 450, 850)
         # self.leg_rear_left = Leg(leg_2_servos[0], leg_2_servos[1], leg_2_servos[2], 600, 450, 850)
         # self.leg_rear_right = Leg(leg_3_servos[0], leg_3_servos[1], leg_3_servos[2], 600, 450, 850)
@@ -43,7 +43,7 @@ class Legs(object):
         :return: None
         """
         
-        leg_0_deploy = [600, 450, 850]
+        leg_0_deploy = [530, 766, 850]
         leg_1_deploy = [0, 0, 0]
         leg_2_deploy = [0, 0, 0]
         leg_3_deploy = [0, 0, 0]
@@ -61,7 +61,7 @@ class Legs(object):
         :return: None
         """
         
-        leg_0_retract = [520, 600, 470]
+        leg_0_retract = [524, 211, 475]
         leg_1_retract = [0, 0, 0]
         leg_2_retract = [0, 0, 0]
         leg_3_retract = [0, 0, 0]
