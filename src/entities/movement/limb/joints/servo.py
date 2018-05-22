@@ -91,7 +91,7 @@ class Servo(object):
             time.sleep(0.1)
 
         # Move the servo using the ax12 library with the servo id and degrees.
-        self.ax12.move_speed(self.servo_id, degrees, speed)
+        self.ax12.move_speed_rw(self.servo_id, degrees, speed)
 
         # Set the last position to the degrees.
         self.last_position = degrees
