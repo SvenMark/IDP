@@ -1,5 +1,6 @@
 #!/bin/python
 import time
+import  math
 
 from entities.movement.legs import Legs
 from entities.movement.sequences.walking_sequences import *
@@ -34,6 +35,11 @@ time.sleep(3)
 spood = 250
 
 count = 0
+
+while True:
+    count += 0.1
+    legs.move([527, 680 + math.sin(count), 998], [650, 400, 400], [400, 400, 400], [600, 400, 400], delay=0.1, speed=spood)
+
 
 while True:
     legs.move([527, 680, 998], [650, 400, 400], [400, 400, 400], [600, 400, 400], delay=0.1, speed=spood)
