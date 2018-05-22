@@ -20,7 +20,7 @@ class Legs(object):
 
         print("Legs setup, retracting")
         
-    def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speed):
+    def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speeds):
         """
         Function to move the legs together
         :param leg_0_moves: Array of positions for leg 0
@@ -31,7 +31,7 @@ class Legs(object):
         :param speed: The speed at which the servo moves
         :return: None
         """
-        self.leg_front_left.move(leg_0_moves[0], leg_0_moves[1], leg_0_moves[2], delay, speed)
+        self.leg_front_left.move(leg_0_moves, delay, speeds)
         # self.leg_front_right.move(leg_1_moves[0], leg_1_moves[1], leg_1_moves[2], delay)
         # self.leg_rear_left.move(leg_2_moves[0], leg_2_moves[1], leg_2_moves[2], delay)
         # self.leg_rear_right.move(leg_3_moves[0], leg_3_moves[1], leg_3_moves[2], delay)
