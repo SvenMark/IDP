@@ -43,7 +43,7 @@ class Legs(object):
         :return: None
         """
         
-        leg_0_deploy = [600, 350, 850]
+        leg_0_deploy = [600, 450, 850]
         leg_1_deploy = [0, 0, 0]
         leg_2_deploy = [0, 0, 0]
         leg_3_deploy = [0, 0, 0]
