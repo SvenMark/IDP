@@ -2,7 +2,7 @@ import unittest
 
 from entities.movement.limb.leg import Leg
 from entities.movement.limb.tire import Tire
-from entities.movement.limb.tracks import Tracks
+from entities.movement.tracks import Tracks
 from entities.movement.movement import Movement
 
 
