@@ -24,7 +24,7 @@ class Servo(object):
         # Set the servo variables and move servo to initial position.
         self.servo_id = servo_id
         self.last_position = initial_position
-        self.ax12.move(servo_id, initial_position)
+        self.ax12.move_speed(servo_id, initial_position, 80)
         self.sensitivity = 2
         time.sleep(0.1)
 
