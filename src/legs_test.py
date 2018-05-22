@@ -25,7 +25,7 @@ legs = Legs(leg_0_servos=[
             ]
             )
 
-time.sleep(5)
+time.sleep(1)
 
 while True:
     legs.move([500, 300, 850], [650, 400, 400], [400, 400, 400], [600, 400, 400], delay=0.1, speed=140)
