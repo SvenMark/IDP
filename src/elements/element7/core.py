@@ -5,9 +5,9 @@ from elements.element7.helpers import Color
 from elements.element7.helpers import Block
 from elements.element7.helpers import ColorRange
 from elements.element7.helpers import SavedBuildings as db
-import importlib
-
+from random import randint
 import time
+
 import numpy as np
 import cv2
 
@@ -16,13 +16,15 @@ import cv2
 POSITIONS = []
 LAST_POS_LEN = 100
 STOP_POSITIONS = False
+CALIBRATED = False
+COLORS_CALIBRATED = []
 
 # initialize color ranges for detection
-orange = Color([0, 100, 100], [10, 255, 255])
-yellow = Color([20, 100, 100], [30, 255, 255])
-red = Color([170, 100, 100], [190, 255, 255])
-green = Color([60, 100, 50], [90, 255, 255])
-blue = Color([90, 100, 100], [120, 255, 255])
+color_range = [Color("orange", [0, 100, 100], [10, 255, 255], 10),
+               Color("yellow", [10, 100, 100], [30, 255, 255], 20),
+               Color("red", [170, 100, 100], [190, 255, 255], 180),
+               Color("green", [60, 100, 50], [90, 255, 255], 75),
+               Color("blue", [90, 120, 100], [110, 255, 170], 100)]
 
 
 def run():
@@ -40,16 +42,25 @@ def run():
         ret, img = cap.read()
         img = cv2.GaussianBlur(img, (9, 9), 0)
 
+        if not CALIBRATED:
+            result = ""
+            calibrate(5)
+            recognize_building(POSITIONS)
+            if len(COLORS_CALIBRATED) > 0:
+                for i in range(len(COLORS_CALIBRATED)):
+                    result += COLORS_CALIBRATED[i] + " "
+            print("calibrating.. " + result)
+
         # calculate the masks
         mask = calculate_mask(img)
 
         # crop to the contours
-        img = crop_to_contours(mask, img)
+        # img = crop_to_contours(mask, img)
 
         # calculate new cropped masks
         mask_cropped = calculate_mask(img, set_contour=True)
-
-        # draw_saved_positions(imgmask, colors)
+        if not CALIBRATED:
+            cv2.rectangle(mask_cropped, (230, 65), (400, 420), (255, 255, 255), 3)
 
         cv2.imshow('camservice', mask_cropped)
 
@@ -60,14 +71,29 @@ def run():
     cv2.destroyAllWindows()
 
 
+def calibrate(sensitivity=50):
+    global color_range
+    for j in range(len(color_range)):
+        c = color_range[j]
+        if c.color not in COLORS_CALIBRATED:
+            base = c.base
+            lower_start = base - sensitivity * 2 if base - sensitivity * 2 > 0 else 0
+            lower_end = base - sensitivity if base - sensitivity > 20 else 30
+
+            upper_start = base + sensitivity if base + sensitivity < 255 else 255
+            upper_end = base + sensitivity * 2 if base + sensitivity * 2 < 200 else 200
+
+            c.lower[0] = randint(lower_start, lower_end)
+            c.upper[0] = randint(upper_start, upper_end)
+
+
 def calculate_mask(img, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
     hsv = cv2.cvtColor(img, conversion)
 
-    masks = [ColorRange("red", cv2.inRange(hsv, red.lower, red.upper)),
-             ColorRange("blue", cv2.inRange(hsv, blue.lower, blue.upper)),
-             ColorRange("green", cv2.inRange(hsv, green.lower, green.upper)),
-             ColorRange("orange", cv2.inRange(hsv, orange.lower, orange.upper)),
-             ColorRange("yellow", cv2.inRange(hsv, yellow.lower, yellow.upper))]
+    masks = list()
+    for i in range(len(color_range)):
+        c = color_range[i]
+        masks.append(ColorRange(c.color, cv2.inRange(hsv, c.lower, c.upper)))
 
     if set_contour:
         img_mask = set_contours(masks[0].range, masks[0].color, img)
@@ -78,20 +104,6 @@ def calculate_mask(img, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
         for i in range(1, len(masks)):
             img_mask += masks[i].range
     return img_mask
-
-
-# draw saved positions
-def draw_saved_positions(imgmask, colors):
-    for i in range(len(db.buildings[0])):
-        cnt = np.array(db.buildings[0][i].array)
-        color = db.buildings[0][i].color
-        c = cv2.convexHull(cnt)
-        M = cv2.moments(c)
-        cx = int(M['m10'] / M['m00'])
-        cy = int(M['m01'] / M['m00'])
-        text = "{} {}".format("Color", color)
-        cv2.drawContours(imgmask, [c], 0, colors.get(color), 3, -1)
-        cv2.putText(imgmask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
 
 def crop_to_contours(mask, img):
@@ -240,29 +252,31 @@ def recognize_building(positions):
             bl = b.front[block_front]
             result = [building, "front"]
             if not is_duplicate(bl.centre, positions, 10, bl.color):
-                found = False
+                return False
 
-        if not found:
-            for block_back in range(len(b.back)):
-                bl = b.front[block_back]
-                result = [building, "back"]
-                if not is_duplicate(bl.centre, positions, 10, bl.color):
-                    found = False
+        # if not found:
+        #     for block_back in range(len(b.back)):
+        #         bl = b.front[block_back]
+        #         result = [building, "back"]
+        #         if not is_duplicate(bl.centre, positions, 10, bl.color):
+        #             found = False
 
-        if not found:
-                    for block_back in range(len(b.back)):
-                        bl = b.front[block_back]
-                        result = [building, "back"]
-                        if not is_duplicate(bl.centre, positions, 10, bl.color):
-                            found = False
-        if not found:
-                    for block_back in range(len(b.back)):
-                        bl = b.front[block_back]
-                        result = [building, "back"]
-                        if not is_duplicate(bl.centre, positions, 10, bl.color):
-                            found = False
+        # if not found:
+        #             for block_back in range(len(b.back)):
+        #                 bl = b.front[block_back]
+        #                 result = [building, "back"]
+        #                 if not is_duplicate(bl.centre, positions, 10, bl.color):
+        #                     found = False
+        # if not found:
+        #             for block_back in range(len(b.back)):
+        #                 bl = b.front[block_back]
+        #                 result = [building, "back"]
+        #                 if not is_duplicate(bl.centre, positions, 10, bl.color):
+        #                     found = False
 
     print("Recognized building {}, {} side".format(result[0], result[1]))
+    global CALIBRATED
+    CALIBRATED = True
     return True
 
 
@@ -278,12 +292,15 @@ def is_duplicate(x, y, sensitivity=10, color=None):
         distance = np.linalg.norm(a - b)  # x[i] = [520,137] y[t] = [430,180]
 
         if color and color == y[i].color and distance <= sensitivity:
+            global COLORS_CALIBRATED
+            if color not in COLORS_CALIBRATED:
+                COLORS_CALIBRATED.append(color)
+                print("calibrated ", color)
             return True
         elif not color and distance <= sensitivity:
             return True
 
     return False
-
 
 
 routine()

@@ -3,9 +3,11 @@ import os
 
 
 class Color:
-    def __init__(self, lower, upper):
+    def __init__(self, color, lower, upper, base):
+        self.color = color
         self.lower = np.array(lower)
         self.upper = np.array(upper)
+        self.base = base
 
 
 class Block:
@@ -30,11 +32,11 @@ class Building:
 
 class SavedBuildings:
     buildings = [
-        Building(front=[Block("red", (33, 317)),
-                        Block("blue", (146, 311)),
-                        Block("orange", (34, 91)),
-                        Block("yellow", (86, 207)),
-                        Block("blue", (141, 90))],
+        Building(front=[Block("orange", (370, 149)),
+Block("yellow", (364, 355)),
+Block("red", (263, 353)),
+Block("green", (260, 149)),
+Block("blue", (316, 258))],
                  back=[Block("blue", (31, 316)),
                        Block("green", (86, 209)),
                        Block("orange", (30, 91)),
