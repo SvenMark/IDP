@@ -25,7 +25,7 @@ class Servo(object):
         self.servo_id = servo_id
         self.last_position = initial_position
         self.ax12.move_speed(servo_id, initial_position, 80)
-        self.sensitivity = 2
+        self.sensitivity = 5
         time.sleep(0.1)
 
     def is_ready(self):

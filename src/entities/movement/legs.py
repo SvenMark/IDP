@@ -43,7 +43,7 @@ class Legs(object):
         :return: None
         """
         
-        leg_0_deploy = [530, 450, 850]
+        leg_0_deploy = [530, 766, 850]
         leg_1_deploy = [0, 0, 0]
         leg_2_deploy = [0, 0, 0]
         leg_3_deploy = [0, 0, 0]
@@ -61,7 +61,7 @@ class Legs(object):
         :return: None
         """
         
-        leg_0_retract = [530, 300, 470]
+        leg_0_retract = [524, 211, 475]
         leg_1_retract = [0, 0, 0]
         leg_2_retract = [0, 0, 0]
         leg_3_retract = [0, 0, 0]
