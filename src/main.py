@@ -34,35 +34,12 @@ def main():
 
     lights = []
 
-    limbs = [
-        Tracks(track_0_pin=18, track_1_pin=13),
-        # Legs(leg_0_servos=[
-        #         1,
-        #         61,
-        #         63
-        #     ],
-        #     leg_1_servos=[
-        #         21,
-        #         31,
-        #         53
-        #     ],
-        #     leg_2_servos=[
-        #         61,
-        #         63,
-        #         111
-        #     ],
-        #     leg_3_servos=[
-        #         111,
-        #         111,
-        #         111
-        #     ]
-        # )
-    ]
+    tracks = Tracks(track_0_pin=18, track_1_pin=13)
 
     name = 'Boris'
-    boris = Robot(name, limbs, lights)
+    boris = Robot(name, tracks, lights)
 
-    boris.movement.tracks.forward(20, 0, 2)
+    boris.tracks.forward(20, 0, 2)
 
     # print(boris.movement.tracks.turn_left())
     #
