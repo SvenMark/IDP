@@ -268,5 +268,6 @@ def is_duplicate(x, y, sensitivity=10, color=None):
     return False
 
 
-routine()
-run()  # disabled for travis
+if __name__ == '__main__':
+    routine()
+    run()  # disabled for travis

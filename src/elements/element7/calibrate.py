@@ -1,5 +1,3 @@
-from threading import Timer
-
 from elements.element7.helpers import Color
 from elements.element7.helpers import Block
 from elements.element7.helpers import ColorRange
@@ -15,13 +13,6 @@ POSITIONS = []
 CALIBRATED = False
 STOP_POSITIONS = False
 
-# initialize color ranges for detection
-color_range = [Color("orange", [0, 100, 126], [10, 255, 204], 0),
-               Color("yellow", [10, 100, 100], [30, 255, 255], 10),
-               Color("red", [170, 100, 100], [190, 255, 255], 170),
-               Color("green", [60, 100, 50], [90, 255, 255], 60),
-               Color("blue", [33, 213, 42], [110, 255, 255], 90)]
-
 
 def run():
     print("run element7")
@@ -31,10 +22,19 @@ def run():
         ret, img = cap.read()
         img = cv2.GaussianBlur(img, (9, 9), 0)
 
-        # calculate the masks
-        mask = calculate_mask(img)
+        # initialize color ranges for detection
+        color_range = [Color("orange", [0, 100, 126], [10, 255, 204], 0),
+                       Color("yellow", [10, 100, 100], [30, 255, 255], 10),
+                       Color("red", [170, 100, 100], [190, 255, 255], 170),
+                       Color("green", [60, 100, 50], [90, 255, 255], 60),
+                       Color("blue", [33, 213, 42], [110, 255, 255], 90)]
 
-        if not CALIBRATED:
+        # calculate the masks
+        mask = calculate_mask(img, color_range)
+
+        if not CALIBRATED and len(POSITIONS) > 0:
+            print("calibrting")
+            calibrate(10)
             cv2.rectangle(mask, (230, 65), (400, 420), (255, 255, 255), 3)
 
         cv2.imshow('camservice', mask)
@@ -47,17 +47,29 @@ def run():
 
 
 def calibrate(sensitivity=50):
-    global color_range
-    for i in range(len(color_range)):  # for each color range available
-        c = color_range[i]
-        c.lower[0] = 0
-        c.upper[0] = 20
-        while c.upper[0] < 255:  # while the color value is not higher than 255
-            if not calibrate_color(POSITIONS, sensitivity, c.color):
-                # try with other color range
-                c.lower[0] += 10
-                c.upper[0] += 10
-        print(c.lower, c.upper, c.color)
+    c = ([0, 100, 126], [10, 255, 204])
+    color = "orange"
+    lower = c[0]
+    upper = c[1]
+
+    lower[0] = 0
+    upper[0] = 10
+    while upper[0] < 255:  # while the color value is not higher than 255
+        if not calibrate_color(POSITIONS, sensitivity, color):
+            # try with other color range
+            c[0] += 10
+            c[0] += 10
+    print(lower, upper, color)
+    # for i in range(len(color_range)):  # for each color range available
+    #     c = color_range[i]
+    #     c.lower[0] = 0
+    #     c.upper[0] = 20
+    #     while c.upper[0] < 255:  # while the color value is not higher than 255
+    #         if not calibrate_color(POSITIONS, sensitivity, c.color):
+    #             # try with other color range
+    #             c.lower[0] += 10
+    #             c.upper[0] += 10
+    #     print(c.lower, c.upper, c.color)
 
 
 def calibrate_color(positions, sensitivity, color):
@@ -78,7 +90,7 @@ def calibrate_color(positions, sensitivity, color):
     return False
 
 
-def calculate_mask(img, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
+def calculate_mask(img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
     hsv = cv2.cvtColor(img, conversion)
 
     masks = list()
@@ -120,8 +132,6 @@ def set_contours(mask, color, img):
             cv2.putText(img_mask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
             cv2.circle(img_mask, (cx, cy), 2, (255, 255, 255), 5)
 
-            global LAST_POS_LEN
-
             if not STOP_POSITIONS:
                 if len(POSITIONS) > 10:
                     print("Cleared POSITIONS of length ", len(POSITIONS))
@@ -139,13 +149,4 @@ def set_contours(mask, color, img):
     return img_mask
 
 
-def routine():
-    t = Timer(2, routine)
-    t.start()
-
-    print("Looped timer..")
-    calibrate(10)
-
-
-routine()
 run()  # disabled for travis
