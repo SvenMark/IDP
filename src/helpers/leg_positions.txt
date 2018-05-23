@@ -1,0 +1,29 @@
+Inklappen:
+Servo found with id: 14 and position: 524
+Servo found with id: 61 and position: 211
+Servo found with id: 63 and position: 475
+
+Lopen initial state:
+Servo found with id: 14 and position: 530
+Servo found with id: 61 and position: 766
+Servo found with id: 63 and position: 850
+
+DAB:
+Servo found with id: 14 and position: 716
+Servo found with id: 61 and position: 684
+Servo found with id: 63 and position: 1023
+
+
+Servo found with id: 14 and position: 315
+Servo found with id: 61 and position: 678
+Servo found with id: 63 and position: 1023
+
+
+Wave:
+Servo found with id: 14 and position: 527
+Servo found with id: 61 and position: 690
+Servo found with id: 63 and position: 970
+
+Servo found with id: 14 and position: 527
+Servo found with id: 61 and position: 620
+Servo found with id: 63 and position: 900
