@@ -1,4 +1,3 @@
-import time
 from collections import OrderedDict
 from threading import Timer
 
@@ -6,6 +5,7 @@ from elements.element7.helpers import Color
 from elements.element7.helpers import Block
 from elements.element7.helpers import ColorRange
 from elements.element7.helpers import SavedBuildings as db
+from entities.audio.speak import Speak
 
 import numpy as np
 import cv2
@@ -54,6 +54,7 @@ def run():
 
     cap.release()
     cv2.destroyAllWindows()
+
 
 def calculate_mask(img, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
     hsv = cv2.cvtColor(img, conversion)
@@ -242,7 +243,8 @@ def recognize_building(positions):
         #                 if not is_duplicate(bl.centre, positions, 10, bl.color):
         #                     found = False
 
-    print("Recognized building {}, {} side".format(result[0], result[1]))
+    tts = "Recognized building {}, {} side".format(result[0], result[1])
+    Speak.tts(Speak(), tts)
     return True
 
 
