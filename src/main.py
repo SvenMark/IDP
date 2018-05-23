@@ -26,11 +26,11 @@ FUNC_MAP = {
 
 
 def main():
-    print(RESOURCES)
-    # print command line arguments
-    if len(sys.argv) < 2:
-        print("Please pass commandline args")
-        return sys.exit(2)
+    # print(RESOURCES)
+    # # print command line arguments
+    # if len(sys.argv) < 2:
+    #     print("Please pass commandline args")
+    #     return sys.exit(2)
 
     lights = []
 
