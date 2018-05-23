@@ -31,7 +31,7 @@ def run():
 
         if not CALIBRATED and len(POSITIONS) > 0:
             print("calibrting")
-            color_range[0] = calibrate(POSITIONS, 10)
+            color_range[0] = calibrate(POSITIONS, 30)
 
         # calculate the masks
         mask = calculate_mask(img, color_range)
@@ -61,6 +61,8 @@ def calibrate(positions, sensitivity=50):
             upper[0] += 10
         else:
             print(lower, upper, color)
+            global CALIBRATED
+            CALIBRATED = True
             return Color(color, lower, upper)
 
     return Color(Color, [50, 100, 126], [10, 255, 204])
