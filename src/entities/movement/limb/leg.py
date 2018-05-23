@@ -25,7 +25,9 @@ class Leg(object):
     def move(self, positions, delay, speeds):
         """
         Function that moves the legs in the specified directions
+        :param positions: Positions to move to for each servo
         :param delay: Time to wait after executing
+        :param speeds: Integer array with 3 speeds for each servo
         :return: None
         """
         self.servo_0.move_speed(positions[0], delay, speeds[0])

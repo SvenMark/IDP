@@ -1,4 +1,6 @@
 #!/bin/python
+from __future__ import division
+import math
 
 import time
 
@@ -27,6 +29,7 @@ class Servo(object):
         self.last_position = initial_position
         self.ax12.move_speed(servo_id, initial_position, 300)
         self.sensitivity = 5
+        print("rw : " + str(self.ax12.read_rw_status(self.servo_id)))
         time.sleep(0.1)
 
     def move_speed(self, degrees, delay, max_speed):
@@ -46,9 +49,9 @@ class Servo(object):
         while not self.is_ready():
             time.sleep(0.1)
 
-
+        max_speed = round(max_speed * 1)
         # Could be changed or set as parameter
-        total_steps = 10
+        total_steps = 1
 
         # Calculating de difference that has to be moved
         start_position = self.last_position
@@ -60,11 +63,12 @@ class Servo(object):
         for i in range(total_steps):
             current_position += step
             speed = math.sin((i + 0.5) / total_steps * math.pi) * max_speed
-            servo_move(current, round(speed, 2))
-            
+            print("Servo " + str(self.servo_id) + ", step: " + str(i) + ", speed: " + str(round(speed)) + ", degrees: " + str(round(current_position)))
             # Move the servo using the ax12 library with the servo id and degrees.
-            self.ax12.move_speed(self.servo_id, current_position, speed)
-
+            self.ax12.move_speed(self.servo_id, round(current_position), round(speed))
+            self.last_position = current_position
+            while not self.is_ready:
+                time.sleep(0.1)
         # Set the last position to the degrees.
         self.last_position = degrees
 
