@@ -26,11 +26,11 @@ FUNC_MAP = {
 
 
 def main():
-    # print(RESOURCES)
-    # # print command line arguments
-    # if len(sys.argv) < 2:
-    #     print("Please pass commandline args")
-    #     return sys.exit(2)
+    print(RESOURCES)
+    # print command line arguments
+    if len(sys.argv) < 2:
+        print("Please pass commandline args")
+        return sys.exit(2)
 
     lights = []
 
@@ -41,14 +41,14 @@ def main():
 
     boris.tracks.forward(20, 0, 2)
 
-    # print(boris.movement.tracks.turn_left())
-    #
-    # part = sys.argv[1]
-    #
-    # part_function = FUNC_MAP[part]
-    #
-    # # run element
-    # part_function.run()
+    print(boris.movement.tracks.turn_left())
+
+    part = sys.argv[1]
+
+    part_function = FUNC_MAP[part]
+
+    # run element
+    part_function.run()
 
 
 if __name__ == "__main__":
