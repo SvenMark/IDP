@@ -1,4 +1,3 @@
-from entities.movement.limb.limb import Limb
 from entities.movement.limb.joints.servo import Servo
 
 

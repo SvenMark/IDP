@@ -1,13 +1,11 @@
-from entities.movement.limb.limb import Limb
 
 
-class Tire(Limb):
+class Tire(object):
     def __init__(self):
-        super(Tire, self).__init__('tire')
         self.type = 'tire'
 
     def forward(self):
-        print('{} forward'.format(self.limb_type))
+        print('{} forward'.format(self.type))
 
     def backward(self):
-        print('{} backward'.format(self.limb_type))
+        print('{} backward'.format(self.type))

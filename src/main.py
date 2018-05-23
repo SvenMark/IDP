@@ -6,7 +6,6 @@ from elements import element1, element2, element3, element4, element5, element6,
 from entities.movement.legs import Legs
 from entities.movement.tracks import Tracks
 from entities.robot.robot import Robot
-from entities.movement.limb.leg import Leg
 from entities.movement.limb.tire import Tire
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
@@ -32,16 +31,38 @@ def main():
         print("Please pass commandline args")
         return sys.exit(2)
 
+    limbs = [
+            Legs(leg_0_servos=[
+                    14,
+                    61,
+                    63
+                ],
+                leg_1_servos=[
+                    21,
+                    31,
+                    53
+                ],
+                leg_2_servos=[
+                    61,
+                    63,
+                    111
+                ],
+                leg_3_servos=[
+                    111,
+                    111,
+                    111
+                ]
+            ),
+            Tracks(track_0_pin=18, track_1_pin=13),
+            Tire()
+        ]
+
     lights = []
 
-    tracks = Tracks(track_0_pin=18, track_1_pin=13)
-
     name = 'Boris'
-    boris = Robot(name, tracks, lights)
+    boris = Robot(name, limbs, lights)
 
     boris.tracks.forward(20, 0, 2)
-
-    print(boris.movement.tracks.turn_left())
 
     part = sys.argv[1]
 

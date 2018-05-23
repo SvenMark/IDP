@@ -1,7 +1,6 @@
 import time
 import math
 
-from entities.movement.limb.limb import Limb
 from entities.movement.limb.joints.dcmotor import DCMotor
 
 

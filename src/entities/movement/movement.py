@@ -7,9 +7,10 @@ class Movement(object):
     """
 
     def __init__(self, limbs, lights):
-        tracks = []
-        legs = []
-        tire = []
+        legs = limbs[0]
+        tracks = limbs[1]
+        tire = limbs[2]
+
         for limb in limbs:
             if limb.type == 'track':
                 tracks.append(limb)
@@ -20,7 +21,10 @@ class Movement(object):
 
         self.limbs = limbs
         self.lights = lights
-        self.tracks = Tracks(tracks)
+
+        self.legs = legs
+        self.tracks = tracks
+        self.tire = tire
 
     def forward(self):
         self.tracks.forward()
