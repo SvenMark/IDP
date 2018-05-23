@@ -49,7 +49,7 @@ class Servo(object):
         while not self.is_ready():
             time.sleep(0.1)
 
-        max_speed = max_speed * 1
+        max_speed = round(max_speed * 1)
         # Could be changed or set as parameter
         total_steps = 1
 
@@ -68,7 +68,7 @@ class Servo(object):
             self.ax12.move_speed(self.servo_id, round(current_position), round(speed))
             self.last_position = current_position
             while not self.is_ready:
-                time.sleep(0.05)
+                time.sleep(0.1)
         # Set the last position to the degrees.
         self.last_position = degrees
 
