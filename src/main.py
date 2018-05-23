@@ -25,11 +25,11 @@ FUNC_MAP = {
 
 
 def main():
-    print(RESOURCES)
+    # print(RESOURCES)
     # print command line arguments
-    if len(sys.argv) < 2:
-        print("Please pass commandline args")
-        return sys.exit(2)
+    # if len(sys.argv) < 2:
+        # print("Please pass commandline args")
+        # return sys.exit(2)
 
     limbs = [
             Legs(leg_0_servos=[
@@ -38,23 +38,23 @@ def main():
                     63
                 ],
                 leg_1_servos=[
-                    21,
-                    31,
-                    53
+                    14,
+                    61,
+                    63
                 ],
                 leg_2_servos=[
+                    14,
                     61,
-                    63,
-                    111
+                    63
                 ],
                 leg_3_servos=[
-                    111,
-                    111,
-                    111
+                    14,
+                    61,
+                    63
                 ]
             ),
             Tracks(track_0_pin=18, track_1_pin=13),
-            Tire()
+            Tire(servo_id=69, position=500)
         ]
 
     lights = []
@@ -62,14 +62,14 @@ def main():
     name = 'Boris'
     boris = Robot(name, limbs, lights)
 
-    boris.tracks.forward(20, 0, 2)
+    boris.movement.tracks.forward(duty_cycle=20, delay=0, acceleration=2)
 
-    part = sys.argv[1]
+    # part = sys.argv[1]
 
-    part_function = FUNC_MAP[part]
+    # part_function = FUNC_MAP[part]
 
     # run element
-    part_function.run()
+    # part_function.run()
 
 
 if __name__ == "__main__":

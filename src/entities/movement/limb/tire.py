@@ -1,11 +1,32 @@
+from entities.movement.limb.joints.servo import Servo
 
 
 class Tire(object):
-    def __init__(self):
+    def __init__(self, servo_id, position):
+        """
+        Constructor for tire class
+        :param servo_id: Id of the tire servo
+        :param position: Position to initialise the servo in
+        """
+        self.servo = Servo(servo_id, position)
         self.type = 'tire'
 
-    def forward(self):
-        print('{} forward'.format(self.type))
+    def forward(self, position, delay, speed):
+        """
+        Function that moves the tire in a forward direction
+        :param position: Position to move to
+        :param delay: Time to wait after executing
+        :param speed: The speed at which the servo moves
+        :return: None
+        """
+        self.servo.move(position, delay, speed)
 
-    def backward(self):
-        print('{} backward'.format(self.type))
+    def backward(self, position, delay, speed):
+        """
+        Function that moves the tire in a backward direction
+        :param position: Position to move to
+        :param delay: Time to wait after executing
+        :param speed: The speed at which the servo moves
+        :return: None
+        """
+        self.servo.move(position, delay, speed)

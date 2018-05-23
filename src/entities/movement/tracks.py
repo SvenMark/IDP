@@ -19,6 +19,7 @@ class Tracks(object):
         # Initialise both motors as tracks. Each track has 1 motor.
         self.track_left = DCMotor(track_0_pin)
         self.track_right = DCMotor(track_1_pin)
+        self.type = 'tracks'
 
         print("Tracks setup")
 

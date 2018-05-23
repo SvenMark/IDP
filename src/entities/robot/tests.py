@@ -5,9 +5,9 @@ from entities.movement.tracks import Tracks
 from entities.movement.legs import Legs
 from entities.robot.robot import Robot
 
-TYPES = ['leg',
-         'tire',
-         'tracks']
+TYPES = ['legs',
+         'tracks',
+         'tire']
 
 
 class CommonTestClass(unittest.TestCase):
@@ -20,25 +20,26 @@ class CommonTestClass(unittest.TestCase):
                     63
                 ],
                 leg_1_servos=[
-                    21,
-                    31,
-                    53
+                    14,
+                    61,
+                    63
                 ],
                 leg_2_servos=[
+                    14,
                     61,
-                    63,
-                    111
+                    63
                 ],
                 leg_3_servos=[
-                    111,
-                    111,
-                    111
+                    14,
+                    61,
+                    63
                 ]
             ),
             Tracks(track_0_pin=18, track_1_pin=13),
-            Tire()
+            Tire(servo_id=69, position=500)
         ]
-        self.boris = Robot('Boris', limbs, [])
+        lights = []
+        self.boris = Robot('Boris', limbs, lights)
 
     def test_name(self):
         self.assertEqual(self.boris.name, 'Boris')
@@ -48,8 +49,7 @@ class CommonTestClass(unittest.TestCase):
 
         count = 0
         for limb in self.boris.limbs:
-            # Inherited of Limb
-            self.assertIsInstance(limb, Limb)
+            self.assertIsInstance(limb, Tracks or Legs or Tire)
             self.assertIsNotNone(limb.limb_type)
 
             # check correct type
