@@ -1,12 +1,12 @@
 import platform
 
-from main import RESOURCES
+#from main import RESOURCES
 
 
 class Audio(object):
     def __init__(self):
         self.windows = True if "Windows" == platform.system() else False
-        self.resources = RESOURCES
+        self.resources = ""
 
     def get_file_path(self, file_name):
         """

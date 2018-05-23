@@ -38,8 +38,8 @@ def main():
         Tracks(track_0_pin=18, track_1_pin=13),
         Legs(leg_0_servos=[
                 1,
-                13,
-                14
+                61,
+                63
             ],
             leg_1_servos=[
                 21,

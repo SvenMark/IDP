@@ -45,8 +45,8 @@ class Ax12:
     AX_LED_STATUS = 25
     AX_CW_COMPLIANCE_MARGIN = 26
     AX_CCW_COMPLIANCE_MARGIN = 27
-    AX_CW_COMPLIANCE_SLOPE = 28
-    AX_CCW_COMPLIANCE_SLOPE = 29
+    AX_CW_COMPLIANCE_SLOPE = 78
+    AX_CCW_COMPLIANCE_SLOPE = 79
     AX_GOAL_POSITION_L = 30
     AX_GOAL_POSITION_H = 31
     AX_GOAL_SPEED_L = 32
@@ -65,8 +65,8 @@ class Ax12:
     AX_PAUSE_TIME = 45
     AX_MOVING = 46
     AX_LOCK = 47
-    AX_PUNCH_L = 48
-    AX_PUNCH_H = 49
+    AX_PUNCH_L = 28
+    AX_PUNCH_H = 29
 
     # /////////////////////////////////////////////////////////////// Status Return Levels
     AX_RETURN_NONE = 0
