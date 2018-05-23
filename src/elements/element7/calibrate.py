@@ -23,19 +23,19 @@ def run():
         img = cv2.GaussianBlur(img, (9, 9), 0)
 
         # initialize color ranges for detection
-        color_range = [Color("orange", [0, 100, 126], [10, 255, 204], 0),
-                       Color("yellow", [10, 100, 100], [30, 255, 255], 10),
-                       Color("red", [170, 100, 100], [190, 255, 255], 170),
-                       Color("green", [60, 100, 50], [90, 255, 255], 60),
-                       Color("blue", [33, 213, 42], [110, 255, 255], 90)]
-
-        # calculate the masks
-        mask = calculate_mask(img, color_range)
+        color_range = [Color("orange", [0, 100, 126], [10, 255, 204]),
+                       Color("yellow", [10, 100, 100], [30, 255, 255]),
+                       Color("red", [170, 100, 100], [190, 255, 255]),
+                       Color("green", [60, 100, 50], [90, 255, 255]),
+                       Color("blue", [33, 213, 42], [110, 255, 255])]
 
         if not CALIBRATED and len(POSITIONS) > 0:
             print("calibrting")
-            calibrate(10)
-            cv2.rectangle(mask, (230, 65), (400, 420), (255, 255, 255), 3)
+            color_range[0] = calibrate(POSITIONS, 10)
+
+        # calculate the masks
+        mask = calculate_mask(img, color_range)
+        cv2.rectangle(mask, (230, 65), (400, 420), (255, 255, 255), 3)
 
         cv2.imshow('camservice', mask)
 
@@ -46,7 +46,7 @@ def run():
     cv2.destroyAllWindows()
 
 
-def calibrate(sensitivity=50):
+def calibrate(positions, sensitivity=50):
     c = ([0, 100, 126], [10, 255, 204])
     color = "orange"
     lower = c[0]
@@ -55,11 +55,16 @@ def calibrate(sensitivity=50):
     lower[0] = 0
     upper[0] = 10
     while upper[0] < 255:  # while the color value is not higher than 255
-        if not calibrate_color(POSITIONS, sensitivity, color):
+        if not calibrate_color(positions, sensitivity, color):
             # try with other color range
-            c[0] += 10
-            c[0] += 10
-    print(lower, upper, color)
+            lower[0] += 10
+            upper[0] += 10
+        else:
+            print(lower, upper, color)
+            return Color(color, lower, upper)
+
+    return Color(Color, [50, 100, 126], [10, 255, 204])
+    # new_range = list()
     # for i in range(len(color_range)):  # for each color range available
     #     c = color_range[i]
     #     c.lower[0] = 0
@@ -69,7 +74,11 @@ def calibrate(sensitivity=50):
     #             # try with other color range
     #             c.lower[0] += 10
     #             c.upper[0] += 10
-    #     print(c.lower, c.upper, c.color)
+    #         else:  # calibrated color
+    #             new_range.append(Color(c.color, c.lower, c.upper))
+    #         print(c.color, (c.lower, c.upper))
+    #
+    # return new_range
 
 
 def calibrate_color(positions, sensitivity, color):
@@ -90,7 +99,7 @@ def calibrate_color(positions, sensitivity, color):
     return False
 
 
-def calculate_mask(img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
+def calculate_mask(img, color_range, conversion=cv2.COLOR_BGR2HSV):
     hsv = cv2.cvtColor(img, conversion)
 
     masks = list()
@@ -98,14 +107,10 @@ def calculate_mask(img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=F
         c = color_range[i]
         masks.append(ColorRange(c.color, cv2.inRange(hsv, c.lower, c.upper)))
 
-    if set_contour:
-        img_mask = set_contours(masks[0].range, masks[0].color, img)
-        for i in range(1, len(masks)):
-            img_mask += set_contours(masks[i].range, masks[i].color, img)
-    else:
-        img_mask = masks[0].range
-        for i in range(1, len(masks)):
-            img_mask += masks[i].range
+    img_mask = set_contours(masks[0].range, masks[0].color, img)
+    for i in range(1, len(masks)):
+        img_mask += set_contours(masks[i].range, masks[i].color, img)
+
     return img_mask
 
 

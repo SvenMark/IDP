@@ -3,11 +3,10 @@ import os
 
 
 class Color:
-    def __init__(self, color, lower, upper, base):
+    def __init__(self, color, lower, upper):
         self.color = color
         self.lower = np.array(lower)
         self.upper = np.array(upper)
-        self.base = base
 
 
 class Block:

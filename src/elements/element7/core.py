@@ -18,11 +18,11 @@ STOP_POSITIONS = False
 RECOGNIZED = False
 
 # initialize color ranges for detection
-color_range = [Color("orange", [0, 100, 126], [10, 255, 204], 0),
-               Color("yellow", [10, 100, 100], [30, 255, 255], 10),
-               Color("red", [170, 100, 100], [190, 255, 255], 170),
-               Color("green", [60, 100, 50], [90, 255, 255], 60),
-               Color("blue", [33, 213, 42], [110, 255, 255], 90)]
+color_range = [Color("orange", [0, 100, 126], [10, 255, 204]),
+               Color("yellow", [10, 100, 100], [30, 255, 255]),
+               Color("red", [170, 100, 100], [190, 255, 255]),
+               Color("green", [60, 100, 50], [90, 255, 255]),
+               Color("blue", [35, 100, 93], [165, 255, 223])]
 
 
 def run():
