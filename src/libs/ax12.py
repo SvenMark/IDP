@@ -43,8 +43,8 @@ class Ax12:
     # ////////////////////////////////////////////////////////////// RAM AREA
     AX_TORQUE_STATUS = 24
     AX_LED_STATUS = 25
-    AX_CW_COMPLIANCE_MARGIN = 26
-    AX_CCW_COMPLIANCE_MARGIN = 27
+    AX_CW_COMPLIANCE_MARGIN = 1
+    AX_CCW_COMPLIANCE_MARGIN = 1
     AX_CW_COMPLIANCE_SLOPE = 78
     AX_CCW_COMPLIANCE_SLOPE = 79
     AX_GOAL_POSITION_L = 30
@@ -65,8 +65,8 @@ class Ax12:
     AX_PAUSE_TIME = 45
     AX_MOVING = 46
     AX_LOCK = 47
-    AX_PUNCH_L = 28
-    AX_PUNCH_H = 29
+    AX_PUNCH_L = 0
+    AX_PUNCH_H = 0
 
     # /////////////////////////////////////////////////////////////// Status Return Levels
     AX_RETURN_NONE = 0
@@ -96,8 +96,8 @@ class Ax12:
     AX_AL_LENGTH = 7
     AX_CM_LENGTH = 6
     AX_CS_LENGTH = 5
-    AX_COMPLIANCE_LENGTH = 7
-    AX_CCW_CW_LENGTH = 8
+    AX_COMPLIANCE_LENGTH = 1
+    AX_CCW_CW_LENGTH = 1
     AX_BD_LENGTH = 4
     AX_TEM_LENGTH = 4
     AX_MOVING_LENGTH = 4
@@ -109,7 +109,7 @@ class Ax12:
     AX_POS_LENGTH = 4
     AX_GOAL_LENGTH = 5
     AX_MT_LENGTH = 5
-    AX_PUNCH_LENGTH = 5
+    AX_PUNCH_LENGTH = 0
     AX_SPEED_LENGTH = 5
     AX_GOAL_SP_LENGTH = 7
 
