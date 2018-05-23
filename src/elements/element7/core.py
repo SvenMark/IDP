@@ -1,3 +1,4 @@
+import time
 from collections import OrderedDict
 from threading import Timer
 
@@ -5,8 +6,6 @@ from elements.element7.helpers import Color
 from elements.element7.helpers import Block
 from elements.element7.helpers import ColorRange
 from elements.element7.helpers import SavedBuildings as db
-from random import randint
-import time
 
 import numpy as np
 import cv2
@@ -20,11 +19,11 @@ CALIBRATED = False
 COLORS_CALIBRATED = []
 
 # initialize color ranges for detection
-color_range = [Color("orange", [0, 100, 100], [10, 255, 255], 10),
-               Color("yellow", [10, 100, 100], [30, 255, 255], 20),
-               Color("red", [170, 100, 100], [190, 255, 255], 180),
-               Color("green", [60, 100, 50], [90, 255, 255], 75),
-               Color("blue", [90, 120, 100], [110, 255, 170], 100)]
+color_range = [Color("orange", [0, 100, 126], [10, 255, 204], 0),
+               Color("yellow", [10, 100, 100], [30, 255, 255], 10),
+               Color("red", [170, 100, 100], [190, 255, 255], 170),
+               Color("green", [60, 100, 50], [90, 255, 255], 60),
+               Color("blue", [33, 213, 42], [110, 255, 255], 90)]
 
 
 def run():
@@ -42,24 +41,18 @@ def run():
         ret, img = cap.read()
         img = cv2.GaussianBlur(img, (9, 9), 0)
 
-        if not CALIBRATED:
-            result = ""
-            calibrate(5)
-            recognize_building(POSITIONS)
-            if len(COLORS_CALIBRATED) > 0:
-                for i in range(len(COLORS_CALIBRATED)):
-                    result += COLORS_CALIBRATED[i] + " "
-            print("calibrating.. " + result)
-
         # calculate the masks
         mask = calculate_mask(img)
 
         # crop to the contours
-        # img = crop_to_contours(mask, img)
+        if CALIBRATED:
+            img = crop_to_contours(mask, img)
 
         # calculate new cropped masks
         mask_cropped = calculate_mask(img, set_contour=True)
+
         if not CALIBRATED:
+            calibrate(10)
             cv2.rectangle(mask_cropped, (230, 65), (400, 420), (255, 255, 255), 3)
 
         cv2.imshow('camservice', mask_cropped)
@@ -73,18 +66,35 @@ def run():
 
 def calibrate(sensitivity=50):
     global color_range
-    for j in range(len(color_range)):
-        c = color_range[j]
-        if c.color not in COLORS_CALIBRATED:
-            base = c.base
-            lower_start = base - sensitivity * 2 if base - sensitivity * 2 > 0 else 0
-            lower_end = base - sensitivity if base - sensitivity > 20 else 30
+    for i in range(len(color_range)):  # for each color range available
+        c = color_range[i]
+        if c.color == "yellow":
+            c.lower[0] = 0
+            c.upper[0] = 10
+            while c.upper[0] < 255:  # while the color value is not higher than 255
+                if not calibrate_color(sensitivity, c.color):
+                    # try with other color range
+                    c.lower[0] += 10
+                    c.upper[0] += 10
+                    print(c.lower, c.upper, c.color)
 
-            upper_start = base + sensitivity if base + sensitivity < 255 else 255
-            upper_end = base + sensitivity * 2 if base + sensitivity * 2 < 200 else 200
 
-            c.lower[0] = randint(lower_start, lower_end)
-            c.upper[0] = randint(upper_start, upper_end)
+def calibrate_color(sensitivity, color):
+    for j in range(len(POSITIONS)):  # for each current position
+        pos = POSITIONS[j]
+        if pos.color == color:
+            for k in range(len(db.calibrate_building)):  # and saved position
+                saved_block = db.calibrate_building[k]
+                if saved_block.color == pos.color:  # if the colors match
+                    b = pos.centre
+                    a = saved_block.centre
+
+                    distance = np.linalg.norm(a - b)
+
+                    if distance <= sensitivity:  # and the positions match
+                        return True  # the color is calibrated
+
+    return False
 
 
 def calculate_mask(img, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
@@ -251,7 +261,7 @@ def recognize_building(positions):
         for block_front in range(len(b.front)):
             bl = b.front[block_front]
             result = [building, "front"]
-            if not is_duplicate(bl.centre, positions, 10, bl.color):
+            if not is_duplicate(bl.centre, positions, 20, bl.color):
                 return False
 
         # if not found:
@@ -275,27 +285,18 @@ def recognize_building(positions):
         #                     found = False
 
     print("Recognized building {}, {} side".format(result[0], result[1]))
-    global CALIBRATED
-    CALIBRATED = True
     return True
 
 
 # checks if contour is duplicate
 def is_duplicate(x, y, sensitivity=10, color=None):
     for i in range(len(y)):
-        cx = y[i].centre[0]
-        cy = y[i].centre[1]
-
-        b = np.array((cx, cy))
-        a = np.array(x)
+        b = y[i].centre
+        a = x
 
         distance = np.linalg.norm(a - b)  # x[i] = [520,137] y[t] = [430,180]
 
         if color and color == y[i].color and distance <= sensitivity:
-            global COLORS_CALIBRATED
-            if color not in COLORS_CALIBRATED:
-                COLORS_CALIBRATED.append(color)
-                print("calibrated ", color)
             return True
         elif not color and distance <= sensitivity:
             return True

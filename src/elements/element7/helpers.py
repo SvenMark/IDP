@@ -13,7 +13,7 @@ class Color:
 class Block:
     def __init__(self, color, centre):
         self.color = color
-        self.centre = centre
+        self.centre = np.array(centre)
 
 
 class ColorRange:
@@ -31,12 +31,18 @@ class Building:
 
 
 class SavedBuildings:
+    calibrate_building = [Block("orange", (267, 356)),
+                         Block("yellow", (252, 140)),
+                         Block("red", (362, 133)),
+                         Block("green", (369, 350)),
+                         Block("blue", (311, 251))]
+
     buildings = [
-        Building(front=[Block("orange", (370, 149)),
-Block("yellow", (364, 355)),
-Block("red", (263, 353)),
-Block("green", (260, 149)),
-Block("blue", (316, 258))],
+        Building(front=[Block("orange", (41, 324)),
+                        Block("yellow", (33, 97)),
+                        Block("red", (148, 92)),
+                        Block("green", (153, 318)),
+                        Block("blue", (92, 218))],
                  back=[Block("blue", (31, 316)),
                        Block("green", (86, 209)),
                        Block("orange", (30, 91)),
