@@ -51,7 +51,7 @@ class DCMotor(object):
         :param delay: Time to wait after executing
         :return: None
         """
-        print("Dcmotor" + str(self.pin_pwm) + " Forwards " + str(duty_cycle))
+        print("Dcmotor " + str(self.pin_pwm) + " Forwards " + str(duty_cycle))
         GPIO.output(self.pin_motor_forward, GPIO.HIGH)
         GPIO.output(self.pin_motor_backward, GPIO.LOW)
         self.pwm_motor.ChangeDutyCycle(duty_cycle)
@@ -65,7 +65,7 @@ class DCMotor(object):
         :param delay: Time to wait after executing
         :return: None
         """
-        print("Dcmotor" + str(self.pin_pwm) + " Backwards " + str(duty_cycle))
+        print("Dcmotor " + str(self.pin_pwm) + " Backwards " + str(duty_cycle))
         GPIO.output(self.pin_motor_forward, GPIO.LOW)
         GPIO.output(self.pin_motor_backward, GPIO.HIGH)
         self.pwm_motor.ChangeDutyCycle(duty_cycle)
