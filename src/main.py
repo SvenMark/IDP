@@ -6,7 +6,6 @@ from elements import element1, element2, element3, element4, element5, element6,
 from entities.movement.legs import Legs
 from entities.movement.tracks import Tracks
 from entities.robot.robot import Robot
-from entities.movement.limb.leg import Leg
 from entities.movement.limb.tire import Tire
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
@@ -26,51 +25,50 @@ FUNC_MAP = {
 
 
 def main():
-    print(RESOURCES)
+    # print(RESOURCES)
     # print command line arguments
-    if len(sys.argv) < 2:
-        print("Please pass commandline args")
-        return sys.exit(2)
-
-    lights = []
+    # if len(sys.argv) < 2:
+        # print("Please pass commandline args")
+        # return sys.exit(2)
 
     limbs = [
-        Tracks(track_0_pin=18, track_1_pin=13),
-        Legs(leg_0_servos=[
-                1,
-                61,
-                63
-            ],
-            leg_1_servos=[
-                21,
-                31,
-                53
-            ],
-            leg_2_servos=[
-                61,
-                63,
-                111
-            ],
-            leg_3_servos=[
-                111,
-                111,
-                111
-            ]
-        )
-    ]
+            Legs(leg_0_servos=[
+                    14,
+                    61,
+                    63
+                ],
+                leg_1_servos=[
+                    14,
+                    61,
+                    63
+                ],
+                leg_2_servos=[
+                    14,
+                    61,
+                    63
+                ],
+                leg_3_servos=[
+                    14,
+                    61,
+                    63
+                ]
+            ),
+            Tracks(track_0_pin=18, track_1_pin=13),
+            Tire(servo_id=69, position=500)
+        ]
+
+    lights = []
 
     name = 'Boris'
     boris = Robot(name, limbs, lights)
 
-    boris.movement.tracks.forward(20, 0, 2)
+    boris.movement.tracks.forward(duty_cycle=20, delay=0, acceleration=2)
 
-    # print(boris.movement.tracks.turn_left())
-    #
     # part = sys.argv[1]
-    #
+
     # part_function = FUNC_MAP[part]
-    #
-    # # run element
+
+    # run element
     # part_function.run()
 
 

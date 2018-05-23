@@ -13,10 +13,11 @@ class Legs(object):
         """
 
         # Initialise a leg for each corner of the robot
-        self.leg_front_left = Leg(leg_0_servos[0], leg_0_servos[1], leg_0_servos[2], 530, 210, 475)
-        # self.leg_front_right = Leg(leg_1_servos[0], leg_1_servos[1], leg_1_servos[2], 600, 450, 850)
-        # self.leg_rear_left = Leg(leg_2_servos[0], leg_2_servos[1], leg_2_servos[2], 600, 450, 850)
-        # self.leg_rear_right = Leg(leg_3_servos[0], leg_3_servos[1], leg_3_servos[2], 600, 450, 850)
+        self.leg_front_left = Leg(leg_0_servos, [530, 210, 475])
+        # self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
+        # self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
+        # self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
+        self.type = 'legs'
 
         print("Legs setup, retracting")
         
@@ -28,7 +29,7 @@ class Legs(object):
         :param leg_2_moves: Array of positions for leg 2
         :param leg_3_moves: Array of positions for leg 3
         :param delay: Time to wait after executing
-        :param speeds: The speeds at which the servo moves
+        :param speeds: Array of speeds for each servo
         :return: None
         """
         self.leg_front_left.move(leg_0_moves, delay, speeds)
@@ -50,9 +51,9 @@ class Legs(object):
         delay = 0.1
 
         self.leg_front_left.move(leg_0_deploy, delay, [speed, speed, speed])
-        # self.leg_front_right.move(leg_1_deploy[0], leg_1_deploy[1], leg_1_deploy[2], delay, speed)
-        # self.leg_rear_left.move(leg_2_deploy[0], leg_2_deploy[1], leg_2_deploy[2], delay, speed)
-        # self.leg_rear_right.move(leg_3_deploy[0], leg_3_deploy[1], leg_3_deploy[2], delay, speed)
+        # self.leg_front_right.move(leg_1_deploy, delay, [speed, speed, speed])
+        # self.leg_rear_left.move(leg_2_deploy, delay, [speed, speed, speed])
+        # self.leg_rear_right.move(leg_3_deploy, delay, [speed, speed, speed])
 
     def retract(self, speed):
         """
@@ -68,6 +69,6 @@ class Legs(object):
         delay = 0.1
         
         self.leg_front_left.move(leg_0_retract, delay, [speed, speed, speed])
-        # self.leg_front_right.move(leg_1_retract[0], leg_1_retract[1], leg_1_retract[2], delay)
-        # self.leg_rear_left.move(leg_2_retract[0], leg_2_retract[1], leg_2_retract[2], delay)
-        # self.leg_rear_right.move(leg_3_retract[0], leg_3_retract[1], leg_3_retract[2], delay)
+        # self.leg_front_right.move(leg_1_retract, delay, [speed, speed, speed])
+        # self.leg_rear_left.move(leg_2_retract, delay, [speed, speed, speed])
+        # self.leg_rear_right.move(leg_3_retract, delay, [speed, speed, speed])
