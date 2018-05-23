@@ -14,11 +14,39 @@ def receivemessages():
     print("Accepted connection from " + str(address))
     time.sleep(3)
 
-    data = client_sock.recv(1024)
-    print("Received: %s" % data)
+    while True:
+        data = client_sock.recv(4096)
+        print("Received: %s" % data)
+        if data == "q":
+            break
 
     client_sock.close()
     server_sock.close()
+
+
+def reveiveard():
+    bd_addr = "98:D3:31:FD:15:C1" # The address from Boris
+    port = 1
+    sock = bluetooth.BluetoothSocket (bluetooth.RFCOMM)
+    try:
+        sock.connect((bd_addr, port))
+        print("Connected!")
+    except bluetooth.btcommon.BluetoothError:
+        print("No connection possible.")
+        return
+     
+    data = ""
+    while 1:
+        try:
+            data += str(sock.recv(1024))[2:][:-1]
+            data_end = data.find('\\n')
+            if data_end != -1:
+                rec = data[:data_end]
+                print(rec)
+                data = ""
+        except KeyboardInterrupt:
+            break
+    sock.close()
 
 
 def sendmessageto(target):
@@ -35,6 +63,8 @@ def looknearby():
         print(str(bluetooth.lookup_name(bdaddr)) + " [" + str(bdaddr) + "]")
 
 
+reveiveard()
 # receivemessages()
-# sendmessageto("B8:27:EB:F6:A8:B2")
-looknearby()
+# sendmessageto("98:D3:31:FD:15:C1") # Boris CS
+# sendmessageto("B8:27:EB:F6:A8:B2") # Pi
+# looknearby()
