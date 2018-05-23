@@ -65,8 +65,8 @@ class Ax12:
     AX_PAUSE_TIME = 45
     AX_MOVING = 46
     AX_LOCK = 47
-    AX_PUNCH_L = 48
-    AX_PUNCH_H = 49
+    AX_PUNCH_L = 28
+    AX_PUNCH_H = 29
 
     # /////////////////////////////////////////////////////////////// Status Return Levels
     AX_RETURN_NONE = 0
