@@ -15,6 +15,7 @@ import cv2
 POSITIONS = []
 LAST_POS_LEN = 100
 STOP_POSITIONS = False
+RECOGNIZED = False
 
 # initialize color ranges for detection
 color_range = [Color("orange", [0, 100, 126], [10, 255, 204], 0),
@@ -165,25 +166,22 @@ def set_contours(mask, color, img):
             cx = int(moment['m10'] / moment['m00'])
             cy = int(moment['m01'] / moment['m00'])
             cv2.drawContours(img_mask, [c], 0, (255, 255, 255), 3)
-            text = "{} {}".format("Color:", color)
-            cv2.putText(img_mask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+            cv2.putText(img_mask, color, (cx - 15, cy - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+            cv2.putText(img_mask, str((cx, cy)), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
             cv2.circle(img_mask, (cx, cy), 2, (255, 255, 255), 5)
 
             global LAST_POS_LEN
 
             if not STOP_POSITIONS:
                 if len(POSITIONS) > 10:
-                    print("Cleared POSITIONS of length ", len(POSITIONS))
                     del POSITIONS[:]
                 if len(POSITIONS) == 0:
                     POSITIONS.append(Block(color, (cx, cy)))
-                    print("Block(\"{}\", {}),".format(color, (cx, cy)))
                 else:
                     if len(POSITIONS) > 0:
                         for j in range(len(POSITIONS)):
                             if not is_duplicate((cx, cy), POSITIONS, 5):
                                 POSITIONS.append(Block(color, (cx, cy)))
-                                print("Block(\"{}\", {}),".format(color, (cx, cy)))
 
     return img_mask
 
@@ -207,9 +205,14 @@ def routine():
         LAST_POS_LEN = 100
 
     LAST_POS_LEN = len(POSITIONS)
+    if RECOGNIZED:
+        t.cancel()
 
 
 def recognize_building(positions):
+    global RECOGNIZED
+    if RECOGNIZED:
+        return True
     # check if you recognize position
     result = []
     found = True
@@ -243,6 +246,7 @@ def recognize_building(positions):
         #                 if not is_duplicate(bl.centre, positions, 10, bl.color):
         #                     found = False
 
+    RECOGNIZED = True
     tts = "Recognized building {}, {} side".format(result[0], result[1])
     Speak.tts(Speak(), tts)
     return True
