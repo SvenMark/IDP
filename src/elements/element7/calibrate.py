@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from threading import Timer
 
 from elements.element7.helpers import Color
@@ -14,6 +13,7 @@ import cv2
 
 POSITIONS = []
 CALIBRATED = False
+STOP_POSITIONS = False
 
 # initialize color ranges for detection
 color_range = [Color("orange", [0, 100, 126], [10, 255, 204], 0),

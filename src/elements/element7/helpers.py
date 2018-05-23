@@ -60,31 +60,3 @@ class SavedBuildings:
                  )
     ]
 
-    # saves the current correct contours to positions.py array
-    @staticmethod
-    def save_contour(blocks):
-        try:
-            filename = "buildings.py"
-            output = open(filename, "a")
-            output.seek(-1, os.SEEK_END)
-            output.truncate()
-            first = True
-            for i in range(len(blocks)):
-                centre = blocks[i].centre
-                color = blocks[i].color
-                print("Saving {}, {}..".format(i, color))
-
-                if not first:
-                    output.write(",\n        Block(\"" + color + "\", (")
-                else:
-                    output.write("        Block(\"" + color + "\", (")  # Position("color",
-                    first = False
-
-                output.write("{}, {}))".format(centre[0], centre[1]))  # (cx,cy)),
-
-            output.write('\n]')
-            output.close()
-            print("Successfully saved {}".format(len(blocks)))
-        except ValueError:
-            print("Failed to save")
-
