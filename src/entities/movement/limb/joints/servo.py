@@ -29,7 +29,7 @@ class Servo(object):
         self.last_position = initial_position
         self.ax12.move_speed(servo_id, initial_position, 300)
         self.sensitivity = 5
-        print(str(self.ax12.read_rw_status(self.servo_id)))
+        print("rw : " + str(self.ax12.read_rw_status(self.servo_id)))
         time.sleep(0.1)
 
     def move_speed(self, degrees, delay, max_speed):
