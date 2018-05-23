@@ -15,8 +15,6 @@ import cv2
 POSITIONS = []
 LAST_POS_LEN = 100
 STOP_POSITIONS = False
-CALIBRATED = False
-COLORS_CALIBRATED = []
 
 # initialize color ranges for detection
 color_range = [Color("orange", [0, 100, 126], [10, 255, 204], 0),
@@ -44,16 +42,10 @@ def run():
         # calculate the masks
         mask = calculate_mask(img)
 
-        # crop to the contours
-        if CALIBRATED:
-            img = crop_to_contours(mask, img)
+        img = crop_to_contours(mask, img)
 
         # calculate new cropped masks
         mask_cropped = calculate_mask(img, set_contour=True)
-
-        if not CALIBRATED:
-            calibrate(10)
-            cv2.rectangle(mask_cropped, (230, 65), (400, 420), (255, 255, 255), 3)
 
         cv2.imshow('camservice', mask_cropped)
 
@@ -62,40 +54,6 @@ def run():
 
     cap.release()
     cv2.destroyAllWindows()
-
-
-def calibrate(sensitivity=50):
-    global color_range
-    for i in range(len(color_range)):  # for each color range available
-        c = color_range[i]
-        if c.color == "yellow":
-            c.lower[0] = 0
-            c.upper[0] = 10
-            while c.upper[0] < 255:  # while the color value is not higher than 255
-                if not calibrate_color(sensitivity, c.color):
-                    # try with other color range
-                    c.lower[0] += 10
-                    c.upper[0] += 10
-                    print(c.lower, c.upper, c.color)
-
-
-def calibrate_color(sensitivity, color):
-    for j in range(len(POSITIONS)):  # for each current position
-        pos = POSITIONS[j]
-        if pos.color == color:
-            for k in range(len(db.calibrate_building)):  # and saved position
-                saved_block = db.calibrate_building[k]
-                if saved_block.color == pos.color:  # if the colors match
-                    b = pos.centre
-                    a = saved_block.centre
-
-                    distance = np.linalg.norm(a - b)
-
-                    if distance <= sensitivity:  # and the positions match
-                        return True  # the color is calibrated
-
-    return False
-
 
 def calculate_mask(img, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
     hsv = cv2.cvtColor(img, conversion)
