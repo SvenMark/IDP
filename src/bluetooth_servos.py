@@ -69,7 +69,7 @@ def reveiveard():
             data_end = data.find('\\n')
             if data_end != -1:
                 rec = data[:data_end]
-                print(rec)
+                #print(rec)
                 handle_data(rec)
                 data = ""
                 count += 1
@@ -85,11 +85,11 @@ def handle_data(data):
     b_index = data.find('b')
 
     if f_index != -1 and b_index != -1:
-        f = data[f_index+2:b_index](" ", "")
-        b = data[b_index+2].replace(" ", "")
+        f = int(data[f_index+2:b_index].replace(" ", ""))
+        b = int(data[b_index+2:].replace(" ", ""))
         print(str(f))
         print(str(b))
-        #legs.move([data[], 680 + math.sin(count), 998], [650, 400, 400], [400, 400, 400], [600, 400, 400], 0, 250)
+        legs.move([f, 680, b], [650, 400, 400], [400, 400, 400], [600, 400, 400], 0, 250)
 
 
 def sendmessageto(target):
