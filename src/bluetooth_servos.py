@@ -103,8 +103,9 @@ def handle_data(data):
         v = int(str(data[v_index+2:h_index].replace(" ", "")))
         h = int(str(data[h_index+2:d_index].replace(" ", "")))
 
-        v = (v - 500) / 5
-        h = (h - 500) / 5
+        # Convert v and h to percentage to be used by dc motors
+        v = ((v * (1000 / 1024)) - 500) / 5
+        h = ((h * (1000 / 1024)) - 500) / 5
 
         if v < 2:
             if -2 < h < 2:
