@@ -68,7 +68,7 @@ def main():
         thread.start_new_thread(boris.movement.tracks.forward, (80, 10, 2, ))
         thread.start_new_thread(walk_forward, (boris.movement.legs, 10, ))
     except:
-        print "Error: unable to start thread"
+        print ("Error: unable to start thread")
 
     wave(boris.movement.legs, [250, 250, 250], 10)
     enge_dab(boris.movement.legs, [140, 140, 140])
