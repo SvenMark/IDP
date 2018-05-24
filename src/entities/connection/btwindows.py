@@ -39,8 +39,9 @@ def reveiveard():
     while 1:
         try:
             data += str(sock.recv(1024))[2:][:-1]
-            print(data)
+            #print(data)
             data_start = data.find('start')
+            data_end = data.find('stop')
             
             if data_start != -1:
                 next = str(sock.recv(1024))[2:][:-1]
@@ -50,7 +51,11 @@ def reveiveard():
                     next = str(sock.recv(1024))[2:][:-1]
                     data_end = next.find('stop')
                 data += next[:data_end]
-                print(data)
+                
+                packages = data.split('stop')
+                
+                for i in range(len(packages)): 
+                    handlePackage(packages[i][5:])
                 data = next[data_end:]
                     
             
@@ -63,6 +68,10 @@ def reveiveard():
             break
     sock.close()
 
+def handlePackage(data):
+    props = data.split(',')
+    for i in range(len(props)):
+        print(props[i])
 
 def sendmessageto(target):
     port = 1
