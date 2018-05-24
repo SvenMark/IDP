@@ -7,6 +7,12 @@ class Robot(object):
     """
 
     def __init__(self, name, limbs, lights):
+        """
+        Constructor for the robot class
+        :param name: Name for the robot
+        :param limbs: Array of limbs
+        :param lights: Array of lights
+        """
         self.name = name
         self.limbs = limbs
         self.lights = lights

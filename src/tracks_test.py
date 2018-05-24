@@ -1,7 +1,7 @@
 #!/bin/python
 from entities.movement.tracks import Tracks
 
-tracks = Tracks(track1pin=18, track2pin=13)
+tracks = Tracks(track_0_pin=18, track_1_pin=13)
 
 tracks.forward(100, 2, 1)
 tracks.forward(20, 4, 4)
