@@ -65,7 +65,10 @@ class Servo(object):
             speed = math.sin((i + 0.5) / total_steps * math.pi) * max_speed
             print("Servo " + str(self.servo_id) + ", step: " + str(i) + ", speed: " + str(round(speed)) + ", degrees: " + str(round(current_position)))
             # Move the servo using the ax12 library with the servo id and degrees.
-            self.ax12.move_speed(self.servo_id, round(current_position), round(speed))
+            try:
+                self.ax12.move_speed(self.servo_id, round(current_position), round(speed))
+            except Ax12.timeout_error:
+                print("Timeout")
             self.last_position = current_position
             while not self.is_ready:
                 time.sleep(0.1)
