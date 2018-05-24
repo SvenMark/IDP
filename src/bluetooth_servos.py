@@ -98,7 +98,8 @@ def handle_data(data):
         b = int(str(data[b_index+2:].replace(" ", "")))
         print(str(f))
         print(str(b))
-        legs.move([530 + round(f / 10), 680, 760 + round(f / 10)], [650, 400, 400], [400, 400, 400], [600, 400, 400], 0, [200, 200, 200])
+        if legs.deployed:
+            legs.move([530 + round(f / 10), 680, 760 + round(f / 10)], [650, 400, 400], [400, 400, 400], [600, 400, 400], 0, [200, 200, 200])
 
 
 def send_message_to(target):
