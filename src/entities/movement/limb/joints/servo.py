@@ -67,7 +67,7 @@ class Servo(object):
             # Move the servo using the ax12 library with the servo id and degrees.
             try:
                 self.ax12.move_speed(self.servo_id, round(current_position), round(speed))
-            except Ax12.timeout_error:
+            except:
                 print("Timeout")
             self.last_position = current_position
             while not self.is_ready:
