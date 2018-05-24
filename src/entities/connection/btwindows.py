@@ -1,7 +1,6 @@
 import bluetooth
 import time
 
-
 def receivemessages():
     server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
@@ -36,13 +35,29 @@ def reveiveard():
         return
      
     data = ""
+    
     while 1:
         try:
             data += str(sock.recv(1024))[2:][:-1]
-            data_end = data.find('\\n')
+            print(data)
+            data_start = data.find('start')
+            
+            if data_start != -1:
+                next = str(sock.recv(1024))[2:][:-1]
+                data_end = next.find('stop')
+                while data_end == -1:
+                    data += next
+                    next = str(sock.recv(1024))[2:][:-1]
+                    data_end = next.find('stop')
+                data += next[:data_end]
+                print(data)
+                data = next[data_end:]
+                    
+            
+            
             if data_end != -1:
                 rec = data[:data_end]
-                print(rec)
+                #print(rec)
                 data = ""
         except KeyboardInterrupt:
             break
