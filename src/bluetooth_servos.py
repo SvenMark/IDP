@@ -30,7 +30,7 @@ legs = Legs(leg_0_servos=[
     ])
 
 
-def receivemessages():
+def receive_messages():
     server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
     port = 1
@@ -53,7 +53,7 @@ def receivemessages():
     server_sock.close()
 
 
-def reveiveard():
+def receive_data():
     bd_addr = "98:D3:31:FD:15:C1"  # The address from Boris
     port = 1
     sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
@@ -85,14 +85,14 @@ def handle_data(data):
     b_index = data.find('b')
 
     if f_index != -1 and b_index != -1:
-        f = int(data[f_index+2:b_index].replace(" ", ""))
-        b = int(data[b_index+2:].replace(" ", ""))
+        f = int(str(data[f_index+2:b_index].replace(" ", "")))
+        b = int(str(data[b_index+2:].replace(" ", "")))
         print(str(f))
         print(str(b))
         legs.move([f, 680, b], [650, 400, 400], [400, 400, 400], [600, 400, 400], 0, 250)
 
 
-def sendmessageto(target):
+def send_message_to(target):
     port = 1
     sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
     sock.connect((target, port))
@@ -100,10 +100,10 @@ def sendmessageto(target):
     sock.close()
 
 
-def looknearby():
+def look_nearby():
     nearby_devices = bluetooth.discover_devices()
     for bdaddr in nearby_devices:
         print(str(bluetooth.lookup_name(bdaddr)) + " [" + str(bdaddr) + "]")
 
 
-reveiveard()
+receive_data()
