@@ -7,6 +7,7 @@ from entities.movement.legs import Legs
 from entities.movement.tracks import Tracks
 from entities.robot.robot import Robot
 from entities.movement.limb.tire import Tire
+from entities.movement.sequences.walking_sequences import *
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
 
@@ -62,8 +63,11 @@ def main():
     name = 'Boris'
     boris = Robot(name, limbs, lights)
 
-    boris.movement.legs.deploy(80)
+    walk_forward(boris.movement.legs, 10)
     boris.movement.tracks.forward(duty_cycle=80, delay=0, acceleration=10)
+    wave(boris.movement.legs, [250, 250, 250], 10)
+    enge_dab(boris.movement.legs, [140, 140, 140])
+    boris.movement.legs.retract(90)
 
     # part = sys.argv[1]
 
