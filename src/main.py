@@ -36,22 +36,22 @@ def main():
                     14,
                     61,
                     63
-                ],
-                leg_1_servos=[
-                    14,
-                    61,
-                    63
-                ],
-                leg_2_servos=[
-                    14,
-                    61,
-                    63
-                ],
-                leg_3_servos=[
-                    14,
-                    61,
-                    63
                 ]
+                # leg_1_servos=[
+                #     14,
+                #     61,
+                #     63
+                # ],
+                # leg_2_servos=[
+                #     14,
+                #     61,
+                #     63
+                # ],
+                # leg_3_servos=[
+                #     14,
+                #     61,
+                #     63
+                # ]
             ),
             Tracks(track_0_pin=18, track_1_pin=13),
             Tire(servo_id=69, position=500)
@@ -62,7 +62,8 @@ def main():
     name = 'Boris'
     boris = Robot(name, limbs, lights)
 
-    boris.movement.tracks.forward(duty_cycle=20, delay=0, acceleration=2)
+    boris.movement.legs.deploy(80)
+    boris.movement.tracks.forward(duty_cycle=80, delay=0, acceleration=10)
 
     # part = sys.argv[1]
 
