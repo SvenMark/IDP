@@ -1,6 +1,7 @@
 import bluetooth
 import time
 
+
 def receivemessages():
     server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
@@ -32,6 +33,7 @@ def reveiveard():
      
     data = ""
     
+    count = 0
     while 1:
         try:
             data += str(sock.recv(1024))[2:][:-1]
@@ -40,15 +42,12 @@ def reveiveard():
                 rec = data[:data_end]
                 print(rec)
                 data = ""
+                count += 1
                     
         except KeyboardInterrupt:
             break
     sock.close()
-
-def handlePackage(data):
-    props = data.split(',')
-    for i in range(len(props)):
-        print(props[i])
+    
 
 def sendmessageto(target):
     port = 1
@@ -65,7 +64,3 @@ def looknearby():
 
 
 reveiveard()
-# receivemessages()
-# sendmessageto("98:D3:31:FD:15:C1") # Boris CS
-# sendmessageto("B8:27:EB:F6:A8:B2") # Pi
-# looknearby()
