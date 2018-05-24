@@ -1,7 +1,6 @@
 import time
 import math
 
-from entities.movement.limb.limb import Limb
 from entities.movement.limb.joints.dcmotor import DCMotor
 
 
@@ -11,10 +10,16 @@ class Tracks(object):
     """
 
     def __init__(self, track_0_pin, track_1_pin):
+        """
+        Constructor for the tracks class
+        :param track_0_pin: The GPIO pin which the first track is connected to
+        :param track_1_pin: The GPIO pin which the second track is connected to
+        """
 
         # Initialise both motors as tracks. Each track has 1 motor.
         self.track_left = DCMotor(track_0_pin)
         self.track_right = DCMotor(track_1_pin)
+        self.type = 'tracks'
 
         print("Tracks setup")
 
@@ -24,11 +29,11 @@ class Tracks(object):
         """
         Function that makes sure the tracks don`t suddenly go to full power,
         instead they accelerate with an acceleration
-        which is passed by the forward/backward/right/left functions.
-        :param duty_cycle_track_left: percentage of power for left track
-        :param duty_cycle_track_right: percentage of power for right track
-        :param delay: time to wait after executing
-        :param acceleration: time in which the tracks accelerate to their given duty cycle in a linear manner.
+        which is passed by the forward/backward/right/left functions
+        :param duty_cycle_track_left: Percentage of power for left track
+        :param duty_cycle_track_right: Percentage of power for right track
+        :param delay: Time to wait after executing
+        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner
         :param track_left_direction: Direction of left track, 1 is forward 0 is backward
         :param track_right_direction: Direction of right track, 1 is forward 0 is backward
         :return: None
@@ -97,10 +102,10 @@ class Tracks(object):
 
     def forward(self, duty_cycle, delay, acceleration):
         """
-        Function for moving tracks in a forward direction.
-        :param duty_cycle: percentage of power for both tracks
-        :param delay: time to wait after executing
-        :param acceleration: time in which the tracks accelerate to their given duty cycle in a linear manner.
+        Function for moving tracks in a forward direction
+        :param duty_cycle: Percentage of power for both tracks
+        :param delay: Time to wait after executing
+        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner
         :return: None
         """
         self.move_helper(duty_cycle, duty_cycle, delay, acceleration, 1, 1)
@@ -108,31 +113,31 @@ class Tracks(object):
     def backward(self, duty_cycle, delay, acceleration):
         """
         Function for moving tracks in a backward direction
-        :param duty_cycle: percentage of power for both tracks
-        :param delay: time to wait after executing
-        :param acceleration: time in which the tracks accelerate to their given duty cycle in a linear manner.
+        :param duty_cycle: Percentage of power for both tracks
+        :param delay: Time to wait after executing
+        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner
         :return: None
         """
         self.move_helper(duty_cycle, duty_cycle, delay, acceleration, 0, 0)
 
     def turn_right(self, duty_cycle_track_left, duty_cycle_track_right, delay, acceleration):
         """
-        Function for moving tracks in a right direction by turning left track forward and right track backward.
-        :param duty_cycle_track_left: percentage of power for right track
-        :param duty_cycle_track_right: percentage of power for left track
-        :param delay: time to wait after executing
-        :param acceleration: time in which the tracks accelerate to their given duty cycle in a linear manner.
+        Function for moving tracks in a right direction by turning left track forward and right track backward
+        :param duty_cycle_track_left: Percentage of power for right track
+        :param duty_cycle_track_right: Percentage of power for left track
+        :param delay: Time to wait after executing
+        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner
         :return: None
         """
         self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 1, 0)
 
     def turn_left(self, duty_cycle_track_right, duty_cycle_track_left, delay, acceleration):
         """
-        Function for moving tracks in a right direction by turning left track backward and right track forward.
-        :param duty_cycle_track_right: percentage of power for right track
-        :param duty_cycle_track_left: percentage of power for left track
-        :param delay: time to wait after executing
-        :param acceleration: time in which the tracks accelerate to their given duty cycle in a linear manner.
+        Function for moving tracks in a right direction by turning left track backward and right track forward
+        :param duty_cycle_track_right: Percentage of power for right track
+        :param duty_cycle_track_left: Percentage of power for left track
+        :param delay: Time to wait after executing
+        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner
         :return: None
         """
         self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 0, 1)

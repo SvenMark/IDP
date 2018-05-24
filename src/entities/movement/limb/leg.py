@@ -1,33 +1,30 @@
-from entities.movement.limb.limb import Limb
 from entities.movement.limb.joints.servo import Servo
 
 
 class Leg(object):
 
-    def __init__(self, servo_0_id, servo_1_id, servo_2_id, servo_0_position, servo_1_position, servo_2_position):
+    def __init__(self, id_servo, positions):
         """
-        Constructor of the leg class
-        :param servo_0_id: ID of the servo closest to the robot(shoulder or hip)
-        :param servo_1_id: ID of the middle leg servo(knee or elbow)
-        :param servo_2_id: ID of the last leg servo(toe or finger)
-        :param servo_0_position: The initial position for servo 0
-        :param servo_1_position: The initial position for servo 1
-        :param servo_2_position: The initial position for servo 2
+        Constructor for leg class
+        :param id_servo: Array of servo id`s
+        :param positions: Array of servo positions
         """
-
         # Create the servo instances with correct id and starting position.
-        self.servo_0 = Servo(servo_0_id, servo_0_position)
-        self.servo_1 = Servo(servo_1_id, servo_1_position)
-        self.servo_2 = Servo(servo_2_id, servo_2_position)
+        self.servo_0 = Servo(id_servo[0], positions[0])
+        self.servo_1 = Servo(id_servo[1], positions[1])
+        self.servo_2 = Servo(id_servo[2], positions[2])
+        self.type = 'leg'
 
         print("Leg setup")
 
     def move(self, positions, delay, speeds):
         """
         Function that moves the legs in the specified directions
+        :param positions: Array of positions for each servo
         :param delay: Time to wait after executing
+        :param speeds: Array of speeds for each servo
         :return: None
         """
-        self.servo_0.move_speed(positions[0], delay, speeds[0])
-        self.servo_1.move_speed(positions[1], delay, speeds[1])
-        self.servo_2.move_speed(positions[2], delay, speeds[2])
+        self.servo_0.move(positions[0], delay, speeds[0])
+        self.servo_1.move(positions[1], delay, speeds[1])
+        self.servo_2.move(positions[2], delay, speeds[2])

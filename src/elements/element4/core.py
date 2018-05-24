@@ -2,7 +2,6 @@ import pyaudio
 import numpy as np
 
 
-
 def run():
     print("run element4")
     CHUNK = 10000  # speed of data point reading, smaller == less datapoints == faster updates
@@ -47,7 +46,7 @@ def run():
             print("Bass #" + str(count))
 
         # Mooi grafiekje van de frequenties (Libraries nodig)
-
+        # import pylab
         # pylab.clf()
         # pylab.figure(1)
         # b = pylab.subplot(212)
