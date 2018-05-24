@@ -111,6 +111,9 @@ def handle_data(data):
 
         print("Vertical: " + str(v) + " Horizontal: " + str(h))
 
+        if -dead_zone < v < dead_zone and -dead_zone < h < dead_zone:
+            tracks.stop()
+
         if v < -dead_zone:
             if -dead_zone < h < dead_zone:
                 tracks.backward(duty_cycle_track_left=abs(v),
@@ -139,16 +142,16 @@ def handle_data(data):
                                acceleration=0)
             if h > dead_zone:
                 h = h / 5
-                tracks.backward(duty_cycle_track_left=v,
-                                duty_cycle_track_right=v - h,
-                                delay=0,
-                                acceleration=0)
+                tracks.forward(duty_cycle_track_left=v,
+                               duty_cycle_track_right=v - h,
+                               delay=0,
+                               acceleration=0)
             if h < -dead_zone:
                 h = abs(h / 5)
-                tracks.backward(duty_cycle_track_left=v - h,
-                                duty_cycle_track_right=v,
-                                delay=0,
-                                acceleration=0)
+                tracks.forward(duty_cycle_track_left=v - h,
+                               duty_cycle_track_right=v,
+                               delay=0,
+                               acceleration=0)
 
         if -dead_zone < v < dead_zone:
             if h > dead_zone:
