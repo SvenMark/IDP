@@ -1,5 +1,6 @@
 import os
 import sys
+import thread
 
 # from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, \
 #     element10
@@ -63,8 +64,12 @@ def main():
     name = 'Boris'
     boris = Robot(name, limbs, lights)
 
-    boris.movement.tracks.forward(duty_cycle=80, delay=0, acceleration=2)
-    walk_forward(boris.movement.legs, 10)
+    try:
+        thread.start_new_thread(boris.movement.tracks.forward, (80, 10, 2, ))
+        thread.start_new_thread(walk_forward, (boris.movement.legs, 10, ))
+    except:
+        print "Error: unable to start thread"
+
     wave(boris.movement.legs, [250, 250, 250], 10)
     enge_dab(boris.movement.legs, [140, 140, 140])
     boris.movement.legs.retract(90)
