@@ -1,56 +1,44 @@
-from collections import OrderedDict
-from threading import Timer
-
 from elements.element7.helpers import Color
 from elements.element7.helpers import Block
-from elements.element7.helpers import ColorRange
 from elements.element7.helpers import SavedBuildings as db
-import importlib
+from elements.element7.helpers import crop_to_contours, \
+                                      check_valid_convex, \
+                                      is_duplicate
+from entities.audio.speak import Speak
 
-import time
-import numpy as np
 import cv2
 
-# print("uncomment run before starting..")
-
 POSITIONS = []
-LAST_POS_LEN = 100
-STOP_POSITIONS = False
-
-# initialize color ranges for detection
-orange = Color([0, 100, 100], [10, 255, 255])
-yellow = Color([20, 100, 100], [30, 255, 255])
-red = Color([170, 100, 100], [190, 255, 255])
-green = Color([60, 100, 50], [90, 255, 255])
-blue = Color([90, 100, 100], [120, 255, 255])
 
 
 def run():
     print("run element7")
+    # Initialize camera
     cap = cv2.VideoCapture(0)
 
-    colors = OrderedDict({
-        "red": (0, 0, 255),
-        "blue": (255, 0, 0),
-        "green": (0, 255, 0),
-        "orange": (0, 165, 255),
-        "yellow": (0, 255, 255)})
+    # Initialize color ranges for detection
+    color_range = [Color("orange", [0, 98, 105], [12, 255, 255]),
+                   Color("yellow", [25, 100, 100], [36, 255, 255]),
+                   Color("red", [0, 93, 98], [4, 250, 255]),
+                   Color("green", [60, 58, 26], [95, 210, 101]),
+                   Color("blue", [90, 100, 100], [120, 255, 255])]
 
     while True:
+        # Read frame from the camera
         ret, img = cap.read()
+
+        # Apply gaussian blue to the image
         img = cv2.GaussianBlur(img, (9, 9), 0)
 
         # calculate the masks
-        mask = calculate_mask(img)
+        mask = calculate_mask(img, color_range)
 
-        # crop to the contours
         img = crop_to_contours(mask, img)
 
         # calculate new cropped masks
-        mask_cropped = calculate_mask(img, set_contour=True)
+        mask_cropped = calculate_mask(img, color_range, set_contour=True)
 
-        # draw_saved_positions(imgmask, colors)
-
+        # Show the created image
         cv2.imshow('camservice', mask_cropped)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -60,218 +48,169 @@ def run():
     cv2.destroyAllWindows()
 
 
-def calculate_mask(img, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
+def calculate_mask(img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
+    """
+    Calculates the mask with the given image
+    :param img: The image to calculate the mask on
+    :param color_range: Color range for the masks
+    :param conversion: Conversion for the mask
+    :param set_contour: Boolean to set the contours
+    :return: The new mask
+    """
+
+    # Convert the image
     hsv = cv2.cvtColor(img, conversion)
 
-    masks = [ColorRange("red", cv2.inRange(hsv, red.lower, red.upper)),
-             ColorRange("blue", cv2.inRange(hsv, blue.lower, blue.upper)),
-             ColorRange("green", cv2.inRange(hsv, green.lower, green.upper)),
-             ColorRange("orange", cv2.inRange(hsv, orange.lower, orange.upper)),
-             ColorRange("yellow", cv2.inRange(hsv, yellow.lower, yellow.upper))]
-
     if set_contour:
-        img_mask = set_contours(masks[0].range, masks[0].color, img)
-        for i in range(1, len(masks)):
-            img_mask += set_contours(masks[i].range, masks[i].color, img)
+        # Set contours for given image and color ranges
+        img_mask = set_contours(cv2.inRange(hsv, color_range[0].lower, color_range[0].upper), color_range[0].color, img)
+        for i in range(1, len(color_range)):
+            img_mask += set_contours(cv2.inRange(hsv, color_range[i].lower, color_range[i].upper), color_range[i].color, img)
     else:
-        img_mask = masks[0].range
-        for i in range(1, len(masks)):
-            img_mask += masks[i].range
+        # Calculate the mask for all color ranges
+        img_mask = cv2.inRange(hsv, color_range[0].lower, color_range[0].upper)
+        for i in range(1, len(color_range)):
+            img_mask += cv2.inRange(hsv, color_range[i].lower, color_range[i].upper)
+
+    # Return the new mask
     return img_mask
 
 
-# draw saved positions
-def draw_saved_positions(imgmask, colors):
-    for i in range(len(db.buildings[0])):
-        cnt = np.array(db.buildings[0][i].array)
-        color = db.buildings[0][i].color
-        c = cv2.convexHull(cnt)
-        M = cv2.moments(c)
-        cx = int(M['m10'] / M['m00'])
-        cy = int(M['m01'] / M['m00'])
-        text = "{} {}".format("Color", color)
-        cv2.drawContours(imgmask, [c], 0, colors.get(color), 3, -1)
-        cv2.putText(imgmask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
-
-
-def crop_to_contours(mask, img):
-    ret, thresh = cv2.threshold(mask, 127, 255, 0)
-    im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
-    extremes = [999999, -99999, 99999, -9999]  # min x, max x, min y, max y
-
-    # draw all correct contours
-    for i in range(len(contours)):
-        c = cv2.convexHull(contours[i])
-        peri = cv2.arcLength(c, True)
-        approx = cv2.approxPolyDP(c, 0.02 * peri, True)
-        area = cv2.contourArea(c)
-
-        if len(approx) == 4 and area > 4000:
-            a = tuple(contours[i][contours[i][:, :, 0].argmin()][0])
-            b = tuple(contours[i][contours[i][:, :, 0].argmax()][0])
-            c = tuple(contours[i][contours[i][:, :, 1].argmin()][0])
-            d = tuple(contours[i][contours[i][:, :, 1].argmax()][0])
-            if a[0] < extremes[0]:
-                extremes[0] = a[0]
-            if b[0] > extremes[1]:
-                extremes[1] = b[0]
-            if c[1] < extremes[2]:
-                extremes[2] = c[1]
-            if d[1] > extremes[3]:
-                extremes[3] = d[1]
-
-    y = extremes[2]
-    h = extremes[3] - y
-    x = extremes[0]
-    w = extremes[1] - x
-
-    if y + h > 0 and x + w > 0:
-        img = img[y:y + h, x:x + w]
-
-    img = image_resize(img, height=400)
-    return img
-
-
-def image_resize(image, width=None, height=None, inter=cv2.INTER_AREA):
-    # initialize the dimensions of the image to be resized and
-    # grab the image size
-    dim = None
-    (h, w) = image.shape[:2]
-
-    # if both the width and height are None, then return the
-    # original image
-    if width is None and height is None:
-        return image
-
-    # check to see if the width is None
-    if width is None:
-        # calculate the ratio of the height and construct the
-        # dimensions
-        r = height / float(h)
-        dim = (int(w * r), height)
-
-    # otherwise, the height is None
-    else:
-        # calculate the ratio of the width and construct the
-        # dimensions
-        r = width / float(w)
-        dim = (width, int(h * r))
-
-    # resize the image
-    resized = cv2.resize(image, dim, interpolation=inter)
-
-    # return the resized image
-    return resized
-
-
-# sets contours for selected masks
 def set_contours(mask, color, img):
+    """
+    Sets contours for selected masks
+    :param mask: The mask to apply on the img
+    :param color: Color of the mask to give contours
+    :param img: Current image
+    :return: New image with the contours
+    """
+
+    # Calculates the per-element bit-wise conjunction of two arrays or an array and a scalar
     img_mask = cv2.bitwise_and(img, img, mask=mask)
 
+    # Calculate the threshhold with the mask
     ret, thresh = cv2.threshold(mask, 127, 255, 0)
+
+    # Find the contours with the threshold
     im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    # draw all correct contours
-    for i in range(len(contours)):
-        c = cv2.convexHull(contours[i])
-        peri = cv2.arcLength(c, True)
-        approx = cv2.approxPolyDP(c, 0.02 * peri, True)
-        area = cv2.contourArea(c)
+    for contour in range(len(contours)):
+        # Create a convexhull of the contour
+        c = cv2.convexHull(contours[contour])
 
-        if len(approx) == 4 and area > 4000:
+        # Check if the contour is a vlid block
+        if check_valid_convex(c):
+            # Image moments help you to calculate some features like center of mass of the object
             moment = cv2.moments(c)
+
+            # Calculate the centre of mass
             cx = int(moment['m10'] / moment['m00'])
             cy = int(moment['m01'] / moment['m00'])
+
+            # Draw the convexhull for the block
             cv2.drawContours(img_mask, [c], 0, (255, 255, 255), 3)
-            text = "{} {}".format("Color:", color)
-            cv2.putText(img_mask, text, (cx - 25, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+
+            # Draw a circle in the centre of the block
             cv2.circle(img_mask, (cx, cy), 2, (255, 255, 255), 5)
 
-            global LAST_POS_LEN
+            # Write the color and position of the block
+            cv2.putText(img_mask, color, (cx - 15, cy - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+            cv2.putText(img_mask, str((cx, cy)), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
-            if not STOP_POSITIONS:
-                if len(POSITIONS) > 10:
-                    print("Cleared POSITIONS of length ", len(POSITIONS))
-                    del POSITIONS[:]
-                if len(POSITIONS) == 0:
-                    POSITIONS.append(Block(color, (cx, cy)))
-                    print("Block(\"{}\", {}),".format(color, (cx, cy)))
-                else:
-                    if len(POSITIONS) > 0:
-                        for j in range(len(POSITIONS)):
-                            if not is_duplicate((cx, cy), POSITIONS, 5):
-                                POSITIONS.append(Block(color, (cx, cy)))
-                                print("Block(\"{}\", {}),".format(color, (cx, cy)))
+            # Append the new block to the global POSITIONS array
+            append_to_positions(Block(color, (cx, cy)))
 
+    # Return the new mask
     return img_mask
 
 
-def routine():
-    t = Timer(2, routine)
-    t.start()
+def append_to_positions(bl):
+    """
+    Appends a unique block to the global POSITIONS array
+    :param bl: Block class
+    """
 
-    global STOP_POSITIONS, LAST_POS_LEN
-    if LAST_POS_LEN == len(POSITIONS):
+    # Call to the global variable POSITIONS
+    global POSITIONS
 
-        # save current positions to file
-        # db.save_contour(POSITIONS)
-
-        # start recognizing building
-        print("Looped timer..")
-
-        recognize_building(POSITIONS)
+    # If the POSITIONS length is getting too long clear it
+    if len(POSITIONS) > 10:
         del POSITIONS[:]
-
-        LAST_POS_LEN = 100
-
-    LAST_POS_LEN = len(POSITIONS)
+    # If the POSITIONS array is empty append the block
+    if len(POSITIONS) == 0:
+        POSITIONS.append(bl)
+    else:
+        # Check if the given block is not a duplicate
+        if not is_duplicate(bl.centre, POSITIONS, 5):
+            # Append the block to positions
+            POSITIONS.append(bl)
+            if len(POSITIONS) > 5:
+                # If there are 5 blocks in POSITIONS (in camera view) try to recognize a building
+                recognize_building(POSITIONS)
 
 
 def recognize_building(positions):
-    # check if you recognize position
+    """
+    Checks if the currents positions of the blocks matches any saved building
+    :param positions: Current reading of POSITIONS
+    :return: True if a building is recognized
+    """
     result = []
     found = True
+
+    # If there are no blocks in view return false
     if not len(positions) > 0:
         return False
+
+    # For each building in the saved building list
     for building in range(len(db.buildings)):
         b = db.buildings[building]
+        # For each block on the front side of the saved building
         for block_front in range(len(b.front)):
             bl = b.front[block_front]
             result = [building, "front"]
-            if not is_duplicate(bl.centre, positions, 10, bl.color):
-                return False
-        #
-        # if not found:
-        #     for block_back in range(len(b.back)):
-        #         bl = b.front[block_back]
-        #         result = [building, "back"]
-        #         if not is_duplicate(bl.centre, positions, 10, bl.color):
-        #             return False
+            # If the current block color and position does not match a saved position,
+            # break and check the next side.
+            if not is_duplicate(bl.centre, positions, 20, bl.color):
+                found = False
+                break
 
-    print("Recognized building {}, {} side".format(result[0], result[1]))
-    return True
+        # Back side
+        if not found:
+            for block_back in range(len(b.back)):
+                bl = b.front[block_back]
+                result = [building, "back"]
+                if not is_duplicate(bl.centre, positions, 10, bl.color):
+                    found = False
+                    break
+
+        # Left side
+        if not found:
+            for block_back in range(len(b.left)):
+                bl = b.front[block_back]
+                result = [building, "back"]
+                if not is_duplicate(bl.centre, positions, 10, bl.color):
+                    found = False
+                    break
+
+        # Right side
+        if not found:
+            for block_back in range(len(b.right)):
+                bl = b.front[block_back]
+                result = [building, "back"]
+                if not is_duplicate(bl.centre, positions, 10, bl.color):
+                    found = False
+                    break
+
+    # Use audio to state the recognized building
+    if found:
+        # tts = "Recognized building {}, {} side".format(result[0], result[1])
+        # Speak.tts(Speak(), tts)
+        print("fakka ik heb je gevonden homo ", result[0], result[1])
+
+    # Return whether a building has been found
+    return found
 
 
-# checks if contour is duplicate
-def is_duplicate(x, y, sensitivity=10, color=None):
-    for i in range(len(y)):
-        cx = y[i].centre[0]
-        cy = y[i].centre[1]
-
-        b = np.array((cx, cy))
-        a = np.array(x)
-
-        distance = np.linalg.norm(a - b)  # x[i] = [520,137] y[t] = [430,180]
-
-        if color and color == y[i].color and distance <= sensitivity:
-            return True
-        elif not color and distance <= sensitivity:
-            return True
-
-    return False
-
-
-
-routine()
-run()  # disabled for travis
+if __name__ == '__main__':
+    run()  # disabled for travis
