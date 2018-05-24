@@ -4,7 +4,7 @@ from entities.movement.limb.leg import Leg
 class Legs(object):
 
     def __init__(self, leg_0_servos,
-                 # leg_1_servos,
+                       leg_1_servos,
                  # leg_2_servos,
                  # leg_3_servos
                  ):

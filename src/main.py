@@ -36,12 +36,12 @@ def main():
                     14,
                     61,
                     63
+                ],
+                leg_1_servos=[
+                    13,
+                    21,
+                    31
                 ]
-                # leg_1_servos=[
-                #     14,
-                #     61,
-                #     63
-                # ],
                 # leg_2_servos=[
                 #     14,
                 #     61,
@@ -54,7 +54,7 @@ def main():
                 # ]
             ),
             Tracks(track_0_pin=18, track_1_pin=13),
-            # Tire(servo_id=69, position=500)
+            Tire(servo_id=53, position=500)
         ]
 
     lights = []
