@@ -79,7 +79,7 @@ def calculate_mask(img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=F
 def set_contours(mask, color, img):
     """
     Sets contours for selected masks
-    :param mask: The mask to apply on the img
+    :param mask: The mask to apply on the image
     :param color: Color of the mask to give contours
     :param img: Current image
     :return: New image with the contours
