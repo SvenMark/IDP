@@ -63,7 +63,7 @@ def main():
     name = 'Boris'
     boris = Robot(name, limbs, lights)
 
-    boris.movement.tracks.forward(duty_cycle=80, delay=10, acceleration=2)
+    boris.movement.tracks.forward(duty_cycle=80, delay=0, acceleration=2)
     walk_forward(boris.movement.legs, 10)
     wave(boris.movement.legs, [250, 250, 250], 10)
     enge_dab(boris.movement.legs, [140, 140, 140])
