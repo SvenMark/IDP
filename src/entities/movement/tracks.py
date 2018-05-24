@@ -52,7 +52,7 @@ class Tracks(object):
         speed_2 = self.track_right.current_speed
 
         # Loop which accelerates the tracks.
-        for i in range(0, 100 * acceleration):
+        for i in range(0, int(100 * acceleration)):
 
             # Add the step size to the speed each cycle.
             speed_1 += step_1
