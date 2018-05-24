@@ -81,6 +81,7 @@ def receive_data():
 
 # f 515 b 523
 def handle_data(data):
+    print(data)
     f_index = data.find('f')
     b_index = data.find('b')
     d_index = data.find('d')
@@ -97,7 +98,7 @@ def handle_data(data):
         b = int(str(data[b_index+2:].replace(" ", "")))
         print(str(f))
         print(str(b))
-        legs.move([530 + round(f / 10), 680, 760 + round(f / 10)], [650, 400, 400], [400, 400, 400], [600, 400, 400], 0, 250)
+        legs.move([530 + round(f / 10), 680, 760 + round(f / 10)], [650, 400, 400], [400, 400, 400], [600, 400, 400], 0, [200, 200, 200])
 
 
 def send_message_to(target):
