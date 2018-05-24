@@ -87,8 +87,8 @@ def handle_data(data):
     if f_index != -1 and b_index != -1:
         f = int(str(data[f_index+2:b_index].replace(" ", "")))
         b = int(str(data[b_index+2:].replace(" ", "")))
-        print(str(f))
-        print(str(b))
+        print("value f : " + str(f))
+        print("value b : " + str(b))
         legs.move([f, 680, b], [650, 400, 400], [400, 400, 400], [600, 400, 400], 0, 250)
 
 
