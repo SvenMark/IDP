@@ -107,7 +107,7 @@ def handle_data(data):
         v = ((v * (1000 / 1024)) - 500) / 5
         h = ((h * (1000 / 1024)) - 500) / 5
 
-        print("Vertical: " + v + " Horizontal: " + h)
+        print("Vertical: " + str(v) + " Horizontal: " + str(h))
 
         if v < 2:
             if -2 < h < 2:
