@@ -3,6 +3,7 @@ import time
 import math
 
 from entities.movement.legs import Legs
+from entities.movement.tracks import Tracks
 from entities.movement.sequences.walking_sequences import *
 
 import bluetooth
@@ -28,6 +29,7 @@ legs = Legs(leg_0_servos=[
         111,
         111
     ])
+tracks = Tracks(track_0_pin=18, track_1_pin=13)
 
 
 def receive_messages():
@@ -82,24 +84,95 @@ def receive_data():
 # f 515 b 523
 def handle_data(data):
     print(data)
-    f_index = data.find('f')
-    b_index = data.find('b')
+    # Index for button to stop motors
+    s_index = data.find('s')
+    # Index for vertical movement of motors
+    v_index = data.find('v')
+    # Index for horizontal movement of motors
+    h_index = data.find('h')
+    # Index for legs deploy button
     d_index = data.find('d')
+    # Index of x axis for legs
+    x_index = data.find('x')
+    # Index of y axis for legs
+    y_index = data.find('y')
 
-    if d_index != -1:
-        d = int(str(data[d_index+2:f_index].replace(" ", "")))
+    # Tracks
+    if s_index != -1 and v_index != -1 and h_index != -1:
+        s = int(str(data[s_index+2:v_index].replace(" ", "")))
+        v = int(str(data[v_index+2:h_index].replace(" ", "")))
+        h = int(str(data[h_index+2:d_index].replace(" ", "")))
+
+        v = (v - 500) / 5
+        h = (h - 500) / 5
+
+        if v < 2:
+            if -2 < h < 2:
+                tracks.backward(duty_cycle_track_left=v,
+                                duty_cycle_track_right=v,
+                                delay=0,
+                                acceleration=0)
+            if h > 2:
+                h = h / 5
+                tracks.backward(duty_cycle_track_left=v,
+                                duty_cycle_track_right=v - h,
+                                delay=0,
+                                acceleration=0)
+            if h < -2:
+                h = abs(h / 5)
+                tracks.backward(duty_cycle_track_left=v,
+                                duty_cycle_track_right=v - h,
+                                delay=0,
+                                acceleration=0)
+
+        if v > 2:
+            if -2 < h < 2:
+                tracks.forward(duty_cycle_track_left=v,
+                               duty_cycle_track_right=v,
+                               delay=0,
+                               acceleration=0)
+                if h > 2:
+                    h = h / 5
+                    tracks.backward(duty_cycle_track_left=v,
+                                    duty_cycle_track_right=v - h,
+                                    delay=0,
+                                    acceleration=0)
+                if h < -2:
+                    h = abs(h / 5)
+                    tracks.backward(duty_cycle_track_left=v,
+                                    duty_cycle_track_right=v - h,
+                                    delay=0,
+                                    acceleration=0)
+
+        if -2 < v < 2:
+            if h > 2:
+                tracks.turn_right(duty_cycle_track_left=h,
+                                  duty_cycle_track_right=h,
+                                  delay=0,
+                                  acceleration=0)
+
+            if h < -2:
+                tracks.track_left(duty_cycle_track_left=abs(h),
+                                  duty_cycle_track_right=abs(h),
+                                  delay=0,
+                                  acceleration=0)
+
+
+    # Legs
+    if x_index != -1 and y_index != -1 and d_index != -1:
+        d = int(str(data[d_index+2:x_index].replace(" ", "")))
+        x = int(str(data[x_index+2:y_index].replace(" ", "")))
+        y = int(str(data[y_index+2:].replace(" ", "")))
+        print(str(x))
+        print(str(y))
+
         if d == 1 and not legs.deployed:
             legs.deploy(200)
         elif d == 0 and legs.deployed:
             legs.retract(200)
 
-    if f_index != -1 and b_index != -1:
-        f = int(str(data[f_index+2:b_index].replace(" ", "")))
-        b = int(str(data[b_index+2:].replace(" ", "")))
-        print(str(f))
-        print(str(b))
         if legs.deployed:
-            legs.move([530 + round(f / 10), 680, 760 + round(f / 10)], [650, 400, 400], [400, 400, 400], [600, 400, 400], 0, [200, 200, 200])
+            legs.move([530 + round(x / 10), 680, 760 + round(y / 10)], [650, 400, 400], [400, 400, 400], [600, 400, 400], 0, [200, 200, 200])
 
 
 def send_message_to(target):
