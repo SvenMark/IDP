@@ -99,7 +99,7 @@ def set_contours(mask, color, img):
         c = cv2.convexHull(contours[contour])
 
         # Check if the contour is a vlid block
-        if check_valid_convex(c):
+        if check_valid_convex(c, 4, 4000):
             # Image moments help you to calculate some features like center of mass of the object
             moment = cv2.moments(c)
 
