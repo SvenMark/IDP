@@ -107,54 +107,56 @@ def handle_data(data):
         v = ((v * (1000 / 1024)) - 500) / 5
         h = ((h * (1000 / 1024)) - 500) / 5
 
+        dead_zone = 5
+
         print("Vertical: " + str(v) + " Horizontal: " + str(h))
 
-        if v < 2:
-            if -2 < h < 2:
+        if v < dead_zone:
+            if -dead_zone > h < dead_zone:
                 tracks.backward(duty_cycle_track_left=v,
                                 duty_cycle_track_right=v,
                                 delay=0,
                                 acceleration=0)
-            if h > 2:
+            if h > dead_zone:
                 h = h / 5
                 tracks.backward(duty_cycle_track_left=v,
                                 duty_cycle_track_right=v - h,
                                 delay=0,
                                 acceleration=0)
-            if h < -2:
+            if h < -dead_zone:
                 h = abs(h / 5)
                 tracks.backward(duty_cycle_track_left=v,
                                 duty_cycle_track_right=v - h,
                                 delay=0,
                                 acceleration=0)
 
-        if v > 2:
-            if -2 < h < 2:
+        if v > dead_zone:
+            if -dead_zone > h < dead_zone:
                 tracks.forward(duty_cycle_track_left=v,
                                duty_cycle_track_right=v,
                                delay=0,
                                acceleration=0)
-                if h > 2:
+                if h > dead_zone:
                     h = h / 5
                     tracks.backward(duty_cycle_track_left=v,
                                     duty_cycle_track_right=v - h,
                                     delay=0,
                                     acceleration=0)
-                if h < -2:
+                if h < -dead_zone:
                     h = abs(h / 5)
                     tracks.backward(duty_cycle_track_left=v,
                                     duty_cycle_track_right=v - h,
                                     delay=0,
                                     acceleration=0)
 
-        if -2 < v < 2:
-            if h > 2:
+        if -dead_zone > v < dead_zone:
+            if h > dead_zone:
                 tracks.turn_right(duty_cycle_track_left=h,
                                   duty_cycle_track_right=h,
                                   delay=0,
                                   acceleration=0)
 
-            if h < -2:
+            if h < -dead_zone:
                 tracks.track_left(duty_cycle_track_left=abs(h),
                                   duty_cycle_track_right=abs(h),
                                   delay=0,
