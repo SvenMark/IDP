@@ -54,7 +54,7 @@ def main():
                 # ]
             ),
             Tracks(track_0_pin=18, track_1_pin=13),
-            Tire(servo_id=69, position=500)
+            # Tire(servo_id=69, position=500)
         ]
 
     lights = []
