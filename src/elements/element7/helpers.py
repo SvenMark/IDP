@@ -14,11 +14,8 @@ class Block:
         self.color = color
         self.centre = np.array(centre)
 
-
-class ColorRange:
-    def __init__(self, color, color_range):
-        self.color = color
-        self.range = color_range
+    def __str__(self):
+        return "Block({}, ({}, {}))".format(self.color, self.centre[0], self.centre[1])
 
 
 class Building:
