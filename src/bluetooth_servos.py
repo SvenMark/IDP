@@ -83,13 +83,21 @@ def receive_data():
 def handle_data(data):
     f_index = data.find('f')
     b_index = data.find('b')
+    d_index = data.find('d')
+
+    if d_index != -1:
+        d = int(str(data[d_index+2:f_index].replace(" ", "")))
+        if d == 1 and not legs.deployed:
+            legs.deploy(200)
+        elif d == 0 and legs.deployed:
+            legs.retract(200)
 
     if f_index != -1 and b_index != -1:
         f = int(str(data[f_index+2:b_index].replace(" ", "")))
         b = int(str(data[b_index+2:].replace(" ", "")))
         print(str(f))
         print(str(b))
-        legs.move([f, 680, b], [650, 400, 400], [400, 400, 400], [600, 400, 400], 0, 250)
+        legs.move([530 + round(f / 10), 680, 760 + round(f / 10)], [650, 400, 400], [400, 400, 400], [600, 400, 400], 0, 250)
 
 
 def send_message_to(target):
