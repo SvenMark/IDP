@@ -74,6 +74,16 @@ class Servo(object):
 
         time.sleep(delay)
 
+    def move_backup(self, degrees, delay, speed):
+
+        # Move the servo using the ax12 library with the servo id and degrees.
+        self.ax12.move_speed(self.servo_id, degrees, speed)
+
+        # Set the last position to the degrees.
+        self.last_position = degrees
+
+        time.sleep(delay)
+
     def is_ready(self):
         """
         Function that checks if a servo completed it`s last move
