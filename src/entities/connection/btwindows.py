@@ -27,43 +27,20 @@ def reveiveard():
     bd_addr = "98:D3:31:FD:15:C1" # The address from Boris
     port = 1
     sock = bluetooth.BluetoothSocket (bluetooth.RFCOMM)
-    try:
-        sock.connect((bd_addr, port))
-        print("Connected!")
-    except bluetooth.btcommon.BluetoothError:
-        print("No connection possible.")
-        return
+    
+    sock.connect((bd_addr, port))
      
     data = ""
     
     while 1:
         try:
             data += str(sock.recv(1024))[2:][:-1]
-            #print(data)
-            data_start = data.find('start')
-            data_end = data.find('stop')
-            
-            if data_start != -1:
-                next = str(sock.recv(1024))[2:][:-1]
-                data_end = next.find('stop')
-                while data_end == -1:
-                    data += next
-                    next = str(sock.recv(1024))[2:][:-1]
-                    data_end = next.find('stop')
-                data += next[:data_end]
-                
-                packages = data.split('stop')
-                
-                for i in range(len(packages)): 
-                    handlePackage(packages[i][5:])
-                data = next[data_end:]
-                    
-            
-            
+            data_end = data.find('\\n')
             if data_end != -1:
                 rec = data[:data_end]
-                #print(rec)
+                print(rec)
                 data = ""
+                    
         except KeyboardInterrupt:
             break
     sock.close()
