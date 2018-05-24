@@ -36,6 +36,7 @@ class Legs(object):
         # self.leg_front_right.move(leg_1_moves[0], leg_1_moves[1], leg_1_moves[2], delay)
         # self.leg_rear_left.move(leg_2_moves[0], leg_2_moves[1], leg_2_moves[2], delay)
         # self.leg_rear_right.move(leg_3_moves[0], leg_3_moves[1], leg_3_moves[2], delay)
+        self.deployed = True
 
     def deploy(self, speed):
         """
@@ -54,6 +55,7 @@ class Legs(object):
         # self.leg_front_right.move(leg_1_deploy[0], leg_1_deploy[1], leg_1_deploy[2], delay, speed)
         # self.leg_rear_left.move(leg_2_deploy[0], leg_2_deploy[1], leg_2_deploy[2], delay, speed)
         # self.leg_rear_right.move(leg_3_deploy[0], leg_3_deploy[1], leg_3_deploy[2], delay, speed)
+        self.deployed = True
 
     def retract(self, speed):
         """
@@ -72,3 +74,4 @@ class Legs(object):
         # self.leg_front_right.move(leg_1_retract[0], leg_1_retract[1], leg_1_retract[2], delay)
         # self.leg_rear_left.move(leg_2_retract[0], leg_2_retract[1], leg_2_retract[2], delay)
         # self.leg_rear_right.move(leg_3_retract[0], leg_3_retract[1], leg_3_retract[2], delay)
+        self.deployed = False
