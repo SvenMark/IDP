@@ -179,7 +179,19 @@ class Ax12:
             assert reply[0] == 0xFF
         except:
             e = "Timeout on servo " + str(id)
-            raise Ax12.timeout_error(e)
+
+
+
+
+
+            # raise Ax12.timeout_error(e)
+
+
+
+
+
+
+
 
         try:
             # length = ord(reply[3]) - 2
