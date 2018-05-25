@@ -6,8 +6,6 @@ from elements import element1, element2, element3, element4, element5, element6,
 from entities.movement.legs import Legs
 from entities.movement.tracks import Tracks
 from entities.robot.robot import Robot
-from entities.movement.limb.leg import Leg
-from entities.movement.limb.tire import Tire
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
 
@@ -62,7 +60,10 @@ def main():
     name = 'Boris'
     boris = Robot(name, limbs, lights)
 
-    boris.movement.tracks.forward(20, 0, 2)
+    while True:
+        boris.controller.receive_data()
+
+    # boris.movement.tracks.forward(20, 0, 2)
 
     # print(boris.movement.tracks.turn_left())
     #

@@ -74,3 +74,17 @@ class Legs(object):
         # self.leg_rear_left.move(leg_2_retract[0], leg_2_retract[1], leg_2_retract[2], delay)
         # self.leg_rear_right.move(leg_3_retract[0], leg_3_retract[1], leg_3_retract[2], delay)
         self.deployed = False
+
+    def handle_controller_input(self, deploy, x_axis, y_axis):
+        if deploy == 1 and not self.deployed:
+            self.deploy(200)
+        elif deploy == 0 and self.deployed:
+            self.retract(200)
+
+        if self.deployed:
+            self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
+                      [650, 400, 400],
+                      [400, 400, 400],
+                      [600, 400, 400],
+                      0,
+                      [200, 200, 200])

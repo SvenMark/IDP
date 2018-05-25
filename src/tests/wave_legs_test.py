@@ -3,7 +3,6 @@ import time
 import math
 
 from entities.movement.legs import Legs
-from entities.movement.sequences.walking_sequences import *
 
 legs = Legs(leg_0_servos=[
                 14,

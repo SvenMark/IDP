@@ -1,4 +1,5 @@
 from entities.movement.movement import Movement
+from entities.connection.bluetooth_controller import BluetoothController
 
 
 class Robot(object):
@@ -11,6 +12,7 @@ class Robot(object):
         self.limbs = limbs
         self.lights = lights
         self.movement = Movement(limbs, lights)
+        self.controller = BluetoothController(limbs)
 
     @property
     def get_name(self):

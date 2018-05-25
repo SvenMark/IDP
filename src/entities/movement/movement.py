@@ -1,4 +1,5 @@
 from entities.movement.tracks import Tracks
+from entities.movement.legs import Legs
 
 
 class Movement(object):

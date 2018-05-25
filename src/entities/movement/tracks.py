@@ -1,7 +1,6 @@
 import time
 import math
 
-from entities.movement.limb.limb import Limb
 from entities.movement.limb.joints.dcmotor import DCMotor
 
 
@@ -138,6 +137,67 @@ class Tracks(object):
         :return: None
         """
         self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 0, 1)
+
+    def handle_controller_input(self, stop_motors, vertical_speed, horizontal_speed, dead_zone):
+        print("Vertical: " + str(vertical_speed) + " Horizontal: " + str(horizontal_speed))
+
+        if stop_motors == 1:
+            self.stop()
+        elif stop_motors == 0:
+            if -dead_zone < vertical_speed < dead_zone and -dead_zone < horizontal_speed < dead_zone:
+                self.stop()
+
+            if vertical_speed < -dead_zone:
+                if -dead_zone < horizontal_speed < dead_zone:
+                    self.backward(duty_cycle_track_left=abs(vertical_speed),
+                                  duty_cycle_track_right=abs(vertical_speed),
+                                  delay=0,
+                                  acceleration=0)
+                if horizontal_speed > dead_zone:
+                    horizontal_speed = horizontal_speed / 5
+                    self.backward(duty_cycle_track_left=abs(vertical_speed),
+                                  duty_cycle_track_right=abs(vertical_speed) - horizontal_speed,
+                                  delay=0,
+                                  acceleration=0)
+                if horizontal_speed < -dead_zone:
+                    horizontal_speed = abs(horizontal_speed / 5)
+                    self.backward(duty_cycle_track_left=abs(vertical_speed) - horizontal_speed,
+                                  duty_cycle_track_right=abs(vertical_speed),
+                                  delay=0,
+                                  acceleration=0)
+
+            if vertical_speed > dead_zone:
+                if -dead_zone < horizontal_speed < dead_zone:
+                    print("Going forward")
+                    self.forward(duty_cycle_track_left=vertical_speed,
+                                 duty_cycle_track_right=vertical_speed,
+                                 delay=0,
+                                 acceleration=0)
+                if horizontal_speed > dead_zone:
+                    horizontal_speed = horizontal_speed / 5
+                    self.forward(duty_cycle_track_left=vertical_speed,
+                                 duty_cycle_track_right=vertical_speed - horizontal_speed,
+                                 delay=0,
+                                 acceleration=0)
+                if horizontal_speed < -dead_zone:
+                    horizontal_speed = abs(horizontal_speed / 5)
+                    self.forward(duty_cycle_track_left=vertical_speed - horizontal_speed,
+                                 duty_cycle_track_right=vertical_speed,
+                                 delay=0,
+                                 acceleration=0)
+
+            if -dead_zone < vertical_speed < dead_zone:
+                if horizontal_speed > dead_zone:
+                    self.turn_right(duty_cycle_track_left=horizontal_speed,
+                                    duty_cycle_track_right=horizontal_speed,
+                                    delay=0,
+                                    acceleration=0)
+
+                if horizontal_speed < -dead_zone:
+                    self.turn_left(duty_cycle_track_left=abs(horizontal_speed),
+                                   duty_cycle_track_right=abs(horizontal_speed),
+                                   delay=0,
+                                   acceleration=0)
 
     def stop(self):
         """
