@@ -1,5 +1,4 @@
 from entities.vision.helpers import *
-from entities.vision.helpers import SavedBuildings
 from entities.audio.speak import Speak
 
 
@@ -7,7 +6,7 @@ class Camera(object):
 
     def __init__(self, color_range):
         self.color_range = color_range
-        self.POSITIONS = []
+        self.positions = []
         self.saved_buildings = [
             Building(front=[Block("orange", (41, 324)),
                             Block("yellow", (33, 97)),
@@ -30,7 +29,7 @@ class Camera(object):
                             Block("yellow", (180, 307))]
                      )
         ]
-        self.db = SavedBuildings(self.saved_buildings)
+        self.helper = Helpers()
 
     def run(self):
         print("run element7")
@@ -45,9 +44,9 @@ class Camera(object):
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
             # Calculate the masks
-            mask = self.calculate_mask(img, self.color_range)
+            mask = self.helper.calculate_mask(img, self.color_range)
 
-            img = crop_to_contours(mask, img)
+            img = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
             mask_cropped = self.calculate_mask(img, self.color_range, set_contour=True)
@@ -111,7 +110,7 @@ class Camera(object):
             c = cv2.convexHull(contours[contour])
 
             # Check if the contour is a vlid block
-            if check_valid_convex(c, 4, 4000, 10000):
+            if self.helper.check_valid_convex(c, 4, 4000, 10000):
                 # Image moments help you to calculate some features like center of mass of the object
                 moment = cv2.moments(c)
 
@@ -130,31 +129,10 @@ class Camera(object):
                 cv2.putText(img_mask, str((cx, cy)), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
                 # Append the new block to the global POSITIONS array
-                self.append_to_positions(Block(color, (cx, cy)))
+                self.positions = self.helper.append_to_positions(self.positions, Block(color, (cx, cy)))
 
         # Return the new mask
         return img_mask
-
-    def append_to_positions(self, bl):
-        """
-        Appends a unique block to the global POSITIONS array
-        :param bl: Block class
-        """
-
-        # If the POSITIONS length is getting too long clear it
-        if len(self.POSITIONS) > 10:
-            del self.POSITIONS[:]
-        # If the POSITIONS array is empty append the block
-        if len(self.POSITIONS) == 0:
-            self.POSITIONS.append(bl)
-        else:
-            # Check if the given block is not a duplicate
-            if not is_duplicate(bl.centre, self.POSITIONS, 5):
-                # Append the block to positions
-                self.POSITIONS.append(bl)
-                if len(self.POSITIONS) > 5:
-                    # If there are 5 blocks in POSITIONS (in camera view) try to recognize a building
-                    self.recognize_building(self.POSITIONS)
 
     def recognize_building(self, positions):
         """
@@ -170,15 +148,15 @@ class Camera(object):
             return False
 
         # For each building in the saved building list
-        for building in range(len(self.db.buildings)):
-            b = self.db.buildings[building]
+        for building in range(len(self.saved_buildings)):
+            b = self.saved_buildings[building]
             # For each block on the front side of the saved building
             for block_front in range(len(b.front)):
                 bl = b.front[block_front]
                 result = [building, "front"]
                 # If the current block color and position does not match a saved position,
                 # break and check the next side.
-                if not is_duplicate(bl.centre, positions, 20, bl.color):
+                if not self.helper.is_duplicate(bl.centre, positions, 20, bl.color):
                     found = False
                     break
 
@@ -187,7 +165,7 @@ class Camera(object):
                 for block_back in range(len(b.back)):
                     bl = b.front[block_back]
                     result = [building, "back"]
-                    if not is_duplicate(bl.centre, positions, 10, bl.color):
+                    if not self.helper.is_duplicate(bl.centre, positions, 10, bl.color):
                         found = False
                         break
 
@@ -196,7 +174,7 @@ class Camera(object):
                 for block_back in range(len(b.left)):
                     bl = b.front[block_back]
                     result = [building, "back"]
-                    if not is_duplicate(bl.centre, positions, 10, bl.color):
+                    if not self.helper.is_duplicate(bl.centre, positions, 10, bl.color):
                         found = False
                         break
 
@@ -205,7 +183,7 @@ class Camera(object):
                 for block_back in range(len(b.right)):
                     bl = b.front[block_back]
                     result = [building, "back"]
-                    if not is_duplicate(bl.centre, positions, 10, bl.color):
+                    if not self.helper.is_duplicate(bl.centre, positions, 10, bl.color):
                         found = False
                         break
 
