@@ -33,34 +33,9 @@ class Building:
 
 
 class SavedBuildings:
-    calibrate_building = [Block("orange", (267, 356)),
-                          Block("yellow", (252, 140)),
-                          Block("red", (362, 133)),
-                          Block("green", (369, 350)),
-                          Block("blue", (311, 251))]
 
-    buildings = [
-        Building(front=[Block("orange", (41, 324)),
-                        Block("yellow", (33, 97)),
-                        Block("red", (148, 92)),
-                        Block("green", (153, 318)),
-                        Block("blue", (92, 218))],
-                 back=[Block("blue", (31, 316)),
-                       Block("green", (86, 209)),
-                       Block("orange", (30, 91)),
-                       Block("yellow", (144, 317))],
-                 left=[Block("red", (112, 175)),
-                       Block("blue", (44, 304)),
-                       Block("green", (36, 68)),
-                       Block("orange", (184, 70)),
-                       Block("yellow", (180, 307))],
-                 right=[Block("red", (112, 175)),
-                        Block("blue", (44, 304)),
-                        Block("green", (36, 68)),
-                        Block("orange", (184, 70)),
-                        Block("yellow", (180, 307))]
-                 )
-    ]
+    def __init__(self, buildings):
+        self.buildings = buildings
 
 
 def is_duplicate(centre, positions, sensitivity=10, color=None):
@@ -87,7 +62,7 @@ def is_duplicate(centre, positions, sensitivity=10, color=None):
     return False
 
 
-def check_valid_convex(c, len_min, area_min, area_max):
+def check_valid_convex(c, sides, area_min, area_max):
     """
     Checks if a convex is a valid block
     :return: True if the contour is a block
@@ -103,7 +78,7 @@ def check_valid_convex(c, len_min, area_min, area_max):
     area = cv2.contourArea(c)
 
     # If the convexhull counts 4 sides and an area bigger than 4000
-    return area_max > area > area_min
+    return len(approx) == sides and area_max > area > area_min
 
 
 def crop_to_contours(mask, img):

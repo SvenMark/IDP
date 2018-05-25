@@ -16,6 +16,12 @@ class Calibrate(object):
         self.STOP_POSITIONS = False
         self.calibrated_colors = []
 
+        self.calibrating_building = [Block("orange", (267, 356)),
+                                     Block("yellow", (252, 140)),
+                                     Block("red", (362, 133)),
+                                     Block("green", (369, 350)),
+                                     Block("blue", (311, 251))]
+
         # Initialize color ranges for detection
         self.color_range = color_range
 
@@ -39,16 +45,16 @@ class Calibrate(object):
             # calculate the masks
             mask = self.calculate_mask(img, self.color_range, set_contour=True)
             cv2.rectangle(mask, (230, 65), (400, 420), (255, 255, 255), 3)
-            for i in range(len(db.calibrate_building)):
-                cx = db.calibrate_building[i].centre[0]
-                cy = db.calibrate_building[i].centre[1]
-                cv2.circle(mask, (cx, cy), 2, self.colors.get(db.calibrate_building[i].color), 10)
+            for i in range(len(self.calibrating_building)):
+                cx = self.calibrating_building[i].centre[0]
+                cy = self.calibrating_building[i].centre[1]
+                cv2.circle(mask, (cx, cy), 2, self.colors.get(self.calibrating_building[i].color), 10)
 
             cv2.rectangle(img, (230, 65), (400, 420), (255, 255, 255), 3)
-            for i in range(len(db.calibrate_building)):
-                cx = db.calibrate_building[i].centre[0]
-                cy = db.calibrate_building[i].centre[1]
-                cv2.circle(img, (cx, cy), 2, self.colors.get(db.calibrate_building[i].color), 10)
+            for i in range(len(self.calibrating_building)):
+                cx = self.calibrating_building[i].centre[0]
+                cy = self.calibrating_building[i].centre[1]
+                cv2.circle(img, (cx, cy), 2, self.colors.get(self.calibrating_building[i].color), 10)
 
             cv2.imshow('aa', mask)
             cv2.imshow('camservice', img)
@@ -75,16 +81,15 @@ class Calibrate(object):
 
                     self.calibrated_colors.append(c.color)
                     if len(self.calibrated_colors) >= 5:
-                        print("Color({}, [{}, {}, {}], [{}, {}, {}])".format(c.color, c.lower[0], c.lower[1], c.lower[2],
+                        print("Color(\"{}\", [{}, {}, {}], [{}, {}, {}])".format(c.color, c.lower[0], c.lower[1], c.lower[2],
                               c.upper[0], c.upper[1], c.upper[2]))
                         print("Calibrated all colors!")
                         return True
                     else:
-                        print("Color({}, [{}, {}, {}], [{}, {}, {}]),".format(c.color, c.lower[0], c.lower[1], c.lower[2],
+                        print("Color(\"{}\", [{}, {}, {}], [{}, {}, {}]),".format(c.color, c.lower[0], c.lower[1], c.lower[2],
                               c.upper[0], c.upper[1], c.upper[2]))
 
         return False
-
 
     def calculate_mask(self, img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
         """
@@ -113,13 +118,12 @@ class Calibrate(object):
         # Return the new mask
         return img_mask
 
-    @staticmethod
-    def calibrated_color(positions, sensitivity, color):
+    def calibrated_color(self, positions, sensitivity, color):
         for j in range(len(positions)):  # for each current position
             pos = positions[j]
             if pos.color == color:
-                for k in range(len(db.calibrate_building)):  # and saved position
-                    saved_block = db.calibrate_building[k]
+                for k in range(len(self.calibrating_building)):  # and saved position
+                    saved_block = self.calibrating_building[k]
                     if saved_block.color == pos.color:  # if the colors match
                         b = pos.centre
                         a = saved_block.centre
