@@ -1,4 +1,5 @@
 from entities.movement.limb.leg import Leg
+from entities.movement.sequences.walking_sequences import *
 
 
 class Legs(object):
@@ -87,9 +88,14 @@ class Legs(object):
             self.retract(200)
 
         if self.deployed:
-            self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
-                      [650, 400, 400],
-                      [400, 400, 400],
-                      [600, 400, 400],
-                      0,
-                      [200, 200, 200])
+            if x_axis > 10:
+                walk_forward(self, x_axis * 2)
+            if x_axis < -10:
+                walk_backward(self, -x_axis * 2)
+
+            # self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
+            #           [650, 400, 400],
+            #           [400, 400, 400],
+            #           [600, 400, 400],
+            #           0,
+            #           [200, 200, 200])
