@@ -87,7 +87,7 @@ def is_duplicate(centre, positions, sensitivity=10, color=None):
     return False
 
 
-def check_valid_convex(c, pref_len, pref_area):
+def check_valid_convex(c, len_min, area_min, area_max):
     """
     Checks if a convex is a valid block
     :return: True if the contour is a block
@@ -103,7 +103,7 @@ def check_valid_convex(c, pref_len, pref_area):
     area = cv2.contourArea(c)
 
     # If the convexhull counts 4 sides and an area bigger than 4000
-    return len(approx) == pref_len and area > pref_area
+    return area_max > area > area_min
 
 
 def crop_to_contours(mask, img):

@@ -4,7 +4,6 @@ from elements.element7.helpers import SavedBuildings as db
 from elements.element7.helpers import crop_to_contours, \
                                       check_valid_convex, \
                                       is_duplicate
-from entities.audio.speak import Speak
 
 import cv2
 

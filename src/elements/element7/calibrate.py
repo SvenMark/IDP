@@ -6,6 +6,8 @@ from elements.element7.helpers import Color, \
                                       Block, \
                                       SavedBuildings as db
 
+from random import randint
+
 import numpy as np
 import cv2
 
@@ -21,10 +23,10 @@ def run():
     cap = cv2.VideoCapture(0)
 
     # initialize color ranges for detection
-    color_range = [Color("orange", [0, 100, 126], [10, 255, 204]),
+    color_range = [Color("orange", [0, 100, 100], [10, 255, 255]),
                    Color("yellow", [100, 100, 100], [30, 255, 255]),
                    Color("red", [170, 100, 100], [190, 255, 255]),
-                   Color("green", [21, 26, 0], [180, 136, 93]),
+                   Color("green", [26, 0, 17], [69, 131, 190]),
                    Color("blue", [36, 120, 105], [159, 255, 235])]
 
     colors = OrderedDict({
@@ -47,14 +49,20 @@ def run():
             c = color_range[i]
             if c.color not in calibrated_colors:
                 if not calibrate_color(POSITIONS, 50, c.color):
-                    if c.lower[0] < 255:
-                        c.upper[0] += 10
+                    if c.upper[0] < 255:
                         c.lower[0] += 10
+                        c.upper[0] += 10
+                        if c.color == "green" or c.color == "blue":
+                            c.lower[1] = randint(0, randint(235, 255))
+                            c.lower[2] = randint(0, randint(235, 255))
+                            c.upper[1] = randint(c.lower[1], 255)
+                            c.upper[2] = randint(c.lower[2], 255)
+                        # print("calibrating {}, [{}, {}, {}], [{}, {}, {}]".format(c.color, c.lower[0], c.lower[1], c.lower[2], c.upper[0], c.upper[1], c.upper[2]))
                     else:
-                        c.upper[0] = 10
-                        c.lower[0] = 0
+                        c.lower[0] = randint(0, 30)
+                        c.upper[0] = randint(0, 30)
                 else:
-                    print(c.upper, c.lower, c.color)
+                    print("succes {}, [{}, {}, {}], [{}, {}, {}]".format(c.color, c.lower[0], c.lower[1], c.lower[2], c.upper[0], c.upper[1], c.upper[2]))
                     calibrated_colors.append(c.color)
 
         # calculate the masks
@@ -150,7 +158,7 @@ def set_contours(mask, color, img):
         c = cv2.convexHull(contours[contour])
 
         # Check if the contour is a vlid block
-        if check_valid_convex(c):
+        if check_valid_convex(c, 4, 8000, 9500):
             # Image moments help you to calculate some features like center of mass of the object
             moment = cv2.moments(c)
 
