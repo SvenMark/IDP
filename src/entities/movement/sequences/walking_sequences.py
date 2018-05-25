@@ -6,12 +6,12 @@ def walk_forward(legs, speeds):
               leg_3_moves=[600, 400, 400],
               delay=0,
               speeds=speeds)
-    legs.move(leg_0_moves=[430, 766, 850],
-              leg_1_moves=[650, 400, 400],
-              leg_2_moves=[400, 400, 400],
-              leg_3_moves=[600, 400, 400],
-              delay=0,
-              speeds=speeds)
+    # legs.move(leg_0_moves=[430, 766, 850],
+    #           leg_1_moves=[650, 400, 400],
+    #           leg_2_moves=[400, 400, 400],
+    #           leg_3_moves=[600, 400, 400],
+    #           delay=0,
+    #           speeds=speeds)
     legs.move(leg_0_moves=[530, 766, 850],
               leg_1_moves=[650, 400, 400],
               leg_2_moves=[400, 400, 400],
@@ -27,26 +27,13 @@ def walk_forward(legs, speeds):
 
 
 def walk_backward(legs, speeds):
-    #while True:
-    legs.move(leg_0_moves=[630, 700, 850],
-              leg_1_moves=[650, 400, 400],
-              leg_2_moves=[400, 400, 400],
-              leg_3_moves=[600, 400, 400],
-              delay=0,
-              speeds=speeds)
-    legs.move(leg_0_moves=[630, 700, 850],
+    legs.move(leg_0_moves=[530, 766, 850],
               leg_1_moves=[650, 400, 400],
               leg_2_moves=[400, 400, 400],
               leg_3_moves=[600, 400, 400],
               delay=0,
               speeds=speeds)
     legs.move(leg_0_moves=[630, 766, 850],
-              leg_1_moves=[650, 400, 400],
-              leg_2_moves=[400, 400, 400],
-              leg_3_moves=[600, 400, 400],
-              delay=0,
-              speeds=speeds)
-    legs.move(leg_0_moves=[530, 766, 850],
               leg_1_moves=[650, 400, 400],
               leg_2_moves=[400, 400, 400],
               leg_3_moves=[600, 400, 400],
