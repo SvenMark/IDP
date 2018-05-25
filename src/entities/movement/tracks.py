@@ -10,10 +10,16 @@ class Tracks(object):
     """
 
     def __init__(self, track_0_pin, track_1_pin):
+        """
+        Constructor for the tracks class
+        :param track_0_pin: The GPIO pin which the first track is connected to
+        :param track_1_pin: The GPIO pin which the second track is connected to
+        """
 
         # Initialise both motors as tracks. Each track has 1 motor.
         self.track_left = DCMotor(track_0_pin)
         self.track_right = DCMotor(track_1_pin)
+        self.type = 'tracks'
 
         print("Tracks setup")
 
@@ -23,11 +29,11 @@ class Tracks(object):
         """
         Function that makes sure the tracks don`t suddenly go to full power,
         instead they accelerate with an acceleration
-        which is passed by the forward/backward/right/left functions.
+        which is passed by the forward/backward/right/left functions
         :param duty_cycle_track_left: Percentage of power for left track
         :param duty_cycle_track_right: Percentage of power for right track
         :param delay: Time to wait after executing
-        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner.
+        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner
         :param track_left_direction: Direction of left track, 1 is forward 0 is backward
         :param track_right_direction: Direction of right track, 1 is forward 0 is backward
         :return: None

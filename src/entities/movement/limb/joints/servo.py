@@ -32,12 +32,12 @@ class Servo(object):
         print("rw : " + str(self.ax12.read_rw_status(self.servo_id)))
         time.sleep(0.1)
 
-    def move_speed(self, degrees, delay, max_speed):
+    def move(self, degrees, delay, max_speed):
         """
         Function that moves the servo using the ax12 library move function
         :param degrees: Position to move to
         :param delay: Time to wait after executing
-        :param speed: The speed at which the servo moves
+        :param max_speed: The speed at which the servo moves
         :return: None
         """
 
@@ -77,6 +77,16 @@ class Servo(object):
 
         time.sleep(delay)
 
+    def move_backup(self, degrees, delay, speed):
+
+        # Move the servo using the ax12 library with the servo id and degrees.
+        self.ax12.move_speed(self.servo_id, degrees, speed)
+
+        # Set the last position to the degrees.
+        self.last_position = degrees
+
+        time.sleep(delay)
+
     def is_ready(self):
         """
         Function that checks if a servo completed it`s last move
@@ -98,9 +108,10 @@ class Servo(object):
         """
         return self.ax12.read_speed(self.servo_id)
 
+
 def main():
     servo = Servo(13, 0)
-    servo.move(500, 0)
+    servo.move(500, 0, 80)
 
 
 if __name__ == "__main__":

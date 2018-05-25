@@ -6,6 +6,8 @@ from elements import element1, element2, element3, element4, element5, element6,
 from entities.movement.legs import Legs
 from entities.movement.tracks import Tracks
 from entities.robot.robot import Robot
+from entities.movement.limb.tire import Tire
+from entities.movement.sequences.walking_sequences import *
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
 
@@ -30,32 +32,33 @@ def main():
         print("Please pass commandline args")
         return sys.exit(2)
 
-    lights = []
-
     limbs = [
-        Tracks(track_0_pin=18, track_1_pin=13),
-        Legs(leg_0_servos=[
-                1,
-                61,
-                63
-            ],
-            leg_1_servos=[
-                21,
-                31,
-                53
-            ],
-            leg_2_servos=[
-                61,
-                63,
-                111
-            ],
-            leg_3_servos=[
-                111,
-                111,
-                111
-            ]
-        )
-    ]
+            Legs(leg_0_servos=[
+                    14,
+                    61,
+                    63
+                ]
+                # leg_1_servos=[
+                #     13,
+                #     21,
+                #     31
+                # ]
+                # leg_2_servos=[
+                #     14,
+                #     61,
+                #     63
+                # ],
+                # leg_3_servos=[
+                #     14,
+                #     61,
+                #     63
+                # ]
+            ),
+            Tracks(track_0_pin=18, track_1_pin=13),
+            Tire(servo_id=21, position=500)
+        ]
+
+    lights = []
 
     name = 'Boris'
     boris = Robot(name, limbs, lights)
@@ -63,15 +66,17 @@ def main():
     while True:
         boris.controller.receive_data()
 
-    # boris.movement.tracks.forward(20, 0, 2)
+    boris.movement.tracks.forward(80, 10, 2)
+    walk_forward(boris.movement.legs, 10)
+    wave(boris.movement.legs, [250, 250, 250], 10)
+    enge_dab(boris.movement.legs, [140, 140, 140])
+    boris.movement.legs.retract(90)
 
-    # print(boris.movement.tracks.turn_left())
-    #
     # part = sys.argv[1]
-    #
+
     # part_function = FUNC_MAP[part]
-    #
-    # # run element
+
+    # run element
     # part_function.run()
 
 
