@@ -88,10 +88,10 @@ class Legs(object):
             self.retract(200)
 
         if self.deployed:
-            if x_axis > 10:
+            if x_axis > 530:
                 walk_forward(self, x_axis * 2)
-            if x_axis < -10:
-                walk_backward(self, -x_axis * 2)
+            if x_axis < 500:
+                walk_backward(self, (500 - x_axis) * 2)
 
             # self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
             #           [650, 400, 400],
