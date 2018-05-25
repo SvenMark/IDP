@@ -1,6 +1,3 @@
-from entities.movement.legs import Legs
-
-
 def walk_forward(legs, speeds):
     #for i in range(repeat):
     legs.move(leg_0_moves=[430, 766, 850],
