@@ -27,7 +27,7 @@ class BluetoothController(object):
         socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
         # Connect to the socket
-        socket.connect((self.bluetooth_address, port))
+        socket.connect(("98:D3:31:FD:15:C1", port))
 
         # Initialise data string
         data = ""

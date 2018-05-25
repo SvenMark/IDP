@@ -59,6 +59,7 @@ class Legs(object):
         # self.leg_front_right.move(leg_1_deploy, delay, [speed, speed, speed])
         # self.leg_rear_left.move(leg_2_deploy, delay, [speed, speed, speed])
         # self.leg_rear_right.move(leg_3_deploy, delay, [speed, speed, speed])
+        self.deployed = True
 
     def retract(self, speed):
         """
