@@ -44,7 +44,7 @@ class Camera(object):
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
             # Calculate the masks
-            mask = self.helper.calculate_mask(img, self.color_range)
+            mask = self.calculate_mask(img, self.color_range)
 
             img = self.helper.crop_to_contours(mask, img)
 

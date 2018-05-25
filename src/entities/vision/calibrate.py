@@ -31,6 +31,8 @@ class Calibrate(object):
 
         self.helper = Helpers()
 
+        self.result = []
+
     def run(self):
         print("run element7")
         cap = cv2.VideoCapture(0)
@@ -43,7 +45,7 @@ class Calibrate(object):
                 break
 
             # calculate the masks
-            mask = self.helper.calculate_mask(img, self.color_range, set_contour=True)
+            mask = self.calculate_mask(img, self.color_range, set_contour=True)
 
             self.draw_helper(img)
             self.draw_helper(mask)
@@ -56,6 +58,9 @@ class Calibrate(object):
 
         cap.release()
         cv2.destroyAllWindows()
+
+        # Return the calibrated color array
+        return self.result
 
     def draw_helper(self, img):
         cv2.rectangle(img, (230, 65), (400, 420), (255, 255, 255), 3)
@@ -79,6 +84,7 @@ class Calibrate(object):
                 else:
 
                     self.calibrated_colors.append(c.color)
+                    self.result.append(Color(c.color, c.lower, c.upper))
                     if len(self.calibrated_colors) >= 5:
                         print("Color(\"{}\", [{}, {}, {}], [{}, {}, {}])".format(c.color, c.lower[0], c.lower[1], c.lower[2],
                               c.upper[0], c.upper[1], c.upper[2]))
@@ -106,6 +112,33 @@ class Calibrate(object):
                             return True  # the color is calibrated
 
         return False
+
+    def calculate_mask(self, img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
+        """
+        Calculates the mask with the given image
+        :param img: The image to calculate the mask on
+        :param color_range: Color range for the masks
+        :param conversion: Conversion for the mask
+        :param set_contour: Boolean to set the contours
+        :return: The new mask
+        """
+
+        # Convert the image
+        hsv = cv2.cvtColor(img, conversion)
+
+        if set_contour:
+            # Set contours for given image and color ranges
+            img_mask = self.set_contours(cv2.inRange(hsv, color_range[0].lower, color_range[0].upper), color_range[0].color, img)
+            for i in range(1, len(color_range)):
+                img_mask += self.set_contours(cv2.inRange(hsv, color_range[i].lower, color_range[i].upper), color_range[i].color, img)
+        else:
+            # Calculate the mask for all color ranges
+            img_mask = cv2.inRange(hsv, color_range[0].lower, color_range[0].upper)
+            for i in range(1, len(color_range)):
+                img_mask += cv2.inRange(hsv, color_range[i].lower, color_range[i].upper)
+
+        # Return the new mask
+        return img_mask
 
     def set_contours(self, mask, color, img):
         """

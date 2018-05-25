@@ -196,33 +196,6 @@ class Helpers:
 
         return positions
 
-    def calculate_mask(self, img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
-        """
-        Calculates the mask with the given image
-        :param img: The image to calculate the mask on
-        :param color_range: Color range for the masks
-        :param conversion: Conversion for the mask
-        :param set_contour: Boolean to set the contours
-        :return: The new mask
-        """
-
-        # Convert the image
-        hsv = cv2.cvtColor(img, conversion)
-
-        if set_contour:
-            # Set contours for given image and color ranges
-            img_mask = self.set_contours(cv2.inRange(hsv, color_range[0].lower, color_range[0].upper), color_range[0].color, img)
-            for i in range(1, len(color_range)):
-                img_mask += self.set_contours(cv2.inRange(hsv, color_range[i].lower, color_range[i].upper), color_range[i].color, img)
-        else:
-            # Calculate the mask for all color ranges
-            img_mask = cv2.inRange(hsv, color_range[0].lower, color_range[0].upper)
-            for i in range(1, len(color_range)):
-                img_mask += cv2.inRange(hsv, color_range[i].lower, color_range[i].upper)
-
-        # Return the new mask
-        return img_mask
-
 
 
 
