@@ -14,7 +14,7 @@ class Movement(object):
 
         self.legs = limbs[0]
         self.tracks = limbs[1]
-        self.tire = limbs[2]
+        self.tires = limbs[2]
 
     def forward(self):
         self.tracks.forward(duty_cycle=20,
