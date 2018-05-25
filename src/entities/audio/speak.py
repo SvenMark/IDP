@@ -38,10 +38,6 @@ class Speak(Audio):
         self.play(filename)
 
 
-spoke = Speak()
-
-spoke.tts("Hello")
-
 
 def main():
     sp = Speak()
