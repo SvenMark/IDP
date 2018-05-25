@@ -1,12 +1,8 @@
 import sys
 sys.path.insert(0, '../../../src')
 
-from elements.element7.helpers import Color
-from elements.element7.helpers import Block
-from elements.element7.helpers import SavedBuildings as db
-from elements.element7.helpers import crop_to_contours, \
-                                      check_valid_convex, \
-                                      is_duplicate
+from elements.element5.helpers import Color
+from elements.element5.helpers import check_valid_convex
 
 import cv2
 
@@ -19,7 +15,7 @@ def run():
     cap = cv2.VideoCapture(0)
 
     # Initialize color ranges for detection
-    color_range = [Color("beker", [26, 0, 17], [69, 131, 190])]
+    color_range = [Color("beker", [30, 10, 93], [83, 87, 175])]
 
     while True:
         # Read frame from the camera
@@ -30,8 +26,6 @@ def run():
 
         # calculate the masks
         mask = calculate_mask(img, color_range)
-
-        img = crop_to_contours(mask, img)
 
         # calculate new cropped masks
         mask_cropped = calculate_mask(img, color_range, set_contour=True)
@@ -116,98 +110,10 @@ def set_contours(mask, color, img):
             cv2.putText(img_mask, str((cx, cy)), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
             # Append the new block to the global POSITIONS array
-            append_to_positions(Block(color, (cx, cy)))
+            # append_to_positions(Block(color, (cx, cy)))
 
     # Return the new mask
     return img_mask
-
-
-def append_to_positions(bl):
-    """
-    Appends a unique block to the global POSITIONS array
-    :param bl: Block class
-    """
-
-    # Call to the global variable POSITIONS
-    global POSITIONS
-
-    # If the POSITIONS length is getting too long clear it
-    if len(POSITIONS) > 10:
-        del POSITIONS[:]
-    # If the POSITIONS array is empty append the block
-    if len(POSITIONS) == 0:
-        POSITIONS.append(bl)
-    else:
-        # Check if the given block is not a duplicate
-        if not is_duplicate(bl.centre, POSITIONS, 5):
-            # Append the block to positions
-            POSITIONS.append(bl)
-            if len(POSITIONS) > 5:
-                # If there are 5 blocks in POSITIONS (in camera view) try to recognize a building
-                recognize_building(POSITIONS)
-
-
-def recognize_building(positions):
-    """
-    Checks if the currents positions of the blocks matches any saved building
-    :param positions: Current reading of POSITIONS
-    :return: True if a building is recognized
-    """
-    result = []
-    found = True
-
-    # If there are no blocks in view return false
-    if not len(positions) > 0:
-        return False
-
-    # For each building in the saved building list
-    for building in range(len(db.buildings)):
-        b = db.buildings[building]
-        # For each block on the front side of the saved building
-        for block_front in range(len(b.front)):
-            bl = b.front[block_front]
-            result = [building, "front"]
-            # If the current block color and position does not match a saved position,
-            # break and check the next side.
-            if not is_duplicate(bl.centre, positions, 20, bl.color):
-                found = False
-                break
-
-        # Back side
-        if not found:
-            for block_back in range(len(b.back)):
-                bl = b.front[block_back]
-                result = [building, "back"]
-                if not is_duplicate(bl.centre, positions, 10, bl.color):
-                    found = False
-                    break
-
-        # Left side
-        if not found:
-            for block_back in range(len(b.left)):
-                bl = b.front[block_back]
-                result = [building, "back"]
-                if not is_duplicate(bl.centre, positions, 10, bl.color):
-                    found = False
-                    break
-
-        # Right side
-        if not found:
-            for block_back in range(len(b.right)):
-                bl = b.front[block_back]
-                result = [building, "back"]
-                if not is_duplicate(bl.centre, positions, 10, bl.color):
-                    found = False
-                    break
-
-    # Use audio to state the recognized building
-    if found:
-        # tts = "Recognized building {}, {} side".format(result[0], result[1])
-        # Speak.tts(Speak(), tts)
-        print("fakka ik heb je gevonden homo ", result[0], result[1])
-
-    # Return whether a building has been found
-    return found
 
 
 if __name__ == '__main__':
