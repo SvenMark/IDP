@@ -3,8 +3,15 @@ import time
 
 
 class BluetoothController(object):
+    """
+    Base class for the bluetooth smart controller
+    """
 
     def __init__(self, limbs):
+        """
+
+        :param limbs:
+        """
         self.bluetooth_addres = "98:D3:31:FD:15:C1"
         self.tracks = limbs[0]
         self.legs = limbs[1]
