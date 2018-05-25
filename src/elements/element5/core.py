@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '../../../src')
+
 from elements.element7.helpers import Color
 from elements.element7.helpers import Block
 from elements.element7.helpers import SavedBuildings as db
