@@ -21,7 +21,6 @@ class BluetoothController(object):
         Retrieve data from bluetooth connection with bluetooth address from the constructor
         :return: None
         """
-        bd_addr = "98:D3:31:FD:15:C1"  # The address from Boris
         port = 1
         sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
