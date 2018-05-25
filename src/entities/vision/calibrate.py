@@ -2,7 +2,6 @@ from collections import OrderedDict
 from random import randint
 
 from entities.vision.helpers import *
-from entities.vision.helpers import SavedBuildings as db
 
 
 # print("uncomment run before starting..")
@@ -11,9 +10,8 @@ from entities.vision.helpers import SavedBuildings as db
 class Calibrate(object):
 
     def __init__(self, color_range):
-        self.POSITIONS = []
+        self.positions = []
         self.CALIBRATED = False
-        self.STOP_POSITIONS = False
         self.calibrated_colors = []
 
         self.calibrating_building = [Block("orange", (267, 356)),
@@ -31,6 +29,8 @@ class Calibrate(object):
                                    "orange": (0, 165, 255),
                                    "yellow": (0, 255, 255)})
 
+        self.helper = Helpers()
+
     def run(self):
         print("run element7")
         cap = cv2.VideoCapture(0)
@@ -43,18 +43,10 @@ class Calibrate(object):
                 break
 
             # calculate the masks
-            mask = self.calculate_mask(img, self.color_range, set_contour=True)
-            cv2.rectangle(mask, (230, 65), (400, 420), (255, 255, 255), 3)
-            for i in range(len(self.calibrating_building)):
-                cx = self.calibrating_building[i].centre[0]
-                cy = self.calibrating_building[i].centre[1]
-                cv2.circle(mask, (cx, cy), 2, self.colors.get(self.calibrating_building[i].color), 10)
+            mask = self.helper.calculate_mask(img, self.color_range, set_contour=True)
 
-            cv2.rectangle(img, (230, 65), (400, 420), (255, 255, 255), 3)
-            for i in range(len(self.calibrating_building)):
-                cx = self.calibrating_building[i].centre[0]
-                cy = self.calibrating_building[i].centre[1]
-                cv2.circle(img, (cx, cy), 2, self.colors.get(self.calibrating_building[i].color), 10)
+            self.draw_helper(img)
+            self.draw_helper(mask)
 
             cv2.imshow('aa', mask)
             cv2.imshow('camservice', img)
@@ -65,11 +57,18 @@ class Calibrate(object):
         cap.release()
         cv2.destroyAllWindows()
 
+    def draw_helper(self, img):
+        cv2.rectangle(img, (230, 65), (400, 420), (255, 255, 255), 3)
+        for i in range(len(self.calibrating_building)):
+            cx = self.calibrating_building[i].centre[0]
+            cy = self.calibrating_building[i].centre[1]
+            cv2.circle(img, (cx, cy), 2, self.colors.get(self.calibrating_building[i].color), 10)
+
     def calibrate(self):
         for i in range(len(self.color_range)):
             c = self.color_range[i]
             if c.color not in self.calibrated_colors:
-                if not self.calibrated_color(self.POSITIONS, 50, c.color):
+                if not self.calibrated_color(self.positions, 50, c.color):
                     if c.upper[0] < 255:
                         c.lower[0] += 10
                         c.upper[0] += 10
@@ -90,33 +89,6 @@ class Calibrate(object):
                               c.upper[0], c.upper[1], c.upper[2]))
 
         return False
-
-    def calculate_mask(self, img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
-        """
-        Calculates the mask with the given image
-        :param img: The image to calculate the mask on
-        :param color_range: Color range for the masks
-        :param conversion: Conversion for the mask
-        :param set_contour: Boolean to set the contours
-        :return: The new mask
-        """
-
-        # Convert the image
-        hsv = cv2.cvtColor(img, conversion)
-
-        if set_contour:
-            # Set contours for given image and color ranges
-            img_mask = self.set_contours(cv2.inRange(hsv, color_range[0].lower, color_range[0].upper), color_range[0].color, img)
-            for i in range(1, len(color_range)):
-                img_mask += self.set_contours(cv2.inRange(hsv, color_range[i].lower, color_range[i].upper), color_range[i].color, img)
-        else:
-            # Calculate the mask for all color ranges
-            img_mask = cv2.inRange(hsv, color_range[0].lower, color_range[0].upper)
-            for i in range(1, len(color_range)):
-                img_mask += cv2.inRange(hsv, color_range[i].lower, color_range[i].upper)
-
-        # Return the new mask
-        return img_mask
 
     def calibrated_color(self, positions, sensitivity, color):
         for j in range(len(positions)):  # for each current position
@@ -158,7 +130,7 @@ class Calibrate(object):
             c = cv2.convexHull(contours[contour])
 
             # Check if the contour is a vlid block
-            if check_valid_convex(c, 4, 8000, 9500):
+            if self.helper.check_valid_convex(c, 4, 8000, 9500):
                 # Image moments help you to calculate some features like center of mass of the object
                 moment = cv2.moments(c)
 
@@ -177,28 +149,10 @@ class Calibrate(object):
                 cv2.putText(img_mask, str((cx, cy)), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
                 # Append the new block to the global POSITIONS array
-                self.append_to_positions(Block(color, (cx, cy)))
+                self.positions = self.helper.append_to_positions(self.positions, Block(color, (cx, cy)))
 
         # Return the new mask
         return img_mask
-
-    def append_to_positions(self, bl):
-        """
-        Appends a unique block to the global POSITIONS array
-        :param bl: Block class
-        """
-
-        # If the POSITIONS length is getting too long clear it
-        if len(self.POSITIONS) > 10:
-            del self.POSITIONS[:]
-        # If the POSITIONS array is empty append the block
-        if len(self.POSITIONS) == 0:
-            self.POSITIONS.append(bl)
-        else:
-            # Check if the given block is not a duplicate
-            if not is_duplicate(bl.centre, self.POSITIONS, 5):
-                # Append the block to positions
-                self.POSITIONS.append(bl)
 
 
 def main():
