@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-backports.functools-lru-cache==1.5
->>>>>>> b17433f591ae75d755824e99257acef161847b45
 certifi==2018.4.16
 cffi==1.11.5
 chardet==3.0.4
