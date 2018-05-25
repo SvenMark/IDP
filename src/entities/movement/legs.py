@@ -95,10 +95,11 @@ class Legs(object):
                           leg_3_moves=[600, 400, 400],
                           delay=0,
                           speeds=[300, 300, 300])
+            y_axis = y_axis * 0.7
             if y_axis > 530:
-                walk_forward(self, [y_axis * 0.7, y_axis * 0.7, y_axis * 0.7])
+                walk_forward(self, [y_axis - 512, y_axis - 512, y_axis - 512])
             if y_axis < 500:
-                walk_backward(self, [(512 - y_axis), (512 - y_axis), (512 - y_axis)])
+                walk_backward(self, [512 - y_axis, 512 - y_axis, 512 - y_axis])
 
             # self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
             #           [650, 400, 400],
