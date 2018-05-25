@@ -1,42 +1,90 @@
+from collections import OrderedDict
+from random import randint
+
 from entities.vision.helpers import *
 from entities.vision.helpers import SavedBuildings as db
-from entities.audio.speak import Speak
 
 
-class Camera(object):
+# print("uncomment run before starting..")
+
+
+class Calibrate(object):
 
     def __init__(self, color_range):
-        self.color_range = color_range
         self.POSITIONS = []
+        self.CALIBRATED = False
+        self.STOP_POSITIONS = False
+        self.calibrated_colors = []
+
+        # Initialize color ranges for detection
+        self.color_range = color_range
+
+        self.colors = OrderedDict({"red": (0, 0, 255),
+                                   "blue": (255, 0, 0),
+                                   "green": (0, 255, 0),
+                                   "orange": (0, 165, 255),
+                                   "yellow": (0, 255, 255)})
 
     def run(self):
         print("run element7")
-        # Initialize camera
         cap = cv2.VideoCapture(0)
 
         while True:
-            # Read frame from the camera
             ret, img = cap.read()
-
-            # Apply gaussian blue to the image
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
-            # Calculate the masks
-            mask = self.calculate_mask(img, self.color_range)
+            if self.calibrate():
+                break
 
-            img = crop_to_contours(mask, img)
+            # calculate the masks
+            mask = self.calculate_mask(img, self.color_range, set_contour=True)
+            cv2.rectangle(mask, (230, 65), (400, 420), (255, 255, 255), 3)
+            for i in range(len(db.calibrate_building)):
+                cx = db.calibrate_building[i].centre[0]
+                cy = db.calibrate_building[i].centre[1]
+                cv2.circle(mask, (cx, cy), 2, self.colors.get(db.calibrate_building[i].color), 10)
 
-            # Calculate new cropped masks
-            mask_cropped = self.calculate_mask(img, self.color_range, set_contour=True)
+            cv2.rectangle(img, (230, 65), (400, 420), (255, 255, 255), 3)
+            for i in range(len(db.calibrate_building)):
+                cx = db.calibrate_building[i].centre[0]
+                cy = db.calibrate_building[i].centre[1]
+                cv2.circle(img, (cx, cy), 2, self.colors.get(db.calibrate_building[i].color), 10)
 
-            # Show the created image
-            cv2.imshow('camservice', mask_cropped)
+            cv2.imshow('aa', mask)
+            cv2.imshow('camservice', img)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
         cap.release()
         cv2.destroyAllWindows()
+
+    def calibrate(self):
+        for i in range(len(self.color_range)):
+            c = self.color_range[i]
+            if c.color not in self.calibrated_colors:
+                if not self.calibrated_color(self.POSITIONS, 50, c.color):
+                    if c.upper[0] < 255:
+                        c.lower[0] += 10
+                        c.upper[0] += 10
+                        # print("calibrating {}, [{}, {}, {}], [{}, {}, {}]".format(c.color, c.lower[0], c.lower[1], c.lower[2], c.upper[0], c.upper[1], c.upper[2]))
+                    else:
+                        c.lower[0] = randint(0, 30)
+                        c.upper[0] = randint(0, 30)
+                else:
+
+                    self.calibrated_colors.append(c.color)
+                    if len(self.calibrated_colors) >= 5:
+                        print("Color({}, [{}, {}, {}], [{}, {}, {}])".format(c.color, c.lower[0], c.lower[1], c.lower[2],
+                              c.upper[0], c.upper[1], c.upper[2]))
+                        print("Calibrated all colors!")
+                        return True
+                    else:
+                        print("Color({}, [{}, {}, {}], [{}, {}, {}]),".format(c.color, c.lower[0], c.lower[1], c.lower[2],
+                              c.upper[0], c.upper[1], c.upper[2]))
+
+        return False
+
 
     def calculate_mask(self, img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
         """
@@ -65,6 +113,24 @@ class Camera(object):
         # Return the new mask
         return img_mask
 
+    @staticmethod
+    def calibrated_color(positions, sensitivity, color):
+        for j in range(len(positions)):  # for each current position
+            pos = positions[j]
+            if pos.color == color:
+                for k in range(len(db.calibrate_building)):  # and saved position
+                    saved_block = db.calibrate_building[k]
+                    if saved_block.color == pos.color:  # if the colors match
+                        b = pos.centre
+                        a = saved_block.centre
+
+                        distance = np.linalg.norm(a - b)
+
+                        if distance <= sensitivity:  # and the positions match
+                            return True  # the color is calibrated
+
+        return False
+
     def set_contours(self, mask, color, img):
         """
         Sets contours for selected masks
@@ -88,7 +154,7 @@ class Camera(object):
             c = cv2.convexHull(contours[contour])
 
             # Check if the contour is a vlid block
-            if check_valid_convex(c, 4, 4000, 10000):
+            if check_valid_convex(c, 4, 8000, 9500):
                 # Image moments help you to calculate some features like center of mass of the object
                 moment = cv2.moments(c)
 
@@ -129,68 +195,19 @@ class Camera(object):
             if not is_duplicate(bl.centre, self.POSITIONS, 5):
                 # Append the block to positions
                 self.POSITIONS.append(bl)
-                if len(self.POSITIONS) > 5:
-                    # If there are 5 blocks in POSITIONS (in camera view) try to recognize a building
-                    self.recognize_building(self.POSITIONS)
 
-    def recognize_building(self, positions):
-        """
-        Checks if the currents positions of the blocks matches any saved building
-        :param positions: Current reading of POSITIONS
-        :return: True if a building is recognized
-        """
-        result = []
-        found = True
 
-        # If there are no blocks in view return false
-        if not len(positions) > 0:
-            return False
+def main():
+    color_range = [Color("orange", [0, 100, 100], [12, 255, 255]),
+                   Color("yellow", [24, 100, 100], [35, 255, 255]),
+                   Color("red", [26, 0, 17], [69, 131, 190]),
+                   Color("green", [71, 89, 11], [83, 202, 120]),
+                   Color("blue", [99, 152, 128], [119, 228, 174])]
 
-        # For each building in the saved building list
-        for building in range(len(db.buildings)):
-            b = db.buildings[building]
-            # For each block on the front side of the saved building
-            for block_front in range(len(b.front)):
-                bl = b.front[block_front]
-                result = [building, "front"]
-                # If the current block color and position does not match a saved position,
-                # break and check the next side.
-                if not is_duplicate(bl.centre, positions, 20, bl.color):
-                    found = False
-                    break
+    cal = Calibrate(color_range)
+    cal.run()
 
-            # Back side
-            if not found:
-                for block_back in range(len(b.back)):
-                    bl = b.front[block_back]
-                    result = [building, "back"]
-                    if not is_duplicate(bl.centre, positions, 10, bl.color):
-                        found = False
-                        break
 
-            # Left side
-            if not found:
-                for block_back in range(len(b.left)):
-                    bl = b.front[block_back]
-                    result = [building, "back"]
-                    if not is_duplicate(bl.centre, positions, 10, bl.color):
-                        found = False
-                        break
+if __name__ == '__main__':
+    main()  # disabled for travis
 
-            # Right side
-            if not found:
-                for block_back in range(len(b.right)):
-                    bl = b.front[block_back]
-                    result = [building, "back"]
-                    if not is_duplicate(bl.centre, positions, 10, bl.color):
-                        found = False
-                        break
-
-        # Use audio to state the recognized building
-        if found:
-            # tts = "Recognized building {}, {} side".format(result[0], result[1])
-            # Speak.tts(Speak(), tts)
-            print("fakka ik heb je gevonden homo ", result[0], result[1])
-
-        # Return whether a building has been found
-        return found

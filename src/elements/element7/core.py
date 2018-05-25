@@ -2,11 +2,11 @@ from entities.vision.camera import Camera
 from entities.vision.helpers import Color
 
 # Initialize color ranges for detection
-color_range = [Color("orange", [0, 98, 105], [12, 255, 255]),
-               Color("yellow", [25, 100, 100], [36, 255, 255]),
-               Color("red", [0, 93, 98], [4, 250, 255]),
-               Color("green", [60, 58, 26], [95, 210, 101]),
-               Color("blue", [90, 100, 100], [120, 255, 255])]
+color_range = [Color("orange", [0, 100, 100], [12, 255, 255]),
+               Color("yellow", [24, 100, 100], [35, 255, 255]),
+               Color("red", [26, 0, 17], [69, 131, 190]),
+               Color("green", [71, 89, 11], [83, 202, 120]),
+               Color("blue", [99, 152, 128], [119, 228, 174])]
 
 cam = Camera(color_range)
 cam.run()

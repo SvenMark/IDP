@@ -34,10 +34,10 @@ class Building:
 
 class SavedBuildings:
     calibrate_building = [Block("orange", (267, 356)),
-                         Block("yellow", (252, 140)),
-                         Block("red", (362, 133)),
-                         Block("green", (369, 350)),
-                         Block("blue", (311, 251))]
+                          Block("yellow", (252, 140)),
+                          Block("red", (362, 133)),
+                          Block("green", (369, 350)),
+                          Block("blue", (311, 251))]
 
     buildings = [
         Building(front=[Block("orange", (41, 324)),
@@ -130,7 +130,7 @@ def crop_to_contours(mask, img):
         c = cv2.convexHull(cnt)
 
         # Check if the convex is a valid block
-        if check_valid_convex(c, 4, 4000):
+        if check_valid_convex(c, 4, 4000, 10000):
             # Calculate extremes of the hull
             min_x = tuple(cnt[cnt[:, :, 0].argmin()][0])
             max_x = tuple(cnt[cnt[:, :, 0].argmax()][0])
