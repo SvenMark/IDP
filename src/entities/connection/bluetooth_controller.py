@@ -21,36 +21,29 @@ class BluetoothController(object):
         Retrieve data from bluetooth connection with bluetooth address from the constructor
         :return: None
         """
+        bd_addr = "98:D3:31:FD:15:C1"  # The address from Boris
         port = 1
+        sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
-        # Create a bluetooth socket
-        socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+        sock.connect((bd_addr, port))
 
-        # Connect to the socket
-        socket.connect(("98:D3:31:FD:15:C1", port))
-
-        # Initialise data string
         data = ""
 
         count = 0
         while 1:
             try:
-                # Receive bluetooth data and put it in the data string
-                data += str(socket.recv(1024))[2:][:-1]
+                data += str(sock.recv(1024))[2:][:-1]
                 data_end = data.find('\\n')
-                # If the data line has ended
                 if data_end != -1:
                     rec = data[:data_end]
                     # print(rec)
-                    # Handle the data
                     self.handle_data(rec)
                     data = ""
                     count += 1
 
             except KeyboardInterrupt:
                 break
-            # Close the socket
-            socket.close()
+        sock.close()
 
     def handle_data(self, data):
         """
