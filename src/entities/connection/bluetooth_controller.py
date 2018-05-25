@@ -13,8 +13,8 @@ class BluetoothController(object):
         :param limbs: Array of robot limbs
         """
         self.bluetooth_address = bluetooth_address
-        self.tracks = limbs[0]
-        self.legs = limbs[1]
+        self.legs = limbs[0]
+        self.tracks = limbs[1]
 
     def receive_data(self):
         """
