@@ -3,46 +3,35 @@ import time
 
 
 class BluetoothController(object):
+    """
+    Base class for the bluetooth smart controller
+    """
 
-    def __init__(self, limbs):
-        self.bluetooth_addres = "98:D3:31:FD:15:C1"
-        self.tracks = limbs[0]
-        self.legs = limbs[1]
-
-    def receive_messages(self, legs):
-        server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-
-        port = 1
-        server_sock.bind(("", port))
-        server_sock.listen(1)
-        print("Waiting for connection...")
-
-        client_sock, address = server_sock.accept()
-        print("Accepted connection from " + str(address))
-        legs.retract(100)
-        time.sleep(3)
-
-        while True:
-            data = client_sock.recv(4096)
-            print("Received: %s" % data)
-            if data == "q":
-                break
-
-        client_sock.close()
-        server_sock.close()
+    def __init__(self, limbs, bluetooth_address):
+        """
+        Constructor for the bluetooth controller class
+        :param limbs: Array of robot limbs
+        """
+        self.bluetooth_address = bluetooth_address
+        self.legs = limbs[0]
+        self.tracks = limbs[1]
 
     def receive_data(self):
+        """
+        Retrieve data from bluetooth connection with bluetooth address from the constructor
+        :return: None
+        """
         port = 1
-        socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+        sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
-        socket.connect((self.bluetooth_addres, port))
+        sock.connect((self.bluetooth_address, port))
 
         data = ""
 
         count = 0
         while 1:
             try:
-                data += str(socket.recv(1024))[2:][:-1]
+                data += str(sock.recv(1024))[2:][:-1]
                 data_end = data.find('\\n')
                 if data_end != -1:
                     rec = data[:data_end]
@@ -53,9 +42,14 @@ class BluetoothController(object):
 
             except KeyboardInterrupt:
                 break
-            socket.close()
+        sock.close()
 
     def handle_data(self, data):
+        """
+        Handle the data that is retrieved from receive data
+        :param data: A data string
+        :return: None
+        """
         print(data)
         # Index for button to stop motors
         s_index = data.find('s')
@@ -71,7 +65,9 @@ class BluetoothController(object):
         y_index = data.find('y')
 
         # Tracks
+        # Check if indexes are not -1
         if s_index != -1 and v_index != -1 and h_index != -1:
+            # Convert the indexes to usable integers
             s = int(str(data[s_index + 2:v_index].replace(" ", "")))
             v = int(str(data[v_index + 2:h_index].replace(" ", "")))
             h = int(str(data[h_index + 2:d_index].replace(" ", "")))
@@ -80,17 +76,25 @@ class BluetoothController(object):
             v = ((v * (1000 / 1024)) - 500) / 5
             h = ((h * (1000 / 1024)) - 500) / 5
 
-            self.tracks.handle_controller_input(stop_motors=s, vertical_speed=v, horizontal_speed=h, dead_zone=5)
+            # Send data to tracks class
+            self.tracks.handle_track_input(stop_motors=s, vertical_speed=v, horizontal_speed=h, dead_zone=5)
 
         # Legs
         if x_index != -1 and y_index != -1 and d_index != -1:
+            # Convert the indexes to usable integers
             d = int(str(data[d_index + 2:x_index].replace(" ", "")))
             x = int(str(data[x_index + 2:y_index].replace(" ", "")))
             y = int(str(data[y_index + 2:].replace(" ", "")))
 
-            self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
+            # Send the data to legs class
+            self.legs.handle_leg_input(deploy=d, x_axis=x, y_axis=y)
 
     def send_message(self, target):
+        """
+        Send a message over bluetooth
+        :param target: Bluetooth address to send to
+        :return: None
+        """
         port = 1
         socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
         socket.connect((target, port))
@@ -98,6 +102,10 @@ class BluetoothController(object):
         socket.close()
 
     def scan(self):
+        """
+        Scan for nearby bluetooth devices
+        :return: None
+        """
         nearby_devices = bluetooth.discover_devices()
         for device in nearby_devices:
             print(str(bluetooth.lookup_name(device)) + " [" + str(device) + "]")
@@ -105,7 +113,7 @@ class BluetoothController(object):
 
 def main():
     limbs = [0, 1]
-    bluetooth = BluetoothController(limbs=limbs)
+    bluetooth = BluetoothController(limbs=limbs, bluetooth_address="98:D3:31:FD:15:C1")
 
 
 if __name__ == '__main__':

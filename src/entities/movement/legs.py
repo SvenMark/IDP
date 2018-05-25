@@ -59,6 +59,7 @@ class Legs(object):
         # self.leg_front_right.move(leg_1_deploy, delay, [speed, speed, speed])
         # self.leg_rear_left.move(leg_2_deploy, delay, [speed, speed, speed])
         # self.leg_rear_right.move(leg_3_deploy, delay, [speed, speed, speed])
+        self.deployed = True
 
     def retract(self, speed):
         """
@@ -79,7 +80,7 @@ class Legs(object):
         # self.leg_rear_right.move(leg_3_retract, delay, [speed, speed, speed])
         self.deployed = False
 
-    def handle_controller_input(self, deploy, x_axis, y_axis):
+    def handle_leg_input(self, deploy, x_axis, y_axis):
         if deploy == 1 and not self.deployed:
             self.deploy(200)
         elif deploy == 0 and self.deployed:
