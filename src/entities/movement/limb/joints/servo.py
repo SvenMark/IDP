@@ -47,7 +47,7 @@ class Servo(object):
 
         # While the servo has not completed it last command wait a bit and check again.
         while not self.is_ready():
-            time.sleep(0.1)
+            time.sleep(0.01)
 
         max_speed = round(max_speed * 1)
         # Could be changed or set as parameter
