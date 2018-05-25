@@ -7,7 +7,7 @@ class Robot(object):
     Robot class
     """
 
-    def __init__(self, name, limbs, lights):
+    def __init__(self, name, limbs, lights, bluetooth_address):
         """
         Constructor for the robot class
         :param name: Name for the robot
@@ -18,7 +18,7 @@ class Robot(object):
         self.limbs = limbs
         self.lights = lights
         self.movement = Movement(limbs, lights)
-        self.controller = BluetoothController(limbs)
+        self.controller = BluetoothController(limbs, bluetooth_address)
 
     @property
     def get_name(self):

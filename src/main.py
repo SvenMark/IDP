@@ -61,7 +61,7 @@ def main():
     lights = []
 
     name = 'Boris'
-    boris = Robot(name, limbs, lights)
+    boris = Robot(name, limbs, lights, bluetooth_address="98:D3:31:FD:15:C1")
 
     while True:
         boris.controller.receive_data()
