@@ -6,31 +6,38 @@ import cv2
 
 def run():
     print("run hsvpicker")
+    cap = WebcamVideoStream(src=0).start()
     time.sleep(1)  # startup
 
-    sample = cv2.imread("brug.png")
-    height = sample.shape[0] /2  # get height
-    width = sample.shape[1] /2 # get width
+    sample = cap.read()
+    height = sample.shape[0]  # get height
+    width = sample.shape[1]  # get width
     print("w: " + str(width) + " " + "h: " + str(height))
 
-    createtrackbars()
+    createtrackbars("1")
+    createtrackbars("2")
+
     while True:
-        img = sample
-        blur = cv2.GaussianBlur(img, (9, 9), 0)
+        img = cap.read()
+        img = cv2.GaussianBlur(img, (9, 9), 0)
 
-        lowh = cv2.getTrackbarPos('Low H', 'picker')
-        lows = cv2.getTrackbarPos('Low S', 'picker')
-        lowv = cv2.getTrackbarPos('Low V', 'picker')
+        lowh = cv2.getTrackbarPos('Low H', '1')
+        lows = cv2.getTrackbarPos('Low S', '1')
+        lowv = cv2.getTrackbarPos('Low V', '1')
 
-        highh = cv2.getTrackbarPos('High H', 'picker')
-        highs = cv2.getTrackbarPos('High S', 'picker')
-        highv = cv2.getTrackbarPos('High V', 'picker')
+        highh = cv2.getTrackbarPos('High H', '1')
+        highs = cv2.getTrackbarPos('High S', '1')
+        highv = cv2.getTrackbarPos('High V', '1')
 
         # Hsv Mask
-        hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         lower = np.array([lowh, lows, lowv])
         higher = np.array([highh, highs, highv])
         mask = cv2.inRange(hsv, lower, higher)
+
+        if cv2.getTrackbarPos('keta', '2') > 50:
+            mask += calculate_mask("2", mask, img)
+            print("homo")
 
         output = cv2.bitwise_and(img, img, mask=mask)
 
@@ -46,30 +53,49 @@ def run():
 
         if cv2.waitKey(1) & 0xFF == ord('s'):
             print("Saved settings")
-            savehigherlower(lowh, lows, lowv, highh, highs, highv)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
+    cap.stop()
     cv2.destroyAllWindows()
 
 
-def createtrackbars():
-    cv2.namedWindow('picker')
+def calculate_mask(name, mask, img):
+    lowh = cv2.getTrackbarPos('Low H', name)
+    lows = cv2.getTrackbarPos('Low S', name)
+    lowv = cv2.getTrackbarPos('Low V', name)
+
+    highh = cv2.getTrackbarPos('High H', name)
+    highs = cv2.getTrackbarPos('High S', name)
+    highv = cv2.getTrackbarPos('High V', name)
+
+    # Hsv Mask
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    lower = np.array([lowh, lows, lowv])
+    higher = np.array([highh, highs, highv])
+    mask += cv2.inRange(hsv, lower, higher)
+    return mask
+
+
+def createtrackbars(name):
+    cv2.namedWindow(name)
 
     # create trackbars for lower
-    cv2.createTrackbar('Low H', 'picker', 90, 180, nothing)
-    cv2.createTrackbar('Low S', 'picker', 100, 255, nothing)
-    cv2.createTrackbar('Low V', 'picker', 100, 255, nothing)
+    cv2.createTrackbar('Low H', name, 90, 180, nothing)
+    cv2.createTrackbar('Low S', name, 100, 255, nothing)
+    cv2.createTrackbar('Low V', name, 100, 255, nothing)
 
     # create trackbars for higher
-    cv2.createTrackbar('High H', 'picker', 120, 180, nothing)
-    cv2.createTrackbar('High S', 'picker', 255, 255, nothing)
-    cv2.createTrackbar('High V', 'picker', 255, 255, nothing)
+    cv2.createTrackbar('High H', name, 120, 180, nothing)
+    cv2.createTrackbar('High S', name, 255, 255, nothing)
+    cv2.createTrackbar('High V', name, 255, 255, nothing)
+    cv2.createTrackbar('keta', name, 255, 255, nothing)
 
 
 def savehigherlower(lowh, lows, lowv, highh, highs, highv):
-    text_file = open("Output.txt", "w")
-    text_file.write("([" + str(lowh) + ", " + str(lows) + ", " + str(lowv) + "],"
+    text_file = open("Output.txt", "a")
+    text_file.write("([" + str(lowh) + ", " + str(lows) + ", " + str(lowv) + "], "
                     "[" + str(highh) + ", " + str(highs) + ", " + str(highv) + "])")
     text_file.close()
 
