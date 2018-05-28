@@ -1,3 +1,4 @@
+import datetime
 from entities.movement.limb.leg import Leg
 from entities.movement.sequences.walking_sequences import *
 
@@ -22,6 +23,11 @@ class Legs(object):
         # self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
         # self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
         # self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
+
+        self.legs = [self.leg_front_left,
+                     #self.leg_front_right, self.leg_rear_left, self.leg_rear_right
+                     ]
+
         self.type = 'legs'
         self.deployed = False
 
@@ -38,6 +44,23 @@ class Legs(object):
         :param speeds: Array of speeds for each servo
         :return: None
         """
+
+        previous = datetime.datetime.now()
+
+        # for testing
+        for i in range(len(self.legs)):
+            for y in range(len(self.legs[i].servos)):
+                self.legs[i].servos[y].last_position = 99
+
+        # while legs are not ready, update
+        legs = [elem for elem in self.legs if elem.ready()]
+        while len(legs) > 0:
+            for i in range(len(legs)):
+                next_time = datetime.datetime.now
+                elapsed_time = previous - next_time
+                previous = next_time
+                legs[i].update(elapsed_time.total_seconds())
+
         self.leg_front_left.move(leg_0_moves, delay, speeds)
         # self.leg_front_right.move(leg_1_moves[0], leg_1_moves[1], leg_1_moves[2], delay)
         # self.leg_rear_left.move(leg_2_moves[0], leg_2_moves[1], leg_2_moves[2], delay)

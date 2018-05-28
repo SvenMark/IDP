@@ -32,6 +32,9 @@ class Servo(object):
         print("rw : " + str(self.ax12.read_rw_status(self.servo_id)))
         time.sleep(0.1)
 
+    def update(self, delta):
+        print(str(delta))
+
     def move(self, degrees, delay, max_speed):
         """
         Function that moves the servo using the ax12 library move function
@@ -92,7 +95,7 @@ class Servo(object):
         Function that checks if a servo completed it`s last move
         :return: Whether or not the servo has completed it`s last move
         """
-        return abs(self.ax12.read_position(self.servo_id) - self.last_position) <= self.sensitivity
+        return abs(round(self.ax12.read_position(self.servo_id)) - round(self.last_position)) <= self.sensitivity
 
     def read_position(self):
         """
