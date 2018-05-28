@@ -60,6 +60,7 @@ class Legs(object):
                 elapsed_time = previous - next_time
                 previous = next_time
                 legs[i].update(elapsed_time.total_seconds())
+                legs = [elem for elem in self.legs if elem.ready()]
 
         self.leg_front_left.move(leg_0_moves, delay, speeds)
         # self.leg_front_right.move(leg_1_moves[0], leg_1_moves[1], leg_1_moves[2], delay)
