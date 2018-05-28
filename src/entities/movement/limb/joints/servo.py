@@ -32,6 +32,9 @@ class Servo(object):
         print("rw : " + str(self.ax12.read_rw_status(self.servo_id)))
         time.sleep(0.1)
 
+    def update(self, delta):
+        print(str(delta))
+
     def move(self, degrees, delay, max_speed):
         """
         Function that moves the servo using the ax12 library move function

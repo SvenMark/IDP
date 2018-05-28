@@ -13,9 +13,15 @@ class Leg(object):
         self.servo_0 = Servo(id_servo[0], positions[0])
         self.servo_1 = Servo(id_servo[1], positions[1])
         self.servo_2 = Servo(id_servo[2], positions[2])
+
+        self.servos = [self.servo_0, self.servo_1, self.servo_2]
+
         self.type = 'leg'
 
         print("Leg setup")
+
+    def ready(self):
+        return len([elem for elem in self.servos if elem.is_ready()]) == 0
 
     def move(self, positions, delay, speeds):
         """
@@ -28,3 +34,7 @@ class Leg(object):
         self.servo_0.move(positions[0], delay, speeds[0])
         self.servo_1.move(positions[1], delay, speeds[1])
         self.servo_2.move(positions[2], delay, speeds[2])
+
+    def update(self, delta):
+        for i in range(len(self.servos)):
+            self.servos[i].update(delta)
