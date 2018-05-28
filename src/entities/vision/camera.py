@@ -32,7 +32,6 @@ class Camera(object):
         self.helper = Helpers()
 
     def run(self):
-        print("run element7")
         # Initialize camera
         cap = cv2.VideoCapture(0)
 
