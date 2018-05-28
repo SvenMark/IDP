@@ -54,7 +54,7 @@ class Legs(object):
 
         # while legs are not ready, update
         legs = [elem for elem in self.legs if elem.ready()]
-        while len(legs) > 0:
+        while len(legs) != 3:
             for i in range(len(legs)):
                 next_time = datetime.datetime.now()
                 elapsed_time = next_time - previous
