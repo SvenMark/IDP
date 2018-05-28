@@ -1,7 +1,5 @@
 #!/bin/python
-import time
 
-from entities.movement.legs import Legs
 from entities.movement.sequences.walking_sequences import *
 
 legs = Legs(leg_0_servos=[
@@ -26,5 +24,4 @@ legs = Legs(leg_0_servos=[
             ]
             )
 
-legs.deploy(150)
-lol(legs, [250, 250, 250], 10)
+legs.retract(90)
