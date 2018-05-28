@@ -29,6 +29,7 @@ class Servo(object):
         self.last_position = self.ax12.read_position(self.servo_id)
         self.goal = initial_position
         self.current_speed = 200
+        self.current_speed_multiplier = 0.1
 
         self.start_position = self.last_position
 
@@ -41,9 +42,11 @@ class Servo(object):
 
     def update(self, delta):
         # move towards new position
-        step = ((self.goal - self.start_position) * delta * self.current_speed * 0.1)
+        step = self.goal - self.start_position
         print("Moving " + str(self.last_position) + ", to " + str(self.goal) + ", speed "
-              + str(self.current_speed) + ", delta: " + str(delta) + "step: " + str(step))
+              + str(self.current_speed) + ", delta: " + str(delta) + " step: " + str(step))
+
+        step = step * delta * self.current_speed
 
         self.last_position = self.last_position + step
         self.ax12.move(self.servo_id, round(self.last_position))
@@ -54,7 +57,7 @@ class Servo(object):
         self.last_position = self.ax12.read_position(self.servo_id)
         self.start_position = self.last_position
         self.goal = degrees
-        self.current_speed = speed
+        self.current_speed = speed * self.current_speed_multiplier
         print("servo " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
 
     def move_speed(self, degrees, delay, max_speed):
