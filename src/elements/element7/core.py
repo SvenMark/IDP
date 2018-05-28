@@ -1,6 +1,6 @@
 from entities.vision.camera import Camera
 from entities.vision.calibrate import Calibrate
-from entities.vision.helpers import Color
+from entities.vision.helpers import Color, Building, Block
 
 # Initialize color ranges for detection
 color_range = [Color("orange", [0, 100, 100], [12, 255, 255]),

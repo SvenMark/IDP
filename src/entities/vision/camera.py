@@ -3,6 +3,7 @@ from entities.audio.speak import Speak
 import json
 from tkinter import *
 
+
 class Camera(object):
 
     def __init__(self, color_range, saved_buildings):
@@ -10,8 +11,6 @@ class Camera(object):
         self.positions = []
         self.saved_buildings = saved_buildings
         self.helper = Helpers()
-        self.saved = False
-        self.save_length = 0
 
     def run(self):
         print("run element7")
@@ -35,11 +34,6 @@ class Camera(object):
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
-
-            # Save the current self.positions
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                a = 1
-                # To be implemented
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -114,6 +108,10 @@ class Camera(object):
                 # Write the color and position of the block
                 cv2.putText(img_mask, color, (cx - 15, cy - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
                 cv2.putText(img_mask, str((cx, cy)), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+
+                pts = cv2.findNonZero(img_mask)
+                box = cv2.boundingRect(pts)
+                print(box.width, box.height)
 
                 # Append the new block to the global POSITIONS array
                 self.positions = self.helper.append_to_positions(self.positions, Block(color, (cx, cy)))
