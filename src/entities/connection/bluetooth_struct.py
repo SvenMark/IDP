@@ -30,20 +30,19 @@ class BluetoothController(object):
 
         sock.connect((self.bluetooth_address, port))
 
-        data = ""
-
         count = 0
         while 1:
             try:
-                data += str(sock.recv(1024))[2:][:-1]
-                data_begin = data.find('S')
-                data_end = data.find('E')
-                if data_begin != -1 and data_end != -1:
-                    rec = data[data_begin:data_end]
-                    # print(rec)
-                    self.handle_data(rec)
-                    data = ""
-                    count += 1
+
+                byte = sock.recv(1024)[2:][:-1]
+                print("Byte: " + str(byte))
+                if str(byte) == 'S':
+                    data = sock.recv(1024)[:24]
+                    print("Data: " + str(data))
+                    byte = sock.recv(1024)[2:][:-1]
+                    if str(byte) == 'E':
+                        new_values = struct.unpack('<fffffffff', data)
+                        print(str(new_values))
 
             except KeyboardInterrupt:
                 break
