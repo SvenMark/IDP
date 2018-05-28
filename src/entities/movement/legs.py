@@ -47,10 +47,10 @@ class Legs(object):
 
         previous = datetime.datetime.now()
 
-        # for testing
-        for i in range(len(self.legs)):
-            for y in range(len(self.legs[i].servos)):
-                self.legs[i].servos[y].last_position = 99
+        self.leg_front_left.move(leg_0_moves, delay, speeds)
+        # self.leg_front_right.move(leg_1_moves[0], leg_1_moves[1], leg_1_moves[2], delay)
+        # self.leg_rear_left.move(leg_2_moves[0], leg_2_moves[1], leg_2_moves[2], delay)
+        # self.leg_rear_right.move(leg_3_moves[0], leg_3_moves[1], leg_3_moves[2], delay)
 
         # while legs are not ready, update
         legs = [elem for elem in self.legs if elem.ready()]
@@ -61,11 +61,6 @@ class Legs(object):
                 previous = next_time
                 legs[i].update(elapsed_time.total_seconds())
                 legs = [elem for elem in self.legs if elem.ready()]
-
-        # self.leg_front_left.move(leg_0_moves, delay, speeds)
-        # self.leg_front_right.move(leg_1_moves[0], leg_1_moves[1], leg_1_moves[2], delay)
-        # self.leg_rear_left.move(leg_2_moves[0], leg_2_moves[1], leg_2_moves[2], delay)
-        # self.leg_rear_right.move(leg_3_moves[0], leg_3_moves[1], leg_3_moves[2], delay)
 
     def deploy(self, speed):
         """
