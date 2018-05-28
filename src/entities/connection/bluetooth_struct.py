@@ -3,6 +3,7 @@ import glob
 import struct
 import numpy as np
 import bluetooth
+import os
 import time
 
 
@@ -35,7 +36,7 @@ class BluetoothController(object):
         Retrieve data from bluetooth connection with bluetooth address from the constructor
         :return: None
         """
-        port = self.look_for_available_ports()[0]
+        port = open("dev/rfcomm0", "rb")
 
         while 1:
             try:
