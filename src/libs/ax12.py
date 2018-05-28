@@ -5,7 +5,6 @@ https://github.com/jes1510/python_dynamixels
 and Josue Alejandro Savage's Arduino library:
 http://savageelectronics.blogspot.it/2011/01/arduino-y-dynamixel-ax-12.html
 '''
-from __future__ import division
 
 from time import sleep
 import RPi.GPIO as GPIO
@@ -337,7 +336,7 @@ class Ax12:
     def move(self, id, position):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
-        p = [position & 0xff, position >> 8]
+        p = [round(position) & 0xff, position >> 8]
         checksum = (~(id + Ax12.AX_GOAL_LENGTH + Ax12.AX_WRITE_DATA + Ax12.AX_GOAL_POSITION_L + p[0] + p[1])) & 0xff
         out_data = bytes([Ax12.AX_START])
         out_data += bytes([Ax12.AX_START])
