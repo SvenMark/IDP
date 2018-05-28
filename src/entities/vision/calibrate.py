@@ -50,11 +50,8 @@ class Calibrate(object):
             self.draw_helper(img)
             self.draw_helper(mask)
 
-            cv2.imshow('aa', mask)
-            cv2.imshow('camservice', img)
-
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+            cv2.imshow('Spider Cam 2000', mask)
+            cv2.imshow('Spider Cam 3000', img)
 
         cap.release()
         cv2.destroyAllWindows()
