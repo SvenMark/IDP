@@ -89,7 +89,7 @@ class BluetoothController(object):
             h = ((h * (1000 / 1024)) - 500) / 5
 
             # Send data to tracks class
-            self.tracks.handle_track_input(stop_motors=s, vertical_speed=v, horizontal_speed=h, dead_zone=5)
+            self.tracks.handle_controller_input(stop_motors=s, vertical_speed=v, horizontal_speed=h, dead_zone=5)
 
         # Legs
         if x_index != -1 and y_index != -1 and d_index != -1:
@@ -99,7 +99,7 @@ class BluetoothController(object):
             y = int(str(data[y_index + 2:].replace(" ", "")))
 
             # Send the data to legs class
-            self.legs.handle_leg_input(deploy=d, x_axis=x, y_axis=y)
+            self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
 
     def send_message(self, target):
         """

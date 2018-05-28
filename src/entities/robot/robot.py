@@ -1,5 +1,6 @@
 from entities.movement.movement import Movement
-from entities.connection.bluetooth_controller import BluetoothController
+# from entities.connection.bluetooth_controller import BluetoothController
+from entities.connection.bluetooth_struct import BluetoothController
 
 
 class Robot(object):
