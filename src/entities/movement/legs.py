@@ -46,6 +46,12 @@ class Legs(object):
         """
 
         previous = datetime.datetime.now()
+
+        # for testing
+        for i in range(len(self.legs)):
+            for y in range(len(self.legs[i].servos)):
+                self.legs[i].servos[y].last_position = 99
+
         # while legs are not ready, update
         legs = [elem for elem in self.legs if elem.ready()]
         while len(legs) > 0:
