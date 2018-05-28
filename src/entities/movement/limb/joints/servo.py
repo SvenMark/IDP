@@ -43,13 +43,16 @@ class Servo(object):
         # move towards new position
         self.last_position = self.last_position + (self.goal - self.start_position) * delta * self.current_speed * 0.0001
         self.ax12.move(self.servo_id, round(self.last_position))
-        print(str(self.last_position))
+
+        print("Moving " + str(self.last_position) + ", to " + str(self.goal))
+        # print(str(self.last_position))
 
     def move(self, degrees, delay, speed):
         self.last_position = self.ax12.read_position(self.servo_id)
         self.start_position = self.last_position
         self.goal = degrees
         self.current_speed = speed
+        print("servo " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
 
     def move_speed(self, degrees, delay, max_speed):
         """
