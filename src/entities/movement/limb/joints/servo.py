@@ -39,8 +39,8 @@ class Servo(object):
 
     def update(self, delta):
         # move towards new position
-        self.last_position = self.last_position + (self.goal - self.last_position) * delta * self.current_speed
-        # self.ax12.move(self.servo_id, self.last_position)
+        self.last_position = self.last_position + (self.goal - self.last_position) * delta * self.current_speed * 0.1
+        self.ax12.move(self.servo_id, self.last_position)
         print(str(self.last_position))
 
     def move(self, degrees, delay, speed):
