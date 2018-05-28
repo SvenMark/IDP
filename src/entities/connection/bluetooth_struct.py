@@ -56,11 +56,12 @@ class BluetoothController(object):
         :return: None
         """
 
+        print("Data " + str(data))
+
         new_values = struct.unpack('<fffffffff', data)
 
         latest_values = np.array(new_values)
 
-        print("Data " + str(data))
         print("Converted data " + str(latest_values))
 
         # Index for button to stop motors
