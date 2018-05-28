@@ -28,7 +28,7 @@ legs = Legs(leg_0_servos=[
             )
 
 # legs.deploy(150)
-walk_forward(legs, [10,10,10])
+walk_forward_repeat(legs, [300,300,300], 10)
 wave(legs, [250, 250, 250], 10)
 enge_dab(legs, [140, 140, 140])
 time.sleep(1)

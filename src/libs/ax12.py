@@ -7,7 +7,6 @@ http://savageelectronics.blogspot.it/2011/01/arduino-y-dynamixel-ax-12.html
 '''
 
 from time import sleep
-
 import RPi.GPIO as GPIO
 from serial import Serial
 

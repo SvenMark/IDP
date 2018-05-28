@@ -21,7 +21,7 @@ class Leg(object):
         print("Leg setup")
 
     def ready(self):
-        return len([elem for elem in self.servos if elem.is_ready()]) == 0
+        return len([elem for elem in self.servos if elem.is_ready()]) == 3
 
     def move(self, positions, delay, speeds):
         """
