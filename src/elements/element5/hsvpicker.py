@@ -37,7 +37,7 @@ def run():
 
         if cv2.getTrackbarPos('keta', '2') > 50:
             mask += calculate_mask("2", mask, img)
-            print("homo")
+            # print("homo")
 
         output = cv2.bitwise_and(img, img, mask=mask)
 
