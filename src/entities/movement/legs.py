@@ -1,3 +1,4 @@
+import datetime
 from entities.movement.limb.leg import Leg
 from entities.movement.sequences.walking_sequences import *
 
@@ -22,6 +23,11 @@ class Legs(object):
         # self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
         # self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
         # self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
+
+        self.legs = [self.leg_front_left,
+                     #self.leg_front_right, self.leg_rear_left, self.leg_rear_right
+                     ]
+
         self.type = 'legs'
         self.deployed = False
 
@@ -29,7 +35,7 @@ class Legs(object):
         
     def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speeds):
         """
-        Function to move the legs together
+        Function to move the legs_not_ready together
         :param leg_0_moves: Array of positions for leg 0
         :param leg_1_moves: Array of positions for leg 1
         :param leg_2_moves: Array of positions for leg 2
@@ -38,10 +44,25 @@ class Legs(object):
         :param speeds: Array of speeds for each servo
         :return: None
         """
+
         self.leg_front_left.move(leg_0_moves, delay, speeds)
         # self.leg_front_right.move(leg_1_moves[0], leg_1_moves[1], leg_1_moves[2], delay)
         # self.leg_rear_left.move(leg_2_moves[0], leg_2_moves[1], leg_2_moves[2], delay)
         # self.leg_rear_right.move(leg_3_moves[0], leg_3_moves[1], leg_3_moves[2], delay)
+
+        self.update_legs()
+
+    def update_legs(self):
+        previous = datetime.datetime.now()
+        # while legs_not_ready are not ready, update
+        legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+        while len(legs_not_ready) != 0:
+            for i in range(len(legs_not_ready)):
+                next_time = datetime.datetime.now()
+                elapsed_time = next_time - previous
+                previous = next_time
+                legs_not_ready[i].update(elapsed_time.total_seconds())
+            legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
     def deploy(self, speed):
         """
@@ -60,6 +81,9 @@ class Legs(object):
         # self.leg_front_right.move(leg_1_deploy, delay, [speed, speed, speed])
         # self.leg_rear_left.move(leg_2_deploy, delay, [speed, speed, speed])
         # self.leg_rear_right.move(leg_3_deploy, delay, [speed, speed, speed])
+
+        self.update_legs()
+
         self.deployed = True
 
     def retract(self, speed):
@@ -79,6 +103,9 @@ class Legs(object):
         # self.leg_front_right.move(leg_1_retract, delay, [speed, speed, speed])
         # self.leg_rear_left.move(leg_2_retract, delay, [speed, speed, speed])
         # self.leg_rear_right.move(leg_3_retract, delay, [speed, speed, speed])
+
+        self.update_legs()
+
         self.deployed = False
 
     def handle_leg_input(self, deploy, x_axis, y_axis):

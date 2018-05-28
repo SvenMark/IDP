@@ -26,6 +26,11 @@ def walk_forward(legs, speeds):
               speeds=speeds)
 
 
+def walk_forward_repeat(legs, speeds, repeat):
+    for i in range(repeat):
+        walk_forward(legs, speeds)
+
+
 def walk_backward(legs, speeds):
     legs.move(leg_0_moves=[530, 766, 850],
               leg_1_moves=[650, 400, 400],
