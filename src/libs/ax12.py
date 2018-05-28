@@ -5,9 +5,9 @@ https://github.com/jes1510/python_dynamixels
 and Josue Alejandro Savage's Arduino library:
 http://savageelectronics.blogspot.it/2011/01/arduino-y-dynamixel-ax-12.html
 '''
+from __future__ import division
 
 from time import sleep
-
 import RPi.GPIO as GPIO
 from serial import Serial
 
