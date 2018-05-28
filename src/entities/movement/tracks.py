@@ -57,7 +57,7 @@ class Tracks(object):
         speed_2 = self.track_right.current_speed
 
         # Loop which accelerates the tracks.
-        for i in range(0, 100 * acceleration):
+        for i in range(0, int(100 * acceleration)):
 
             # Add the step size to the speed each cycle.
             speed_1 += step_1
@@ -100,47 +100,110 @@ class Tracks(object):
 
         time.sleep(delay)
 
-    def forward(self, duty_cycle, delay, acceleration):
+    def forward(self, duty_cycle_track_left, duty_cycle_track_right, delay, acceleration):
         """
-        Function for moving tracks in a forward direction
-        :param duty_cycle: Percentage of power for both tracks
+        Function for moving tracks in a forward direction.
+        :param duty_cycle_track_left: Percentage of power for left track
+        :param duty_cycle_track_right: Percentage of power for right track
         :param delay: Time to wait after executing
-        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner
+        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner.
         :return: None
         """
-        self.move_helper(duty_cycle, duty_cycle, delay, acceleration, 1, 1)
+        self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 1, 1)
 
-    def backward(self, duty_cycle, delay, acceleration):
+    def backward(self, duty_cycle_track_left, duty_cycle_track_right, delay, acceleration):
         """
         Function for moving tracks in a backward direction
-        :param duty_cycle: Percentage of power for both tracks
+        :param duty_cycle_track_left: Percentage of power for left track
+        :param duty_cycle_track_right: Percentage of power for right track
         :param delay: Time to wait after executing
-        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner
+        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner.
         :return: None
         """
-        self.move_helper(duty_cycle, duty_cycle, delay, acceleration, 0, 0)
+        self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 0, 0)
 
     def turn_right(self, duty_cycle_track_left, duty_cycle_track_right, delay, acceleration):
         """
-        Function for moving tracks in a right direction by turning left track forward and right track backward
-        :param duty_cycle_track_left: Percentage of power for right track
-        :param duty_cycle_track_right: Percentage of power for left track
+        Function for moving tracks in a right direction by turning left track forward and right track backward.
+        :param duty_cycle_track_left: Percentage of power for left track
+        :param duty_cycle_track_right: Percentage of power for right track
         :param delay: Time to wait after executing
-        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner
+        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner.
         :return: None
         """
         self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 1, 0)
 
     def turn_left(self, duty_cycle_track_right, duty_cycle_track_left, delay, acceleration):
         """
-        Function for moving tracks in a right direction by turning left track backward and right track forward
-        :param duty_cycle_track_right: Percentage of power for right track
+        Function for moving tracks in a right direction by turning left track backward and right track forward.
         :param duty_cycle_track_left: Percentage of power for left track
+        :param duty_cycle_track_right: Percentage of power for right track
         :param delay: Time to wait after executing
-        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner
+        :param acceleration: Time in which the tracks accelerate to their given duty cycle in a linear manner.
         :return: None
         """
         self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 0, 1)
+
+    def handle_track_input(self, stop_motors, vertical_speed, horizontal_speed, dead_zone):
+        print("Vertical: " + str(vertical_speed) + " Horizontal: " + str(horizontal_speed))
+
+        if stop_motors == 1:
+            self.stop()
+        elif stop_motors == 0:
+            if -dead_zone < vertical_speed < dead_zone and -dead_zone < horizontal_speed < dead_zone:
+                self.stop()
+
+            if vertical_speed < -dead_zone:
+                if -dead_zone < horizontal_speed < dead_zone:
+                    self.backward(duty_cycle_track_left=abs(vertical_speed),
+                                  duty_cycle_track_right=abs(vertical_speed),
+                                  delay=0,
+                                  acceleration=0)
+                if horizontal_speed > dead_zone:
+                    horizontal_speed = horizontal_speed / 5
+                    self.backward(duty_cycle_track_left=abs(vertical_speed),
+                                  duty_cycle_track_right=abs(vertical_speed) - horizontal_speed,
+                                  delay=0,
+                                  acceleration=0)
+                if horizontal_speed < -dead_zone:
+                    horizontal_speed = abs(horizontal_speed / 5)
+                    self.backward(duty_cycle_track_left=abs(vertical_speed) - horizontal_speed,
+                                  duty_cycle_track_right=abs(vertical_speed),
+                                  delay=0,
+                                  acceleration=0)
+
+            if vertical_speed > dead_zone:
+                if -dead_zone < horizontal_speed < dead_zone:
+                    print("Going forward")
+                    self.forward(duty_cycle_track_left=vertical_speed,
+                                 duty_cycle_track_right=vertical_speed,
+                                 delay=0,
+                                 acceleration=0)
+                if horizontal_speed > dead_zone:
+                    horizontal_speed = horizontal_speed / 5
+                    self.forward(duty_cycle_track_left=vertical_speed,
+                                 duty_cycle_track_right=vertical_speed - horizontal_speed,
+                                 delay=0,
+                                 acceleration=0)
+                if horizontal_speed < -dead_zone:
+                    horizontal_speed = abs(horizontal_speed / 5)
+                    self.forward(duty_cycle_track_left=vertical_speed - horizontal_speed,
+                                 duty_cycle_track_right=vertical_speed,
+                                 delay=0,
+                                 acceleration=0)
+
+            if -dead_zone < vertical_speed < dead_zone:
+                if horizontal_speed > dead_zone:
+                    self.turn_right(duty_cycle_track_left=horizontal_speed,
+                                    duty_cycle_track_right=horizontal_speed,
+                                    delay=0,
+                                    acceleration=0)
+
+                if horizontal_speed < -dead_zone:
+                    self.turn_left(duty_cycle_track_left=abs(horizontal_speed),
+                                   duty_cycle_track_right=abs(horizontal_speed),
+                                   delay=0,
+                                   acceleration=0)
 
     def stop(self):
         """

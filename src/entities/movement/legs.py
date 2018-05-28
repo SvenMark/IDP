@@ -3,7 +3,11 @@ from entities.movement.limb.leg import Leg
 
 class Legs(object):
 
-    def __init__(self, leg_0_servos, leg_1_servos, leg_2_servos, leg_3_servos):
+    def __init__(self, leg_0_servos,
+                 # leg_1_servos,
+                 # leg_2_servos,
+                 # leg_3_servos
+                 ):
         """
         Constructor for the legs
         :param leg_0_servos: Array of servo id`s for leg 0
@@ -18,6 +22,7 @@ class Legs(object):
         # self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
         # self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
         self.type = 'legs'
+        self.deployed = False
 
         print("Legs setup, retracting")
         
@@ -54,6 +59,7 @@ class Legs(object):
         # self.leg_front_right.move(leg_1_deploy, delay, [speed, speed, speed])
         # self.leg_rear_left.move(leg_2_deploy, delay, [speed, speed, speed])
         # self.leg_rear_right.move(leg_3_deploy, delay, [speed, speed, speed])
+        self.deployed = True
 
     def retract(self, speed):
         """
@@ -72,3 +78,18 @@ class Legs(object):
         # self.leg_front_right.move(leg_1_retract, delay, [speed, speed, speed])
         # self.leg_rear_left.move(leg_2_retract, delay, [speed, speed, speed])
         # self.leg_rear_right.move(leg_3_retract, delay, [speed, speed, speed])
+        self.deployed = False
+
+    def handle_leg_input(self, deploy, x_axis, y_axis):
+        if deploy == 1 and not self.deployed:
+            self.deploy(200)
+        elif deploy == 0 and self.deployed:
+            self.retract(200)
+
+        if self.deployed:
+            self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
+                      [650, 400, 400],
+                      [400, 400, 400],
+                      [600, 400, 400],
+                      0,
+                      [200, 200, 200])
