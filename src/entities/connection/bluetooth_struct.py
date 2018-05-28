@@ -24,11 +24,11 @@ class BluetoothController(object):
         """
         find available serial ports to Arduino
         """
-        available_ports = glob.glob('/dev/ttyACM*')
+        available_ports = glob.glob('/dev/rfcomm*')
         print("Available ports: ")
         print(available_ports)
 
-        return available_ports
+        return available_ports[0]
 
     def receive_data(self):
         """
