@@ -1,4 +1,4 @@
-from entities.vision.camera import Camera
+from entities.vision.camera import Camera, Building, Block
 from entities.vision.calibrate import Calibrate
 from entities.vision.helpers import Color
 
