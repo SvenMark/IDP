@@ -60,8 +60,8 @@ class BluetoothController(object):
 
         latest_values = np.array(new_values)
 
-        print("Data " + data)
-        print("Converted data " + latest_values)
+        print("Data " + str(data))
+        print("Converted data " + str(latest_values))
 
         # Index for button to stop motors
         s_index = data.find('s')
