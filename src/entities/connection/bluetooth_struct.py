@@ -20,33 +20,29 @@ class BluetoothController(object):
         self.legs = limbs[0]
         self.tracks = limbs[1]
 
+    def look_for_available_ports(self):
+        """
+        find available serial ports to Arduino
+        """
+        available_ports = glob.glob('/dev/ttyACM*')
+        print("Available ports: ")
+        print(available_ports)
+
+        return available_ports
+
     def receive_data(self):
         """
         Retrieve data from bluetooth connection with bluetooth address from the constructor
         :return: None
         """
-        port = 1
-        sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+        port = self.look_for_available_ports()[0]
 
-        sock.connect((self.bluetooth_address, port))
-
-        count = 0
         while 1:
             try:
-
-                byte = sock.recv(1024)[2:][:-1]
-                print("Byte: " + str(byte))
-                if str(byte) == 'S':
-                    data = sock.recv(1024)[:24]
-                    print("Data: " + str(data))
-                    byte = sock.recv(1024)[2:][:-1]
-                    if str(byte) == 'E':
-                        new_values = struct.unpack('<fffffffff', data)
-                        print(str(new_values))
-
+                byte = port.read(1)
+                print(str(byte))
             except KeyboardInterrupt:
                 break
-        sock.close()
 
     def handle_data(self, data):
         """
