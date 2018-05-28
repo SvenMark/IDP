@@ -56,7 +56,7 @@ class Legs(object):
         legs = [elem for elem in self.legs if elem.ready()]
         while len(legs) > 0:
             for i in range(len(legs)):
-                next_time = datetime.datetime.now
+                next_time = datetime.datetime.now()
                 elapsed_time = previous - next_time
                 previous = next_time
                 legs[i].update(elapsed_time.total_seconds())
