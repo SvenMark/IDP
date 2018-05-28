@@ -1,11 +1,12 @@
-import cv2
-
 from elements.element7.helpers import Color
 from elements.element7.helpers import Block
 from elements.element7.helpers import SavedBuildings as db
 from elements.element7.helpers import crop_to_contours, \
-    check_valid_convex, \
-    is_duplicate
+                                      check_valid_convex, \
+                                      is_duplicate
+from entities.audio.speak import Speak
+
+import cv2
 
 POSITIONS = []
 
@@ -20,7 +21,8 @@ def run():
                    Color("Rand", [0, 0, 185], [0, 0, 255])]
     while True:
         # Read frame from the camera
-        img = cv2.imread("brug.png")
+        # img = cv2.imread("brug.png")
+        ret, img = cap.read()
 
         # Apply gaussian blue to the image
         img = cv2.GaussianBlur(img, (9, 9), 0)
@@ -39,6 +41,7 @@ def run():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
+    cap.release()
     cv2.destroyAllWindows()
 
 
@@ -139,72 +142,9 @@ def append_to_positions(bl):
         if not is_duplicate(bl.centre, POSITIONS, 5):
             # Append the block to positions
             POSITIONS.append(bl)
-            if len(POSITIONS) > 5:
-                # If there are 5 blocks in POSITIONS (in camera view) try to recognize a building
-                recognize_building(POSITIONS)
-
-
-def recognize_building(positions):
-    """
-    Checks if the currents positions of the blocks matches any saved building
-    :param positions: Current reading of POSITIONS
-    :return: True if a building is recognized
-    """
-    result = []
-    found = True
-
-    # If there are no blocks in view return false
-    if not len(positions) > 0:
-        return False
-
-    # For each building in the saved building list
-    for building in range(len(db.buildings)):
-        b = db.buildings[building]
-        # For each block on the front side of the saved building
-        for block_front in range(len(b.front)):
-            bl = b.front[block_front]
-            result = [building, "front"]
-            # If the current block color and position does not match a saved position,
-            # break and check the next side.
-            if not is_duplicate(bl.centre, positions, 20, bl.color):
-                found = False
-                break
-
-        # Back side
-        if not found:
-            for block_back in range(len(b.back)):
-                bl = b.front[block_back]
-                result = [building, "back"]
-                if not is_duplicate(bl.centre, positions, 10, bl.color):
-                    found = False
-                    break
-
-        # Left side
-        if not found:
-            for block_back in range(len(b.left)):
-                bl = b.front[block_back]
-                result = [building, "back"]
-                if not is_duplicate(bl.centre, positions, 10, bl.color):
-                    found = False
-                    break
-
-        # Right side
-        if not found:
-            for block_back in range(len(b.right)):
-                bl = b.front[block_back]
-                result = [building, "back"]
-                if not is_duplicate(bl.centre, positions, 10, bl.color):
-                    found = False
-                    break
-
-    # Use audio to state the recognized building
-    if found:
-        # tts = "Recognized building {}, {} side".format(result[0], result[1])
-        # Speak.tts(Speak(), tts)
-        print("fakka ik heb je gevonden homo ", result[0], result[1])
-
-    # Return whether a building has been found
-    return found
+            # if len(POSITIONS) > 5:
+            # If there are 5 blocks in POSITIONS (in camera view) try to recognize a building
+            # vrecognize_building(POSITIONS)
 
 
 if __name__ == '__main__':
