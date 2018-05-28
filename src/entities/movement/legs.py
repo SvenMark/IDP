@@ -60,7 +60,7 @@ class Legs(object):
                 elapsed_time = next_time - previous
                 previous = next_time
                 legs[i].update(elapsed_time.total_seconds())
-                legs = [elem for elem in self.legs if elem.ready()]
+            legs = [elem for elem in self.legs if elem.ready()]
 
     def deploy(self, speed):
         """
