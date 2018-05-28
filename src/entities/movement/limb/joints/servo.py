@@ -47,7 +47,7 @@ class Servo(object):
 
         # While the servo has not completed it last command wait a bit and check again.
         while not self.is_ready():
-            time.sleep(0.1)
+            time.sleep(0.01)
 
         max_speed = round(max_speed * 1)
         # Could be changed or set as parameter
@@ -67,7 +67,7 @@ class Servo(object):
             # Move the servo using the ax12 library with the servo id and degrees.
             try:
                 self.ax12.move_speed(self.servo_id, round(current_position), round(speed))
-            except:
+            except Ax12.timeout_error:
                 print("Timeout")
             self.last_position = current_position
             while not self.is_ready:
