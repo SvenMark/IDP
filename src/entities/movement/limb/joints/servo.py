@@ -32,12 +32,12 @@ class Servo(object):
         print("rw : " + str(self.ax12.read_rw_status(self.servo_id)))
         time.sleep(0.1)
 
-    def move_speed(self, degrees, delay, max_speed):
+    def move(self, degrees, delay, max_speed):
         """
         Function that moves the servo using the ax12 library move function
         :param degrees: Position to move to
         :param delay: Time to wait after executing
-        :param speed: The speed at which the servo moves
+        :param max_speed: The speed at which the servo moves
         :return: None
         """
 
@@ -47,7 +47,7 @@ class Servo(object):
 
         # While the servo has not completed it last command wait a bit and check again.
         while not self.is_ready():
-            time.sleep(0.1)
+            time.sleep(0.01)
 
         max_speed = round(max_speed * 1)
         # Could be changed or set as parameter
@@ -65,10 +65,23 @@ class Servo(object):
             speed = math.sin((i + 0.5) / total_steps * math.pi) * max_speed
             print("Servo " + str(self.servo_id) + ", step: " + str(i) + ", speed: " + str(round(speed)) + ", degrees: " + str(round(current_position)))
             # Move the servo using the ax12 library with the servo id and degrees.
-            self.ax12.move_speed(self.servo_id, round(current_position), round(speed))
+            try:
+                self.ax12.move_speed(self.servo_id, round(current_position), round(speed))
+            except Ax12.timeout_error:
+                print("Timeout")
             self.last_position = current_position
             while not self.is_ready:
                 time.sleep(0.1)
+        # Set the last position to the degrees.
+        self.last_position = degrees
+
+        time.sleep(delay)
+
+    def move_backup(self, degrees, delay, speed):
+
+        # Move the servo using the ax12 library with the servo id and degrees.
+        self.ax12.move_speed(self.servo_id, degrees, speed)
+
         # Set the last position to the degrees.
         self.last_position = degrees
 
@@ -95,9 +108,10 @@ class Servo(object):
         """
         return self.ax12.read_speed(self.servo_id)
 
+
 def main():
     servo = Servo(13, 0)
-    servo.move(500, 0)
+    servo.move(500, 0, 80)
 
 
 if __name__ == "__main__":
