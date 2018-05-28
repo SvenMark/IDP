@@ -1,19 +1,5 @@
 from entities.vision.camera import Camera
-from entities.vision.calibrate import Calibrate
 from entities.vision.helpers import Color
-
-POSITIONS = []
-
-
-import sys
-sys.path.insert(0, '../../../src')
-
-from elements.element5.helpers import Color
-from elements.element5.helpers import check_valid_convex
-
-import cv2
-
-POSITIONS = []
 
 
 def run():
