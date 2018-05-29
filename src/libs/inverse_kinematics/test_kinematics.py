@@ -1,5 +1,5 @@
-from libs.inverse_kinematics.actuator import Actuator
-from libs.inverse_kinematics.point import Point3D
+from actuator import Actuator
+from point import Point3D
 
 actuator = Actuator()
 
