@@ -32,6 +32,9 @@ class BluetoothController(object):
         while 1:
             try:
                 data += str(sock.recv(1024))[2:][:-1]
+
+                print(str(data))
+
                 data_end = data.find('\\n')
                 if data_end != -1:
                     rec = data[:data_end]
