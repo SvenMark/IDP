@@ -29,4 +29,4 @@ legs = Legs(leg_0_servos=[
 
 
 for i in range(5):
-    pull(legs, [200, 200, 200])
+    push(legs, [200, 200, 200])

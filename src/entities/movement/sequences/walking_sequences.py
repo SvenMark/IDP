@@ -104,7 +104,7 @@ def lol(legs, speeds, repeat):
                   speeds=speeds)
 
 
-def pull(legs, speeds, ):
+def pull(legs, speeds):
     legs.move(leg_0_moves=[530, 840, 970],
               leg_1_moves=[650, 400, 400],
               leg_2_moves=[400, 400, 400],
@@ -129,3 +129,31 @@ def pull(legs, speeds, ):
               leg_3_moves=[600, 400, 400],
               delay=0,
               speeds=speeds)
+
+
+def push(legs, speeds):
+    legs.move(leg_0_moves=[530, 840, 970],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
+    legs.move(leg_0_moves=[530, 650, 750],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
+    legs.move(leg_0_moves=[530, 650, 640],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
+    legs.move(leg_0_moves=[530, 730, 640],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
+
