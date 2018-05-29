@@ -18,7 +18,6 @@ class Camera(object):
         self.save_building = 0
 
     def run(self):
-        print("run element7")
         # Initialize camera
         cap = cv2.VideoCapture(0)
 
@@ -225,7 +224,7 @@ class Camera(object):
         if found:
             # tts = "Recognized building {}, {} side".format(result[0], result[1])
             # Speak.tts(Speak(), tts)
-            print("fakka ik heb je gevonden homo ", result[0], result[1])
+            print("Hebbes ", result[0], result[1])
 
         # Return whether a building has been found
         return found
