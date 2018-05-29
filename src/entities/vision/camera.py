@@ -35,9 +35,6 @@ class Camera(object):
             # Calculate new cropped masks
             mask_cropped = self.calculate_mask(img, self.color_range, set_contour=True)
 
-            # Show the created image
-            cv2.imshow('Spider Cam 3000', mask_cropped)
-
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 def save_entry_fields():
                     self.save_length = int(e1.get())
@@ -50,8 +47,8 @@ class Camera(object):
                 print("homo")
                 e1 = Entry(master)
                 e2 = Entry(master)
-                e1.insert(10, self.save_length)
-                e2.insert(10, self.save_building)
+                e1.insert(0, self.save_length)
+                e2.insert(0, self.save_building)
 
                 e1.grid(row=0, column=1)
                 e2.grid(row=1, column=1)
@@ -61,7 +58,10 @@ class Camera(object):
                 self.save = True
 
             if self.save and self.save_length == len(self.positions):
-                self.save_that_money()
+                self.save_that_money(img)
+
+            # Show the created image
+            cv2.imshow('Spider Cam 3000', mask_cropped)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -69,21 +69,32 @@ class Camera(object):
         cap.release()
         cv2.destroyAllWindows()
 
-    def save_that_money(self):
-        self.save = False
-
+    def save_that_money(self, img):
         out = open("Output.txt", "a")
-        out.write("{} = [".format(self.save_building))
+        out.write("{} = [\n".format(self.save_building))
 
         for block in range(len(self.positions)):
             b = self.positions[block]
+            cv2.circle(img, b, 2, (255, 255, 255), 5)
             if block == len(self.positions):
-                out.write("        ({}, {})".format(b[0], b[1]))
+                out.write("        ({}, {})\n".format(b[0], b[1]))
             else:
-                out.write("        ({}, {}),".format(b[0], b[1]))
+                out.write("        ({}, {}),\n".format(b[0], b[1]))
 
-        out.write("]")
+        out.write("]\n")
         out.close()
+
+        cv2.imshow('Spider Cam Result', img)
+
+        def confirmed():
+            self.save = False
+            print("saved ", self.save_building)
+            master.destroy()
+
+        master = Tk()
+        Button(master, text='OK', command=confirmed).grid(row=0, column=1, sticky=W, pady=4)
+        Button(master, text='Retry', command=master.destroy).grid(row=0, column=0, sticky=W, pady=4)
+        mainloop()
 
     def calculate_mask(self, img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
         """
