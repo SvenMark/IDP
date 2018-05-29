@@ -105,13 +105,13 @@ def lol(legs, speeds, repeat):
 
 
 def pull(legs, speeds, ):
-    legs.move(leg_0_moves=[530, 200, 350],
+    legs.move(leg_0_moves=[530, 766, 850],
               leg_1_moves=[650, 400, 400],
               leg_2_moves=[400, 400, 400],
               leg_3_moves=[600, 400, 400],
               delay=0.1,
               speeds=speeds)
-    legs.move(leg_0_moves=[530, 210, 475],
+    legs.move(leg_0_moves=[530, 700, 800],
               leg_1_moves=[650, 400, 400],
               leg_2_moves=[400, 400, 400],
               leg_3_moves=[600, 400, 400],
