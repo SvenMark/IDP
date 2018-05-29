@@ -44,7 +44,7 @@ class Servo(object):
         # move towards new position
         step = (self.goal - self.start_position) * delta * self.current_speed
 
-        if self.goal - self.start_position == 0 or abs((self.last_position + step) - self.last_position) < 5:
+        if abs(round(self.last_position) - round(self.goal)) <= self.sensitivity:
             return
 
         self.last_position = self.last_position + (math.sin(step / (self.goal - self.start_position) * math.pi) * step)
