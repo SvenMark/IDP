@@ -35,7 +35,7 @@ class Legs(object):
         
     def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speeds):
         """
-        Function to move the legs together
+        Function to move the legs_not_ready together
         :param leg_0_moves: Array of positions for leg 0
         :param leg_1_moves: Array of positions for leg 1
         :param leg_2_moves: Array of positions for leg 2
@@ -45,26 +45,24 @@ class Legs(object):
         :return: None
         """
 
-        previous = datetime.datetime.now()
-
-        # for testing
-        for i in range(len(self.legs)):
-            for y in range(len(self.legs[i].servos)):
-                self.legs[i].servos[y].last_position = 99
-
-        # while legs are not ready, update
-        legs = [elem for elem in self.legs if elem.ready()]
-        while len(legs) > 0:
-            for i in range(len(legs)):
-                next_time = datetime.datetime.now
-                elapsed_time = previous - next_time
-                previous = next_time
-                legs[i].update(elapsed_time.total_seconds())
-
         self.leg_front_left.move(leg_0_moves, delay, speeds)
         # self.leg_front_right.move(leg_1_moves[0], leg_1_moves[1], leg_1_moves[2], delay)
         # self.leg_rear_left.move(leg_2_moves[0], leg_2_moves[1], leg_2_moves[2], delay)
         # self.leg_rear_right.move(leg_3_moves[0], leg_3_moves[1], leg_3_moves[2], delay)
+
+        self.update_legs()
+
+    def update_legs(self):
+        previous = datetime.datetime.now()
+        # while legs_not_ready are not ready, update
+        legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+        while len(legs_not_ready) != 0:
+            for i in range(len(legs_not_ready)):
+                next_time = datetime.datetime.now()
+                elapsed_time = next_time - previous
+                previous = next_time
+                legs_not_ready[i].update(elapsed_time.total_seconds())
+            legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
     def deploy(self, speed):
         """
@@ -83,6 +81,9 @@ class Legs(object):
         # self.leg_front_right.move(leg_1_deploy, delay, [speed, speed, speed])
         # self.leg_rear_left.move(leg_2_deploy, delay, [speed, speed, speed])
         # self.leg_rear_right.move(leg_3_deploy, delay, [speed, speed, speed])
+
+        self.update_legs()
+
         self.deployed = True
 
     def retract(self, speed):
@@ -102,6 +103,9 @@ class Legs(object):
         # self.leg_front_right.move(leg_1_retract, delay, [speed, speed, speed])
         # self.leg_rear_left.move(leg_2_retract, delay, [speed, speed, speed])
         # self.leg_rear_right.move(leg_3_retract, delay, [speed, speed, speed])
+
+        self.update_legs()
+
         self.deployed = False
 
     def handle_controller_input(self, deploy, x_axis, y_axis):
