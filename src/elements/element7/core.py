@@ -5,7 +5,7 @@ from entities.vision.helpers import Color, Building, Block
 # Initialize color ranges for detection
 color_range = [Color("orange", [0, 100, 100], [12, 255, 255]),
                Color("yellow", [24, 100, 100], [35, 255, 255]),
-               Color("red", [26, 0, 17], [69, 131, 190]),
+               Color("red", [0, 122, 112], [37, 255, 154]),
                Color("green", [71, 89, 11], [83, 202, 120]),
                Color("blue", [99, 152, 128], [119, 228, 174])]
 
@@ -33,7 +33,7 @@ saved_buildings = [
         ]
 
 
-cali = Calibrate(color_range)
-color_range = cali.run()
+# cali = Calibrate(color_range)
+# color_range = cali.run()
 cam = Camera(color_range, saved_buildings)
 cam.run()

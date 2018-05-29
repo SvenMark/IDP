@@ -12,6 +12,11 @@ class Camera(object):
         self.saved_buildings = saved_buildings
         self.helper = Helpers()
 
+        # Saving variables
+        self.save_length = 0
+        self.save = False
+        self.save_building = 0
+
     def run(self):
         print("run element7")
         # Initialize camera
@@ -35,11 +40,52 @@ class Camera(object):
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
 
+            if cv2.waitKey(1) & 0xFF == ord('s'):
+                def save_entry_fields():
+                    self.save_length = e1.get()
+                    self.save_building = e2.get()
+                    master.quit()
+                    master.destroy()
+                print("Aaaaaaa")
+                master = Tk()
+                Label(master, text="Amount of blocks").grid(row=0)
+                Label(master, text="Building Number").grid(row=1)
+
+                e1 = Entry(master)
+                e2 = Entry(master)
+
+                e1.grid(row=0, column=1)
+                e2.grid(row=1, column=1)
+
+                Button(master, text='Save', command=save_entry_fields).grid(row=3, column=1, sticky=W, pady=4)
+                mainloop()
+                self.save = True
+
+            if self.save:
+                self.save_that_money()
+
+            print(self.save_length)
+
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
         cap.release()
         cv2.destroyAllWindows()
+
+    def save_that_money(self):
+        out = open("Output.txt", "a")
+        out.write("{} = [".format(self.save_building))
+        if len(self.positions) == self.save_length:
+            for block in range(len(self.positions)):
+                b = self.positions[block]
+                if block == len(self.positions):
+                    out.write("        Block({}, ({}, {}))".format(b.color, b.centre[0], b.centre[1]))
+                else:
+                    out.write("        Block({}, ({}, {})),".format(b.color, b.centre[0], b.centre[1]))
+
+        out.write("]")
+        out.close()
+        self.save = False
 
     def calculate_mask(self, img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
         """
@@ -95,6 +141,7 @@ class Camera(object):
                 # Image moments help you to calculate some features like center of mass of the object
                 moment = cv2.moments(c)
 
+                x, y, w, h = cv2.boundingRect(c)
                 # Calculate the centre of mass
                 cx = int(moment['m10'] / moment['m00'])
                 cy = int(moment['m01'] / moment['m00'])
@@ -105,13 +152,15 @@ class Camera(object):
                 # Draw a circle in the centre of the block
                 cv2.circle(img_mask, (cx, cy), 2, (255, 255, 255), 5)
 
+                block_position = "bottom/top"
+                if w > 160:
+                    block_position = "laying"
+                elif h > 160:
+                    block_position = "standing"
+
                 # Write the color and position of the block
                 cv2.putText(img_mask, color, (cx - 15, cy - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
-                cv2.putText(img_mask, str((cx, cy)), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
-
-                pts = cv2.findNonZero(img_mask)
-                box = cv2.boundingRect(pts)
-                print(box.width, box.height)
+                cv2.putText(img_mask, "{} {}".format(str((cx, cy)), block_position), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
                 # Append the new block to the global POSITIONS array
                 self.positions = self.helper.append_to_positions(self.positions, Block(color, (cx, cy)))

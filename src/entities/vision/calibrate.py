@@ -50,8 +50,13 @@ class Calibrate(object):
             self.draw_helper(img)
             self.draw_helper(mask)
 
+            img = cv2.flip(img, 1)
+
             cv2.imshow('Spider Cam 2000', mask)
-            cv2.imshow('Spider Cam 3000', img)
+            cv2.imshow('Spider Cam 4000', img)
+
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
         cap.release()
         cv2.destroyAllWindows()
@@ -198,4 +203,3 @@ def main():
 
 if __name__ == '__main__':
     main()  # disabled for travis
-
