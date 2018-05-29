@@ -30,7 +30,7 @@ class Legs(object):
 
         self.type = 'legs'
         self.deployed = False
-        self.retract(200)
+        self.retract(120)
 
         print("Legs setup, retracting")
         
