@@ -1,38 +1,19 @@
 from entities.vision.helpers import *
 from entities.audio.speak import Speak
-
+import json
+from tkinter import *
 
 class Camera(object):
 
-    def __init__(self, color_range):
+    def __init__(self, color_range, saved_buildings):
         self.color_range = color_range
         self.positions = []
-        self.saved_buildings = [
-            Building(front=[Block("orange", (41, 324)),
-                            Block("yellow", (33, 97)),
-                            Block("red", (148, 92)),
-                            Block("green", (153, 318)),
-                            Block("blue", (92, 218))],
-                     back=[Block("blue", (31, 316)),
-                           Block("green", (86, 209)),
-                           Block("orange", (30, 91)),
-                           Block("yellow", (144, 317))],
-                     left=[Block("red", (112, 175)),
-                           Block("blue", (44, 304)),
-                           Block("green", (36, 68)),
-                           Block("orange", (184, 70)),
-                           Block("yellow", (180, 307))],
-                     right=[Block("red", (112, 175)),
-                            Block("blue", (44, 304)),
-                            Block("green", (36, 68)),
-                            Block("orange", (184, 70)),
-                            Block("yellow", (180, 307))]
-                     )
-        ]
+        self.saved_buildings = saved_buildings
         self.helper = Helpers()
+        self.saved = False
+        self.save_length = 0
 
     def run(self):
-        print("run element7")
         # Initialize camera
         cap = cv2.VideoCapture(0)
 
@@ -52,7 +33,12 @@ class Camera(object):
             mask_cropped = self.calculate_mask(img, self.color_range, set_contour=True)
 
             # Show the created image
-            cv2.imshow('camservice', mask_cropped)
+            cv2.imshow('Spider Cam 3000', mask_cropped)
+
+            # Save the current self.positions
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                a = 1
+                # To be implemented
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -191,7 +177,7 @@ class Camera(object):
         if found:
             # tts = "Recognized building {}, {} side".format(result[0], result[1])
             # Speak.tts(Speak(), tts)
-            print("fakka ik heb je gevonden homo ", result[0], result[1])
+            print("Hebbes ", result[0], result[1])
 
         # Return whether a building has been found
         return found
