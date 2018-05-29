@@ -43,6 +43,10 @@ class Servo(object):
     def update(self, delta):
         # move towards new position
         step = (self.goal - self.start_position) * delta * self.current_speed
+
+        if self.goal - self.start_position == 0 or abs((self.last_position + step) - self.last_position) < 5:
+            return
+
         self.last_position = self.last_position + (math.sin(step / (self.goal - self.start_position) * math.pi) * step)
         self.ax12.move(self.servo_id, round(self.last_position))
 
