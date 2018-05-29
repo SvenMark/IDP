@@ -15,6 +15,7 @@ class Camera(object):
         self.save_length = 0
         self.save = False
         self.save_building = 0
+        self.last_positions = []
 
     def run(self):
         # Initialize camera
@@ -44,7 +45,6 @@ class Camera(object):
                 master = Tk()
                 Label(master, text="Amount of blocks").grid(row=0)
                 Label(master, text="Building Number").grid(row=1)
-                print("homo")
                 e1 = Entry(master)
                 e2 = Entry(master)
                 e1.insert(0, self.save_length)
@@ -53,11 +53,11 @@ class Camera(object):
                 e1.grid(row=0, column=1)
                 e2.grid(row=1, column=1)
 
-                Button(master, text='Save', command=save_entry_fields).grid(row=3, column=1, sticky=W, pady=4)
+                Button(master, text='Save', command=save_entry_fields).grid(row=3, column=1, pady=4)
                 mainloop()
                 self.save = True
 
-            if self.save and self.save_length == len(self.positions):
+            if self.save and 3 < len(self.positions) == self.save_length:
                 self.save_that_money(img)
 
             # Show the created image
@@ -68,6 +68,15 @@ class Camera(object):
 
         cap.release()
         cv2.destroyAllWindows()
+
+    # def not_last_positions(self):
+    #     if len(self.last_positions) == len(self.positions):
+    #         for block in range(len(self.last_positions)):
+    #             b = self.last_positions[block]
+    #             if b not in self.positions:
+    #                 return True
+    #
+    #     return False
 
     def save_that_money(self, img):
         out = open("Output.txt", "a")
@@ -95,6 +104,8 @@ class Camera(object):
         Button(master, text='OK', command=confirmed).grid(row=0, column=1, sticky=W, pady=4)
         Button(master, text='Retry', command=master.destroy).grid(row=0, column=0, sticky=W, pady=4)
         mainloop()
+
+        self.last_positions = self.positions
 
     def calculate_mask(self, img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
         """
