@@ -162,11 +162,11 @@ class Helpers:
         # Return the resized image
         return resized
 
-    def append_to_positions(self, positions, bl):
+    def append_to_positions(self, positions, block):
         """
         Appends a unique block to the array
         :param positions: Positions array of the current view
-        :param bl: Block class
+        :param block: Centre point
         """
 
         # If the POSITIONS length is getting too long clear it
@@ -174,12 +174,12 @@ class Helpers:
             del positions[:]
         # If the POSITIONS array is empty append the block
         if len(positions) == 0:
-            positions.append(bl)
+            positions.append(block)
         else:
             # Check if the given block is not a duplicate
-            if not self.is_duplicate(bl, positions, 5):
+            if not self.is_duplicate(block, positions, 5):
                 # Append the block to positions
-                positions.append(bl)
+                positions.append(block)
 
         return positions
 

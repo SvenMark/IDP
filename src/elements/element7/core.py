@@ -18,9 +18,9 @@ saved_buildings = [
                  (92, 218)]
 ]
 
-save = Saving(color_range)
-save.run()
-# cali = Calibrate(color_range)
-# color_range = cali.run()
+# save = Saving(color_range)
+# save.run()
+cali = Calibrate(color_range)
+color_range = cali.run()
 # cam = Camera(color_range, saved_buildings)
 # cam.run()
