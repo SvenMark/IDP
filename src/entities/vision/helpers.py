@@ -15,27 +15,10 @@ class ColorRange:
         self.range = color_range
 
 
-class Block:
-    def __init__(self, color, centre):
-        self.color = color
-        self.centre = np.array(centre)
-
-    def __str__(self):
-        return "Block({}, ({}, {}))".format(self.color, self.centre[0], self.centre[1])
-
-
-class Building:
-    def __init__(self, front, back, left, right):
-        self.front = front
-        self.back = back
-        self.left = left
-        self.right = right
-
-
 class Helpers:
 
     @staticmethod
-    def is_duplicate(centre, positions, sensitivity=10, color=None):
+    def is_duplicate(centre, positions, sensitivity=10):
         """
         Compares a centre points to an array with currently visible center points
         :param centre: Centre point to check
@@ -47,13 +30,12 @@ class Helpers:
 
         for block in range(len(positions)):
             # Calculate distance between the centre points
-            distance = np.linalg.norm(centre - positions[block].centre)
+            a = np.array(centre)
+            b = np.array(positions[block])
+            distance = np.linalg.norm(a-b)
 
-            # If there is a given color, check those and
-            # the distance between the blocks
-            if color and color == positions[block].color and distance <= sensitivity:
-                return True
-            elif not color and distance <= sensitivity:
+            # Check the distance between the blocks
+            if distance <= sensitivity:
                 return True
 
         return False
@@ -190,7 +172,7 @@ class Helpers:
             positions.append(bl)
         else:
             # Check if the given block is not a duplicate
-            if not self.is_duplicate(bl.centre, positions, 5):
+            if not self.is_duplicate(bl, positions, 5):
                 # Append the block to positions
                 positions.append(bl)
 

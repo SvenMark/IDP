@@ -1,6 +1,5 @@
 from entities.vision.helpers import *
 from entities.audio.speak import Speak
-import json
 from tkinter import *
 
 
@@ -41,17 +40,18 @@ class Camera(object):
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 def save_entry_fields():
-                    self.save_length = e1.get()
+                    self.save_length = int(e1.get())
                     self.save_building = e2.get()
                     master.quit()
                     master.destroy()
-                print("Aaaaaaa")
                 master = Tk()
                 Label(master, text="Amount of blocks").grid(row=0)
                 Label(master, text="Building Number").grid(row=1)
-
+                print("homo")
                 e1 = Entry(master)
                 e2 = Entry(master)
+                e1.insert(10, self.save_length)
+                e2.insert(10, self.save_building)
 
                 e1.grid(row=0, column=1)
                 e2.grid(row=1, column=1)
@@ -60,10 +60,8 @@ class Camera(object):
                 mainloop()
                 self.save = True
 
-            if self.save:
+            if self.save and self.save_length == len(self.positions):
                 self.save_that_money()
-
-            print(self.save_length)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -72,19 +70,20 @@ class Camera(object):
         cv2.destroyAllWindows()
 
     def save_that_money(self):
+        self.save = False
+
         out = open("Output.txt", "a")
         out.write("{} = [".format(self.save_building))
-        if len(self.positions) == self.save_length:
-            for block in range(len(self.positions)):
-                b = self.positions[block]
-                if block == len(self.positions):
-                    out.write("        Block({}, ({}, {}))".format(b.color, b.centre[0], b.centre[1]))
-                else:
-                    out.write("        Block({}, ({}, {})),".format(b.color, b.centre[0], b.centre[1]))
+
+        for block in range(len(self.positions)):
+            b = self.positions[block]
+            if block == len(self.positions):
+                out.write("        ({}, {})".format(b[0], b[1]))
+            else:
+                out.write("        ({}, {}),".format(b[0], b[1]))
 
         out.write("]")
         out.close()
-        self.save = False
 
     def calculate_mask(self, img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
         """
@@ -152,9 +151,9 @@ class Camera(object):
                 cv2.circle(img_mask, (cx, cy), 2, (255, 255, 255), 5)
 
                 block_position = "bottom/top"
-                if w > 160:
+                if w > 100:
                     block_position = "laying"
-                elif h > 160:
+                elif h > 100:
                     block_position = "standing"
 
                 # Write the color and position of the block
@@ -162,7 +161,7 @@ class Camera(object):
                 cv2.putText(img_mask, "{} {}".format(str((cx, cy)), block_position), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
                 # Append the new block to the global POSITIONS array
-                self.positions = self.helper.append_to_positions(self.positions, Block(color, (cx, cy)))
+                self.positions = self.helper.append_to_positions(self.positions, (cx, cy))
 
         # Return the new mask
         return img_mask
@@ -174,7 +173,6 @@ class Camera(object):
         :return: True if a building is recognized
         """
         result = []
-        found = True
 
         # If there are no blocks in view return false
         if not len(positions) > 0:
@@ -184,47 +182,16 @@ class Camera(object):
         for building in range(len(self.saved_buildings)):
             b = self.saved_buildings[building]
             # For each block on the front side of the saved building
-            for block_front in range(len(b.front)):
-                bl = b.front[block_front]
+            for block in range(len(b)):
+                bl = b.front[block]
                 result = [building, "front"]
                 # If the current block color and position does not match a saved position,
                 # break and check the next side.
-                if not self.helper.is_duplicate(bl.centre, positions, 20, bl.color):
-                    found = False
-                    break
-
-            # Back side
-            if not found:
-                for block_back in range(len(b.back)):
-                    bl = b.front[block_back]
-                    result = [building, "back"]
-                    if not self.helper.is_duplicate(bl.centre, positions, 10, bl.color):
-                        found = False
-                        break
-
-            # Left side
-            if not found:
-                for block_back in range(len(b.left)):
-                    bl = b.front[block_back]
-                    result = [building, "back"]
-                    if not self.helper.is_duplicate(bl.centre, positions, 10, bl.color):
-                        found = False
-                        break
-
-            # Right side
-            if not found:
-                for block_back in range(len(b.right)):
-                    bl = b.front[block_back]
-                    result = [building, "back"]
-                    if not self.helper.is_duplicate(bl.centre, positions, 10, bl.color):
-                        found = False
-                        break
+                if not self.helper.is_duplicate(bl.centre, positions, 20):
+                    return False
 
         # Use audio to state the recognized building
-        if found:
-            # tts = "Recognized building {}, {} side".format(result[0], result[1])
-            # Speak.tts(Speak(), tts)
-            print("Hebbes ", result[0], result[1])
+        print("Hebbes ", result[0], result[1])
 
         # Return whether a building has been found
-        return found
+        return True
