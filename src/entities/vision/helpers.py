@@ -9,6 +9,12 @@ class Color:
         self.upper = np.array(upper)
 
 
+class Block:
+    def __init__(self, color, centre):
+        self.color = color
+        self.centre = np.array(centre)
+
+
 class ColorRange:
     def __init__(self, color, color_range):
         self.color = color
@@ -24,7 +30,6 @@ class Helpers:
         :param centre: Centre point to check
         :param positions: Array with blocks
         :param sensitivity: Sensitivity to check with, higher sensitivity allows more distance
-        :param color: The color to compare, leave empty for no color
         :return: True if array 'y' contains the centre point
         """
 

@@ -1,5 +1,6 @@
 from entities.vision.calibrate import Calibrate
 from entities.vision.camera import Camera
+from entities.vision.saving import Saving
 from entities.vision.helpers import Color
 
 # Initialize color ranges for detection
@@ -17,8 +18,9 @@ saved_buildings = [
                  (92, 218)]
 ]
 
-
+save = Saving(color_range)
+save.run()
 # cali = Calibrate(color_range)
 # color_range = cali.run()
-cam = Camera(color_range, saved_buildings)
-cam.run()
+# cam = Camera(color_range, saved_buildings)
+# cam.run()
