@@ -4,6 +4,30 @@ Daniel Gonzalez
 dgonz@mit.edu
 """
 import math
+from entities.movement.legs import Legs
+
+legs = Legs(leg_0_servos=[
+                14,
+                61,
+                63
+            ]
+#            leg_1_servos=[
+#                21,
+#                31,
+#                53
+#            ],
+#            leg_2_servos=[
+#                61,
+#                63,
+#                111
+#            ],
+#            leg_3_servos=[
+#                111,
+#                111,
+#                111
+#            ]
+            )
+
 
 def inverseKinematics(myInput):
     [x,y,z,thetaE,thetaR, gripAmount, mySpeed] = myInput
@@ -39,5 +63,16 @@ def inverseKinematics(myInput):
     myOutput = [thetaBase, thetaShoulder, thetaElbow, thetaE, thetaR, gripAmount,mySpeed]
     return myOutput
 
-print(str(inverseKinematics([5,5,5,10,0,0,65])))
 
+result = inverseKinematics([5,5,5,10,0,0,65])
+print(str(result))
+
+legs.deploy(90)
+leg_0_deploy = [530, 766, 850]
+
+legs.move(leg_0_moves=[leg_0_deploy[0] + result[0], leg_0_deploy[1] + result[1], leg_0_deploy[2] + result[2]],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=[90,90,90])
