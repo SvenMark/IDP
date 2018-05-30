@@ -14,6 +14,10 @@ class Tracks(object):
         Constructor for the tracks class
         :param track_0_pin: The GPIO pin which the first track is connected to
         :param track_1_pin: The GPIO pin which the second track is connected to
+        :param track_0_forward: GPIO direction pin for track 0
+        :param track_0_backward: GPIO direction pin for track 0
+        :param track_1_forward: GPIO direction pin for track 1
+        :param track_1_backward: GPIO direction pin for track 1
         """
 
         # Initialise both motors as tracks. Each track has 1 motor.

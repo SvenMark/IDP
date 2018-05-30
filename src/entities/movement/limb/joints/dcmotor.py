@@ -14,6 +14,8 @@ class DCMotor(object):
         """
         Constructor for the dc motor class
         :param pin: The GPIO pin the dc motor is connected to
+        :param pin_forward: The forward direction pin, this pin send a signal if the motor needs to go forward
+        :param pin_backward: The backward direction pin, this pin send a signal if the motor needs to go backward
         """
 
         # Set up the gpio and pins for the use of DC motors
