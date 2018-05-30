@@ -148,7 +148,7 @@ class Legs(object):
                 walk_backward(self, [speed, speed, speed],
                               self_update=False)
         # not all legs finished
-        else:
+        elif self.deployed:
             for i in range(len(legs_not_ready)):
                 for y in range(len(legs_not_ready[i].servos)):
                     legs_not_ready[i].servos[y].set_speed(speed)
