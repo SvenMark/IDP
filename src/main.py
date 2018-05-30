@@ -9,6 +9,7 @@ from entities.robot.robot import Robot
 from entities.movement.limb.tire import Tire
 from entities.movement.sequences.walking_sequences import *
 
+sys.path.insert(0, '../src')
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
 
 #FUNC_MAP = {

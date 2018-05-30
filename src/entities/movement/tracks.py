@@ -1,7 +1,10 @@
 import time
+import sys
 
 from entities.movement.limb.joints.dcmotor import DCMotor
 from entities.movement.limb.track import Track
+
+sys.path.insert(0, '../../../src')
 
 
 class Tracks(object):

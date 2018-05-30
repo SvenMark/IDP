@@ -1,9 +1,12 @@
 import unittest
+import sys
 
 from entities.movement.limb.tire import Tire
 from entities.movement.tracks import Tracks
 from entities.movement.legs import Legs
 from entities.robot.robot import Robot
+
+sys.path.insert(0, '../../../src')
 
 TYPES = ['legs',
          'tracks',
@@ -18,22 +21,22 @@ class CommonTestClass(unittest.TestCase):
                     14,
                     61,
                     63
-                ],
-                leg_1_servos=[
-                    14,
-                    61,
-                    63
-                ],
-                leg_2_servos=[
-                    14,
-                    61,
-                    63
-                ],
-                leg_3_servos=[
-                    14,
-                    61,
-                    63
                 ]
+                # leg_1_servos=[
+                #     14,
+                #     61,
+                #     63
+                # ],
+                # leg_2_servos=[
+                #     14,
+                #     61,
+                #     63
+                # ],
+                # leg_3_servos=[
+                #     14,
+                #     61,
+                #     63
+                # ]
             ),
             Tracks(track_0_pin=18, track_1_pin=13),
             Tire(servo_id=69, position=500)

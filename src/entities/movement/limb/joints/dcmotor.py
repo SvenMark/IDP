@@ -1,8 +1,8 @@
-#!/bin/python
-
+import sys
 import time  # Import the Time library
-
 import RPi.GPIO as GPIO  # Import the GPIO Library
+
+sys.path.insert(0, '../../../../../src')
 
 
 class DCMotor(object):

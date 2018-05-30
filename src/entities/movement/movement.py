@@ -1,3 +1,8 @@
+import sys
+
+sys.path.insert(0, '../../../src')
+
+
 class Movement(object):
     """
     Base class for movement
