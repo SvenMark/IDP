@@ -35,7 +35,7 @@ class Saving(object):
             # Calculate the masks
             mask = self.calculate_mask(img, self.color_range)
 
-            #img = self.helper.crop_to_contours(mask, img)
+            img = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
             mask_cropped = self.calculate_mask(img, self.color_range, set_contour=True)
@@ -54,15 +54,6 @@ class Saving(object):
 
         cap.release()
         cv2.destroyAllWindows()
-
-    # def not_last_positions(self):
-    #     if len(self.last_positions) == len(self.positions):
-    #         for block in range(len(self.last_positions)):
-    #             b = self.last_positions[block]
-    #             if b not in self.positions:
-    #                 return True
-    #
-    #     return False
 
     def show_input_fields(self):
         def save_entry_fields():
