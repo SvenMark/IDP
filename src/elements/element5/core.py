@@ -27,7 +27,7 @@ saved_buildings = saved_buildings = [
 
 def run():
     print("run element killmyself")
-    detect_bridge()
+    detect_cup()
 
 
 def detect_cup():
