@@ -1,9 +1,12 @@
 import unittest
+import sys
 
 from entities.movement.legs import Legs
 from entities.movement.tracks import Tracks
 from entities.movement.limb.tire import Tire
 from entities.movement.movement import Movement
+
+sys.path.insert(0, '../../../src')
 
 
 class CommonTestClass(unittest.TestCase):

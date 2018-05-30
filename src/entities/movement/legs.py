@@ -1,6 +1,10 @@
 import datetime
+import sys
+
 from entities.movement.limb.leg import Leg
 from entities.movement.sequences.walking_sequences import *
+
+sys.path.insert(0, '../../../src')
 
 
 class Legs(object):

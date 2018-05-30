@@ -1,4 +1,8 @@
+import sys
+
 from entities.movement.limb.joints.servo import Servo
+
+sys.path.insert(0, '../../../../src')
 
 
 class Tire(object):

@@ -1,7 +1,9 @@
-#!/bin/python
+import sys
 
 from entities.movement.sequences.walking_sequences import *
 from entities.movement.legs import Legs
+
+sys.path.insert(0, '../../src')
 
 legs = Legs(leg_0_servos=[
                 14,

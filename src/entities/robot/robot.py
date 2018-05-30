@@ -1,5 +1,9 @@
+import sys
+
 from entities.movement.movement import Movement
 from entities.connection.bluetooth_controller import BluetoothController
+
+sys.path.insert(0, '../../../src')
 
 
 class Robot(object):

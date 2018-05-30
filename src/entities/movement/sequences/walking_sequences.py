@@ -1,3 +1,8 @@
+import sys
+
+sys.path.insert(0, '../../../../src')
+
+
 def walk_forward(legs, speeds, self_update=True):
     legs.move(leg_0_moves=[530, 700, 850],
               leg_1_moves=[650, 400, 400],

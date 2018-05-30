@@ -1,4 +1,8 @@
+import sys
+
 from entities.movement.limb.joints.dcmotor import DCMotor
+
+sys.path.insert(0, '../../../../src')
 
 
 class Track(object):

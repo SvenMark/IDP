@@ -1,11 +1,13 @@
-#!/bin/python
 from __future__ import division
+
+import sys
 import math
-
 import time
-
 import numpy as np
+
 from libs.ax12 import Ax12
+
+sys.path.insert(0, '../../../../../src')
 
 
 class Servo(object):

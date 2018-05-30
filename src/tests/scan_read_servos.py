@@ -1,6 +1,8 @@
-#!/bin/python
+import sys
 
 from libs.ax12 import Ax12
+
+sys.path.insert(0, '../../src')
 
 tester = Ax12()
 
