@@ -29,7 +29,7 @@ class Servo(object):
         self.last_position = self.ax12.read_position(self.servo_id)
         self.goal = initial_position
         self.current_speed = 200
-        self.current_speed_multiplier = 0.01
+        self.current_speed_multiplier = 0.06
 
         self.start_position = self.last_position
 
@@ -43,7 +43,11 @@ class Servo(object):
     def update(self, delta):
         # move towards new position
         step = (self.goal - self.start_position) * delta * self.current_speed
-        self.last_position = self.last_position + step
+
+        if abs(round(self.last_position) - round(self.goal)) <= self.sensitivity:
+            return
+
+        self.last_position = self.last_position + (math.sin(step / (self.goal - self.start_position) * math.pi) * step)
         self.ax12.move(self.servo_id, round(self.last_position))
 
     def move(self, degrees, delay, speed):

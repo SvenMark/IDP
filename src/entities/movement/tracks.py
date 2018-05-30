@@ -1,7 +1,7 @@
 import time
-import math
 
 from entities.movement.limb.joints.dcmotor import DCMotor
+from entities.movement.limb.track import Track
 
 
 class Tracks(object):
@@ -17,8 +17,8 @@ class Tracks(object):
         """
 
         # Initialise both motors as tracks. Each track has 1 motor.
-        self.track_left = DCMotor(track_0_pin)
-        self.track_right = DCMotor(track_1_pin)
+        self.track_left = Track(track_0_pin)
+        self.track_right = Track(track_1_pin)
         self.type = 'tracks'
 
         print("Tracks setup")
@@ -144,7 +144,7 @@ class Tracks(object):
         """
         self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 0, 1)
 
-    def handle_track_input(self, stop_motors, vertical_speed, horizontal_speed, dead_zone):
+    def handle_controller_input(self, stop_motors, vertical_speed, horizontal_speed, dead_zone):
         print("Vertical: " + str(vertical_speed) + " Horizontal: " + str(horizontal_speed))
 
         if stop_motors == 1:
