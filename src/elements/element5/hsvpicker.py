@@ -15,7 +15,6 @@ def run():
     print("w: " + str(width) + " " + "h: " + str(height))
 
     createtrackbars("1")
-    createtrackbars("2")
 
     while True:
         img = cap.read()
@@ -35,10 +34,6 @@ def run():
         higher = np.array([highh, highs, highv])
         mask = cv2.inRange(hsv, lower, higher)
 
-        if cv2.getTrackbarPos('keta', '2') > 50:
-            mask += calculate_mask("2", mask, img)
-            # print("homo")
-
         output = cv2.bitwise_and(img, img, mask=mask)
 
         ret, thresh = cv2.threshold(mask, 127, 255, 0)
@@ -52,6 +47,7 @@ def run():
         cv2.imshow('hsv-picker', output)
 
         if cv2.waitKey(1) & 0xFF == ord('s'):
+            savehigherlower(lowh, lows, lowv, highh, highs, highv)
             print("Saved settings")
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -90,13 +86,12 @@ def createtrackbars(name):
     cv2.createTrackbar('High H', name, 120, 180, nothing)
     cv2.createTrackbar('High S', name, 255, 255, nothing)
     cv2.createTrackbar('High V', name, 255, 255, nothing)
-    cv2.createTrackbar('keta', name, 255, 255, nothing)
 
 
 def savehigherlower(lowh, lows, lowv, highh, highs, highv):
     text_file = open("Output.txt", "a")
     text_file.write("([" + str(lowh) + ", " + str(lows) + ", " + str(lowv) + "], "
-                    "[" + str(highh) + ", " + str(highs) + ", " + str(highv) + "])")
+                    "[" + str(highh) + ", " + str(highs) + ", " + str(highv) + "])\n")
     text_file.close()
 
 

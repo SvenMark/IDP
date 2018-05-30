@@ -1,3 +1,7 @@
+import time
+import sys
+sys.path.insert(0, '../../../src')
+
 from entities.vision.helpers import *
 from entities.audio.speak import Speak
 
@@ -149,7 +153,7 @@ class Camera(object):
                     return False
 
         # Use audio to state the recognized building
-        print("Hebbes ", result[0], result[1])
+        print("At time: " + time.ctime() + " Found: ", result[0], result[1])
 
         # Return whether a building has been found
         return True

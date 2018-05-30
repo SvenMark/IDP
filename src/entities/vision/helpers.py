@@ -88,7 +88,7 @@ class Helpers:
             c = cv2.convexHull(cnt)
 
             # Check if the convex is a valid block
-            if self.check_valid_convex(c, 4, 4000, 10000):
+            if self.check_valid_convex(c, 4, 1000, 10000):
                 # Calculate extremes of the hull
                 min_x = tuple(cnt[cnt[:, :, 0].argmin()][0])
                 max_x = tuple(cnt[cnt[:, :, 0].argmax()][0])
