@@ -49,7 +49,8 @@ class Servo(object):
         # move towards new position
         step = (self.goal - self.start_position) * delta * self.current_speed
         if self.last_position + step > 998 or self.last_position + step < 0:
-            print(str(self.last_position + step) + " not in range " + str(self.servo_id))
+            print(str(self.last_position + step) + " not in range " + str(self.servo_id) + "speed "
+                  + str(self.current_speed) + "delta " + str(delta))
             return
         self.last_position = self.last_position + step
         self.ax12.move(self.servo_id, round(self.last_position))
