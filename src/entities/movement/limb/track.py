@@ -2,7 +2,7 @@ from entities.movement.limb.joints.dcmotor import DCMotor
 
 
 class Track(object):
-    def __init__(self, track_pin):
+    def __init__(self, track_pin, pin_forward, pin_backward):
         """
         Constructor for the tracks class
         :param track_0_pin: The GPIO pin which the first track is connected to
@@ -10,7 +10,7 @@ class Track(object):
         """
 
         # Initialise both motors as tracks. Each track has 1 motor.
-        self.motor = DCMotor(track_pin)
+        self.motor = DCMotor(track_pin, pin_forward, pin_backward)
         self.current_speed = 0
         self.type = 'track'
 
