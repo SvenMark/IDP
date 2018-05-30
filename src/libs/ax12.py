@@ -9,10 +9,10 @@ http://savageelectronics.blogspot.it/2011/01/arduino-y-dynamixel-ax-12.html
 import sys
 import RPi.GPIO as GPIO
 
+sys.path.insert(0, '../../src')
+
 from time import sleep
 from serial import Serial
-
-sys.path.insert(0, '../../src')
 
 
 class Ax12:
