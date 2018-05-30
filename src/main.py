@@ -54,7 +54,12 @@ def main():
                 #     63
                 # ]
             ),
-            Tracks(track_0_pin=18, track_1_pin=13, track_0_forward=22, track_0_backward=27, track_1_forward=10, track_1_backward=9),
+            Tracks(track_0_pin=18,
+                   track_1_pin=13,
+                   track_0_forward=22,
+                   track_0_backward=27,
+                   track_1_forward=10,
+                   track_1_backward=9),
             Tire(servo_id=21, position=500)
         ]
 
