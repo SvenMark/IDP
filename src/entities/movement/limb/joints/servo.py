@@ -42,6 +42,9 @@ class Servo(object):
 
         time.sleep(0.1)
 
+    def set_speed(self, speed):
+        self.current_speed = speed * self.current_speed_multiplier
+
     def update(self, delta):
         # move towards new position
         step = (self.goal - self.start_position) * delta * self.current_speed

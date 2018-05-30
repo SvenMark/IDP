@@ -22,6 +22,9 @@ class Legs(object):
         :param leg_3_servos: Array of servo id`s for leg 3
         """
 
+        self.previous = datetime.datetime.now()
+
+
         # Initialise a leg for each corner of the robot
         self.leg_front_left = Leg(leg_0_servos, [530, 210, 475])
         # self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
@@ -38,7 +41,7 @@ class Legs(object):
 
         print("Legs setup, retracting")
         
-    def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speeds):
+    def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speeds, self_update=True):
         """
         Function to move the legs_not_ready together
         :param leg_0_moves: Array of positions for leg 0
@@ -47,6 +50,8 @@ class Legs(object):
         :param leg_3_moves: Array of positions for leg 3
         :param delay: Time to wait after executing
         :param speeds: Array of speeds for each servo
+        :param self_update: If True, it locks the thread while legs are not ready,
+            else updates must be handled for movement
         :return: None
         """
 
@@ -55,19 +60,25 @@ class Legs(object):
         # self.leg_rear_left.move(leg_2_moves[0], leg_2_moves[1], leg_2_moves[2], delay)
         # self.leg_rear_right.move(leg_3_moves[0], leg_3_moves[1], leg_3_moves[2], delay)
 
-        self.update_legs()
+        # setting previous time, because the delta time would be too big
+        self.previous = datetime.datetime.now()
+
+        if self_update:
+            self.update_legs()
 
     def update_legs(self):
-        previous = datetime.datetime.now()
         # while legs_not_ready are not ready, update
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
         while len(legs_not_ready) != 0:
             for i in range(len(legs_not_ready)):
-                next_time = datetime.datetime.now()
-                elapsed_time = next_time - previous
-                previous = next_time
-                legs_not_ready[i].update(elapsed_time.total_seconds())
+                legs_not_ready[i].update(self.get_delta())
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+
+    def get_delta(self):
+        next_time = datetime.datetime.now()
+        elapsed_time = next_time - self.previous
+        self.previous = next_time
+        return elapsed_time.total_seconds()
 
     def deploy(self, speed):
         """
@@ -119,13 +130,29 @@ class Legs(object):
         elif deploy == 0 and self.deployed:
             self.retract(200)
 
-        if self.deployed:
+        legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+
+        # init
+        speed = (y_axis - 512) * 0.7
+        if y_axis < 500:
+            speed = (512 - y_axis) * 0.7
+
+        # if legs are deployed and all legs are finished
+        if self.deployed and len(legs_not_ready) == 0:
             if 500 < y_axis < 530:
                 self.deploy(200)
             if y_axis > 530:
-                walk_forward(self, [(y_axis - 512) * 0.7, (y_axis - 512) * 0.7, (y_axis - 512) * 0.7])
+                walk_forward(self, [speed, speed, speed],
+                             self_update=False)
             if y_axis < 500:
-                walk_backward(self, [(512 - y_axis) * 0.7, (512 - y_axis) * 0.7, (512 - y_axis) * 0.7])
+                walk_backward(self, [speed, speed, speed],
+                              self_update=False)
+        # not all legs finished
+        else:
+            for i in range(len(legs_not_ready)):
+                for y in range(len(legs_not_ready[i].servos)):
+                    legs_not_ready[i].servos[y].set_speed(speed)
+                legs_not_ready[i].update(self.get_delta())
 
             # Move according to joystick direction
             # self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
