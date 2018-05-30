@@ -1,4 +1,9 @@
+from __future__ import print_function
+import glob
+import struct
+import numpy as np
 import bluetooth
+import os
 import time
 
 
@@ -16,36 +21,29 @@ class BluetoothController(object):
         self.legs = limbs[0]
         self.tracks = limbs[1]
 
+    def look_for_available_ports(self):
+        """
+        find available serial ports to Arduino
+        """
+        available_ports = glob.glob('/dev/rfcomm*')
+        print("Available ports: ")
+        print(available_ports)
+
+        return available_ports[0]
+
     def receive_data(self):
         """
         Retrieve data from bluetooth connection with bluetooth address from the constructor
         :return: None
         """
-        port = 1
-        sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+        port = open("dev/rfcomm0", "rb")
 
-        sock.connect((self.bluetooth_address, port))
-
-        data = ""
-
-        count = 0
         while 1:
             try:
-                data += str(sock.recv(1024))[2:][:-1]
-
-                print(str(data))
-
-                data_end = data.find('\\n')
-                if data_end != -1:
-                    rec = data[:data_end]
-                    # print(rec)
-                    self.handle_data(rec)
-                    data = ""
-                    count += 1
-
+                byte = port.read(1)
+                print(str(byte))
             except KeyboardInterrupt:
                 break
-        sock.close()
 
     def handle_data(self, data):
         """
@@ -53,7 +51,15 @@ class BluetoothController(object):
         :param data: A data string
         :return: None
         """
-        print(data)
+
+        print("Data " + str(data))
+
+        new_values = struct.unpack('<fffffffff', data)
+
+        latest_values = np.array(new_values)
+
+        print("Converted data " + str(latest_values))
+
         # Index for button to stop motors
         s_index = data.find('s')
         # Index for vertical movement of motors
@@ -91,6 +97,27 @@ class BluetoothController(object):
 
             # Send the data to legs class
             self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
+
+    def send_message(self, target):
+        """
+        Send a message over bluetooth
+        :param target: Bluetooth address to send to
+        :return: None
+        """
+        port = 1
+        socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+        socket.connect((target, port))
+        socket.send("Dit is ontvangen met bluetooth")
+        socket.close()
+
+    def scan(self):
+        """
+        Scan for nearby bluetooth devices
+        :return: None
+        """
+        nearby_devices = bluetooth.discover_devices()
+        for device in nearby_devices:
+            print(str(bluetooth.lookup_name(device)) + " [" + str(device) + "]")
 
 
 def main():

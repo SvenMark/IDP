@@ -108,7 +108,7 @@ class Legs(object):
 
         self.deployed = False
 
-    def handle_leg_input(self, deploy, x_axis, y_axis):
+    def handle_controller_input(self, deploy, x_axis, y_axis):
         if deploy == 1 and not self.deployed:
             self.deploy(200)
         elif deploy == 0 and self.deployed:
