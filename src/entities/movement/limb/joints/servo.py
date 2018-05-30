@@ -5,9 +5,9 @@ import math
 import time
 import numpy as np
 
-from libs.ax12 import Ax12
-
 sys.path.insert(0, '../../../../../src')
+
+from libs.ax12 import Ax12
 
 
 class Servo(object):

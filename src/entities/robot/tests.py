@@ -1,12 +1,12 @@
 import unittest
 import sys
 
+sys.path.insert(0, '../../../src')
+
 from entities.movement.limb.tire import Tire
 from entities.movement.tracks import Tracks
 from entities.movement.legs import Legs
 from entities.robot.robot import Robot
-
-sys.path.insert(0, '../../../src')
 
 TYPES = ['legs',
          'tracks',

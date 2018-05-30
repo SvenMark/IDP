@@ -1,6 +1,7 @@
 import os
 import sys
 
+sys.path.insert(0, '../src')
 # from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, \
 #    element10
 from entities.movement.legs import Legs
@@ -9,7 +10,6 @@ from entities.robot.robot import Robot
 from entities.movement.limb.tire import Tire
 from entities.movement.sequences.walking_sequences import *
 
-sys.path.insert(0, '../src')
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
 
 #FUNC_MAP = {

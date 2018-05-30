@@ -1,8 +1,8 @@
 import sys
 
-from entities.movement.tracks import Tracks
-
 sys.path.insert(0, '../../src')
+
+from entities.movement.tracks import Tracks
 
 tracks = Tracks(track_0_pin=18,
                 track_1_pin=13,

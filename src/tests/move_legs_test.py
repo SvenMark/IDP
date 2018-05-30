@@ -1,9 +1,9 @@
 import sys
 import time
 
-from entities.movement.legs import Legs
-
 sys.path.insert(0, '../../src')
+
+from entities.movement.legs import Legs
 
 legs = Legs(leg_0_servos=[
                 14,
