@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '../../../src')
+
 import time
 
 from entities.vision.helpers import *
@@ -32,7 +35,7 @@ class Saving(object):
             # Calculate the masks
             mask = self.calculate_mask(img, self.color_range)
 
-            img = self.helper.crop_to_contours(mask, img)
+            #img = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
             mask_cropped = self.calculate_mask(img, self.color_range, set_contour=True)
@@ -68,7 +71,7 @@ class Saving(object):
             master.quit()
             master.destroy()
 
-        master = Tk("Give building properties")
+        master = Tk()
         master.configure(background='gold')
         Label(master, text="Amount of blocks").grid(row=0)
         Label(master, text="Building Number").grid(row=1)
@@ -107,7 +110,7 @@ class Saving(object):
             out.write("]\n")
             out.close()
 
-        master = Tk("Confirm Building")
+        master = Tk()
         master.configure(background='gold')
         Button(master, text='OK', command=confirmed).grid(row=0, column=1, sticky=W)
         Button(master, text='Retry', command=master.destroy).grid(row=0, column=0, sticky=W)
@@ -170,7 +173,7 @@ class Saving(object):
             c = cv2.convexHull(contours[contour])
 
             # Check if the contour is a vlid block
-            if self.helper.check_valid_convex(c, 4, 4000, 10000):
+            if self.helper.check_valid_convex(c, 4, 1000, 10000):
                 # Image moments help you to calculate some features like center of mass of the object
                 moment = cv2.moments(c)
 
