@@ -133,7 +133,9 @@ class Legs(object):
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
         # init
-        speed = (y_axis - 512) * 0.7
+        speed = 0
+        if y_axis > 530:
+            speed = (y_axis - 512) * 0.7
         if y_axis < 500:
             speed = (512 - y_axis) * 0.7
 
