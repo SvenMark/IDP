@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, '../../../src')
 
 from entities.vision.calibrate import Calibrate
-from entities.vision.camera import Camera
+from entities.vision.recognize import Camera
 from entities.vision.saving import Saving
 from entities.vision.helpers import Color
 

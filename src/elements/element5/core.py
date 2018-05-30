@@ -1,4 +1,4 @@
-from entities.vision.camera import Camera, Block
+from entities.vision.recognize import Camera, Block
 from entities.vision.helpers import Color
 
 def run():
