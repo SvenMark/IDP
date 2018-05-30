@@ -35,7 +35,7 @@ class Servo(object):
 
         self.ax12.move_speed(servo_id, initial_position, 300)
 
-        self.sensitivity = 5
+        self.sensitivity = 3
         print("rw : " + str(self.ax12.read_rw_status(self.servo_id)))
 
         time.sleep(0.1)

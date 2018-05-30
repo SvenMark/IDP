@@ -30,6 +30,7 @@ class Legs(object):
 
         self.type = 'legs'
         self.deployed = False
+        self.retract(120)
 
         print("Legs setup, retracting")
         
@@ -93,7 +94,7 @@ class Legs(object):
         :return: None
         """
         
-        leg_0_retract = [524, 211, 475]
+        leg_0_retract = [530, 200, 470]
         leg_1_retract = [0, 0, 0]
         leg_2_retract = [0, 0, 0]
         leg_3_retract = [0, 0, 0]
@@ -116,12 +117,7 @@ class Legs(object):
 
         if self.deployed:
             if 500 < y_axis < 530:
-                self.move(leg_0_moves=[530, 766, 850],
-                          leg_1_moves=[650, 400, 400],
-                          leg_2_moves=[400, 400, 400],
-                          leg_3_moves=[600, 400, 400],
-                          delay=0,
-                          speeds=[300, 300, 300])
+                self.deploy(200)
             if y_axis > 530:
                 walk_forward(self, [(y_axis - 512) * 0.7, (y_axis - 512) * 0.7, (y_axis - 512) * 0.7])
             if y_axis < 500:

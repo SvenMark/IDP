@@ -10,17 +10,19 @@ class DCMotor(object):
     Base class for dc motor
     """
 
-    def __init__(self, pin):
+    def __init__(self, pin, pin_forward, pin_backward):
         """
         Constructor for the dc motor class
         :param pin: The GPIO pin the dc motor is connected to
+        :param pin_forward: The forward direction pin, this pin send a signal if the motor needs to go forward
+        :param pin_backward: The backward direction pin, this pin send a signal if the motor needs to go backward
         """
 
         # Set up the gpio and pins for the use of DC motors
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
-        self.pin_motor_forward = 10
-        self.pin_motor_backward = 9
+        self.pin_motor_forward = pin_forward
+        self.pin_motor_backward = pin_backward
         self.pin_pwm = pin
         self.frequency = 2048
         self.stop = 0

@@ -1,5 +1,4 @@
 def walk_forward(legs, speeds):
-    #for i in range(repeat):
     legs.move(leg_0_moves=[530, 700, 850],
               leg_1_moves=[650, 400, 400],
               leg_2_moves=[400, 400, 400],
@@ -58,6 +57,11 @@ def walk_backward(legs, speeds):
               speeds=speeds)
 
 
+def walk_backward_repeat(legs, speeds, repeat):
+    for i in range(repeat):
+        walk_backward(legs, speeds)
+
+
 def enge_dab(legs, speeds):
     print("ENGE DAB")
     legs.move(leg_0_moves=[315, 678, 1023],
@@ -98,3 +102,57 @@ def lol(legs, speeds, repeat):
                   leg_3_moves=[600, 400, 400],
                   delay=0.1,
                   speeds=speeds)
+
+
+def pull(legs, speeds):
+    legs.move(leg_0_moves=[530, 730, 640],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
+    legs.move(leg_0_moves=[530, 650, 640],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
+    legs.move(leg_0_moves=[530, 650, 750],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
+    legs.move(leg_0_moves=[530, 840, 970],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
+
+
+def push(legs, speeds):
+    legs.move(leg_0_moves=[530, 650, 750],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
+    legs.move(leg_0_moves=[530, 650, 640],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
+    legs.move(leg_0_moves=[530, 730, 640],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
+    legs.move(leg_0_moves=[530, 840, 970],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
