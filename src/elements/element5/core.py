@@ -1,4 +1,4 @@
-from entities.vision.recognize import Camera, Block
+from entities.vision.recognize import Recognize, Block
 from entities.vision.helpers import Color
 
 def run():
@@ -11,7 +11,7 @@ def detect_cup():
     # Initialize color ranges for detection
     color_range = [Color("beker", [30, 10, 93], [83, 87, 175])]
 
-    cam = Camera(color_range)
+    cam = Recognize(color_range)
     cam.run()
 
 
@@ -23,7 +23,7 @@ def detect_bridge():
                    Color("Rand", [0, 0, 185], [0, 0, 255]),
                    Color("White-ish", [0, 0, 68], [180, 98, 255])]
 
-    cam = Camera(color_range)
+    cam = Recognize(color_range)
     cam.run()
 
 
