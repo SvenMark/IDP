@@ -33,7 +33,7 @@ class BluetoothController(object):
             try:
                 data += str(sock.recv(1024))[2:][:-1]
 
-                print(str(data))
+                # print(str(data))
 
                 data_end = data.find('\\n')
                 if data_end != -1:
