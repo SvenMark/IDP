@@ -69,10 +69,11 @@ class Legs(object):
     def update_legs(self):
         # while legs_not_ready are not ready, update
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+        self.get_delta()
         while len(legs_not_ready) != 0:
-            self.get_delta()
+            delta = self.get_delta()
             for i in range(len(legs_not_ready)):
-                legs_not_ready[i].update(self.get_delta())
+                legs_not_ready[i].update(delta)
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
     def get_delta(self):
