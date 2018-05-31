@@ -28,5 +28,23 @@ legs = Legs(leg_0_servos=[
 #            ]
             )
 
-for i in range(10):
+for i in range(5):
+    legs.run_sequence([150, 150, 150], True, None, forward)
+
+for i in range(5):
+    legs.run_sequence([150, 150, 150], True, None, backward)
+
+for i in range(5):
+    legs.run_sequence([150, 150, 150], True, None, pull)
+
+for i in range(5):
+    legs.run_sequence([150, 150, 150], True, None, push)
+
+for i in range(5):
+    legs.run_sequence([150, 150, 150], True, None, wave)
+
+for i in range(5):
     legs.run_sequence([150, 150, 150], True, None, march)
+
+for i in range(5):
+    legs.run_sequence([150, 150, 150], True, None, dab)

@@ -2,7 +2,7 @@ import sys
 
 sys.path.insert(0, '../../../../src')
 
-forward_sequence = [
+forward = [
     [
         [530, 700, 850],
         [650, 400, 400],
@@ -29,7 +29,7 @@ forward_sequence = [
     ]
 ]
 
-backward_sequence = [
+backward = [
     [
         [530, 766, 850],
         [650, 400, 400],
