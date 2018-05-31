@@ -169,3 +169,19 @@ def push(legs, speeds):
               leg_3_moves=[600, 400, 400],
               delay=0,
               speeds=speeds)
+
+
+def march(legs, speeds):
+    legs.move(leg_0_moves=[530, 600, 570],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
+    legs.move(leg_0_moves=[530, 730, 690],
+              leg_1_moves=[650, 400, 400],
+              leg_2_moves=[400, 400, 400],
+              leg_3_moves=[600, 400, 400],
+              delay=0,
+              speeds=speeds)
+
