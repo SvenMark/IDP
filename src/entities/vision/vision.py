@@ -13,11 +13,11 @@ class Vision(object):
     Base class for vision
     """
 
-    def __init__(self):
+    def __init__(self, color_range, saved_buildings=None):
         """
         Constructor for vision class
         """
-        self.calibrate = Calibrate([2, 2, 2])
+        self.calibrate = Calibrate(color_range)
         self.hsv_picker = Hsv_picker()
-        self.recognize = Recognize([2, 2, 2])
-        self.saving = Saving([2, 2, 2])
+        self.recognize = Recognize(color_range, saved_buildings)
+        self.saving = Saving(color_range)

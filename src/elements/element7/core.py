@@ -1,9 +1,7 @@
 import sys
 sys.path.insert(0, '../../../src')
 
-from entities.vision.calibrate import Calibrate
-from entities.vision.recognize import Recognize
-from entities.vision.saving import Saving
+from entities.vision.vision import Vision
 from entities.vision.helpers import Color
 
 # Initialize color ranges for detection
@@ -22,9 +20,6 @@ saved_buildings = [[
         ]
 ]
 
-save = Saving(color_range)
-save.run()
-# cali = Calibrate(color_range)
-# color_range = cali.run()
-# cam = Recognize(color_range, saved_buildings)
-# cam.run()
+
+vision = Vision(color_range, saved_buildings)
+vision.saving.run()
