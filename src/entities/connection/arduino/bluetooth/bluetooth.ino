@@ -13,36 +13,28 @@
 //  BT TX to Arduino pin 2 (no need voltage divider)
 //98d3,31,fd1353  98d3,31,fd15c1
 
+
+ 
+ 
 #include <SoftwareSerial.h>
 #include <Nextion.h>
 
 SoftwareSerial nextion(5,4);// Nextion TX to pin 2 and RX to pin 3 of Arduino
 
+
 Nextion myNextion(nextion, 9600); //create a Nextion object named myNextion using the nextion serial port @ 9600bps
 
-bool button1State;
-bool button2State;
-bool button3State;
-bool button4State;
-bool button5State;
-bool button6State;
-bool button7State;
-bool button8State;
+boolean button1State;
+boolean button2State;
+boolean button3State;
+boolean button4State;
+boolean button5State;
+boolean button6State;
+boolean button7State;
+boolean button8State;
 String Data;
 int page=0;
-
-int value_X,value_Y,value_V,value_H;
-
-//stp, value_V, value_H, deploy, value_X, value_Y
-struct struct_data {
-  int stop_motors;
-  int vertical;
-  int horizontal;
-  int deploy;
-  int x_axis;
-  int y_axis;
-};
- 
+unsigned int value_X,value_Y,value_V,value_H;
 
 const int button1 = 13;
 const int button2 = 3;
@@ -113,18 +105,11 @@ void loop()
         button_2_activated = 0;
       }
       
-      struct_data data_holder = {
-        stp, value_V, value_H, deploy, value_X, value_Y
-        };
-      int len_struct = sizeof(data_holder);
       
-      //String finaldata = " s " + String(stp) + " v " + String(value_V) + " h " + String(value_H)+ " d " + String(deploy) + " x " + String(value_X) + " y " + String(value_Y);
-      //Serial.print(finaldata);
-      //Serial.print("\n");
-
-      Serial.write('S');
-      Serial.write((uint8_t *)&data_holder, len_struct);
-      Serial.write('E');
+      String finaldata = " s " + String(stp) + " v " + String(value_V) + " h " + String(value_H)+ " d " + String(deploy) + " x " + String(value_X) + " y " + String(value_Y);
+      Serial.print(finaldata);
+      Serial.print("\n");
+      delay(20);
       
     
 //    if (page==1){        

@@ -196,3 +196,4 @@ def leg_updater(legs):
                 for y in range(len(legs_not_ready[i].servos)):
                     legs_not_ready[i].servos[y].set_speed(speed)
                 legs_not_ready[i].update(delta)
+        time.sleep(0.02)
