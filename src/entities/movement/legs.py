@@ -152,6 +152,7 @@ class Legs(object):
 
 
 def leg_updater(legs):
+    print("New thread alive")
     legs.updater = True
 
     while True:
