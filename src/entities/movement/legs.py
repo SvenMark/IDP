@@ -43,9 +43,7 @@ class Legs(object):
         self.retract(120)
 
         self.updater = False
-        self.update_thread = Thread()
-        self.x_axis = 0
-        self.y_axis = 0
+        self.update_thread = Thread(target=leg_updater, args=(self, ))
 
         # deploy, x-axis, y-axis
         self.recent_package = [0, 0, 0]
@@ -146,8 +144,8 @@ class Legs(object):
     def handle_controller_input(self, deploy, x_axis, y_axis):
         self.recent_package = [deploy, x_axis, y_axis]
 
-        if not self.updater:
-            self.update_thread = Thread(target=leg_updater, args=(self, ))
+        if not self.update_thread.is_alive():
+            print("starting update thread")
             self.update_thread.start()
         else:
             self.update_thread.join()

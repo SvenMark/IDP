@@ -33,6 +33,7 @@ class BluetoothController(object):
             try:
                 data += str(sock.recv(1024))[2:][:-1]
 
+                print("reading bluetooth data")
                 # print(str(data))
 
                 data_end = data.find('\\n')
