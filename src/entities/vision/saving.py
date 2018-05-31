@@ -61,7 +61,6 @@ class Saving(object):
             self.save_building = e2.get()
             master.quit()
             master.destroy()
-
         master = Tk()
         master.configure(background='gold')
         Label(master, text="Amount of blocks").grid(row=0)

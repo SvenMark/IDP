@@ -1,6 +1,9 @@
 from tkinter import *
 import numpy as np
 import cv2
+import sys
+
+sys.path.insert(0, '../../../src')
 
 
 class Hsv_picker:

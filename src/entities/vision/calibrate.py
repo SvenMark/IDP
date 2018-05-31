@@ -1,5 +1,8 @@
 from collections import OrderedDict
 from random import randint
+import sys
+
+sys.path.insert(0, '../../../src')
 
 from entities.vision.helpers import *
 
