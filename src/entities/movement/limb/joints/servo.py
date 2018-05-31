@@ -70,7 +70,7 @@ class Servo(object):
         self.start_position = self.last_position
         self.goal = degrees
         self.current_speed = speed * self.current_speed_multiplier
-        # print("servo " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
+        print("servo " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
 
     def move_speed(self, degrees, delay, max_speed):
         """
