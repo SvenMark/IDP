@@ -1,12 +1,13 @@
 import time
 import sys
+
 sys.path.insert(0, '../../../src')
 
 from entities.vision.helpers import *
 from entities.audio.speak import Speak
 
 
-class Camera(object):
+class Recognize(object):
 
     def __init__(self, color_range, saved_buildings=None):
         self.color_range = color_range
