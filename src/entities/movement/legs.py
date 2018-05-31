@@ -161,42 +161,44 @@ class Legs(object):
             self.update_thread.join()
 
 
-def leg_updater(self):
-    self.updater = True
+def leg_updater(legs):
+    legs.updater = True
 
     while True:
-        deploy = self.recent_package[0]
-        x_axis = self.recent_package[1]
-        y_axis = self.recent_package[2]
+        deploy = legs.recent_package[0]
+        x_axis = legs.recent_package[1]
+        y_axis = legs.recent_package[2]
 
-        if deploy == 1 and not self.deployed:
-            self.deploy(200)
-        elif deploy == 0 and self.deployed:
-            self.retract(200)
+        print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
+
+        if deploy == 1 and not legs.deployed:
+            legs.deploy(200)
+        elif deploy == 0 and legs.deployed:
+            legs.retract(200)
         speed = 0
         if y_axis > 530:
             speed = (y_axis - 512) * 0.4
         if y_axis < 500:
             speed = (512 - y_axis) * 0.4
 
-        delta = self.get_delta()
+        delta = legs.get_delta()
 
-        legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+        legs_not_ready = [elem for elem in legs.legs if not elem.ready()]
 
-        if self.deployed and len(legs_not_ready) == 0:
+        if legs.deployed and len(legs_not_ready) == 0:
             if 500 < y_axis < 530:
-                self.deploy(200)
+                legs.deploy(200)
             if y_axis > 530:
-                walk_forward(self, [100, 100, 100],
+                walk_forward(legs, [100, 100, 100],
                              self_update=False,
-                             sequences=[self.sequence])
-                self.update_sequence()
+                             sequences=[legs.sequence])
+                legs.update_sequence()
             if y_axis < 500:
                 walk_backward(self, [100, 100, 100],
                               self_update=False,
-                              sequences=[self.sequence])
-                self.update_sequence()
-            self.get_delta()
+                              sequences=[legs.sequence])
+                legs.update_sequence()
+            legs.get_delta()
 
         if len(legs_not_ready) > 0:
             for i in range(len(legs_not_ready)):
