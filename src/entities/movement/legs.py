@@ -188,8 +188,11 @@ class Legs(object):
         elif sequence is dab:
             print("DAB")
             sequences = [0]
-        elif sequence is wave or march:
+        elif sequence is wave:
             print("WAVE")
+            sequences = [0, 1]
+        elif sequence is march:
+            print("MARCH")
             sequences = [0, 1]
 
         if sequences is None:
