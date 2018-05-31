@@ -31,7 +31,7 @@ class Servo(object):
         self.last_position = self.ax12.read_position(self.servo_id)
         self.goal = initial_position
         self.current_speed = 200
-        self.current_speed_multiplier = 0.06
+        self.current_speed_multiplier = 0.02
 
         self.start_position = self.last_position
 
@@ -51,12 +51,14 @@ class Servo(object):
 
         if step > 0 and self.last_position > self.goal:
             self.start_position = self.last_position
+            step = (self.goal - self.start_position) * delta * self.current_speed
 
         if step < 0 and self.last_position < self.goal:
             self.start_position = self.last_position
+            step = (self.goal - self.start_position) * delta * self.current_speed
 
-        print("Delta: " + str(delta) + " Step: " + str(step) + " Goal: " + str(self.goal) + " Last_pos: " + str(self.last_position) + " Start_pos: " + str(self.start_position))
-        if self.last_position + step > 998 or self.last_position + step < 0:
+        # print("Delta: " + str(delta) + " Step: " + str(step) + " Goal: " + str(self.goal) + " Last_pos: " + str(self.last_position) + " Start_pos: " + str(self.start_position))
+        if self.last_position + step > 1024 or self.last_position + step < 0:
             print(str(self.last_position + step) + " not in range " + str(self.servo_id) + "speed "
                   + str(self.current_speed) + "delta " + str(delta))
             return
