@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, '../../src')
 
 from entities.movement.legs import Legs
-from entities.movement.sequences.walking_sequences import *
+from entities.movement.sequences.sequences import *
 
 legs = Legs(leg_0_servos=[
                 14,
@@ -29,4 +29,4 @@ legs = Legs(leg_0_servos=[
             )
 
 for i in range(10):
-    march(legs, [150, 150, 150])
+    legs.run_sequence([150, 150, 150], True, None, march)

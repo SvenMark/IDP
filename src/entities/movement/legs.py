@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, '../../../src')
 
 from entities.movement.limb.leg import Leg
-from entities.movement.sequences.walking_sequences import *
+from entities.movement.sequences.sequences import *
 
 
 class Legs(object):
@@ -153,14 +153,14 @@ class Legs(object):
             if 500 < y_axis < 530:
                 self.deploy(200)
             if y_axis > 530:
-                walk_forward(self, [speed, speed, speed],
-                             self_update=False,
-                             sequences=[self.sequence])
+                self.walk_forward(self, [speed, speed, speed],
+                                  self_update=False,
+                                  sequences=[self.sequence])
                 self.update_sequence()
             if y_axis < 500:
-                walk_backward(self, [speed, speed, speed],
-                              self_update=False,
-                              sequences=[self.sequence])
+                self.walk_backward(self, [speed, speed, speed],
+                                   self_update=False,
+                                   sequences=[self.sequence])
                 self.update_sequence()
             self.get_delta()
 
@@ -181,3 +181,120 @@ class Legs(object):
             #           [600, 400, 400],
             #           0,
             #           [200, 200, 200])
+
+    def run_sequence(self, speeds, self_update=True, sequences=None, sequence=None):
+        if sequence is None:
+            sequence = forward_sequence
+        elif sequence is wave or march:
+            sequences = [0, 1]
+
+        if sequences is None:
+            sequences = [0, 1, 2, 3]
+
+        for moves in sequences:
+            self.move(leg_0_moves=sequence[moves][0],
+                      leg_1_moves=sequence[moves][1],
+                      leg_2_moves=sequence[moves][2],
+                      leg_3_moves=sequence[moves][3],
+                      delay=0,
+                      speeds=speeds,
+                      self_update=self_update)
+
+    def walk_forward(self, speeds, self_update=True, sequences=None):
+        if sequences is None:
+            sequences = [0, 1, 2, 3]
+
+        for moves in sequences:
+            self.move(leg_0_moves=forward_sequence[moves][0],
+                      leg_1_moves=forward_sequence[moves][1],
+                      leg_2_moves=forward_sequence[moves][2],
+                      leg_3_moves=forward_sequence[moves][3],
+                      delay=0,
+                      speeds=speeds,
+                      self_update=self_update)
+
+    def walk_forward_repeat(self, speeds, repeat):
+        for i in range(repeat):
+            self.walk_forward(speeds)
+
+    def walk_backward(self, speeds, self_update=True, sequences=None):
+        if sequences is None:
+            sequences = [0, 1, 2, 3]
+
+        for moves in backward_sequence:
+            self.move(leg_0_moves=backward_sequence[moves][0],
+                      leg_1_moves=backward_sequence[moves][1],
+                      leg_2_moves=backward_sequence[moves][2],
+                      leg_3_moves=backward_sequence[moves][3],
+                      delay=0,
+                      speeds=speeds,
+                      self_update=self_update)
+
+    def walk_backward_repeat(self, speeds, repeat):
+        for i in range(repeat):
+            self.walk_backward(speeds)
+
+    def dab(self, speeds, self_update=True):
+        self.move(leg_0_moves=dab[0],
+                  leg_1_moves=dab[1],
+                  leg_2_moves=dab[2],
+                  leg_3_moves=dab[3],
+                  delay=0,
+                  speeds=speeds,
+                  self_update=self_update)
+
+    def march(self, speeds, self_update=True, sequences=None):
+        if sequences is None:
+            sequences = [0, 1]
+
+        for moves in sequences:
+            self.move(leg_0_moves=march[moves][0],
+                      leg_1_moves=march[moves][1],
+                      leg_2_moves=march[moves][2],
+                      leg_3_moves=march[moves][3],
+                      delay=0,
+                      speeds=speeds,
+                      self_update=self_update)
+
+    def wave(self, speeds, self_update=True, sequences=None):
+        if sequences is None:
+            sequences = [0, 1]
+
+        for moves in sequences:
+            self.move(leg_0_moves=wave[moves][0],
+                      leg_1_moves=wave[moves][1],
+                      leg_2_moves=wave[moves][2],
+                      leg_3_moves=wave[moves][3],
+                      delay=0,
+                      speeds=speeds,
+                      self_update=self_update)
+
+    def wave_repeat(self, speeds, repeat):
+        for i in range(repeat):
+            self.wave(speeds)
+
+    def push(self, speeds, self_update=True, sequences=None):
+        if sequences is None:
+            sequences = [0, 1, 2, 3]
+
+        for moves in sequences:
+            self.move(leg_0_moves=push[moves][0],
+                      leg_1_moves=push[moves][1],
+                      leg_2_moves=push[moves][2],
+                      leg_3_moves=push[moves][3],
+                      delay=0,
+                      speeds=speeds,
+                      self_update=self_update)
+
+    def pull(self, speeds, self_update=True,sequences=None):
+        if sequences is None:
+            sequences = [0, 1, 2, 3]
+
+        for moves in sequences:
+            self.move(leg_0_moves=pull[moves][0],
+                      leg_1_moves=pull[moves][1],
+                      leg_2_moves=pull[moves][2],
+                      leg_3_moves=pull[moves][3],
+                      delay=0,
+                      speeds=speeds,
+                      self_update=self_update)
