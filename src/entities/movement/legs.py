@@ -41,11 +41,14 @@ class Legs(object):
         self.type = 'legs'
         self.deployed = False
         self.retract(120)
-        self.speed = 200
+
         self.updater = False
         self.update_thread = Thread()
         self.x_axis = 0
         self.y_axis = 0
+
+        # deploy, x-axis, y-axis
+        self.recent_package = [0, 0, 0]
 
         print("Legs setup, retracting")
         
@@ -141,22 +144,8 @@ class Legs(object):
             self.sequence = 0
 
     def handle_controller_input(self, deploy, x_axis, y_axis):
-        if deploy == 1 and not self.deployed:
-            self.deploy(200)
-        elif deploy == 0 and self.deployed:
-            self.retract(200)
+        self.recent_package = [deploy, x_axis, y_axis]
 
-        legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-
-        # init
-        speed = 0
-        if y_axis > 530:
-            speed = (y_axis - 512) * 0.4
-        if y_axis < 500:
-            speed = (512 - y_axis) * 0.4
-
-        self.speed = speed
-        # not all legs finished
         if self.deployed and not self.updater:
             self.update_thread = Thread(target=leg_updater, args=(self, ))
             self.update_thread.start()
@@ -174,19 +163,35 @@ class Legs(object):
 
 def leg_updater(self):
     self.updater = True
+
     while True:
+        deploy = self.recent_package[0]
+        x_axis = self.recent_package[1]
+        y_axis = self.recent_package[2]
+
+        if deploy == 1 and not self.deployed:
+            self.deploy(200)
+        elif deploy == 0 and self.deployed:
+            self.retract(200)
+        speed = 0
+        if y_axis > 530:
+            speed = (y_axis - 512) * 0.4
+        if y_axis < 500:
+            speed = (512 - y_axis) * 0.4
+
         delta = self.get_delta()
+
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
         if self.deployed and len(legs_not_ready) == 0:
-            if 500 < self.y_axis < 530:
+            if 500 < y_axis < 530:
                 self.deploy(200)
-            if self.y_axis > 530:
+            if y_axis > 530:
                 walk_forward(self, [100, 100, 100],
                              self_update=False,
                              sequences=[self.sequence])
                 self.update_sequence()
-            if self.y_axis < 500:
+            if y_axis < 500:
                 walk_backward(self, [100, 100, 100],
                               self_update=False,
                               sequences=[self.sequence])
@@ -196,5 +201,5 @@ def leg_updater(self):
         if len(legs_not_ready) > 0:
             for i in range(len(legs_not_ready)):
                 for y in range(len(legs_not_ready[i].servos)):
-                    legs_not_ready[i].servos[y].set_speed(self.speed)
+                    legs_not_ready[i].servos[y].set_speed(speed)
                 legs_not_ready[i].update(delta)
