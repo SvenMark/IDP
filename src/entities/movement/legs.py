@@ -144,6 +144,7 @@ class Legs(object):
 
         # if legs are deployed and all legs are finished
         if self.deployed and len(legs_not_ready) == 0:
+            print("spood  " + str(speed))
             if 500 < y_axis < 530:
                 self.deploy(200)
             if y_axis > 530:
