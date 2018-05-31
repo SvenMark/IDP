@@ -1,16 +1,21 @@
+import sys
+
+sys.path.insert(0, '../../../../src')
+
 from entities.movement.limb.joints.dcmotor import DCMotor
 
 
 class Track(object):
-    def __init__(self, track_pin):
+    def __init__(self, track_pin, pin_forward, pin_backward):
         """
-        Constructor for the tracks class
-        :param track_0_pin: The GPIO pin which the first track is connected to
-        :param track_1_pin: The GPIO pin which the second track is connected to
+        Constructor for track class which is almost direct copy of dc motor
+        :param track_pin: The PWM pin which sets the speed
+        :param pin_forward: The forward direction pin
+        :param pin_backward: The backward direction pin
         """
 
         # Initialise both motors as tracks. Each track has 1 motor.
-        self.motor = DCMotor(track_pin)
+        self.motor = DCMotor(track_pin, pin_forward, pin_backward)
         self.current_speed = 0
         self.type = 'track'
 

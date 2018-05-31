@@ -6,8 +6,12 @@ and Josue Alejandro Savage's Arduino library:
 http://savageelectronics.blogspot.it/2011/01/arduino-y-dynamixel-ax-12.html
 '''
 
-from time import sleep
+import sys
 import RPi.GPIO as GPIO
+
+sys.path.insert(0, '../../src')
+
+from time import sleep
 from serial import Serial
 
 

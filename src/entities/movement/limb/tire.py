@@ -1,3 +1,7 @@
+import sys
+
+sys.path.insert(0, '../../../../src')
+
 from entities.movement.limb.joints.servo import Servo
 
 

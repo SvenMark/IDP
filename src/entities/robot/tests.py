@@ -1,4 +1,7 @@
 import unittest
+import sys
+
+sys.path.insert(0, '../../../src')
 
 from entities.movement.limb.tire import Tire
 from entities.movement.tracks import Tracks
@@ -18,22 +21,22 @@ class CommonTestClass(unittest.TestCase):
                     14,
                     61,
                     63
-                ],
-                leg_1_servos=[
-                    14,
-                    61,
-                    63
-                ],
-                leg_2_servos=[
-                    14,
-                    61,
-                    63
-                ],
-                leg_3_servos=[
-                    14,
-                    61,
-                    63
                 ]
+                # leg_1_servos=[
+                #     14,
+                #     61,
+                #     63
+                # ],
+                # leg_2_servos=[
+                #     14,
+                #     61,
+                #     63
+                # ],
+                # leg_3_servos=[
+                #     14,
+                #     61,
+                #     63
+                # ]
             ),
             Tracks(track_0_pin=18, track_1_pin=13),
             Tire(servo_id=69, position=500)

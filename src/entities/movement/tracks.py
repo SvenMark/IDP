@@ -1,4 +1,7 @@
 import time
+import sys
+
+sys.path.insert(0, '../../../src')
 
 from entities.movement.limb.joints.dcmotor import DCMotor
 from entities.movement.limb.track import Track
@@ -9,16 +12,20 @@ class Tracks(object):
     Base class for tracks that implements DC motors
     """
 
-    def __init__(self, track_0_pin, track_1_pin):
+    def __init__(self, track_0_pin, track_1_pin, track_0_forward, track_0_backward, track_1_forward, track_1_backward):
         """
         Constructor for the tracks class
         :param track_0_pin: The GPIO pin which the first track is connected to
         :param track_1_pin: The GPIO pin which the second track is connected to
+        :param track_0_forward: GPIO direction pin for track 0
+        :param track_0_backward: GPIO direction pin for track 0
+        :param track_1_forward: GPIO direction pin for track 1
+        :param track_1_backward: GPIO direction pin for track 1
         """
 
         # Initialise both motors as tracks. Each track has 1 motor.
-        self.track_left = Track(track_0_pin)
-        self.track_right = Track(track_1_pin)
+        self.track_left = Track(track_0_pin, track_0_forward, track_0_backward)
+        self.track_right = Track(track_1_pin, track_1_forward, track_1_backward)
         self.type = 'tracks'
 
         print("Tracks setup")

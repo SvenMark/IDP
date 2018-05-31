@@ -1,10 +1,12 @@
-#!/bin/python
 from __future__ import division
+
+import sys
 import math
-
 import time
-
 import numpy as np
+
+sys.path.insert(0, '../../../../../src')
+
 from libs.ax12 import Ax12
 
 
@@ -35,19 +37,22 @@ class Servo(object):
 
         self.ax12.move_speed(servo_id, initial_position, 300)
 
-        self.sensitivity = 5
+        self.sensitivity = 3
         print("rw : " + str(self.ax12.read_rw_status(self.servo_id)))
 
         time.sleep(0.1)
 
+    def set_speed(self, speed):
+        self.current_speed = speed * self.current_speed_multiplier
+
     def update(self, delta):
         # move towards new position
         step = (self.goal - self.start_position) * delta * self.current_speed
-
-        if abs(round(self.last_position) - round(self.goal)) <= self.sensitivity:
+        if self.last_position + step > 998 or self.last_position + step < 0:
+            print(str(self.last_position + step) + " not in range " + str(self.servo_id) + "speed "
+                  + str(self.current_speed) + "delta " + str(delta))
             return
-
-        self.last_position = self.last_position + (math.sin(step / (self.goal - self.start_position) * math.pi) * step)
+        self.last_position = self.last_position + step
         self.ax12.move(self.servo_id, round(self.last_position))
 
     def move(self, degrees, delay, speed):

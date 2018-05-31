@@ -1,6 +1,7 @@
 import os
 import sys
 
+sys.path.insert(0, '../src')
 # from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, \
 #    element10
 from entities.movement.legs import Legs
@@ -54,7 +55,12 @@ def main():
                 #     63
                 # ]
             ),
-            Tracks(track_0_pin=18, track_1_pin=13),
+            Tracks(track_0_pin=18,
+                   track_1_pin=13,
+                   track_0_forward=22,
+                   track_0_backward=27,
+                   track_1_forward=10,
+                   track_1_backward=9),
             Tire(servo_id=21, position=500)
         ]
 
