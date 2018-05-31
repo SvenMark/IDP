@@ -71,26 +71,32 @@ class BluetoothController(object):
         # Check if indexes are not -1
         if s_index != -1 and v_index != -1 and h_index != -1:
             # Convert the indexes to usable integers
-            s = int(str(data[s_index + 2:v_index].replace(" ", "")))
-            v = int(str(data[v_index + 2:h_index].replace(" ", "")))
-            h = int(str(data[h_index + 2:d_index].replace(" ", "")))
+            try:
+                s = int(str(data[s_index + 2:v_index].replace(" ", "")))
+                v = int(str(data[v_index + 2:h_index].replace(" ", "")))
+                h = int(str(data[h_index + 2:d_index].replace(" ", "")))
 
-            # Convert v and h to percentage to be used by dc motors
-            v = ((v * (1000 / 1024)) - 500) / 5
-            h = ((h * (1000 / 1024)) - 500) / 5
+                # Convert v and h to percentage to be used by dc motors
+                v = ((v * (1000 / 1024)) - 500) / 5
+                h = ((h * (1000 / 1024)) - 500) / 5
 
-            # Send data to tracks class
-            self.tracks.handle_controller_input(stop_motors=s, vertical_speed=v, horizontal_speed=h, dead_zone=5)
+                # Send data to tracks class
+                self.tracks.handle_controller_input(stop_motors=s, vertical_speed=v, horizontal_speed=h, dead_zone=5)
+            except:
+                print("Invalid package")
 
         # Legs
         if x_index != -1 and y_index != -1 and d_index != -1:
             # Convert the indexes to usable integers
-            d = int(str(data[d_index + 2:x_index].replace(" ", "")))
-            x = int(str(data[x_index + 2:y_index].replace(" ", "")))
-            y = int(str(data[y_index + 2:].replace(" ", "")))
+            try:
+                d = int(str(data[d_index + 2:x_index].replace(" ", "")))
+                x = int(str(data[x_index + 2:y_index].replace(" ", "")))
+                y = int(str(data[y_index + 2:].replace(" ", "")))
 
-            # Send the data to legs class
-            self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
+                # Send the data to legs class
+                self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
+            except:
+                print("Invalid package")
 
 
 def main():
