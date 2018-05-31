@@ -82,7 +82,7 @@ class Servo(object):
         """
 
         # If degrees are out of range print an error
-        if degrees < 0 or degrees > 998:
+        if degrees < 0 or degrees > 1024:
             print("In servo " + str(self.servo_id) + ", degrees: " + str(degrees) + ", must be between 0 and 998")
 
         # While the servo has not completed it last command wait a bit and check again.
