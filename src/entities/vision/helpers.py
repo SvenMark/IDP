@@ -21,6 +21,14 @@ class ColorRange:
         self.range = color_range
 
 
+class Building:
+    def __init__(self, front, back, left, right):
+        self.front = front
+        self.back = back
+        self.left = left
+        self.right = right
+
+
 class Helpers:
 
     @staticmethod

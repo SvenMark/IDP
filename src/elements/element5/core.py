@@ -25,6 +25,7 @@ saved_buildings = saved_buildings = [
                  )
     ]
 
+
 def run():
     print("run element killmyself")
     detect_cup()
@@ -35,7 +36,7 @@ def detect_cup():
     # Initialize color ranges for detection
     color_range = [Color("beker", [30, 10, 93], [83, 87, 175])]
 
-    cam = Camera(color_range, saved_buildings)
+    cam = Camera(color_range, saved_buildings=None)
     cam.run()
 
 
