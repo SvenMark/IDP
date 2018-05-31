@@ -133,6 +133,7 @@ class Legs(object):
             self.retract(200)
 
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+        print("Not ready legs: " + str(legs_not_ready))
 
         # init
         speed = 0
