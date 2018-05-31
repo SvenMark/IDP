@@ -185,6 +185,8 @@ class Legs(object):
     def run_sequence(self, speeds, self_update=True, sequences=None, sequence=None):
         if sequence is None:
             sequence = forward
+        elif sequence is dab:
+            sequences = [0]
         elif sequence is wave or march:
             sequences = [0, 1]
 
