@@ -186,13 +186,13 @@ class Legs(object):
         if sequence is None:
             sequence = forward
         elif sequence is dab:
+            print("DAB")
             sequences = [0]
         elif sequence is wave or march:
-            print(str(sequence))
+            print("WAVE")
             sequences = [0, 1]
 
         if sequences is None:
-            print("HALLOOOO>?????????????????????????")
             sequences = [0, 1, 2, 3]
 
         for moves in sequences:
