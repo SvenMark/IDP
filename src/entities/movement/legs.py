@@ -136,7 +136,7 @@ class Legs(object):
         print("Not ready legs: " + str(len(legs_not_ready)))
 
         # init
-        speed = 0
+        speed = 200
         if y_axis > 530:
             speed = (y_axis - 512) * 0.7
         if y_axis < 500:
