@@ -29,4 +29,4 @@ legs = Legs(leg_0_servos=[
             )
 
 for i in range(10):
-    march(legs, [300, 300, 300])
+    march(legs, [150, 150, 150])
