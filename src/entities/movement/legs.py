@@ -1,5 +1,7 @@
 import datetime
+import time
 import sys
+from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
@@ -39,6 +41,13 @@ class Legs(object):
         self.type = 'legs'
         self.deployed = False
         self.retract(120)
+
+        self.updater = False
+        self.update_thread = Thread(target=self.leg_updater, args=(self, ))
+        self.update_thread.start()
+
+        # deploy, x-axis, y-axis
+        self.recent_package = [0, 0, 0]
 
         print("Legs setup, retracting")
         
@@ -134,53 +143,69 @@ class Legs(object):
             self.sequence = 0
 
     def handle_controller_input(self, deploy, x_axis, y_axis):
-        if deploy == 1 and not self.deployed:
-            self.deploy(200)
-        elif deploy == 0 and self.deployed:
-            self.retract(200)
+        self.recent_package = [deploy, x_axis, y_axis]
 
-        legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+        if not self.update_thread.is_alive():
+            self.update_thread.join()
+            self.update_thread = Thread(target=self.leg_updater, args=(self,))
+            self.update_thread.start()
 
-        # init
-        speed = 200
-        if y_axis > 530:
-            speed = (y_axis - 512) * 0.4
-        if y_axis < 500:
-            speed = (512 - y_axis) * 0.4
+    def leg_updater(self, args):
+        print("New thread alive")
+        self.updater = True
 
-        # if legs are deployed and all legs are finished
-        if self.deployed and len(legs_not_ready) == 0:
-            if 500 < y_axis < 530:
+        while True:
+            deploy = self.recent_package[0]
+            # x_axis = legs.recent_package[1]
+            y_axis = self.recent_package[2]
+
+            print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
+
+            if deploy == 1 and not self.deployed:
                 self.deploy(200)
+            elif deploy == 0 and self.deployed:
+                self.retract(200)
+            speed = 0
             if y_axis > 530:
-                self.walk_forward(self, [speed, speed, speed],
-                                  self_update=False,
-                                  sequences=[self.sequence])
-                self.update_sequence()
+                speed = (y_axis - 512) * 0.4
             if y_axis < 500:
-                self.walk_backward(self, [speed, speed, speed],
-                                   self_update=False,
-                                   sequences=[self.sequence])
-                self.update_sequence()
-            self.get_delta()
+                speed = (512 - y_axis) * 0.4
 
-        # not all legs finished
-        elif self.deployed:
             delta = self.get_delta()
-            while len(legs_not_ready) > 0:
-                for i in range(len(legs_not_ready)):
-                    for y in range(len(legs_not_ready[i].servos)):
-                        legs_not_ready[i].servos[y].set_speed(speed)
-                    legs_not_ready[i].update(delta)
-                legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
-            # Move according to joystick direction
-            # self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
-            #           [650, 400, 400],
-            #           [400, 400, 400],
-            #           [600, 400, 400],
-            #           0,
-            #           [200, 200, 200])
+            legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+            if self.deployed and len(legs_not_ready) == 0:
+                if 500 < y_axis < 530:
+                    self.deploy(200)
+                if y_axis > 530:
+                    self.run_sequence(self, [100, 100, 100],
+                                      self_update=False,
+                                      sequences=[self.sequence],
+                                      sequence=forward)
+                    self.update_sequence()
+                if y_axis < 500:
+                    self.run_sequence(self, [100, 100, 100],
+                                      self_update=False,
+                                      sequences=[self.sequence],
+                                      sequence=backward)
+                    self.update_sequence()
+                self.get_delta()
+
+                if len(legs_not_ready) > 0:
+                    for i in range(len(legs_not_ready)):
+                        for y in range(len(legs_not_ready[i].servos)):
+                            legs_not_ready[i].servos[y].set_speed(speed)
+                        legs_not_ready[i].update(delta)
+
+                time.sleep(0.02)
+
+        # Move according to joystick direction
+        # self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
+        #           [650, 400, 400],
+        #           [400, 400, 400],
+        #           [600, 400, 400],
+        #           0,
+        #           [200, 200, 200])
 
     def run_sequence(self, speeds, self_update=True, sequences=None, sequence=None):
         if sequence is None:
