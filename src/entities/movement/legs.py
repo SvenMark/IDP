@@ -9,6 +9,7 @@ from entities.movement.sequences.walking_sequences import *
 from threading import Thread
 import time
 
+
 class Legs(object):
 
     def __init__(self, leg_0_servos,
@@ -43,7 +44,8 @@ class Legs(object):
         self.retract(120)
 
         self.updater = False
-        self.update_thread = Thread(target=leg_updater, args=(self, ))
+        self.update_thread = Thread(target=self.leg_updater, args=(self, ))
+        self.update_thread.start()
 
         # deploy, x-axis, y-axis
         self.recent_package = [0, 0, 0]
@@ -144,56 +146,50 @@ class Legs(object):
     def handle_controller_input(self, deploy, x_axis, y_axis):
         self.recent_package = [deploy, x_axis, y_axis]
 
-        if not self.update_thread.is_alive():
-            print("starting update thread")
-            self.update_thread.start()
-        else:
-            self.update_thread.join()
+    def leg_updater(self, args):
+        print("New thread alive")
+        self.updater = True
 
+        while True:
+            deploy = self.recent_package[0]
+            # x_axis = legs.recent_package[1]
+            y_axis = self.recent_package[2]
 
-def leg_updater(legs):
-    print("New thread alive")
-    legs.updater = True
+            print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
 
-    while True:
-        deploy = legs.recent_package[0]
-        # x_axis = legs.recent_package[1]
-        y_axis = legs.recent_package[2]
-
-        print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
-
-        if deploy == 1 and not legs.deployed:
-            legs.deploy(200)
-        elif deploy == 0 and legs.deployed:
-            legs.retract(200)
-        speed = 0
-        if y_axis > 530:
-            speed = (y_axis - 512) * 0.4
-        if y_axis < 500:
-            speed = (512 - y_axis) * 0.4
-
-        delta = legs.get_delta()
-
-        legs_not_ready = [elem for elem in legs.legs if not elem.ready()]
-
-        if legs.deployed and len(legs_not_ready) == 0:
-            if 500 < y_axis < 530:
-                legs.deploy(200)
+            if deploy == 1 and not self.deployed:
+                self.deploy(200)
+            elif deploy == 0 and self.deployed:
+                self.retract(200)
+            speed = 0
             if y_axis > 530:
-                walk_forward(legs, [100, 100, 100],
-                             self_update=False,
-                             sequences=[legs.sequence])
-                legs.update_sequence()
+                speed = (y_axis - 512) * 0.4
             if y_axis < 500:
-                walk_backward(self, [100, 100, 100],
-                              self_update=False,
-                              sequences=[legs.sequence])
-                legs.update_sequence()
-            legs.get_delta()
+                speed = (512 - y_axis) * 0.4
 
-        if len(legs_not_ready) > 0:
-            for i in range(len(legs_not_ready)):
-                for y in range(len(legs_not_ready[i].servos)):
-                    legs_not_ready[i].servos[y].set_speed(speed)
-                legs_not_ready[i].update(delta)
-        time.sleep(0.02)
+            delta = self.get_delta()
+
+            legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+
+            if self.deployed and len(legs_not_ready) == 0:
+                if 500 < y_axis < 530:
+                    self.deploy(200)
+                if y_axis > 530:
+                    walk_forward(self, [100, 100, 100],
+                                 self_update=False,
+                                 sequences=[self.sequence])
+                    self.update_sequence()
+                if y_axis < 500:
+                    walk_backward(legs, [100, 100, 100],
+                                  self_update=False,
+                                  sequences=[self.sequence])
+                    self.update_sequence()
+                    self.get_delta()
+
+            if len(legs_not_ready) > 0:
+                for i in range(len(legs_not_ready)):
+                    for y in range(len(legs_not_ready[i].servos)):
+                        legs_not_ready[i].servos[y].set_speed(speed)
+                    legs_not_ready[i].update(delta)
+
+            time.sleep(0.02)

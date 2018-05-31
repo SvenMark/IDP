@@ -5,19 +5,27 @@ sys.path.insert(0, '../../src')
 from threading import Thread
 import time
 
-speed = 200
 
-def thread1(threadname):
-    #global a       # Optional if you treat a as read-only
-    while speed < 500:
-        print(str(speed))
+class Shit(object):
 
-thread1 = Thread( target=thread1, args=("Thread-1", ) )
+    def __init__(self):
+        self.speed = 200
+                
+    def thread1(self, threadname, shit):
+        while self.speed < 500:
+            print(str(self.speed))
 
-thread1.start()
+    def main(self):
+        thread1 = Thread( target=self.thread1, args=(self, "Thread-1",) )
 
-while True:
-    speed = speed + 1
-    time.sleep(1)
+        thread1.start()
+        
+        while True:
+            self.speed  = self.speed  + 1
+            time.sleep(1)
 
-thread1.join()
+        thread1.join()
+
+    
+shit = Shit()
+shit.main()
