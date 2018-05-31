@@ -48,7 +48,7 @@ class Servo(object):
     def update(self, delta):
         # move towards new position
         step = (self.goal - self.start_position) * delta * self.current_speed
-        print("Step: " + str(step) + " Goal: " + str(self.goal))
+        print("Step: " + str(step) + " Goal: " + str(self.goal) + " Last_pos: " + str(self.last_position))
         if not self.sensitivity < abs(self.goal - self.last_position + step) > self.sensitivity:
             step = self.goal - self.last_position
         if self.last_position + step > 998 or self.last_position + step < 0:
