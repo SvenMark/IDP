@@ -11,7 +11,7 @@ def walk_forward(legs, speeds, self_update=True):
               delay=0,
               speeds=speeds,
               self_update=self_update)
-    print("NEXT MOVE")
+    print("NEXT MOVE 1")
     legs.move(leg_0_moves=[430, 766, 850],
               leg_1_moves=[650, 400, 400],
               leg_2_moves=[400, 400, 400],
@@ -19,6 +19,7 @@ def walk_forward(legs, speeds, self_update=True):
               delay=0,
               speeds=speeds,
               self_update=self_update)
+    print("NEXT MOVE 2")
     legs.move(leg_0_moves=[430, 766, 850],
               leg_1_moves=[650, 400, 400],
               leg_2_moves=[400, 400, 400],
@@ -26,6 +27,7 @@ def walk_forward(legs, speeds, self_update=True):
               delay=0,
               speeds=speeds,
               self_update=self_update)
+    print("NEXT MOVE 3")
     legs.move(leg_0_moves=[530, 766, 850],
               leg_1_moves=[650, 400, 400],
               leg_2_moves=[400, 400, 400],

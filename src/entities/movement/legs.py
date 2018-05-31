@@ -146,6 +146,7 @@ class Legs(object):
             if 500 < y_axis < 530:
                 self.deploy(200)
             if y_axis > 530:
+                print("Walking sequence")
                 walk_forward(self, [speed, speed, speed],
                              self_update=False)
             if y_axis < 500:
