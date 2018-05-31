@@ -10,10 +10,10 @@ def walk_forward(legs, speeds, self_update=True, sequences=None):
         sequences = [0, 1, 2, 3]
 
     for moves in sequences:
-        legs.move(leg_0_moves=forward_sequence[moves][0],
-                  leg_1_moves=forward_sequence[moves][1],
-                  leg_2_moves=forward_sequence[moves][2],
-                  leg_3_moves=forward_sequence[moves][3],
+        legs.move(leg_0_moves=forward[moves][0],
+                  leg_1_moves=forward[moves][1],
+                  leg_2_moves=forward[moves][2],
+                  leg_3_moves=forward[moves][3],
                   delay=0,
                   speeds=speeds,
                   self_update=self_update)
@@ -29,10 +29,10 @@ def walk_backward(legs, speeds, self_update=True, sequences=None):
         sequences = [0, 1, 2, 3]
 
     for moves in sequences:
-        legs.move(leg_0_moves=backward_sequence[moves][0],
-                  leg_1_moves=backward_sequence[moves][1],
-                  leg_2_moves=backward_sequence[moves][2],
-                  leg_3_moves=backward_sequence[moves][3],
+        legs.move(leg_0_moves=backward[moves][0],
+                  leg_1_moves=backward[moves][1],
+                  leg_2_moves=backward[moves][2],
+                  leg_3_moves=backward[moves][3],
                   delay=0,
                   speeds=speeds,
                   self_update=self_update)
