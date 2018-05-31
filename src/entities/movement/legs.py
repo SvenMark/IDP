@@ -6,6 +6,8 @@ sys.path.insert(0, '../../../src')
 from entities.movement.limb.leg import Leg
 from entities.movement.sequences.walking_sequences import *
 
+from threading import Thread
+import time
 
 class Legs(object):
 
@@ -39,6 +41,9 @@ class Legs(object):
         self.type = 'legs'
         self.deployed = False
         self.retract(120)
+        self.speed = 200
+        self.updater = False
+        self.update_thread = Thread()
 
         print("Legs setup, retracting")
         
@@ -155,24 +160,19 @@ class Legs(object):
             if y_axis > 530:
                 walk_forward(self, [speed, speed, speed],
                              self_update=False,
-                             sequences=[self.sequence])
+                             sequences=[1, 2, 3])
                 self.update_sequence()
             if y_axis < 500:
                 walk_backward(self, [speed, speed, speed],
                               self_update=False,
-                              sequences=[self.sequence])
+                              sequences=[1, 2, 3])
                 self.update_sequence()
             self.get_delta()
 
         # not all legs finished
-        elif self.deployed:
-            delta = self.get_delta()
-            while len(legs_not_ready) > 0:
-                for i in range(len(legs_not_ready)):
-                    for y in range(len(legs_not_ready[i].servos)):
-                        legs_not_ready[i].servos[y].set_speed(speed)
-                    legs_not_ready[i].update(delta)
-                legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+        elif self.deployed and not self.updater:
+            self.update_thread = Thread(target=leg_updater, args=(self, ))
+            self.update_thread.start()
 
             # Move according to joystick direction
             # self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
@@ -181,3 +181,18 @@ class Legs(object):
             #           [600, 400, 400],
             #           0,
             #           [200, 200, 200])
+        elif self.deployed:
+            self.update_thread.join()
+
+
+def leg_updater(self):
+    self.updater = True
+    delta = self.get_delta()
+    legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+    while len(legs_not_ready) > 0:
+        for i in range(len(legs_not_ready)):
+            for y in range(len(legs_not_ready[i].servos)):
+                legs_not_ready[i].servos[y].set_speed(self.speed)
+            legs_not_ready[i].update(delta)
+        legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+    self.updater = False
