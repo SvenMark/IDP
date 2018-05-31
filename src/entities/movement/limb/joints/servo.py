@@ -48,6 +48,8 @@ class Servo(object):
     def update(self, delta):
         # move towards new position
         step = (self.goal - self.start_position) * delta * self.current_speed
+        if not self.sensitivity < abs(self.goal - self.last_position + step) > self.sensitivity:
+            step = self.goal - self.last_position
         if self.last_position + step > 998 or self.last_position + step < 0:
             print(str(self.last_position + step) + " not in range " + str(self.servo_id) + "speed "
                   + str(self.current_speed) + "delta " + str(delta))
