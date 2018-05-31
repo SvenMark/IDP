@@ -144,9 +144,9 @@ class Legs(object):
         # init
         speed = 200
         if y_axis > 530:
-            speed = (y_axis - 512) * 0.7
+            speed = (y_axis - 512) * 0.4
         if y_axis < 500:
-            speed = (512 - y_axis) * 0.7
+            speed = (512 - y_axis) * 0.4
 
         # if legs are deployed and all legs are finished
         if self.deployed and len(legs_not_ready) == 0:
