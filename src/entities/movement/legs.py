@@ -167,10 +167,12 @@ class Legs(object):
         # not all legs finished
         elif self.deployed:
             delta = self.get_delta()
-            for i in range(len(legs_not_ready)):
-                for y in range(len(legs_not_ready[i].servos)):
-                    legs_not_ready[i].servos[y].set_speed(speed)
-                legs_not_ready[i].update(delta)
+            while len(legs_not_ready) > 0:
+                for i in range(len(legs_not_ready)):
+                    for y in range(len(legs_not_ready[i].servos)):
+                        legs_not_ready[i].servos[y].set_speed(speed)
+                    legs_not_ready[i].update(delta)
+                legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
             # Move according to joystick direction
             # self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
