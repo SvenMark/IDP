@@ -155,13 +155,9 @@ class Legs(object):
         if y_axis < 500:
             speed = (512 - y_axis) * 0.4
 
-        legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-        if len(legs_not_ready) > 0:
-            for i in range(len(legs_not_ready)):
-                for y in range(len(legs_not_ready[i].servos)):
-                    legs_not_ready[i].servos[y].set_speed(self.speed)
+        self.speed = speed
         # not all legs finished
-        elif self.deployed and not self.updater:
+        if self.deployed and not self.updater:
             self.update_thread = Thread(target=leg_updater, args=(self, ))
             self.update_thread.start()
 
