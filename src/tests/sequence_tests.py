@@ -48,3 +48,4 @@ for i in range(5):
 
 for i in range(5):
     legs.run_sequence([150, 150, 150], True, None, dab)
+    legs.deploy(200)
