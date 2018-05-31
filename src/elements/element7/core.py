@@ -1,39 +1,30 @@
-from entities.vision.camera import Camera, Building, Block
+import sys
+sys.path.insert(0, '../../../src')
+
 from entities.vision.calibrate import Calibrate
+from entities.vision.camera import Camera
+from entities.vision.saving import Saving
 from entities.vision.helpers import Color
 
 # Initialize color ranges for detection
-color_range = [Color("orange", [0, 100, 100], [12, 255, 255]),
-               Color("yellow", [24, 100, 100], [35, 255, 255]),
-               Color("red", [26, 0, 17], [69, 131, 190]),
-               Color("green", [71, 89, 11], [83, 202, 120]),
-               Color("blue", [99, 152, 128], [119, 228, 174])]
+color_range = [Color("orange", [0, 69, 124], [13, 255, 255]),
+               Color("yellow", [15, 103, 124], [31, 255, 255]),
+               Color("red", [159, 116, 152], [180, 255, 255]),
+               Color("green", [56, 90, 17], [86, 197, 255]),
+               Color("blue", [96, 148, 92], [159, 255, 255])]
 
-saved_buildings = [
-            Building(front=[Block("orange", (41, 324)),
-                            Block("yellow", (33, 97)),
-                            Block("red", (148, 92)),
-                            Block("green", (153, 318)),
-                            Block("blue", (92, 218))],
-                     back=[Block("blue", (31, 316)),
-                           Block("green", (86, 209)),
-                           Block("orange", (30, 91)),
-                           Block("yellow", (144, 317))],
-                     left=[Block("red", (112, 175)),
-                           Block("blue", (44, 304)),
-                           Block("green", (36, 68)),
-                           Block("orange", (184, 70)),
-                           Block("yellow", (180, 307))],
-                     right=[Block("red", (112, 175)),
-                            Block("blue", (44, 304)),
-                            Block("green", (36, 68)),
-                            Block("orange", (184, 70)),
-                            Block("yellow", (180, 307))]
-                     )
+saved_buildings = [[
+        (28, 91),
+        (136, 83),
+        (137, 312),
+        (82, 200),
+        (29, 316),
         ]
+]
 
-
-cali = Calibrate(color_range)
-color_range = cali.run()
-cam = Camera(color_range, saved_buildings)
-cam.run()
+save = Saving(color_range)
+save.run()
+# cali = Calibrate(color_range)
+# color_range = cali.run()
+# cam = Camera(color_range, saved_buildings)
+# cam.run()

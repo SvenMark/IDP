@@ -31,7 +31,7 @@ class Servo(object):
         self.last_position = self.ax12.read_position(self.servo_id)
         self.goal = initial_position
         self.current_speed = 200
-        self.current_speed_multiplier = 0.01
+        self.current_speed_multiplier = 0.06
 
         self.start_position = self.last_position
 

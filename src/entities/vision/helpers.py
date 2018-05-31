@@ -9,51 +9,38 @@ class Color:
         self.upper = np.array(upper)
 
 
+class Block:
+    def __init__(self, color, centre):
+        self.color = color
+        self.centre = np.array(centre)
+
+
 class ColorRange:
     def __init__(self, color, color_range):
         self.color = color
         self.range = color_range
 
 
-class Block:
-    def __init__(self, color, centre):
-        self.color = color
-        self.centre = np.array(centre)
-
-    def __str__(self):
-        return "Block({}, ({}, {}))".format(self.color, self.centre[0], self.centre[1])
-
-
-class Building:
-    def __init__(self, front, back, left, right):
-        self.front = front
-        self.back = back
-        self.left = left
-        self.right = right
-
-
 class Helpers:
 
     @staticmethod
-    def is_duplicate(centre, positions, sensitivity=10, color=None):
+    def is_duplicate(centre, positions, sensitivity=10):
         """
         Compares a centre points to an array with currently visible center points
         :param centre: Centre point to check
         :param positions: Array with blocks
         :param sensitivity: Sensitivity to check with, higher sensitivity allows more distance
-        :param color: The color to compare, leave empty for no color
         :return: True if array 'y' contains the centre point
         """
 
         for block in range(len(positions)):
             # Calculate distance between the centre points
-            distance = np.linalg.norm(centre - positions[block].centre)
+            a = np.array(centre)
+            b = np.array(positions[block])
+            distance = np.linalg.norm(a-b)
 
-            # If there is a given color, check those and
-            # the distance between the blocks
-            if color and color == positions[block].color and distance <= sensitivity:
-                return True
-            elif not color and distance <= sensitivity:
+            # Check the distance between the blocks
+            if distance <= sensitivity:
                 return True
 
         return False
@@ -101,7 +88,7 @@ class Helpers:
             c = cv2.convexHull(cnt)
 
             # Check if the convex is a valid block
-            if self.check_valid_convex(c, 4, 4000, 10000):
+            if self.check_valid_convex(c, 4, 1000, 10000):
                 # Calculate extremes of the hull
                 min_x = tuple(cnt[cnt[:, :, 0].argmin()][0])
                 max_x = tuple(cnt[cnt[:, :, 0].argmax()][0])
@@ -175,11 +162,11 @@ class Helpers:
         # Return the resized image
         return resized
 
-    def append_to_positions(self, positions, bl):
+    def append_to_positions(self, positions, block):
         """
         Appends a unique block to the array
         :param positions: Positions array of the current view
-        :param bl: Block class
+        :param block: Centre point
         """
 
         # If the POSITIONS length is getting too long clear it
@@ -187,12 +174,12 @@ class Helpers:
             del positions[:]
         # If the POSITIONS array is empty append the block
         if len(positions) == 0:
-            positions.append(bl)
+            positions.append(block)
         else:
             # Check if the given block is not a duplicate
-            if not self.is_duplicate(bl.centre, positions, 5):
+            if not self.is_duplicate(block, positions, 5):
                 # Append the block to positions
-                positions.append(bl)
+                positions.append(block)
 
         return positions
 

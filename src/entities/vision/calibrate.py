@@ -50,8 +50,13 @@ class Calibrate(object):
             self.draw_helper(img)
             self.draw_helper(mask)
 
+            img = cv2.flip(img, 1)
+
             cv2.imshow('Spider Cam 2000', mask)
-            cv2.imshow('Spider Cam 3000', img)
+            cv2.imshow('Spider Cam 4000', img)
+
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
         cap.release()
         cv2.destroyAllWindows()
@@ -179,10 +184,53 @@ class Calibrate(object):
                 cv2.putText(img_mask, str((cx, cy)), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
                 # Append the new block to the global POSITIONS array
-                self.positions = self.helper.append_to_positions(self.positions, Block(color, (cx, cy)))
+                self.positions = self.append_to_positions(self.positions, Block(color, (cx, cy)))
 
         # Return the new mask
         return img_mask
+
+    @staticmethod
+    def is_duplicate(centre, positions, sensitivity=10):
+        """
+        Compares a centre points to an array with currently visible center points
+        :param centre: Centre point to check
+        :param positions: Array with blocks
+        :param sensitivity: Sensitivity to check with, higher sensitivity allows more distance
+        :return: True if array 'y' contains the centre point
+        """
+
+        for block in range(len(positions)):
+            # Calculate distance between the centre points
+            a = np.array(centre)
+            b = np.array((positions[block].centre[0], positions[block].centre[1]))
+            distance = np.linalg.norm(a - b)
+
+            # Check the distance between the blocks
+            if distance <= sensitivity:
+                return True
+
+        return False
+
+    def append_to_positions(self, positions, bl):
+        """
+        Appends a unique block to the array
+        :param positions: Positions array of the current view
+        :param bl: Block class
+        """
+
+        # If the POSITIONS length is getting too long clear it
+        if len(positions) >= 6:
+            del positions[:]
+        # If the POSITIONS array is empty append the block
+        if len(positions) == 0:
+            positions.append(bl)
+        else:
+            # Check if the given block is not a duplicate
+            if not self.is_duplicate(bl.centre, positions, 5):
+                # Append the block to positions
+                positions.append(bl)
+
+        return positions
 
 
 def main():
@@ -198,4 +246,3 @@ def main():
 
 if __name__ == '__main__':
     main()  # disabled for travis
-
