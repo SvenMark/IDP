@@ -146,18 +146,10 @@ class Legs(object):
     def handle_controller_input(self, deploy, x_axis, y_axis):
         self.recent_package = [deploy, x_axis, y_axis]
 
-        if self.deployed and not self.updater:
+        if not self.updater:
             self.update_thread = Thread(target=leg_updater, args=(self, ))
             self.update_thread.start()
-
-            # Move according to joystick direction
-            # self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
-            #           [650, 400, 400],
-            #           [400, 400, 400],
-            #           [600, 400, 400],
-            #           0,
-            #           [200, 200, 200])
-        elif self.deployed:
+        else:
             self.update_thread.join()
 
 
@@ -166,7 +158,7 @@ def leg_updater(legs):
 
     while True:
         deploy = legs.recent_package[0]
-        x_axis = legs.recent_package[1]
+        # x_axis = legs.recent_package[1]
         y_axis = legs.recent_package[2]
 
         print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
