@@ -44,7 +44,7 @@ class Legs(object):
 
         self.updater = False
         self.update_thread = Thread(target=self.leg_updater, args=(self, ))
-        self.update_thread.start()
+        # self.update_thread.start()
 
         # deploy, x-axis, y-axis
         self.recent_package = [0, 0, 0]
