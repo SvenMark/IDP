@@ -185,7 +185,7 @@ class Legs(object):
                                  sequences=[self.sequence])
                     self.update_sequence()
                 if y_axis < 500:
-                    walk_backward(legs, [100, 100, 100],
+                    walk_backward(self, [100, 100, 100],
                                   self_update=False,
                                   sequences=[self.sequence])
                     self.update_sequence()
