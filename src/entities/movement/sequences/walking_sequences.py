@@ -2,36 +2,21 @@ import sys
 
 sys.path.insert(0, '../../../../src')
 
+from entities.movement.sequences.sequences import *
 
-def walk_forward(legs, speeds, self_update=True):
-    legs.move(leg_0_moves=[530, 700, 850],
-              leg_1_moves=[650, 400, 400],
-              leg_2_moves=[400, 400, 400],
-              leg_3_moves=[600, 400, 400],
-              delay=0,
-              speeds=speeds,
-              self_update=self_update)
-    legs.move(leg_0_moves=[430, 766, 850],
-              leg_1_moves=[650, 400, 400],
-              leg_2_moves=[400, 400, 400],
-              leg_3_moves=[600, 400, 400],
-              delay=0,
-              speeds=speeds,
-              self_update=self_update)
-    legs.move(leg_0_moves=[430, 766, 850],
-              leg_1_moves=[650, 400, 400],
-              leg_2_moves=[400, 400, 400],
-              leg_3_moves=[600, 400, 400],
-              delay=0,
-              speeds=speeds,
-              self_update=self_update)
-    legs.move(leg_0_moves=[530, 766, 850],
-              leg_1_moves=[650, 400, 400],
-              leg_2_moves=[400, 400, 400],
-              leg_3_moves=[600, 400, 400],
-              delay=0,
-              speeds=speeds,
-              self_update=self_update)
+
+def walk_forward(legs, speeds, self_update=True, sequences=None):
+    if sequences is None:
+        sequences = [0, 1, 2, 3]
+
+    for moves in sequences:
+        legs.move(leg_0_moves=forward_sequence[moves][0],
+                  leg_1_moves=forward_sequence[moves][1],
+                  leg_2_moves=forward_sequence[moves][2],
+                  leg_3_moves=forward_sequence[moves][3],
+                  delay=0,
+                  speeds=speeds,
+                  self_update=self_update)
 
 
 def walk_forward_repeat(legs, speeds, repeat):
@@ -39,35 +24,18 @@ def walk_forward_repeat(legs, speeds, repeat):
         walk_forward(legs, speeds)
 
 
-def walk_backward(legs, speeds, self_update=True):
-    legs.move(leg_0_moves=[530, 766, 850],
-              leg_1_moves=[650, 400, 400],
-              leg_2_moves=[400, 400, 400],
-              leg_3_moves=[600, 400, 400],
-              delay=0,
-              speeds=speeds,
-              self_update=self_update)
-    legs.move(leg_0_moves=[630, 766, 850],
-              leg_1_moves=[650, 400, 400],
-              leg_2_moves=[400, 400, 400],
-              leg_3_moves=[600, 400, 400],
-              delay=0,
-              speeds=speeds,
-              self_update=self_update)
-    legs.move(leg_0_moves=[530, 700, 850],
-              leg_1_moves=[650, 400, 400],
-              leg_2_moves=[400, 400, 400],
-              leg_3_moves=[600, 400, 400],
-              delay=0,
-              speeds=speeds,
-              self_update=self_update)
-    legs.move(leg_0_moves=[530, 766, 850],
-              leg_1_moves=[650, 400, 400],
-              leg_2_moves=[400, 400, 400],
-              leg_3_moves=[600, 400, 400],
-              delay=0,
-              speeds=speeds,
-              self_update=self_update)
+def walk_backward(legs, speeds, self_update=True, sequences=None):
+    if sequences is None:
+        sequences = [0, 1, 2, 3]
+
+    for moves in sequences:
+        legs.move(leg_0_moves=backward_sequence[moves][0],
+                  leg_1_moves=backward_sequence[moves][1],
+                  leg_2_moves=backward_sequence[moves][2],
+                  leg_3_moves=backward_sequence[moves][3],
+                  delay=0,
+                  speeds=speeds,
+                  self_update=self_update)
 
 
 def walk_backward_repeat(legs, speeds, repeat):

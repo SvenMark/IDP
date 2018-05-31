@@ -35,6 +35,7 @@ class Legs(object):
                      #self.leg_front_right, self.leg_rear_left, self.leg_rear_right
                      ]
 
+        self.sequence = 0
         self.type = 'legs'
         self.deployed = False
         self.retract(120)
@@ -126,6 +127,12 @@ class Legs(object):
 
         self.deployed = False
 
+    def update_sequence(self):
+        if self.sequence < 3:
+            self.sequence = self.sequence + 1
+        else:
+            self.sequence = 0
+
     def handle_controller_input(self, deploy, x_axis, y_axis):
         if deploy == 1 and not self.deployed:
             self.deploy(200)
@@ -133,7 +140,6 @@ class Legs(object):
             self.retract(200)
 
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-        print("Not ready legs: " + str(len(legs_not_ready)))
 
         # init
         speed = 200
@@ -144,16 +150,18 @@ class Legs(object):
 
         # if legs are deployed and all legs are finished
         if self.deployed and len(legs_not_ready) == 0:
-            print("spood  " + str(speed))
             if 500 < y_axis < 530:
                 self.deploy(200)
             if y_axis > 530:
-                print("Walking sequence")
                 walk_forward(self, [speed, speed, speed],
-                             self_update=False)
+                             self_update=False,
+                             sequences=[self.sequence])
+                self.update_sequence()
             if y_axis < 500:
                 walk_backward(self, [speed, speed, speed],
-                              self_update=False)
+                              self_update=False,
+                              sequences=[self.sequence])
+                self.update_sequence()
             self.get_delta()
 
         # not all legs finished
