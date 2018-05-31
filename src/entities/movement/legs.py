@@ -160,12 +160,12 @@ class Legs(object):
             if y_axis > 530:
                 walk_forward(self, [speed, speed, speed],
                              self_update=False,
-                             sequences=[1, 2, 3])
+                             sequences=[self.sequence])
                 self.update_sequence()
             if y_axis < 500:
                 walk_backward(self, [speed, speed, speed],
                               self_update=False,
-                              sequences=[1, 2, 3])
+                              sequences=[self.sequence])
                 self.update_sequence()
             self.get_delta()
 
