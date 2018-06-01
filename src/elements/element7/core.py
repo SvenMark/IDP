@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, '../../../src')
+sys.path.insert(0, '../../../src')  # Needed for pi
 
 from entities.vision.calibrate import Calibrate
 from entities.vision.camera import Camera
