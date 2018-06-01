@@ -168,15 +168,13 @@ class Legs(object):
                 if 500 < y_axis < 530:
                     self.deploy(200)
                 if y_axis > 530:
-                    self.run_sequence(self,
-                                      [100, 100, 100],
+                    self.run_sequence(speeds=[100, 100, 100],
                                       self_update=False,
                                       sequences=[self.sequence],
                                       sequence=forward)
                     self.update_sequence()
                 if y_axis < 500:
-                    self.run_sequence(self,
-                                      [100, 100, 100],
+                    self.run_sequence(speeds=[100, 100, 100],
                                       self_update=False,
                                       sequences=[self.sequence],
                                       sequence=backward)
@@ -210,7 +208,7 @@ class Legs(object):
         else:
             self.sequence = 0
 
-    def run_sequence(self, speeds, self_update, sequences=None, sequence=None):
+    def run_sequence(self, speeds, self_update=True, sequences=None, sequence=None):
         """
         Function that runs one of the leg movement sequences
         :param speeds: Array of speeds, one for each leg
