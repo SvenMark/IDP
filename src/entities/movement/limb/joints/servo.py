@@ -29,7 +29,6 @@ class Servo(object):
         # Set the servo variables and move servo to initial position.
         self.servo_id = servo_id
         self.last_position = self.ax12.read_position(self.servo_id)
-        print(str(self.ax12.read_position(self.servo_id)))
         self.goal = initial_position
         self.current_speed = 200
         self.current_speed_multiplier = 0.02
@@ -133,7 +132,8 @@ class Servo(object):
         Function that checks if a servo completed it`s last move
         :return: Whether or not the servo has completed it`s last move
         """
-        print("Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
+        if self.last_position is None:
+            self.last_position = self.ax12.read_position(self.servo_id)
         return abs(round(self.last_position) - round(self.goal)) <= self.sensitivity
 
     def read_position(self):
