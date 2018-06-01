@@ -1,6 +1,8 @@
 import bluetooth
 import time
 
+from threading import Thread
+
 
 class BluetoothController(object):
     """
@@ -16,6 +18,9 @@ class BluetoothController(object):
         self.legs = limbs[0]
         self.tracks = limbs[1]
 
+        self.update_thread = Thread(target=self.legs.leg_updater, args=(self,))
+        self.update_thread.start()
+
     def receive_data(self):
         """
         Retrieve data from bluetooth connection with bluetooth address from the constructor
@@ -30,7 +35,6 @@ class BluetoothController(object):
 
         count = 0
         while 1:
-            print("reading bluetooth data")
             try:
                 # data += str(sock.recv(1024).decode("utf-8"))
                 data += str(sock.recv(1024))[2:][:-1]

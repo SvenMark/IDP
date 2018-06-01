@@ -132,8 +132,6 @@ class Servo(object):
         Function that checks if a servo completed it`s last move
         :return: Whether or not the servo has completed it`s last move
         """
-        if self.last_position is None:
-            self.last_position = self.ax12.read_position(self.servo_id)
         return abs(round(self.last_position) - round(self.goal)) <= self.sensitivity
 
     def read_position(self):
