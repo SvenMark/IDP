@@ -138,14 +138,6 @@ class Legs(object):
         return elapsed_time.total_seconds()
 
     def start_thread(self):
-        print("START THREAD")
-        self.update_thread.join()
-        self.update_thread = Thread(target=self.leg_updater, args=(self,))
-        self.update_thread.start()
-
-    def handle_controller_input(self, deploy, x_axis, y_axis):
-        self.recent_package = [deploy, x_axis, y_axis]
-
         if self.update_thread is None:
             print("CREATING THREAD")
             self.update_thread = Thread(target=self.leg_updater, args=(self,))
@@ -156,6 +148,10 @@ class Legs(object):
         else:
             print("JOINING THREAD")
             self.update_thread.join()
+
+    def handle_controller_input(self, deploy, x_axis, y_axis):
+        self.recent_package = [deploy, x_axis, y_axis]
+        self.start_thread()
 
     def leg_updater(self, args):
         print("New thread alive")
