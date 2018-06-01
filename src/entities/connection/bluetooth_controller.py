@@ -1,8 +1,12 @@
 import bluetooth
 import time
+import sys
 
 from threading import Thread
 
+sys.path.insert(0, '../../../src')
+
+from entities.movement.legs import Legs
 
 class BluetoothController(object):
     """
@@ -14,11 +18,18 @@ class BluetoothController(object):
         Constructor for the bluetooth controller class
         :param limbs: Array of robot limbs
         """
+
+        self.legboys = Legs(leg_0_servos=[
+            14,
+            61,
+            63
+        ])
+
         self.bluetooth_address = bluetooth_address
         self.legs = limbs[0]
         self.tracks = limbs[1]
 
-        self.update_thread = Thread(target=self.legs.leg_updater, args=(self,))
+        self.update_thread = Thread(target=self.legboys.__init__([14, 61, 63]), args=(self,))
         self.update_thread.start()
 
     def receive_data(self):
