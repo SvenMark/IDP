@@ -2,8 +2,8 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
-from entities.vision.calibrate import Calibrate
-from entities.vision.hsvpicker import Hsv_picker
+from entities.vision.helpers.calibrate import Calibrate
+from entities.vision.helpers.hsvpicker import Hsv_picker
 from entities.vision.recognize import Recognize
 from entities.vision.saving import Saving
 

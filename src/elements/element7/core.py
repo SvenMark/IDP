@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, '../../../src')
 
 from entities.vision.vision import Vision
-from entities.vision.helpers import Color
+from entities.vision.helpers.helpers import Color
 
 # Initialize color ranges for detection
 color_range = [Color("orange", [0, 69, 124], [13, 255, 255]),
