@@ -146,8 +146,12 @@ class Legs(object):
     def handle_controller_input(self, deploy, x_axis, y_axis):
         self.recent_package = [deploy, x_axis, y_axis]
 
-        if self.update_thread is None:
-            self.start_thread()
+        if not self.update_thread.is_alive() or self.update_thread is None:
+            print("starting update thread")
+            self.update_thread = Thread(target=self.leg_updater, args=(self,))
+            self.update_thread.start()
+        else:
+            self.update_thread.join()
 
     def leg_updater(self, args):
         print("New thread alive")
