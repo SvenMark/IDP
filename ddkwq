@@ -1,0 +1,2265 @@
+[33mcommit cf4122048921e41d32ff141b69e76abf6c329c21[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 12:17:31 2018 +0200
+
+    testing
+
+[33mcommit 90346f78df3f74501d1322dccae49d2a475a9bbf[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 12:15:39 2018 +0200
+
+    retracting when init
+
+[33mcommit accec1e17919a5e73d1b17b07337495601c0f849[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 12:11:05 2018 +0200
+
+    back
+
+[33mcommit 886e1e19a8a50059d52c4922ff6fb0e08afc26b0[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 12:10:01 2018 +0200
+
+    move_speed_rw testing
+
+[33mcommit 773b21ec1545866667448fee3fe196fa3d5df263[m
+Merge: a2445f9 4e5227a
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 12:07:11 2018 +0200
+
+    merge
+
+[33mcommit 4e5227ac1b86a30a6619d8a13f9ac1922ab85d4b[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 13:34:23 2018 +0200
+
+    wave
+
+[33mcommit ad167a9ceabb6b0316757ee0c76c22cce86227b3[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 12:24:23 2018 +0200
+
+    moving 1 leg correctly
+
+[33mcommit a2445f9533ea2ff0d0e7ab338101884256a8a887[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 12:05:57 2018 +0200
+
+    positions
+
+[33mcommit 87a5f094bc98b7cd734f6e36bdbbfdc9349aa898[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 22 11:22:39 2018 +0200
+
+    Updated retract
+
+[33mcommit 07456447c718c5d7e540652d13e5bb9fbffcfc22[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 22 11:17:27 2018 +0200
+
+    Updated positions
+
+[33mcommit 1cf12cf5dbc4e939714d514e4a5b917a35c7457c[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 22 11:08:02 2018 +0200
+
+    Updated middle servo deploy
+
+[33mcommit cf627777e31ef13b1cadaa99e6cd5ae3a011e581[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 22 11:06:32 2018 +0200
+
+    Updated legs class and comments
+
+[33mcommit 9cf9427141ab5ebae5e5d6db0f2eff6922338d38[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 10:41:44 2018 +0200
+
+    Walking dead
+
+[33mcommit 26d4cd0da32d05383e4f72e784be4d6e2f78e93e[m
+Merge: 65864b2 2678520
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 10:34:04 2018 +0200
+
+    Merge branch '17-poten_aansturen' of https://github.com/SvenMark/IDP into 17-poten_aansturen
+
+[33mcommit 65864b2aa70263ae05f8d9d92bc8ac0635e9dc4e[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 10:33:54 2018 +0200
+
+    testinmg
+
+[33mcommit 267852019f9fb5945da1deb956587a504e1baea6[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 22 10:31:18 2018 +0200
+
+    Updated to move_speed
+
+[33mcommit bde7181af0d4ddc23210db3bc73050f50e3c085f[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 22 10:27:51 2018 +0200
+
+    Added a move speed function to servo
+
+[33mcommit f6d59245b3456859c972c5d9e8222617a9aef9a7[m
+Merge: 3c70e8d 55d3a56
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 22 10:19:23 2018 +0200
+
+    Merge remote-tracking branch 'origin/17-poten_aansturen' into 17-poten_aansturen
+    
+    # Conflicts:
+    #       src/legs_test.py
+
+[33mcommit 3c70e8d4a449719e71251dd3f13e3251dd34a62d[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 22 10:19:00 2018 +0200
+
+    Added a readspeed to servo
+
+[33mcommit ed718705337b27971d118be9259ed876193c424c[m
+Merge: 87b2049 ad4d625
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 22 09:24:08 2018 +0200
+
+    Merge remote-tracking branch 'origin/17-poten_aansturen' into 17-poten_aansturen
+    
+    # Conflicts:
+    #       src/legs_test.py
+
+[33mcommit 87b2049aea3df8ba3dd031893bd900a8cd284055[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 22 09:23:48 2018 +0200
+
+    Updated legs test
+
+[33mcommit b17433f591ae75d755824e99257acef161847b45[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 22 09:15:13 2018 +0200
+
+    Updated legs for use of leg test
+
+[33mcommit 1611140050a044c5dfa0b7f99bdf2149e667139d[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 22 09:09:39 2018 +0200
+
+    Added a test that reads servos and their positions
+
+[33mcommit 55d3a56dfebb1e34663aa906ad66a4e3b59ac481[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 08:12:28 2018 +0200
+
+    testing leg
+
+[33mcommit a8e5bbc2b5fb83866c5bec8b65555c159f367f3d[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 08:02:36 2018 +0200
+
+    testing
+
+[33mcommit ad4d625def0c4944328db1fece37a3f5101c03cc[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 07:53:51 2018 +0200
+
+    testing
+
+[33mcommit 398e7080bffcfc517e133ef5a060a69dfe405696[m
+Merge: a888184 b17433f
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 22 07:52:58 2018 +0200
+
+    merge
+
+[33mcommit a88818429eeec672809a702c6d57263e97adc46f[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Fri May 18 12:49:01 2018 +0200
+
+    fix
+
+[33mcommit 3818b0989ca54c111fe117eef78ed7944fd1cf33[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 12:09:04 2018 +0200
+
+    Added deploy and retract function to legs
+
+[33mcommit df91cb6d832f425d8bccd0decd9a8ce2506af94c[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Fri May 18 11:45:45 2018 +0200
+
+    resource folder
+
+[33mcommit 88edc80d61cc9c02ab1ef6e3a82c0acf7eb305b5[m
+Merge: b74a6bc e29ac2b
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Fri May 18 11:25:15 2018 +0200
+
+    req
+
+[33mcommit b74a6bcb333d8a9448a523b04b3aa582d3d3badf[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Fri May 18 10:45:08 2018 +0200
+
+    AI
+
+[33mcommit f420fc546cb850ee618738d5d88e48cf9480158b[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 10:10:23 2018 +0200
+
+    Added comments to legs class
+
+[33mcommit 67271dd7a631fd5372ffe6a737e655f1738420da[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 10:04:50 2018 +0200
+
+    Added comments to servo and leg
+
+[33mcommit 68762d31626ca680e65fff5bdbd90a83bb2be122[m
+Merge: 1abd8bd eb191ce
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 07:52:45 2018 +0000
+
+    Merge pull request #105 from SvenMark/16-rupsbandenAansturen
+    
+    16 rupsbanden aansturen
+
+[33mcommit eb191ce2d1d22092331ac510e33ab6da4130aa03[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 09:47:24 2018 +0200
+
+    Updated none to None
+
+[33mcommit 50e46892fe64bce76844ff02693a6162a75b4f69[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 09:44:49 2018 +0200
+
+    Updated comments in the dc motor and tracks classes
+
+[33mcommit 9db8f92413cc58eea315bba24f7fa54e661121d4[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 09:24:19 2018 +0200
+
+    Merge branches '16-rupsbandenAansturen' and 'master' of https://github.com/SvenMark/IDP into 16-rupsbandenAansturen
+    
+    # Conflicts:
+    #       src/entities/movement/limb/joints/dcmotor.py
+    #       src/entities/movement/tracks.py
+
+[33mcommit 3ea1064bd8e61258a0019f34edadb4573ab33f42[m
+Merge: a0e32e3 1abd8bd
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 09:23:04 2018 +0200
+
+    Merge branches '16-rupsbandenAansturen' and 'master' of https://github.com/SvenMark/IDP into 16-rupsbandenAansturen
+    
+    # Conflicts:
+    #       src/entities/movement/limb/joints/dcmotor.py
+    #       src/entities/movement/tracks.py
+
+[33mcommit 1abd8bd02ed78adb5b0522535a0c310be1c6a5d4[m
+Merge: 3cdc310 79666b4
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 07:13:53 2018 +0000
+
+    Merge pull request #103 from SvenMark/17-poten_aansturen
+    
+    17 poten aansturen
+
+[33mcommit 79666b4932485dfefae91ef8df8077476fec8897[m
+Merge: 44ae824 3cdc310
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 09:08:14 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 17-poten_aansturen
+
+[33mcommit 3cdc31070f748bd05785d35700fecb3d2ac72ee2[m
+Merge: dabde4a cb66a11
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 07:06:35 2018 +0000
+
+    Merge pull request #101 from SvenMark/4.01-Frequenties-Onderscheiden
+    
+    4.01 frequenties onderscheiden
+
+[33mcommit dabde4a7285d5bd5bb1a4f315fd531fc301fa508[m
+Merge: 4c1cd92 5186ed8
+Author: Lars <lars-schipper@hotmail.com>
+Date:   Fri May 18 09:06:07 2018 +0200
+
+    Merge pull request #102 from SvenMark/80-dcmotor
+    
+    80 dcmotor
+
+[33mcommit 5186ed8b4079fb74bd06473b8c1caa09f0b3f89d[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 09:03:20 2018 +0200
+
+    Set HZ to 2khz
+
+[33mcommit 8d687bf6db8f8d447fd0744f42ccec8b8cc9de8a[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 08:53:22 2018 +0200
+
+    Updated tracks class
+
+[33mcommit e38346583d2f3ae0d1415db6cbcfdbf31260e9a6[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 08:52:34 2018 +0200
+
+    Updated DC motor frequency
+
+[33mcommit 1b7d77dc44d571bcd084e05e5d2a0887e6a5a656[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 08:51:38 2018 +0200
+
+    Updated DC motor frequency
+
+[33mcommit ea40dc060e0fe7ba54411fb809e566092193aafc[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 08:50:45 2018 +0200
+
+    Updated DC motor frequency
+
+[33mcommit 434577c7fa53c3e7fe1ce5cc81fed7a4fa1985c8[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Fri May 18 08:46:59 2018 +0200
+
+    Updated DC motor frequency
+
+[33mcommit 44ae8247fa53f735441c56d4601e37f31d1af916[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 14:43:59 2018 +0200
+
+    Updated import
+
+[33mcommit 791c94e09d21be2bf0558565c40c323c8df03d8e[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 14:42:49 2018 +0200
+
+    Updated import
+
+[33mcommit 149a576e786b05145bdd0b85870b0dcdd583060c[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 14:41:01 2018 +0200
+
+    removed buggy import
+
+[33mcommit 5cf7dfc7bcf15b390f5ac7932251488653f8fdd8[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 14:36:54 2018 +0200
+
+    Added parentheses around print
+
+[33mcommit aa6a04e0605be9a446743a74dafccb2a2e89f6a7[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 14:35:50 2018 +0200
+
+    updated main
+
+[33mcommit 36d24e0246c9fd4ce91413aa093696228e39d64f[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 14:34:37 2018 +0200
+
+    updated main
+
+[33mcommit e7bdfab6e4d87268e2c40fc269471dcb8cf0f763[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 14:27:54 2018 +0200
+
+    updated main
+
+[33mcommit 0515a357a4a7307d903a6acdbb9fa918be3ff022[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 14:18:03 2018 +0200
+
+    Added requirements
+
+[33mcommit c9e7d2ff74d6e331c9e75e242490ee05098844e9[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 13:38:54 2018 +0200
+
+    Put tests in their own package
+
+[33mcommit 094d6f4a303666a5ecd11fe169d071e0321b62e8[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 13:33:36 2018 +0200
+
+    Put tests in their own package
+
+[33mcommit 131d7d7b89e41bb89e93306c0f06ca2ec25a9532[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 13:18:52 2018 +0200
+
+    test for legs and tracks simultaneous
+
+[33mcommit 1e35352abc1d9e8b5a4115b260489f4bc0d09678[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 13:14:36 2018 +0200
+
+    test for legs and tracks simultaneous
+
+[33mcommit a07b2f4406c6552173ecc91ac595510f0480a0bf[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 12:58:35 2018 +0200
+
+    reset library to original
+
+[33mcommit 5fa906efb9de28247a61677b58cf8d48b007577e[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 12:56:33 2018 +0200
+
+    moved to src
+
+[33mcommit 2ce0c18125200abc567ef9b075ed8cf7f1282c57[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 12:55:21 2018 +0200
+
+    try to reset servo id
+
+[33mcommit 8231106382602db4dc4d92060b86b5e0faa305df[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 12:08:12 2018 +0200
+
+    test update 1208
+
+[33mcommit c94fc592d7869d7c4834545f020ecee871dd93b5[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 12:07:04 2018 +0200
+
+    test update 1207
+
+[33mcommit 429e73bf942b33cc9b4a68a38f345d90a4b847a0[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 12:06:06 2018 +0200
+
+    test update 1206
+
+[33mcommit a31f674dc448c822ad893201908fbea907d4a705[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 12:04:33 2018 +0200
+
+    Added standard sleep to servo constructor
+
+[33mcommit a7cf476ceda59447b5e0fd95f2aaaada379df983[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 12:03:10 2018 +0200
+
+    test update 1203
+
+[33mcommit 78560df73bad62f91947f366850f15d4f7491c07[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:52:28 2018 +0200
+
+    test update 1152
+
+[33mcommit e36112c4704bad7419df4410f12f41ff387f1209[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:51:08 2018 +0200
+
+    test update 1151
+
+[33mcommit 7babb5965a43e0197a70c412c17aeef09cdab310[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:39:37 2018 +0200
+
+    test update 1139
+
+[33mcommit 032b50dfcbfe4a9a211620045c7108c175d4fb76[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:29:33 2018 +0200
+
+    test update 1129
+
+[33mcommit 0c026f5361664d3e19dbfc1a696c0c4609417f6e[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:28:24 2018 +0200
+
+    test update 1128
+
+[33mcommit f18aa79c17503e2743267aeb03cf73601045952d[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:27:05 2018 +0200
+
+    test update 1126
+
+[33mcommit e7a5856169015d1e950707856b5dd37ad8a65c4f[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:25:34 2018 +0200
+
+    test update 1125
+
+[33mcommit 1fabb00c1aa29291d2ff38ec5157d4758e30461c[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:23:46 2018 +0200
+
+    test update 1123
+
+[33mcommit ac8addf167905845b448428fa0667ca0a287a1e7[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:22:23 2018 +0200
+
+    test update 1122
+
+[33mcommit e3811eca63363c5466527f69905a234c2b0bd188[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:21:08 2018 +0200
+
+    test update 1121
+
+[33mcommit 049d0399526a578651e0202c536a2801734fa390[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:20:15 2018 +0200
+
+    test update 1120
+
+[33mcommit f04ad4204234cf1400b9b400869c31d0995fc405[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:17:21 2018 +0200
+
+    Added sleep
+
+[33mcommit 302f1edd809676c545e35bea69cb489f14340107[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:13:17 2018 +0200
+
+    updated id`s
+
+[33mcommit f6e302f22bc3e0e6e4f560f343a5e1601328f063[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:11:08 2018 +0200
+
+    created servo id changer
+
+[33mcommit cda60e67eb99b431e9639ab498289b2d1d9ff6fd[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:05:22 2018 +0200
+
+    created servo id changer
+
+[33mcommit a9eac19b1eb304715d2d31b618d29e4fbbd9948c[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:03:40 2018 +0200
+
+    created servo id changer
+
+[33mcommit db883e6cdaffdde3822e78ea873761ea7464b4a3[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 11:02:50 2018 +0200
+
+    created servo id changer
+
+[33mcommit 3150f336c7726aabfb58499b0e9c3b976d1acc61[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 10:58:00 2018 +0200
+
+    Moved servo canner and removed unused tests
+
+[33mcommit 58ebd2cbe6d791271c581a734242bcff5007aa93[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 10:53:05 2018 +0200
+
+    Added correct servo ID`s
+
+[33mcommit 7e83331096baf78c57a56c93e0e8aff38cc5facf[m
+Merge: 6b95883 4c1cd92
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 10:50:25 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 17-poten_aansturen
+
+[33mcommit 4c1cd925fa8469d69763577e8db23301af5bf4b7[m
+Merge: ee62979 24b3018
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Thu May 17 10:49:55 2018 +0200
+
+    Merge pull request #99 from SvenMark/15-bouwwerk-herkennen
+    
+    15 bouwwerk herkennen
+
+[33mcommit 24b3018745b5e006d46c333b238712d6ba3fedb2[m
+Merge: c46143f ee62979
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Thu May 17 10:47:59 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 15-bouwwerk-herkennen
+
+[33mcommit c46143f0c805420db7e6d8a63279a7d23da85257[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Thu May 17 10:47:41 2018 +0200
+
+    fixed masks, code clean
+
+[33mcommit 6b95883d7f43395c3cb1c77b29948685a2178b75[m
+Merge: 0373fa3 ee62979
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 10:46:54 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 17-poten_aansturen
+
+[33mcommit 0373fa3156642e21760da22e6fb8b022bf8bdb94[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 10:15:19 2018 +0200
+
+    commented code to prevent errors
+
+[33mcommit a2c3ef42d7662411956f71bd0ed73522b0acd0c5[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 10:13:30 2018 +0200
+
+    Updated legs class and added it to main
+
+[33mcommit cb66a11cead0fa528d834cc02aa8fd44ea05e669[m
+Merge: 78d7d00 4c1cd92
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Thu May 17 09:55:45 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 4.01-Frequenties-Onderscheiden
+
+[33mcommit 78d7d00bbe5ac63664288f8b1cd7f76a1f58e16d[m
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Thu May 17 09:55:35 2018 +0200
+
+    Bass
+
+[33mcommit 44d083e8ae24ca5430ea7ba9a2cbfc7527ef18bc[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 09:35:06 2018 +0200
+
+    Updated leg class
+
+[33mcommit aa21654021901b04d90cb03816babf7a9ca47773[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Thu May 17 09:19:41 2018 +0200
+
+    Createda class for all legs and a test for it
+
+[33mcommit 9a433bd356013fc46fd7626d3461e525b4b85533[m
+Author: Jildert Venema <jildert.venema@hotmail.com>
+Date:   Wed May 16 21:12:31 2018 +0200
+
+    AI
+
+[33mcommit 81bca0dafff37c1bbc1b984af369ca3e7b89ff99[m
+Author: Jildert Venema <jildert.venema@hotmail.com>
+Date:   Wed May 16 21:11:26 2018 +0200
+
+    ai
+
+[33mcommit 7bae2822cc78c62f70e43253ea7a2e28b92aa273[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 15:22:10 2018 +0200
+
+    put the servo ids in the constructor
+
+[33mcommit be2e27ab5acc9c8abe80ab4962eb4862431f6ba7[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed May 16 15:21:47 2018 +0200
+
+    resize to contours
+
+[33mcommit 2fbdb5b3b68070f3e541a71566c330b1e3676109[m
+Author: RendallSchijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 13:20:17 2018 +0000
+
+    Updated leg tester
+
+[33mcommit afa6d3c1b63f64e6d4e2fb81e0b944c95c530af0[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 15:14:11 2018 +0200
+
+    updated values in leg test
+
+[33mcommit e8d8aac88f69a726f8dd5a17a1c92ef0c1e5b7d5[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 15:12:29 2018 +0200
+
+    Finished basic setup of leg class with comments
+
+[33mcommit dc09c79c1e7e58039f469491e555158ce5883b92[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 15:01:08 2018 +0200
+
+    Added comments to servo class
+
+[33mcommit a0e32e37554dc97548ba30275c4338d6b323108a[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 14:53:28 2018 +0200
+
+    Added comments to tracks and dcmotor files and converted everything to snake casing
+
+[33mcommit aa4809a49c30ef34584d2d73a7d2d6e3a4521dfe[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 14:28:18 2018 +0200
+
+    Added constructor to leg class
+
+[33mcommit ee6297966c8ce39299f52f3b91185c937243cefd[m
+Merge: 30ed4d1 7d8eab5
+Author: Kevin Snijder <kevinsnijder9@hotmail.com>
+Date:   Wed May 16 14:17:43 2018 +0200
+
+    Merge pull request #98 from SvenMark/4.01-Frequenties-Onderscheiden
+    
+    4.01 frequenties onderscheiden
+
+[33mcommit 7d8eab56871f2edeb3a6d3f61da8265c120b3cb4[m
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Wed May 16 14:10:48 2018 +0200
+
+    borders
+
+[33mcommit e940ac50fc0aca841e0efa76c29db4f6e6162f71[m
+Merge: e6012d2 30ed4d1
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Wed May 16 14:02:54 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 4.01-Frequenties-Onderscheiden
+
+[33mcommit e6012d2e6b0075da384a0efecba3fcb9bd418cce[m
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Wed May 16 14:02:42 2018 +0200
+
+    Fixed barchart and frequency splitting
+
+[33mcommit 1f796dfc006060a106ea69e021697f060a30bb8e[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 16 13:27:52 2018 +0200
+
+    recognize building change
+
+[33mcommit 2801729d846d769b1bb45946100039a6cee60839[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed May 16 13:17:37 2018 +0200
+
+    working detecting
+
+[33mcommit 35d38a9b31b6a928f2dc1c41d3c9166afdb177ab[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 13:12:31 2018 +0200
+
+    Removed swp files
+
+[33mcommit e43a443082526f358b9648977bdb0a375f1ab77d[m
+Merge: a9ddd38 30ed4d1
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 13:11:43 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 64-ServoAansturen
+    
+    # Conflicts:
+    #       src/double_servo_test.py
+    #       src/servo_test.py
+
+[33mcommit 30ed4d15b31325c82fe394a1698c0c535606767b[m
+Merge: e29ac2b 301ff31
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 11:09:02 2018 +0000
+
+    Merge pull request #97 from SvenMark/16-rupsbandenAansturen
+    
+    16 rupsbanden aansturen
+
+[33mcommit 301ff311ca2f05e14dd4bcd86918014835a75340[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 13:07:29 2018 +0200
+
+    Fixed bug
+
+[33mcommit 85b22cd7c321e2e2a1e40cdb68a9034c5b1751dc[m
+Author: RendallSchijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 11:04:44 2018 +0000
+
+    Updated track test to new track class
+
+[33mcommit b51e43e54866ffd0f3de260a7089036863d2f3a2[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 13:02:37 2018 +0200
+
+    Added one more decimal to rounding
+
+[33mcommit 4c026939dab62c768cb0f66783291e986162c0f1[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 12:57:15 2018 +0200
+
+    Removed format from round
+
+[33mcommit 57e42aa89de5f9cdafae9dd719674d7541dc2c88[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 12:56:13 2018 +0200
+
+    Formatted speed to contain only 2 decimals
+
+[33mcommit 73e334c397192fb1b406bfaaee2694622d238b89[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 12:50:34 2018 +0200
+
+    Unrounded speed
+
+[33mcommit 8f146190d8826489bd3c49f9a1cbbb247e9544ad[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 12:49:32 2018 +0200
+
+    rounded speed
+
+[33mcommit 354549d606492a823644cc405dbc926582939ed6[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 12:45:43 2018 +0200
+
+    added check for speed < 0
+
+[33mcommit 4c0efc8d39ef24c43cca82be8501fedfc85b1337[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 12:37:48 2018 +0200
+
+    Updated tracks class
+
+[33mcommit 5f4ea893260496b62ca2d8a1d6bf55f4bece1444[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed May 16 12:08:18 2018 +0200
+
+    detecting objects
+
+[33mcommit dd44d1e84077fd339de9027703d049eb0b4331b8[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 11:52:31 2018 +0200
+
+    Merge branch 'track-svenmark' of https://github.com/SvenMark/IDP into 16-rupsbandenAansturen
+    
+    # Conflicts:
+    #       src/entities/movement/limb/tracks.py
+
+[33mcommit d14467c1e1d027169d67494d6c605c24f0258229[m
+Merge: c4266b2 775c09a
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 11:51:59 2018 +0200
+
+    Merge branch 'track-svenmark' of https://github.com/SvenMark/IDP into 16-rupsbandenAansturen
+    
+    # Conflicts:
+    #       src/entities/movement/limb/tracks.py
+
+[33mcommit 56f33a1abf815e0c57ff0b6ad668c383cbb186a4[m
+Merge: 085630d e29ac2b
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Wed May 16 11:44:57 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 4.01-Frequenties-Onderscheiden
+
+[33mcommit 085630d94c285b17756fcada65dd3218588222ae[m
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Wed May 16 11:44:16 2018 +0200
+
+    small import fixes
+
+[33mcommit c4266b25551f21f7b9289dd263366982805c38c9[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 11:29:50 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 16-rupsbandenAansturen
+    
+    # Conflicts:
+    #       src/entities/movement/limb/tracks.py
+    #       src/track_class_test.py
+
+[33mcommit 462eff1decc563fd02b58ee362d6bdf260214fea[m
+Merge: fa266a2 e29ac2b
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 11:22:52 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 16-rupsbandenAansturen
+    
+    # Conflicts:
+    #       src/entities/movement/limb/tracks.py
+    #       src/track_class_test.py
+
+[33mcommit e29ac2b8313bc767a9a0f8366c6a04d58e815e5a[m
+Merge: cceaa45 34db48d
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 09:19:56 2018 +0000
+
+    Merge pull request #95 from SvenMark/4.01-Frequenties-Onderscheiden
+    
+    4.01 frequenties onderscheiden
+
+[33mcommit cceaa455e345b46ab80e4b93aa412bb516f07caf[m
+Merge: ed61188 5135f6a
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Wed May 16 11:19:16 2018 +0200
+
+    Merge pull request #96 from SvenMark/80-dcmotor
+    
+    80 dcmotor
+
+[33mcommit ed61188404c36b6d4e8dd805ea8b110bcaaf2874[m
+Merge: f105761 9a8828e
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 09:17:57 2018 +0000
+
+    Merge pull request #93 from SvenMark/15-bouwwerk-herkennen
+    
+    15 bouwwerk herkennen
+
+[33mcommit 5135f6ad05a1062ba1bdb85ea2926c2bed75d5a5[m
+Author: RendallSchijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 09:17:10 2018 +0000
+
+    updated track test
+
+[33mcommit 34db48dc109f2abb516880124cf843d5692b8c9e[m
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Wed May 16 10:56:42 2018 +0200
+
+    Main is garbage
+
+[33mcommit badb15e2cadc7bf8e9ccdeac5b7b2123240577cc[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 16 10:52:23 2018 +0200
+
+    max speed fix
+
+[33mcommit 395a19a18941236cd2d15ce1053f8917d56384f5[m
+Merge: 7d228b5 f105761
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Wed May 16 10:51:33 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 4.01-Frequenties-Onderscheiden
+
+[33mcommit 7d228b5f9fe48525d058f958c66999f81d4d1d7b[m
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Wed May 16 10:51:25 2018 +0200
+
+    Plots
+
+[33mcommit 775c09a00784a0c23802c31ab6a8bd6ea85b02d0[m
+Author: Sven Mark <hofs1600@student.nhl.nl>
+Date:   Wed May 16 10:39:48 2018 +0200
+
+    Proposition for tracks setup, also usable for legs, and tires
+
+[33mcommit c676f3733c7d2130e55af0868df698981e1d1963[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 16 10:39:19 2018 +0200
+
+    begin speed fix
+
+[33mcommit 99f6f5de0fa68a6e5ba795a75b36d5ff9caa1704[m
+Merge: 9a8828e f105761
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed May 16 10:29:55 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 15-bouwwerk-herkennen
+
+[33mcommit 9a8828e0306414234563f3fe0ff91b1df8fc0b5f[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed May 16 10:29:04 2018 +0200
+
+    saving when all object detected
+
+[33mcommit cd2549a4ba11d1b7cd4f5884f05b12ddee4622b4[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 16 10:26:18 2018 +0200
+
+    step fix 2
+
+[33mcommit 6492d7723208e7cefe0fd87983d8fe24ac3636c2[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 16 10:24:16 2018 +0200
+
+    step fix
+
+[33mcommit a99a61bd2cff5078dc3475d0f07934105d29d50e[m
+Author: RendallSchijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 08:23:12 2018 +0000
+
+    Fixed indenting
+
+[33mcommit 4df87ba8c526e4effc28f2967560931ea4475019[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 16 10:20:50 2018 +0200
+
+    deleted and merged dcmotor.py
+
+[33mcommit 007ec7ed61a6914469d7fcc4512499a9fc60c266[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 16 10:12:08 2018 +0200
+
+    acceleration test
+
+[33mcommit fa266a244fc5d9d4891f5ec518db5cb4174dc89a[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 10:09:26 2018 +0200
+
+    Updated forward track function
+
+[33mcommit e731bd5db6ed3e23f36675328468952db7f731c6[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 10:08:29 2018 +0200
+
+    Updated forward track function
+
+[33mcommit 646d7d0ba00b0fd0271e0d2248ec71072dfcf286[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 10:07:15 2018 +0200
+
+    Added print to test
+
+[33mcommit 9d80185f45d8abbd465c40b1118bba7503d34963[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 10:05:17 2018 +0200
+
+    Converted float to int
+
+[33mcommit ea9c28cb54b9e9466fea13040ec2133f587f9516[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 10:04:25 2018 +0200
+
+    Updated test
+
+[33mcommit a506e8c281763839f1adbb07dba1e0c32ba3b7b9[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 10:03:02 2018 +0200
+
+    Updated track class and test
+
+[33mcommit c7d2ac98baa718dc75c24c6990a3e20069c24781[m
+Merge: 4f6550c f105761
+Author: Sven Mark <hofs1600@student.nhl.nl>
+Date:   Wed May 16 09:47:27 2018 +0200
+
+    Merge branch 'master' of github.com:SvenMark/IDP
+
+[33mcommit 4f6550c3cc7cd20983e1fc369b0c9b7e1a3cd9ac[m
+Author: Sven Mark <hofs1600@student.nhl.nl>
+Date:   Wed May 16 09:47:19 2018 +0200
+
+    Add vision module
+
+[33mcommit f1057610e52876fc923645faba3abbcef97b8a16[m
+Merge: 1a61037 68411b2
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 07:45:14 2018 +0000
+
+    Merge pull request #92 from SvenMark/80-dcmotor
+    
+    80 dcmotor
+
+[33mcommit 68411b2856794eeb3b05fb87a4ed218b42f2dc61[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 09:36:39 2018 +0200
+
+    Updated unittests
+
+[33mcommit e05f1c1db7871d097a0a94d701b369f32cafc7f6[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 09:33:55 2018 +0200
+
+    Patched tracks class
+
+[33mcommit e70ba9bd251bdce651ba75c5ef1cb6e2b0afe07d[m
+Merge: 818530b 76557d9
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 09:28:06 2018 +0200
+
+    Merge remote-tracking branch 'origin/80-dcmotor' into 80-dcmotor
+
+[33mcommit 818530be9cb39fe949f4c8de284879c509cec68c[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 09:27:52 2018 +0200
+
+    Updated tracks test and class
+
+[33mcommit 76557d9d48153a07958f9990a20f92f2319f2e36[m
+Merge: 9c9dae8 786866a
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 16 09:24:07 2018 +0200
+
+    Merge branch '80-dcmotor' of https://github.com/SvenMark/IDP into 80-dcmotor
+
+[33mcommit 786866a21e01a24544bf10ccdc366ff2c6f895ab[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 09:23:46 2018 +0200
+
+    Created test for testing track class
+
+[33mcommit 9c9dae8caaecde013ac9452d355f259d39b54aa2[m
+Merge: cee0c76 8abe108
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 16 09:23:38 2018 +0200
+
+    test fix
+
+[33mcommit 0aeb88e39be79d3d66e0b9a5a707b2b3477cd800[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 09:19:37 2018 +0200
+
+    updated implementation of Track() to Tracks()
+
+[33mcommit 358eb052c6023254f03767c76eab561d58a04fbe[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 16 09:19:07 2018 +0200
+
+    Updated track class name to tracks
+
+[33mcommit a9ddd3886eb48b25f44832b1862edfda94c7cc7e[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 16 09:09:37 2018 +0200
+
+    servo fix
+
+[33mcommit 8abe108a167e2bb54faa90dadba74ff399cdc8a3[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 14:25:26 2018 +0200
+
+    Track class finished
+
+[33mcommit adf13499a5da5b35ca56c106f569a0adc356713d[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 14:05:40 2018 +0200
+
+    Put dcmotor and servo class in their own folder
+
+[33mcommit 392e109205d0801a1f02ca9498aa1c62257ebfe4[m
+Merge: 91650a1 4a66df6
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 14:04:22 2018 +0200
+
+    Merge branch '64-ServoAansturen' of https://github.com/SvenMark/IDP into 64-ServoAansturen
+
+[33mcommit cee0c76c0ec1f537ba5950c7292eff42979f8c41[m
+Merge: 2d68b32 4a66df6
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 14:03:41 2018 +0200
+
+    merge
+
+[33mcommit 2d68b32fc62d8a804f0f4eb337c163ebbcbdcd83[m
+Merge: f6aab13 555ab80
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 14:02:02 2018 +0200
+
+    Merge branch '80-dcmotor' of https://github.com/SvenMark/IDP into 80-dcmotor
+
+[33mcommit f6aab134c141f1894c86f3f5afbfea9fec27c618[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 14:01:35 2018 +0200
+
+    testing
+
+[33mcommit 1d81e3e97ca1a9bc7c83349d697c3beceff36c52[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 13:47:16 2018 +0200
+
+    other pin
+
+[33mcommit 91650a1d993e7d274194b62cca029dd443b5850f[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 13:43:50 2018 +0200
+
+    other pin
+
+[33mcommit 555ab8071e17688798793d58d3dceef9161f239b[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 13:32:28 2018 +0200
+
+    Renamed to pascal casing
+
+[33mcommit f00100009cac6de3589f5a0c8313fbc98ea5fba4[m
+Merge: 8352e1a 1a61037
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 13:30:46 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 80-dcmotor
+    
+    # Conflicts:
+    #       src/entities/movement/limb/dcmotor.py
+
+[33mcommit 2b36252b7d3132085e236123c9fa5def0b1c4b19[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Tue May 15 13:00:24 2018 +0200
+
+    needs fix
+
+[33mcommit c97d7e661535647a14d9c4fd58499dacb6e8dd39[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Tue May 15 12:54:14 2018 +0200
+
+    needs threading
+
+[33mcommit c5e9c62db2fa8fd7f9e70feaaecc0538404f0d24[m
+Merge: 1ffaab3 1a61037
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Tue May 15 12:33:19 2018 +0200
+
+    merge
+
+[33mcommit 1a6103788e90bf8a196a09ec6870972a4fe4bd95[m
+Merge: a254256 d4ca635
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 10:07:08 2018 +0000
+
+    Merge pull request #91 from SvenMark/4.01-Frequenties-Onderscheiden
+    
+    4.01 frequenties onderscheiden
+
+[33mcommit d4ca6350ae9236a02221273a4c251c64e9ad83c8[m
+Merge: e68c2a4 a254256
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Tue May 15 12:06:33 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 4.01-Frequenties-Onderscheiden
+    
+    # Conflicts:
+    #       src/elements/element7/core.py
+
+[33mcommit a2542561d8f82f71439d35704028818d9dfabc07[m
+Merge: 02413a2 90b8cc1
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 10:05:07 2018 +0000
+
+    Merge pull request #90 from SvenMark/refactor-audio
+    
+    Make audio clean again
+
+[33mcommit 90b8cc15dc0be31d5b9b3836137d41c777ee7f04[m
+Merge: 9eb0801 02413a2
+Author: Sven Mark <hofs1600@student.nhl.nl>
+Date:   Tue May 15 12:03:25 2018 +0200
+
+    Merge remote-tracking branch 'remotes/origin/master' into refactor-audio
+    
+    # Conflicts:
+    #       src/elements/element7/core.py
+
+[33mcommit 1ffaab34477290c914d781949ece22fa310e0459[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Tue May 15 12:02:45 2018 +0200
+
+    recognize buildings
+
+[33mcommit 4a66df6889319f2243d5e1c5c88af54c766bd997[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 12:01:01 2018 +0200
+
+    Removed temptest
+
+[33mcommit aa9c924a2ffe489c57fea72ae32ce8659b45d885[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 11:58:49 2018 +0200
+
+    str() fix
+
+[33mcommit ba90fa77cc127ed53c33fac2336face6e5c70705[m
+Merge: ecb8e3d 3eaf5c0
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 11:56:14 2018 +0200
+
+    Merge branch '64-ServoAansturen' of https://github.com/SvenMark/IDP into 64-ServoAansturen
+
+[33mcommit ecb8e3dd0e8e5fbf1d856b1f43c9ad12c32085fc[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 11:55:59 2018 +0200
+
+    2 servos same time test
+
+[33mcommit 3eaf5c091c8b26c963dfb828ad16c6a251761efe[m
+Merge: d64d809 bda30b5
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 11:27:19 2018 +0200
+
+    Merge remote-tracking branch 'origin/64-ServoAansturen' into 64-ServoAansturen
+
+[33mcommit d64d8095dfa58bac188744186b8e13aeefb14e42[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 11:27:08 2018 +0200
+
+    Added test for finding servo and updated to pascal casing
+
+[33mcommit 9eb080144965bd416295e91f278368c12044864f[m
+Author: Sven Mark <hofs1600@student.nhl.nl>
+Date:   Tue May 15 11:21:09 2018 +0200
+
+    Tests
+
+[33mcommit bda30b5d387efdb81ac0dcf4c04c172dab9cbee8[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 11:17:20 2018 +0200
+
+    added is_Ready function
+
+[33mcommit e68c2a4548d2185a207ddedb309b3d5a72d4c0a6[m
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Tue May 15 11:17:19 2018 +0200
+
+    Added second option
+
+[33mcommit 689dca502959919b27b7f4d42e14f7cd525be174[m
+Merge: 1191cc2 02413a2
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Tue May 15 11:11:52 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 4.01-Frequenties-Onderscheiden
+    
+    # Conflicts:
+    #       src/elements/element7/core.py
+
+[33mcommit a1145675be6d89a0caeac8b429718414097b62a4[m
+Author: Sven Mark <hofs1600@student.nhl.nl>
+Date:   Tue May 15 11:10:48 2018 +0200
+
+    Update travis with audio lib
+
+[33mcommit 1191cc25a0fa2c89fb45e331c7698e15bc2979ac[m
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Tue May 15 11:08:50 2018 +0200
+
+    Highs mids en lows gesplit, weet niet of dit wel een goede commit was
+
+[33mcommit 021bebd404b5584650177d1968e2f031be618134[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 11:08:11 2018 +0200
+
+    return
+
+[33mcommit 3ece9a27cc993ee4576ce1ca82cd46276f647064[m
+Author: Sven Mark <hofs1600@student.nhl.nl>
+Date:   Tue May 15 11:05:51 2018 +0200
+
+    Tests for audio
+
+[33mcommit 609e83e24e548fdaece844b2013d89dc1b301218[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Tue May 15 10:51:55 2018 +0200
+
+    saving contours without duplicates
+
+[33mcommit 9bb964b4a3afc6b282ac17b201c2707c0d5a4b12[m
+Author: Sven Mark <hofs1600@student.nhl.nl>
+Date:   Tue May 15 10:48:07 2018 +0200
+
+    Make audio clean again
+
+[33mcommit ee87677c965fec8416b6a49ffd1845e137da345a[m
+Merge: b5c1288 a583d9a
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 10:47:58 2018 +0200
+
+    Merge branch '64-ServoAansturen' of https://github.com/SvenMark/IDP into 64-ServoAansturen
+
+[33mcommit b5c128838a713e7ef0062e8b156d2238a6bb3bb2[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 10:47:34 2018 +0200
+
+    busy check fix
+
+[33mcommit 0c48556ca2d5e2eae19ebad4ac3e588aba664316[m
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Tue May 15 10:44:34 2018 +0200
+
+    Small changes
+
+[33mcommit b88ee7d20c8f97a93148de1f0feb3e0186c3f4b1[m
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Tue May 15 10:43:42 2018 +0200
+
+    Microphone Frequency Peak Visualisation
+
+[33mcommit 02413a213167d14bbbe795b1dc51c9068d00dbbb[m
+Merge: 812c68c 0261b7d
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 08:25:38 2018 +0000
+
+    Merge pull request #85 from SvenMark/temp
+    
+    Temp
+
+[33mcommit 812c68cb10dace5b4e786addbf526509a7283888[m
+Merge: 6b51afb a583d9a
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 08:24:22 2018 +0000
+
+    Merge pull request #89 from SvenMark/64-ServoAansturen
+    
+    64 servo aansturen
+
+[33mcommit a583d9af3f2c3a3db3676ea911a87e59c977ecea[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 10:23:20 2018 +0200
+
+    Updated to pascal casing and added conventions for main()
+
+[33mcommit 62d432aebe8246cdba5dcf1708f1acfbb9e76fc5[m
+Author: kevin <kevinsnijder9@hotmail.com>
+Date:   Tue May 15 10:20:14 2018 +0200
+
+    Microphone Volume Visualisation
+
+[33mcommit 7af1acd70c76df089171c11212ce4f2018c2be31[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 10:15:10 2018 +0200
+
+    initial state
+
+[33mcommit 337d989e8bc73260de8ee92c3a31c7ad3b64a12c[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 10:12:17 2018 +0200
+
+    updated servo class
+
+[33mcommit 71dbc4f24be28ff68e4e6333a587abe9c73ee9cc[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 10:04:25 2018 +0200
+
+    updated servo class
+
+[33mcommit dcd2e8061a96c2f39822cec670c01cfbc8f24ec6[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 10:01:45 2018 +0200
+
+    solved merge conflict
+
+[33mcommit 52d5c7eeb9ebf082dce82096bcb8a3bf7ca59160[m
+Merge: d1f1918 be51620
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 10:01:04 2018 +0200
+
+    Merge remote-tracking branch 'origin/64-ServoAansturen' into 64-ServoAansturen
+    
+    # Conflicts:
+    #       src/entities/movement/limb/servo.py
+
+[33mcommit d1f1918daf48e000262a083217b5aef766222785[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 09:58:11 2018 +0200
+
+    Updated library to pascal casing
+
+[33mcommit be516209c8a2e0e69243f4d85609740624dc338b[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 09:50:38 2018 +0200
+
+    sleep while busy
+
+[33mcommit 86f66cee98f8633626c5965039711b83caa7b415[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 09:38:39 2018 +0200
+
+    updated servo files
+
+[33mcommit 42c582121a41235db708bcd54b8b064ccc76bc09[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 09:33:22 2018 +0200
+
+    Updated servo class readPosition
+
+[33mcommit b0569fb27645e14b1f57536dae105c310713ac71[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 09:29:56 2018 +0200
+
+    Removed unnecessary imports
+
+[33mcommit 360281a10544ddb774976695938edd3811e0adef[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 09:27:12 2018 +0200
+
+    updated readposition
+
+[33mcommit 10a21e31e0503c06a6a4145dc8fb8580b46f964b[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 09:25:23 2018 +0200
+
+    Added position reader to servo class
+
+[33mcommit 7dcbbaefe9159fb9caf91c6aa81a248e766f8fa0[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Tue May 15 09:18:17 2018 +0200
+
+    Finished servo base class and wrote a test for it
+
+[33mcommit 8352e1a80a860bed097ce6844b4ad840a058278e[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 15 09:02:11 2018 +0200
+
+    added pin argument
+
+[33mcommit 6b51afb679324c542ea901ab3a174d9ab1b854c1[m
+Merge: d1c7d36 c170feb
+Author: Jildert Venema <jildert.venema@hotmail.com>
+Date:   Tue May 15 08:59:40 2018 +0200
+
+    Merge pull request #88 from SvenMark/80-dcmotor
+    
+    80 dcmotor
+
+[33mcommit c170febc955d009ff73d24f6385a16fae0669621[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 15:07:11 2018 +0200
+
+    updated test
+
+[33mcommit 035c4c80e82931b49f4f6e2e115892783f316970[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 15:04:20 2018 +0200
+
+    updated test
+
+[33mcommit 2e309ff2a60dd4414128d1436559216a5e51ed10[m
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Mon May 14 15:03:10 2018 +0200
+
+    Block with color detection working.
+
+[33mcommit ecf0ae97f953c272b1a8085f159b032e3a7e074e[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 15:02:24 2018 +0200
+
+    dc test now uses limb
+
+[33mcommit 0261b7d518db7546907b31994ae2e5f847f1f96b[m
+Merge: a2349e7 d1c7d36
+Author: Jildert Venema <jildert.venema@hotmail.com>
+Date:   Mon May 14 14:54:34 2018 +0200
+
+    Merge branch 'master' into temp
+
+[33mcommit d1c7d36583903d164e222a581cbe116d9643a775[m
+Merge: 490b358 5213780
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 14:51:36 2018 +0200
+
+    Merge branch 'reformatting' of https://github.com/SvenMark/IDP
+    
+    # Conflicts:
+    #       src/ax12libtest.py
+    #       src/dcMotorTest.py
+    #       src/movetest.py
+    #       src/serialtest.py
+
+[33mcommit 490b3583df01145ff52acb59ad1c587ab18aba82[m
+Merge: a99d99a e0d56bf
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 12:46:04 2018 +0000
+
+    Merge pull request #87 from SvenMark/80-dcmotor
+    
+    80 dcmotor
+
+[33mcommit 0cbd3a8f6d594522f9bdec3037b028d0c16ccdd1[m
+Merge: d3e0265 60b1814
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Mon May 14 14:40:20 2018 +0200
+
+    Merge remote-tracking branch 'origin/3-objectherkenning' into 3-objectherkenning
+    
+    # Conflicts:
+    #       src/elements/element7/core.py
+
+[33mcommit d3e0265cb523008c42dce4eb8e41ba91d81c4a09[m
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Mon May 14 14:38:38 2018 +0200
+
+    Thread (bit better for pi)
+
+[33mcommit 60b1814e09ef2d44599c1a8659a09d40d5323cc2[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Mon May 14 14:35:06 2018 +0200
+
+    hogere sensitivryry
+
+[33mcommit 72c06c022ca45c6f48df81662e065bba6182d9af[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Mon May 14 14:31:04 2018 +0200
+
+    compare is 'working'
+
+[33mcommit e0d56bffb4ecb72c9cea44da2f39f1b3bdc0159e[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 14:24:45 2018 +0200
+
+    Updated tests
+
+[33mcommit d3ef4d81d5dc3a806697537b5ebfe0d5fdb48c97[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 14:15:47 2018 +0200
+
+    Updated tests
+
+[33mcommit 5213780f1026eed420806951e28f56c29b6a9344[m
+Author: Sven Mark <hofs1600@student.nhl.nl>
+Date:   Mon May 14 14:10:17 2018 +0200
+
+    Reformat
+
+[33mcommit 0b1ed89e4dea7ee18c0482eeb7b5f33cecb4e5c5[m
+Author: RendallSchijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 12:00:37 2018 +0000
+
+    updated tests
+
+[33mcommit 9d60d0067f48e88b5c52c34455f77c3c199798e9[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Mon May 14 14:00:15 2018 +0200
+
+    fix
+
+[33mcommit e0918a74be67a9296dac96ca50442046d02c7d16[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Mon May 14 13:27:01 2018 +0200
+
+    fixes
+
+[33mcommit 94be6b6bf650ffbf09862c4931df1efe74ed15c4[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 13:14:09 2018 +0200
+
+    Updated naming
+
+[33mcommit 356e39e25a583bca7c1387dda439b02e5987a2f0[m
+Author: RendallSchijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 10:41:11 2018 +0000
+
+    -a
+
+[33mcommit eb9e2841e38cb51dda404cb26219846aef18d683[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 12:30:12 2018 +0200
+
+    Added dc motor to duo test
+
+[33mcommit b21ff24c5af2447046490158b5416f0f5805e5d6[m
+Author: RendallSchijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 10:26:12 2018 +0000
+
+    Test is able to control 2 servos at the same time
+
+[33mcommit f35bda22bf58b72c53473bda0a0e7c18c90c44aa[m
+Merge: fcca0a0 0bf29be
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Mon May 14 12:15:12 2018 +0200
+
+    merge
+
+[33mcommit fcca0a08a1eeacf27ba0b7fb1c40e00bd914264b[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Mon May 14 12:12:02 2018 +0200
+
+    fixed recognition
+
+[33mcommit 132b77b15810db049f4a6ad2fad20fb05951fc85[m
+Author: RendallSchijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 09:34:01 2018 +0000
+
+    updated servotest
+
+[33mcommit eb3f7240b309438dd324a64bfbf25c0a0b83b4e8[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 11:25:01 2018 +0200
+
+    updated servotest
+
+[33mcommit d248de89032212c831775b004bb782dd25f6dadf[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 11:19:38 2018 +0200
+
+    updated servotest
+
+[33mcommit a99d99a3b6d55982359ee44a6ae4d83f3fe14abf[m
+Merge: 66eed90 0bf29be
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 09:17:45 2018 +0000
+
+    Merge pull request #84 from SvenMark/3-objectherkenning
+    
+    3 objectherkenning
+
+[33mcommit a2349e7f70666d2f11d0620aea83f4641b0fca77[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Mon May 14 11:06:15 2018 +0200
+
+    deleted old stuff
+
+[33mcommit 25cc7f59462a38b11147d097b5010ad4d13b224c[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 14 11:02:10 2018 +0200
+
+    Removed superfluous tests and created a test for double servos
+
+[33mcommit d46f8c714b2abe862300c83264da27a64f1f8902[m
+Merge: 7987a5c 66eed90
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Mon May 14 11:01:36 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP
+
+[33mcommit 2ac5a539071b7fee0b1ce271aff4870e8b3e6de8[m
+Merge: a5a98f5 fd5b9cb
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Mon May 14 10:44:13 2018 +0200
+
+    https://github.com/SvenMark/IDP into microphone_recognition
+
+[33mcommit a5a98f5632a26b14fd7e32a4345049bac7432098[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Mon May 14 10:42:22 2018 +0200
+
+    speech recognition
+
+[33mcommit fd5b9cb4ddad973424af9c259a407c49505250cc[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Mon May 14 10:27:24 2018 +0200
+
+    updated requirements.txt for speach recognition
+
+[33mcommit 0bf29be33832b561a6784ea1238001a833cb1f86[m
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Mon May 14 10:03:57 2018 +0200
+
+    Update main.py
+
+[33mcommit b089fc98995f63ee496f5aef9b56b386b31136f4[m
+Merge: cf28580 8b1f187
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Mon May 14 10:03:49 2018 +0200
+
+    Merge branch 'microphone_recognition' of
+    https://github.com/SvenMark/IDP into 3-objectherkenning
+
+[33mcommit 6ee2d41f70bcc851cdfcb9016d66580c7711194d[m
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Mon May 14 10:03:45 2018 +0200
+
+    Update main.py
+
+[33mcommit 447de277c304cf6c96283993e9314335ca53d85b[m
+Merge: a60186e cf28580
+Author: Melvin <bos12bos@hotmail.com>
+Date:   Mon May 14 08:00:57 2018 +0000
+
+    Small fixes
+
+[33mcommit 8b1f187196a9e80b16f0884d5aea796d6898a2b1[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Mon May 14 09:57:20 2018 +0200
+
+    added microphone_recognition.py
+
+[33mcommit a60186ed8f005ea105e6519421281957b5259974[m
+Author: Melvin <bos12bos@hotmail.com>
+Date:   Mon May 14 07:56:42 2018 +0000
+
+    Small fixes
+
+[33mcommit cf28580d1d9b1d7f540cb5d21cbfdc0b931b678f[m
+Merge: bc00733 66eed90
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Mon May 14 09:56:37 2018 +0200
+
+    merge
+
+[33mcommit bc00733d1ec7c9d1e23f0002cea8ff80f8e33042[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed May 9 14:00:55 2018 +0200
+
+    save position for recognition
+
+[33mcommit 66eed90fae2c9258a2cd744d546ddddf0bfa8977[m
+Merge: e40f948 bfd3569
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 11:56:09 2018 +0000
+
+    Merge pull request #83 from SvenMark/80-dcmotor
+    
+    added bot to main
+
+[33mcommit e40f948972c2876cba1aacd42ec1af858470de07[m
+Merge: 31bad1a 9c9cad3
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 11:54:29 2018 +0000
+
+    Merge pull request #82 from SvenMark/64-ServoAansturen
+    
+    64 servo aansturen
+
+[33mcommit bfd356940ac8aeb102a86ba51b737a49a3195ce4[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 13:52:18 2018 +0200
+
+    added bot to main
+
+[33mcommit 9c9cad3370d6a27bcfc75ab2091025d9643a4efd[m
+Merge: d87b989 4446ab7
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 13:47:34 2018 +0200
+
+    Merge branch '64-ServoAansturen' of https://github.com/SvenMark/IDP into 64-ServoAansturen
+
+[33mcommit d87b989fdcd0f2f988c04e42eeb4c98e5ca73559[m
+Merge: a819464 824f1a2
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 13:46:49 2018 +0200
+
+    servo test
+
+[33mcommit 4446ab70ec9fb350777c07aecefdfa386a67ed26[m
+Merge: a819464 31bad1a
+Author: Jildert Venema <jildert.venema@hotmail.com>
+Date:   Wed May 9 13:45:54 2018 +0200
+
+    Merge branch 'master' into 64-ServoAansturen
+
+[33mcommit 31bad1ac1a936a0d295b24ee35907b0fcd3394c3[m
+Merge: 26c0e3e 824f1a2
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 11:30:03 2018 +0000
+
+    Merge pull request #81 from SvenMark/80-dcmotor
+    
+    80 dcmotor
+
+[33mcommit b1e15e1716fe98c5610dbb74f90ef5fa95dd02d1[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed May 9 12:56:03 2018 +0200
+
+    position recognition
+
+[33mcommit 824f1a243b25acf098920bb1c835c4548749a9f0[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 12:31:51 2018 +0200
+
+    Removed unused file and uncommented main
+
+[33mcommit c5706dd02034a3632e4ead77bc6e9e2ef36f9c45[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 12:29:38 2018 +0200
+
+    dc motor klasse werkend
+
+[33mcommit a8194644ad8ca0dd44d26934875ddcdbd9b228a8[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 12:28:13 2018 +0200
+
+    dcmotor klasse werkt
+
+[33mcommit cb2407a21aa1d3e24195554f568e1c71b11f17d2[m
+Merge: 31096aa 0420202
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 12:05:29 2018 +0200
+
+    Merge branch '80-dcmotor' of https://github.com/SvenMark/IDP into 64-ServoAansturen
+
+[33mcommit 0420202c0561963ff7d53d0eca675a73fa923ff1[m
+Author: RendallSchijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 09:57:50 2018 +0000
+
+    updated dc class
+
+[33mcommit 31096aa56b06066e0dd02250a102e7092ebe825e[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 11:49:35 2018 +0200
+
+    servo class
+
+[33mcommit bcb5f32a4434dced1a4261cdb3d425751ac50a44[m
+Merge: d16c34f 84508c8
+Author: RendallSchijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 09:48:27 2018 +0000
+
+    Merge branch '80-dcmotor' of https://github.com/SvenMark/IDP into 80-dcmotor
+
+[33mcommit d16c34ff861d1ce9d43d0b0c3177744391ba3636[m
+Merge: e98e741 26c0e3e
+Author: RendallSchijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 09:47:55 2018 +0000
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 80-dcmotor
+
+[33mcommit 84508c8b87404460ebcfbee6274329ec80bb21ef[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 11:47:46 2018 +0200
+
+    Updated dc motor class
+
+[33mcommit e98e7419a540decec08974f1159d37058c3c381a[m
+Author: RendallSchijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 09:44:12 2018 +0000
+
+    Updated dc motor class
+
+[33mcommit 15f9c76711381e98833d3a81633c2785b8921345[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 11:35:23 2018 +0200
+
+    Created dc motor class
+
+[33mcommit 1dcdeed9d27de9fb6e1099b0b8ead965e3e8a441[m
+Merge: c3c997e f0c5884
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 11:02:18 2018 +0200
+
+    Merge branch '80-dcmotor' of https://github.com/SvenMark/IDP into 80-dcmotor
+
+[33mcommit c3c997e8853b8e5c0faa889b6e44eceab5e20c0b[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 11:01:51 2018 +0200
+
+    dc motor werkend
+
+[33mcommit f0c58847b6117bd337af3bd13c469eba474aff86[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 10:34:45 2018 +0200
+
+    Updated name
+
+[33mcommit 4d8e155a126933d2108b21c393dffc6b24f7868a[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 10:27:38 2018 +0200
+
+    motor script update
+
+[33mcommit 8c21e530ec540a20132b31993ba10c88e20e1491[m
+Merge: 6d47236 468e25f
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 10:23:39 2018 +0200
+
+    Merge branch '64-ServoAansturen' of https://github.com/SvenMark/IDP into 64-ServoAansturen
+
+[33mcommit 6d47236e8c68e5d3382a8605c18c0a808fcdd484[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 10:23:15 2018 +0200
+
+    motor script
+
+[33mcommit 26c0e3e39d6ba5396a1eaf1b36f5ec22c7ac3af2[m
+Merge: 53ebe9e 468e25f
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 08:09:45 2018 +0000
+
+    Merge pull request #79 from SvenMark/64-ServoAansturen
+    
+    64 servo aansturen
+
+[33mcommit 468e25f969af3d967a6208fd27d4f402d83481a8[m
+Author: Sven Mark Hofstra <svenmark10@gmail.com>
+Date:   Wed May 9 10:06:49 2018 +0200
+
+    Update servo.py
+
+[33mcommit 479bc2417777384fb8a6c6e40f1f468f966efdbe[m
+Author: RendallSchijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 08:01:33 2018 +0000
+
+    updated directory name
+
+[33mcommit e829d547e6da85f923e9d06cdcc1ed4ccb50f303[m
+Merge: b1a3c9e 53ebe9e
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed May 9 09:58:28 2018 +0200
+
+    merge ma dude
+
+[33mcommit b1a3c9eb30ddfd641643acbaa869985da4603c3c[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed May 9 09:57:58 2018 +0200
+
+    perfomance improvement, code cleaning
+
+[33mcommit 28c1cf36f6304f84e150dd4266ddb7e19b5aa80b[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 09:52:00 2018 +0200
+
+    loop
+
+[33mcommit e2ca7a28717252b6e370bc59098c690266e10667[m
+Merge: 33ef4ce 7122567
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 09:37:27 2018 +0200
+
+    Merge branch '64-ServoAansturen' of https://github.com/SvenMark/IDP into 64-ServoAansturen
+
+[33mcommit 712256784c832aa494cabc9d03311d25a51ebc2f[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Wed May 9 09:37:17 2018 +0200
+
+    Created library folder
+
+[33mcommit 33ef4ce00d790bcdcf5980bcf3d1a4d650e723ff[m
+Merge: 99d3931 53ebe9e
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 09:33:18 2018 +0200
+
+    Merge branch 'master' of https://github.com/SvenMark/IDP into 64-ServoAansturen
+
+[33mcommit 0c3a5d7a9d12b48926e9b05bd2c9aac1add0a1dc[m
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Wed May 9 09:26:45 2018 +0200
+
+    Working text.
+
+[33mcommit 99d39319fd174a9c32e5e1ac7f21b2483e5cbce3[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 09:26:11 2018 +0200
+
+    oneindige loop weg
+
+[33mcommit b05ee7408adb8a1b1e076b73762919977937fc50[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed May 9 09:15:47 2018 +0200
+
+    recognizes color by name, optimalization
+
+[33mcommit f2331491e77923b86ca1d937722a2b9fa12381a0[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 09:04:35 2018 +0200
+
+    Werkende servo aansturing
+
+[33mcommit 0f0bf50b70d22cbf7c69ec8525003e66d64a862c[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Wed May 9 08:26:04 2018 +0200
+
+    new ax12 lib
+
+[33mcommit b592b2f903cb01c2048457109b42ea1e664425ef[m
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Tue May 8 14:57:56 2018 +0200
+
+    Text added to blocks.
+
+[33mcommit 0e5da1d905f29d2415709173f7b7f98fa0dd4fd4[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 8 14:44:13 2018 +0200
+
+    aanvullende libs
+
+[33mcommit 3dc1a9b8219641d74c1b3d548b9a905ce8f037de[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 8 14:31:20 2018 +0200
+
+    new library
+
+[33mcommit 5927d4fcc08da2a4dfbc01b74243aa5348fc4ac8[m
+Merge: c6a948e d309f8a
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 8 14:26:52 2018 +0200
+
+    Merge branch '64-ServoAansturen' of https://github.com/SvenMark/IDP into 64-ServoAansturen
+
+[33mcommit c6a948e116048b5d2ddc1ca01f906fe1b38d28b5[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Tue May 8 14:26:17 2018 +0200
+
+    testing
+
+[33mcommit d309f8a2ea0c9331e2b76a647013072a2d75e87c[m
+Merge: 794418c f845374
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 7 14:15:39 2018 +0200
+
+    Merge remote-tracking branch 'origin/64-ServoAansturen' into 64-ServoAansturen
+
+[33mcommit 794418c6dd5df3ab263b0a3a697ae57242afcd2c[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 7 14:15:22 2018 +0200
+
+    Updated servo class
+
+[33mcommit f845374f0c0bf2757a4552b0bad0410665375cdb[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Mon May 7 14:15:05 2018 +0200
+
+    new test files
+
+[33mcommit dbeff306d06b578f72276583a10987c7fc2f5fbb[m
+Merge: b8341a9 48fa08c
+Author: Melvin <bos12bos@hotmail.com>
+Date:   Mon May 7 11:32:16 2018 +0000
+
+    merge
+
+[33mcommit b8341a9bfefe15bbc5609ecfc9b26f840647e6e6[m
+Author: Melvin <bos12bos@hotmail.com>
+Date:   Mon May 7 11:30:14 2018 +0000
+
+    merge
+
+[33mcommit 53ebe9eb7212878b6b339f68722e775f9ca395e8[m
+Merge: 847a882 48fa08c
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Mon May 7 13:23:45 2018 +0200
+
+    Merge pull request #77 from SvenMark/3-objectherkenning
+    
+    3 objectherkenning
+
+[33mcommit c6d435abf8aa794cce88bc1a49adbbd1cab7ac02[m
+Merge: 8ff56c0 847a882
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Mon May 7 11:16:09 2018 +0000
+
+    Lol merge #Merge branch 'master' of https://github.com/SvenMark/IDP into 3-objectherkenning
+
+[33mcommit 2cab6c2583b157d5bc0fcf0e0cda558f7b4a56dd[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Mon May 7 11:09:21 2018 +0200
+
+    scan test
+
+[33mcommit 1ea6305de89e427594b1b1a382750f4ee07bd7f2[m
+Author: Jildert <jildert.venema@hotmail.com>
+Date:   Mon May 7 11:08:46 2018 +0200
+
+    scan test
+
+[33mcommit 847a882e9661af46b50681fa09579469e3988fc6[m
+Merge: e15ea05 d4b96ac
+Author: Jildert Venema <jildert.venema@hotmail.com>
+Date:   Mon May 7 10:28:52 2018 +0200
+
+    Merge pull request #78 from SvenMark/64-ServoAansturen
+    
+    64 servo aansturen
+
+[33mcommit e15ea05e0268c25f2f9b0bdec8ae6a96485771e2[m
+Merge: 611277f c8d0305
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 7 10:24:05 2018 +0200
+
+    Merge pull request #76 from SvenMark/72-robot-laten-praten
+    
+    72 robot laten praten
+
+[33mcommit d4b96ace9efa543b8573f6b3794e333b24e9eb2d[m
+Author: Rendall Schijven <rendall.schijven@hotmail.com>
+Date:   Mon May 7 10:23:06 2018 +0200
+
+    Created pyax12 test
+
+[33mcommit 48fa08c2e18f2d82162335d85295d7bcdbeb23ca[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Thu Apr 26 14:45:19 2018 +0200
+
+    removed picamera, add when working wih pi
+
+[33mcommit 57fc62078b14a9af25af5f0e838f91dda68321d7[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Thu Apr 26 14:40:39 2018 +0200
+
+    travis
+
+[33mcommit a6dc6960e5a22885b9aba7ac0d94e43fdafe6aba[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Thu Apr 26 14:34:36 2018 +0200
+
+    travis
+
+[33mcommit 78cb54cfebecc3b0ea1f9f11def6fcb46f5e980e[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Thu Apr 26 14:20:15 2018 +0200
+
+    free commits
+
+[33mcommit 0921f5e04f8c5d158058d3dacbd670ee45c681b4[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Thu Apr 26 14:13:19 2018 +0200
+
+    travis
+
+[33mcommit c8c392bb706e25a276d5e340cee286281b92f9f7[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Thu Apr 26 13:59:11 2018 +0200
+
+    update travis.yml
+
+[33mcommit 8ff56c09c642d92e522f170e6a2224e246babf65[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Thu Apr 26 13:22:31 2018 +0200
+
+    added rgb -> hsv converter, color masks, hull
+
+[33mcommit 013b455408edd2262605c0168f2af979a268cf40[m
+Merge: c8d0305 5adcc60
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Thu Apr 26 11:25:53 2018 +0200
+
+    merge, blijkbaar
+
+[33mcommit c8d03054d0446d068de5386b82d6aacd33f2bc98[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Thu Apr 26 10:55:28 2018 +0200
+
+    audio class emptied
+
+[33mcommit 49029486c3a2585be661917938c15892d6590d46[m
+Merge: 4dcfa34 611277f
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Thu Apr 26 10:38:15 2018 +0200
+
+    merge
+
+[33mcommit 4dcfa3409de8048ec6168c297bae22054988ea4d[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Thu Apr 26 10:37:29 2018 +0200
+
+    playing sound files works all types, all platform
+
+[33mcommit 611277f0764a7b8b6163ea999b021c1b0d0ca229[m
+Merge: 6f610f0 8c03e9a
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Thu Apr 26 10:24:54 2018 +0200
+
+    Merge pull request #75 from SvenMark/svenmark/codeowners
+    
+    Delete CODEOWNERS
+
+[33mcommit 8c03e9a1415a81d45a6fc1a02c5e8792fd81c55b[m
+Author: Sven Mark Hofstra <svenmark10@gmail.com>
+Date:   Thu Apr 26 09:26:04 2018 +0200
+
+    Delete CODEOWNERS
+
+[33mcommit 6a71c772377c1d379cdf7eca55ffd90205d50740[m
+Merge: 2076895 6f610f0
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed Apr 25 14:58:11 2018 +0200
+
+    mergeMerge branch 'master' of https://github.com/SvenMark/IDP into 72-robot-laten-praten
+
+[33mcommit 2076895defbc57e2279a87e8e7b0dc21628499b2[m
+Merge: c31cdf9 b9f8a4d
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed Apr 25 14:56:50 2018 +0200
+
+    merge
+
+[33mcommit b9f8a4dfacfc7f22e130948686ab9a3e6a2afc45[m
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Wed Apr 25 12:42:57 2018 +0000
+
+    Fixed text to speech
+
+[33mcommit 6f610f0451e4253b86a9740234d6ded500e006f0[m
+Merge: 870236e c31cdf9
+Author: AltijdMelvin <bos12bos@hotmail.com>
+Date:   Wed Apr 25 13:43:43 2018 +0200
+
+    Merge pull request #71 from SvenMark/13-geluidopvangen
+    
+    13 geluidopvangen
+
+[33mcommit c31cdf99ce7395cefc3b1f0465bd9d6c38e01339[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed Apr 25 13:37:09 2018 +0200
+
+    rename.txt
+
+[33mcommit 449d697391f3e0886156964af91d31c0c1af255e[m
+Author: Lars Schipper <lars-schipper@hotmail.com>
+Date:   Wed Apr 25 12:44:42 2018 +0200
+
+    updated requirements.txt
+
+[33mcommit 4f00fa995257331081543534198733275a84f1d5[m
+Merge: 42a06bc 7424a5e
+Author: Jildert Venema <jildert.venema@hotmail.com>
+Date:   Wed Apr 25 12:42:11 2018 +0200
+
+    Merge branch '64-ServoAansturen' of https://github.com/SvenMark/IDP into 64-ServoAansturen

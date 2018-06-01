@@ -1,8 +1,8 @@
-#!/bin/python
-
+import sys
 import time  # Import the Time library
-
 import RPi.GPIO as GPIO  # Import the GPIO Library
+
+sys.path.insert(0, '../../../../../src')
 
 
 class DCMotor(object):
@@ -10,13 +10,19 @@ class DCMotor(object):
     Base class for dc motor
     """
 
-    def __init__(self, pin):
+    def __init__(self, pin, pin_forward, pin_backward):
+        """
+        Constructor for the dc motor class
+        :param pin: The GPIO pin the dc motor is connected to
+        :param pin_forward: The forward direction pin, this pin send a signal if the motor needs to go forward
+        :param pin_backward: The backward direction pin, this pin send a signal if the motor needs to go backward
+        """
 
         # Set up the gpio and pins for the use of DC motors
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
-        self.pin_motor_forward = 10
-        self.pin_motor_backward = 9
+        self.pin_motor_forward = pin_forward
+        self.pin_motor_backward = pin_backward
         self.pin_pwm = pin
         self.frequency = 2048
         self.stop = 0
@@ -43,11 +49,11 @@ class DCMotor(object):
     def forward(self, duty_cycle, delay):
         """
         Turn the motor forward
-        :param duty_cycle: the percentage of available power the motor uses
-        :param delay: time to wait after executing
+        :param duty_cycle: The percentage of available power the motor uses
+        :param delay: Time to wait after executing
         :return: None
         """
-        print("Forwards " + str(duty_cycle))
+        print("DC motor on pin " + str(self.pin_pwm) + " Forwards " + str(duty_cycle))
         GPIO.output(self.pin_motor_forward, GPIO.HIGH)
         GPIO.output(self.pin_motor_backward, GPIO.LOW)
         self.pwm_motor.ChangeDutyCycle(duty_cycle)
@@ -57,11 +63,11 @@ class DCMotor(object):
     def backward(self, duty_cycle, delay):
         """
         Turn the motor backward
-        :param duty_cycle: the percentage of available power the motor uses
-        :param delay: time to wait after executing
+        :param duty_cycle: The percentage of available power the motor uses
+        :param delay: Time to wait after executing
         :return: None
         """
-        print("Backwards " + str(duty_cycle))
+        print("DC motor on pin " + str(self.pin_pwm) + " Backwards " + str(duty_cycle))
         GPIO.output(self.pin_motor_forward, GPIO.LOW)
         GPIO.output(self.pin_motor_backward, GPIO.HIGH)
         self.pwm_motor.ChangeDutyCycle(duty_cycle)
