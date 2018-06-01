@@ -162,7 +162,7 @@ class Legs(object):
 
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
-            if self.deployed and len(legs_not_ready) == 0:
+            if self.deployed:
                 if 500 < y_axis < 530:
                     self.deploy(200)
                 if y_axis > 530:
