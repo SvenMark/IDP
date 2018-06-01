@@ -137,18 +137,6 @@ class Legs(object):
         self.previous = next_time
         return elapsed_time.total_seconds()
 
-    def start_thread(self):
-        if self.update_thread is None:
-            print("CREATING THREAD")
-            self.update_thread = Thread(target=self.leg_updater, args=(self,))
-            self.update_thread.start()
-        elif not self.update_thread.is_alive():
-            print("REVIVING THREAD")
-            self.update_thread.start()
-        else:
-            print("JOINING THREAD")
-            self.update_thread.join()
-
     def handle_controller_input(self, deploy, x_axis, y_axis):
         self.recent_package = [deploy, x_axis, y_axis]
         # self.update_thread.join()
