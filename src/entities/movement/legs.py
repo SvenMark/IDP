@@ -44,9 +44,8 @@ class Legs(object):
         self.retract(120)
 
         self.updater = False
-        self.update_thread = None
-        self.start_thread()
-        # self.update_thread.start()
+        self.update_thread = Thread(target=self.leg_updater, args=(self,))
+        self.update_thread.start()
 
         # deploy, x-axis, y-axis
         self.recent_package = [0, 0, 0]
@@ -152,7 +151,7 @@ class Legs(object):
 
     def handle_controller_input(self, deploy, x_axis, y_axis):
         self.recent_package = [deploy, x_axis, y_axis]
-        self.start_thread()
+        self.update_thread.join()
 
     def leg_updater(self, args):
         print("New thread alive")
