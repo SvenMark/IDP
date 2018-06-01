@@ -29,6 +29,7 @@ class Servo(object):
         # Set the servo variables and move servo to initial position.
         self.servo_id = servo_id
         self.last_position = self.ax12.read_position(self.servo_id)
+        print(str(self.ax12.read_position(self.servo_id)))
         self.goal = initial_position
         self.current_speed = 200
         self.current_speed_multiplier = 0.02
