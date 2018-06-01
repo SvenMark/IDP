@@ -149,7 +149,7 @@ class Legs(object):
             # x_axis = legs.recent_package[1]
             y_axis = self.recent_package[2]
 
-            # print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
+            print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
 
             if deploy == 1 and not self.deployed:
                 self.deploy(200)
@@ -164,11 +164,11 @@ class Legs(object):
             delta = self.get_delta()
 
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+
             if self.deployed and len(legs_not_ready) == 0:
                 if 500 < y_axis < 530:
                     self.deploy(200)
                 if y_axis > 530:
-                    print("Forward!!!!!!!!!!!!!!!!!")
                     self.run_sequence(speeds=[100, 100, 100],
                                       self_update=False,
                                       sequences=[self.sequence],
