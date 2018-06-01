@@ -4,6 +4,7 @@ import time
 
 from threading import Thread
 
+
 class BluetoothController(object):
     """
     Base class for the bluetooth smart controller
