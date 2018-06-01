@@ -139,10 +139,10 @@ class Legs(object):
 
     def handle_controller_input(self, deploy, x_axis, y_axis):
         self.recent_package = [deploy, x_axis, y_axis]
+        print("Update packages")
         # self.update_thread.join()
 
     def leg_updater(self, args):
-        print("New thread alive")
         self.updater = True
 
         while True:
@@ -150,7 +150,7 @@ class Legs(object):
             # x_axis = legs.recent_package[1]
             y_axis = self.recent_package[2]
 
-            print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
+            # print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
 
             if deploy == 1 and not self.deployed:
                 self.deploy(200)
