@@ -155,7 +155,6 @@ class Legs(object):
 
             if y_axis > 530:
                 speed = (y_axis - 512) * 0.4
-                print("SET SPEED")
             if y_axis < 500:
                 speed = (512 - y_axis) * 0.4
 
@@ -164,10 +163,10 @@ class Legs(object):
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
             if self.deployed and len(legs_not_ready) == 0:
-                print("DO A MOVEEEEEEEEEEEE")
                 if 500 < y_axis < 530:
                     self.deploy(200)
                 if y_axis > 530:
+                    print("VOORRUIT DANN!!!!!!!!!!")
                     self.run_sequence(speeds=[100, 100, 100],
                                       self_update=False,
                                       sequences=[self.sequence],
