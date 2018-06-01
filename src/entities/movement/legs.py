@@ -168,6 +168,7 @@ class Legs(object):
                 if 500 < y_axis < 530:
                     self.deploy(200)
                 if y_axis > 530:
+                    print("Forward!!!!!!!!!!!!!!!!!")
                     self.run_sequence(speeds=[100, 100, 100],
                                       self_update=False,
                                       sequences=[self.sequence],
