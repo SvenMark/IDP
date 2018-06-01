@@ -30,8 +30,8 @@ class BluetoothController(object):
 
         count = 0
         while 1:
-            print("reading bluetooth data")
             try:
+                print("reading bluetooth data")
                 data += str(sock.recv(1024).decode("utf-8"))
                 data_end = data.find('\\n')
                 if data_end != -1:

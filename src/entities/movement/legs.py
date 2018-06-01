@@ -141,11 +141,10 @@ class Legs(object):
         self.recent_package = [deploy, x_axis, y_axis]
         self.update_thread.join()
         print("Update packages")
-        # self.update_thread.join()
 
     def leg_updater(self, args):
         self.updater = True
-
+        print("Thread started")
         while True:
             deploy = self.recent_package[0]
             # x_axis = legs.recent_package[1]
