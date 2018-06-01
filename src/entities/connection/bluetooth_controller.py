@@ -96,6 +96,8 @@ class BluetoothController(object):
             # Send the data to legs class
             self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
 
+        self.update_thread.join()
+
 
 def main():
     limbs = [0, 1]
