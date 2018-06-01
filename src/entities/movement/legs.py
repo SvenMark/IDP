@@ -45,6 +45,7 @@ class Legs(object):
 
         self.updater = False
         self.update_thread = None
+        self.start_thread()
         # self.update_thread.start()
 
         # deploy, x-axis, y-axis
