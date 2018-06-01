@@ -149,7 +149,7 @@ class Legs(object):
             # x_axis = legs.recent_package[1]
             y_axis = self.recent_package[2]
 
-            print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
+            # print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
 
             if deploy == 1 and not self.deployed:
                 self.deploy(200)
