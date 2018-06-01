@@ -19,6 +19,7 @@ class BluetoothController(object):
         self.tracks = limbs[1]
 
         self.update_thread = Thread(target=self.legs.leg_updater, args=(self,))
+        self.update_thread.start()
 
     def receive_data(self):
         """
@@ -35,7 +36,6 @@ class BluetoothController(object):
         count = 0
         while 1:
             try:
-                self.update_thread.start()
                 # data += str(sock.recv(1024).decode("utf-8"))
                 data += str(sock.recv(1024))[2:][:-1]
 
@@ -95,8 +95,6 @@ class BluetoothController(object):
 
             # Send the data to legs class
             self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
-
-        self.update_thread.join()
 
 
 def main():
