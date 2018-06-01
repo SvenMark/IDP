@@ -151,7 +151,7 @@ class Legs(object):
 
     def handle_controller_input(self, deploy, x_axis, y_axis):
         self.recent_package = [deploy, x_axis, y_axis]
-        self.update_thread.join()
+        # self.update_thread.join()
 
     def leg_updater(self, args):
         print("New thread alive")
