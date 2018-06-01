@@ -36,6 +36,7 @@ class BluetoothController(object):
         count = 0
         while 1:
             try:
+                self.update_thread.start()
                 # data += str(sock.recv(1024).decode("utf-8"))
                 data += str(sock.recv(1024))[2:][:-1]
 
