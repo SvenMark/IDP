@@ -26,7 +26,6 @@ class Legs(object):
 
         self.previous = datetime.datetime.now()
 
-
         # Initialise a leg for each corner of the robot
         self.leg_front_left = Leg(leg_0_servos, [530, 210, 475])
         # self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
@@ -34,7 +33,9 @@ class Legs(object):
         # self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
 
         self.legs = [self.leg_front_left,
-                     #self.leg_front_right, self.leg_rear_left, self.leg_rear_right
+                     # self.leg_front_right,
+                     # self.leg_rear_left,
+                     # self.leg_rear_right
                      ]
 
         self.sequence = 0
@@ -75,22 +76,6 @@ class Legs(object):
 
         if self_update:
             self.update_legs()
-
-    def update_legs(self):
-        # while legs_not_ready are not ready, update
-        legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-        self.get_delta()
-        while len(legs_not_ready) != 0:
-            delta = self.get_delta()
-            for i in range(len(legs_not_ready)):
-                legs_not_ready[i].update(delta)
-            legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-
-    def get_delta(self):
-        next_time = datetime.datetime.now()
-        elapsed_time = next_time - self.previous
-        self.previous = next_time
-        return elapsed_time.total_seconds()
 
     def deploy(self, speed):
         """
@@ -136,13 +121,24 @@ class Legs(object):
 
         self.deployed = False
 
-    def update_sequence(self):
-        if self.sequence < 3:
-            self.sequence = self.sequence + 1
-        else:
-            self.sequence = 0
+    def update_legs(self):
+        # while legs_not_ready are not ready, update
+        legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+        self.get_delta()
+        while len(legs_not_ready) != 0:
+            delta = self.get_delta()
+            for i in range(len(legs_not_ready)):
+                legs_not_ready[i].update(delta)
+            legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+
+    def get_delta(self):
+        next_time = datetime.datetime.now()
+        elapsed_time = next_time - self.previous
+        self.previous = next_time
+        return elapsed_time.total_seconds()
 
     def start_thread(self):
+        print("START THREAD")
         self.update_thread.join()
         self.update_thread = Thread(target=self.leg_updater, args=(self,))
         self.update_thread.start()
@@ -152,7 +148,6 @@ class Legs(object):
 
         if self.update_thread is None:
             self.start_thread()
-
 
     def leg_updater(self, args):
         print("New thread alive")
@@ -182,13 +177,15 @@ class Legs(object):
                 if 500 < y_axis < 530:
                     self.deploy(200)
                 if y_axis > 530:
-                    self.run_sequence(self, [100, 100, 100],
+                    self.run_sequence(self,
+                                      [100, 100, 100],
                                       self_update=False,
                                       sequences=[self.sequence],
                                       sequence=forward)
                     self.update_sequence()
                 if y_axis < 500:
-                    self.run_sequence(self, [100, 100, 100],
+                    self.run_sequence(self,
+                                      [100, 100, 100],
                                       self_update=False,
                                       sequences=[self.sequence],
                                       sequence=backward)
@@ -211,12 +208,31 @@ class Legs(object):
         #           0,
         #           [200, 200, 200])
 
+    def update_sequence(self):
+        """
+        Function that updates on which part of the movement sequence the legs are in
+        when controller by the controller.
+        :return: None
+        """
+        if self.sequence < 3:
+            self.sequence = self.sequence + 1
+        else:
+            self.sequence = 0
+
     def run_sequence(self, speeds, self_update=True, sequences=None, sequence=None):
+        """
+        Function that runs one of the leg movement sequences
+        :param speeds: Array of speeds, one for each leg
+        :param self_update: Variable that is false if controlled by controller and true if autonomous
+        :param sequences: The moves of the sequence you want to run
+        :param sequence: The movement sequence you want to run
+        :return: None
+        """
         if sequence is None:
             sequence = forward
-        elif sequence is dab:
+        elif sequence is dab and sequences is None:
             sequences = [0]
-        elif sequence is wave or sequence is march:
+        elif sequence is wave and sequences is None or sequence is march and sequences is None:
             sequences = [0, 1]
 
         if sequences is None:
