@@ -152,7 +152,8 @@ class Legs(object):
                 self.deploy(200)
             elif deploy == 0 and self.deployed:
                 self.retract(200)
-            speed = 0
+
+            speed = 100
             if y_axis > 530:
                 speed = (y_axis - 512) * 0.4
             if y_axis < 500:
@@ -162,7 +163,7 @@ class Legs(object):
 
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
-            if self.deployed and len(legs_not_ready) == 1:
+            if self.deployed and len(legs_not_ready) == 0:
                 if 500 < y_axis < 530:
                     self.deploy(200)
                 if y_axis > 530:
