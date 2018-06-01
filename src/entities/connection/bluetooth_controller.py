@@ -30,12 +30,19 @@ class BluetoothController(object):
 
         count = 0
         while 1:
+            print("reading bluetooth data")
             try:
-                # print("reading bluetooth data")
-                data += str(sock.recv(1024).decode("utf-8"))
-                self.handle_data(data)
-                data = ""
-                count += 1
+                # data += str(sock.recv(1024).decode("utf-8"))
+                data += str(sock.recv(1024))[2:][:-1]
+
+                data_end = data.find('\\n')
+                if data_end != -1:
+                    rec = data[:data_end]
+                    # print(rec)
+                    self.handle_data(rec)
+                    data = ""
+                    count += 1
+
             except KeyboardInterrupt:
                 break
         sock.close()
