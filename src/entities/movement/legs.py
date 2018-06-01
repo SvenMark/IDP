@@ -93,9 +93,9 @@ class Legs(object):
         # self.leg_rear_left.move(leg_2_deploy, delay, [speed, speed, speed])
         # self.leg_rear_right.move(leg_3_deploy, delay, [speed, speed, speed])
 
-        self.update_legs()
-
         self.deployed = True
+
+        self.update_legs()
 
     def retract(self, speed):
         """
@@ -115,9 +115,9 @@ class Legs(object):
         # self.leg_rear_left.move(leg_2_retract, delay, [speed, speed, speed])
         # self.leg_rear_right.move(leg_3_retract, delay, [speed, speed, speed])
 
-        self.update_legs()
-
         self.deployed = False
+
+        self.update_legs()
 
     def update_legs(self):
         # while legs_not_ready are not ready, update
@@ -153,7 +153,6 @@ class Legs(object):
             elif deploy == 0 and self.deployed:
                 self.retract(200)
 
-            speed = 100
             if y_axis > 530:
                 speed = (y_axis - 512) * 0.4
             if y_axis < 500:
