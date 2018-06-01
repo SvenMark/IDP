@@ -32,7 +32,7 @@ class BluetoothController(object):
         while 1:
             print("reading bluetooth data")
             try:
-                data += str(sock.recv([1024])).decode("utf-8")
+                data += str(sock.recv(1024)).decode("utf-8")
                 # data += str(sock.recv(1024))[2:][:-1]
                 print(str(data))
 
