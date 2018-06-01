@@ -143,7 +143,7 @@ class Legs(object):
 
         while True:
             deploy = self.recent_package[0]
-            # x_axis = legs.recent_package[1]
+            x_axis = self.recent_package[1]
             y_axis = self.recent_package[2]
 
             # print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
@@ -162,7 +162,7 @@ class Legs(object):
 
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
-            if self.deployed and len(legs_not_ready) == 0:
+            if self.deployed and len(legs_not_ready) == 1:
                 if 500 < y_axis < 530:
                     self.deploy(200)
                 if y_axis > 530:
