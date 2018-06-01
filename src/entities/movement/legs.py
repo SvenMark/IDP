@@ -160,6 +160,8 @@ class Legs(object):
 
             delta = self.get_delta()
 
+            print("Y axis: " + str(y_axis))
+
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
             if self.deployed and len(legs_not_ready) == 0:
