@@ -162,6 +162,7 @@ class Legs(object):
 
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
+            print("Deployed: " + str(self.deployed) + " Legs not ready: " + str(len(legs_not_ready)))
             if self.deployed and len(legs_not_ready) == 0:
                 print("VOORRUIT DANN!!!!!!!!!!")
                 if 500 < y_axis < 530:
