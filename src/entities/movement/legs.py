@@ -139,12 +139,11 @@ class Legs(object):
 
     def handle_controller_input(self, deploy, x_axis, y_axis):
         self.recent_package = [deploy, x_axis, y_axis]
-        self.update_thread.join()
         print("Update packages")
 
     def leg_updater(self, args):
         self.updater = True
-        print("Thread started")
+
         while True:
             deploy = self.recent_package[0]
             # x_axis = legs.recent_package[1]
