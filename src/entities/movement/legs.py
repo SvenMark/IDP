@@ -52,7 +52,7 @@ class Legs(object):
 
         print("Legs setup, retracting")
         
-    def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speeds, self_update=True):
+    def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speeds, self_update):
         """
         Function to move the legs_not_ready together
         :param leg_0_moves: Array of positions for leg 0
@@ -210,7 +210,7 @@ class Legs(object):
         else:
             self.sequence = 0
 
-    def run_sequence(self, speeds, self_update=True, sequences=None, sequence=None):
+    def run_sequence(self, speeds, self_update, sequences=None, sequence=None):
         """
         Function that runs one of the leg movement sequences
         :param speeds: Array of speeds, one for each leg
@@ -219,6 +219,7 @@ class Legs(object):
         :param sequence: The movement sequence you want to run
         :return: None
         """
+
         if sequence is None:
             sequence = forward
         elif sequence is dab and sequences is None:

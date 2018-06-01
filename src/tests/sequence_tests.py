@@ -29,7 +29,7 @@ legs = Legs(leg_0_servos=[
             )
 
 for i in range(5):
-    legs.run_sequence([250, 250, 250], True, None, forward)
+    legs.run_sequence([250, 250, 250], self_update=True, sequences=None, sequence=forward)
 
 for i in range(5):
     legs.run_sequence([250, 250, 250], True, None, backward)
