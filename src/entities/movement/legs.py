@@ -147,10 +147,13 @@ class Legs(object):
         self.updater = True
 
         while True:
+
             deploy = self.recent_package[0]
             x_axis = self.recent_package[1]
             y_axis = self.recent_package[2]
 
+            if deploy == 0 and x_axis == 0 and y_axis == 0:
+                continue
 
             if deploy == 1 and not self.deployed:
                 self.deploy(200)
