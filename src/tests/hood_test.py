@@ -1,6 +1,10 @@
-#!/bin/python
+import time
+import sys
 
-from entities.movement.sequences.walking_sequences import *
+sys.path.insert(0, '../../src')
+
+from entities.movement.legs import Legs
+from entities.movement.sequences.sequences import *
 
 legs = Legs(leg_0_servos=[
                 14,
@@ -24,6 +28,6 @@ legs = Legs(leg_0_servos=[
 #            ]
             )
 
-legs.deploy(150)
-lol(legs, [250, 250, 250], 10)
-legs.retract(90)
+
+legs.run_sequence([120, 120, 120], self_update=True, sequences=None, sequence=hood_handshake)
+
