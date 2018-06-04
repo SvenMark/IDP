@@ -126,7 +126,6 @@ class Legs(object):
     def update_legs(self):
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
         self.get_delta()
-        print(str(len(legs_not_ready)) + " hoaom")
         while len(legs_not_ready) != 0:
             delta = self.get_delta()
             for i in range(len(legs_not_ready)):
@@ -237,7 +236,6 @@ class Legs(object):
             sequences = [0, 1, 2, 3]
 
         for moves in sequences:
-            print(str(sequence[moves]))
             self.move(leg_0_moves=sequence[moves][0],
                       leg_1_moves=sequence[moves][1],
                       leg_2_moves=sequence[moves][2],
