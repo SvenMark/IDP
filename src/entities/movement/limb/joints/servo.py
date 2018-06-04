@@ -141,12 +141,11 @@ class Servo(object):
         Read the position of the servo
         :return: Current position of this servo
         """
-        while self.busy:
-            time.sleep(0.2)
-
-        self.busy = True
         result = self.ax12.read_position(self.servo_id)
-        self.busy = False
+        while result is None:
+            print("Can't read position, trying again")
+            result = self.ax12.read_position(self.servo_id)
+
         return result
 
     def read_speed(self):
