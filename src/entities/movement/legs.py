@@ -230,6 +230,8 @@ class Legs(object):
             sequences = [0]
         elif sequence is wave and sequences is None or sequence is march and sequences is None:
             sequences = [0, 1]
+        elif sequence is hood_handshake:
+            sequences = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
         if sequences is None:
             sequences = [0, 1, 2, 3]
