@@ -167,6 +167,7 @@ class Tracks(object):
             if -dead_zone < vertical_speed < dead_zone and -dead_zone < horizontal_speed < dead_zone:
                 self.stop()
 
+            # Move backwards
             if vertical_speed < -dead_zone:
                 if -dead_zone < horizontal_speed < dead_zone:
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
@@ -186,9 +187,9 @@ class Tracks(object):
                                   delay=0,
                                   acceleration=0)
 
+            # Move forward
             if vertical_speed > dead_zone:
                 if -dead_zone < horizontal_speed < dead_zone:
-                    print("Going forward")
                     self.forward(duty_cycle_track_left=vertical_speed,
                                  duty_cycle_track_right=vertical_speed,
                                  delay=0,
@@ -206,6 +207,7 @@ class Tracks(object):
                                  delay=0,
                                  acceleration=0)
 
+            # Turn around it`s axis
             if -dead_zone < vertical_speed < dead_zone:
                 if horizontal_speed > dead_zone:
                     self.turn_right(duty_cycle_track_left=horizontal_speed,
