@@ -114,7 +114,6 @@ class Legs(object):
         delay = 0.1
         
         self.leg_front_left.move(leg_0_retract, delay, [speed, speed, speed])
-        self.start_update_thread()
 
         # self.leg_front_right.move(leg_1_retract, delay, [speed, speed, speed])
         # self.leg_rear_left.move(leg_2_retract, delay, [speed, speed, speed])
@@ -123,10 +122,6 @@ class Legs(object):
         self.deployed = False
 
         self.update_legs()
-
-    def start_update_thread(self):
-        update_thread = Thread(target=self.update_thread, args=(self, ))
-        update_thread.start()
 
     def update_legs(self):
         self.updating = True
