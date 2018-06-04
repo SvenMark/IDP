@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
-from entities.vision.helpers import *
+from entities.vision.helpers.helpers import *
 
 
 # print("uncomment run before starting..")
@@ -68,6 +68,10 @@ class Calibrate(object):
         return self.result
 
     def draw_helper(self, img):
+        """
+        Draws helper to place building in
+        :param img: Image to draw helper on
+        """
         cv2.rectangle(img, (230, 65), (400, 420), (255, 255, 255), 3)
         for i in range(len(self.calibrating_building)):
             cx = self.calibrating_building[i].centre[0]
@@ -75,6 +79,10 @@ class Calibrate(object):
             cv2.circle(img, (cx, cy), 2, self.colors.get(self.calibrating_building[i].color), 10)
 
     def calibrate(self):
+        """
+        Traverses through color spectrum untill it finds the right color
+        :return: True is all colors calibrated
+        """
         for i in range(len(self.color_range)):
             c = self.color_range[i]
             if c.color not in self.calibrated_colors:
@@ -82,7 +90,6 @@ class Calibrate(object):
                     if c.upper[0] < 255:
                         c.lower[0] += 10
                         c.upper[0] += 10
-                        # print("calibrating {}, [{}, {}, {}], [{}, {}, {}]".format(c.color, c.lower[0], c.lower[1], c.lower[2], c.upper[0], c.upper[1], c.upper[2]))
                     else:
                         c.lower[0] = randint(0, 30)
                         c.upper[0] = randint(0, 30)
@@ -102,6 +109,13 @@ class Calibrate(object):
         return False
 
     def calibrated_color(self, positions, sensitivity, color):
+        """
+        Checks if the color is properly calibrated
+        :param positions: Array with colors and centres
+        :param sensitivity: Sensitivity for detecting
+        :param color: Color to check
+        :return: True if the color is calibrated
+        """
         for j in range(len(positions)):  # for each current position
             pos = positions[j]
             if pos.color == color:
