@@ -138,13 +138,20 @@ class Legs(object):
     def update_thread(self, args):
         self.updating = True
         print("Updating legs in new thread")
-        legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+        try:
+            legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+        except:
+            legs_not_ready = []
+
         self.get_delta()
         while len(legs_not_ready) != 0:
             delta = self.get_delta()
             for i in range(len(legs_not_ready)):
                 legs_not_ready[i].update(delta)
-            legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+            try:
+                legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+            except:
+                legs_not_ready = []
         print("Finished move")
         self.updating = False
 
