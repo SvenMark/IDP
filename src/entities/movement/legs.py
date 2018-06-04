@@ -48,8 +48,8 @@ class Legs(object):
         self.recent_package = [0, 0, 0]
 
         self.updater = False
-        # self.update_thread = Thread(target=self.leg_updater, args=(self, ))
-        # self.update_thread.start()
+        self.update_thread = Thread(target=self.leg_updater, args=(self, ))
+        self.update_thread.start()
 
         print("Legs setup, retracting")
         
@@ -114,7 +114,6 @@ class Legs(object):
         delay = 0.1
         
         self.leg_front_left.move(leg_0_retract, delay, [speed, speed, speed])
-        self.start_update_thread()
 
         # self.leg_front_right.move(leg_1_retract, delay, [speed, speed, speed])
         # self.leg_rear_left.move(leg_2_retract, delay, [speed, speed, speed])
@@ -124,20 +123,8 @@ class Legs(object):
 
         self.update_legs()
 
-    def start_update_thread(self):
-        update_thread = Thread(target=self.update_thread, args=(self, ))
-        update_thread.start()
-
     def update_legs(self):
-        # wait thread while not ready
-        while self.updating:
-            time.sleep(0.2)
-
-        self.start_update_thread()
-
-    def update_thread(self, args):
         self.updating = True
-        print("Updating legs in new thread")
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
         self.get_delta()
         while len(legs_not_ready) != 0:
@@ -145,7 +132,7 @@ class Legs(object):
             for i in range(len(legs_not_ready)):
                 legs_not_ready[i].update(delta)
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-        print("Finished move")
+        # print("Finished move")
         self.updating = False
 
     def get_delta(self):
@@ -155,6 +142,7 @@ class Legs(object):
         return elapsed_time.total_seconds()
 
     def handle_controller_input(self, deploy, x_axis, y_axis):
+        # print("NEW PACKAGE")
         self.recent_package = [deploy, x_axis, y_axis]
 
     def leg_updater(self, args):
@@ -165,7 +153,6 @@ class Legs(object):
             x_axis = self.recent_package[1]
             y_axis = self.recent_package[2]
 
-            # print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
 
             if deploy == 1 and not self.deployed:
                 self.deploy(200)
@@ -180,10 +167,8 @@ class Legs(object):
 
             delta = self.get_delta()
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-
+            # print(str(speed) + "  not ready : " + str(len(legs_not_ready)) + " deployed " + str(self.deployed) + " y" + str(y_axis) + " x" + str(x_axis))
             if self.deployed and len(legs_not_ready) == 0:
-                print(str(speed) + "  not ready : " + str(len(legs_not_ready)))
-
                 if 500 < y_axis < 530:
                     self.deploy(200)
                 if y_axis > 530:
@@ -200,11 +185,11 @@ class Legs(object):
                     self.update_sequence()
                 self.get_delta()
 
-                if len(legs_not_ready) > 0:
-                    for i in range(len(legs_not_ready)):
-                        for y in range(len(legs_not_ready[i].servos)):
-                            legs_not_ready[i].servos[y].set_speed(speed)
-                        legs_not_ready[i].update(delta)
+            if len(legs_not_ready) > 0:
+                for i in range(len(legs_not_ready)):
+                    for y in range(len(legs_not_ready[i].servos)):
+                        legs_not_ready[i].servos[y].set_speed(speed)
+                    legs_not_ready[i].update(delta)
 
                 time.sleep(0.02)
 
