@@ -42,6 +42,7 @@ class Legs(object):
         self.type = 'legs'
         self.deployed = False
         self.retract(120)
+        self.updating = False
 
         # deploy, x-axis, y-axis
         self.recent_package = [0, 0, 0]
@@ -114,7 +115,7 @@ class Legs(object):
         
         self.leg_front_left.move(leg_0_retract, delay, [speed, speed, speed])
         self.start_update_thread()
-        
+
         # self.leg_front_right.move(leg_1_retract, delay, [speed, speed, speed])
         # self.leg_rear_left.move(leg_2_retract, delay, [speed, speed, speed])
         # self.leg_rear_right.move(leg_3_retract, delay, [speed, speed, speed])
@@ -130,13 +131,13 @@ class Legs(object):
     def update_legs(self):
         # wait thread while not ready
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-        while len(legs_not_ready) != 0:
+        while self.updating:
             time.sleep(0.2)
-            legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
         self.start_update_thread()
 
     def update_thread(self, args):
+        self.updating = True
         print("Updating legs in new thread")
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
         self.get_delta()
@@ -146,6 +147,7 @@ class Legs(object):
                 legs_not_ready[i].update(delta)
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
         print("Finished move")
+        self.updating = False
 
     def get_delta(self):
         next_time = datetime.datetime.now()
