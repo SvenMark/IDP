@@ -1,10 +1,7 @@
 import sys
 sys.path.insert(0, '../../../src')
 
-import time
-
-from entities.vision.helpers import *
-from entities.audio.speak import Speak
+from entities.vision.helpers.helpers import *
 from tkinter import *
 
 
@@ -18,7 +15,7 @@ class Saving(object):
         # Saving variables
         self.save_length = 0
         self.save = False
-        self.save_building = 0
+        self.building_to_save = 0
         self.last_positions = []
 
     def run(self):
@@ -44,7 +41,7 @@ class Saving(object):
                 self.show_input_fields()
 
             if self.save and 3 < len(self.positions) == self.save_length:
-                self.save_that_money(img)
+                self.save_building(img)
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
@@ -56,39 +53,58 @@ class Saving(object):
         cv2.destroyAllWindows()
 
     def show_input_fields(self):
+        """
+        Shows the input fields for saving the building
+        """
         def save_entry_fields():
+            """
+            Saves the entry fields
+            """
             self.save_length = int(e1.get())
-            self.save_building = e2.get()
+            self.save = e2.get()
             master.quit()
             master.destroy()
+
+        # Create forum with tkinter
         master = Tk()
-        master.configure(background='gold')
+
+        # Add labels
         Label(master, text="Amount of blocks").grid(row=0)
         Label(master, text="Building Number").grid(row=1)
         e1 = Entry(master)
         e2 = Entry(master)
+
+        # Insert last length and building to save
         e1.insert(0, self.save_length)
-        e2.insert(0, self.save_building)
+        e2.insert(0, self.building_to_save)
 
         e1.grid(row=0, column=1)
         e2.grid(row=1, column=1)
 
+        # Create save button
         Button(master, text='Save', command=save_entry_fields).grid(row=3, column=1, sticky=W)
         mainloop()
         self.save = True
 
-    def save_that_money(self, img):
+    def save_building(self, img):
+        """
+        Saves the current building with the given img
+        :param img: The current frame
+        """
         for circle in range(len(self.positions)):
             b = self.positions[circle]
             cv2.circle(img, b, 2, (255, 255, 255), 5)
 
         def confirmed():
+            """
+            Confirms the building and saves it to a file
+            """
             self.save = False
-            print("saved ", self.save_building)
+            print("saved ", self.building_to_save)
             master.destroy()
 
-            out = open("Output.txt", "a")
-            out.write("{} = [\n".format(self.save_building))
+            out = open("helpers/save.txt", "a")
+            out.write("{} = [\n".format(self.building_to_save))
 
             for block in range(len(self.positions)):
                 b = self.positions[block]
@@ -100,11 +116,10 @@ class Saving(object):
             out.write("]\n")
             out.close()
 
+        # Create new forum
         master = Tk()
-        master.configure(background='gold')
         Button(master, text='OK', command=confirmed).grid(row=0, column=1, sticky=W)
         Button(master, text='Retry', command=master.destroy).grid(row=0, column=0, sticky=W)
-        master.lift()
         mainloop()
 
         cv2.imshow('Spider Cam Result', img)

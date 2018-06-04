@@ -57,6 +57,12 @@ class Hsv_picker:
 
     @staticmethod
     def calculate_mask(name, mask, img):
+        """
+        Calculates mask with given ranges
+        :param name: Form name to get the values from
+        :param mask: Mask to apply to
+        :param img: Image to apply mask to
+        """
         lowh = cv2.getTrackbarPos('Low H', name)
         lows = cv2.getTrackbarPos('Low S', name)
         lowv = cv2.getTrackbarPos('Low V', name)
@@ -73,6 +79,10 @@ class Hsv_picker:
         return mask
 
     def createtrackbars(self, name):
+        """
+        Create trackbar form
+        :param name: Name of form
+        """
         cv2.namedWindow(name)
 
         # create trackbars for lower
@@ -86,6 +96,9 @@ class Hsv_picker:
         cv2.createTrackbar('High V', name, 255, 255, self.nothing)
 
     def savehigherlower(self, lowh, lows, lowv, highh, highs, highv):
+        """
+        Starts form for getting the color of the saving color
+        """
         def get_color():
             self.color_to_save = e1.get()
             master.destroy()
