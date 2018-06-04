@@ -12,7 +12,7 @@ class Helpers(object):
     Base class for vision
     """
 
-    def __init__(self, color_range, img=None):
+    def __init__(self, color_range, img):
         """
         Constructor for vision class
         """

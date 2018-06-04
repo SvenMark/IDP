@@ -8,7 +8,7 @@ sys.path.insert(0, '../../../src')
 
 class Hsv_picker:
 
-    def __init__(self, helpers, img=None):
+    def __init__(self, helpers, img):
         self.color_to_save = ""
         self.img = cv2.imread(img)
         self.helpers = helpers
