@@ -86,7 +86,7 @@ class BluetoothController(object):
                 h = ((h * (1000 / 1024)) - 500) / 5
 
                 # Send data to tracks class
-                self.tracks.handle_controller_input(stop_motors=s, vertical_speed=v, horizontal_speed=h, dead_zone=5)
+                self.tracks.handle_controller_input(stop_motors=s, vertical_speed=h, horizontal_speed=z, dead_zone=5)
             except ValueError:
                 print("Invalid value in package")
 
