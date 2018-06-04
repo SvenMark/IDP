@@ -48,6 +48,9 @@ class Legs(object):
 
         self.updater = False
 
+        self.update_thread = Thread(target=self.leg_updater, args=(self,))
+        self.update_thread.start()
+
         print("Legs setup, retracting")
         
     def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speeds, self_update):

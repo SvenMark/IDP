@@ -19,9 +19,6 @@ class BluetoothController(object):
         self.legs = limbs[0]
         self.tracks = limbs[1]
 
-        self.update_thread = Thread(target=self.legs.leg_updater, args=(self,))
-        self.update_thread.start()
-
     def receive_data(self):
         """
         Retrieve data from bluetooth connection with bluetooth address from the constructor
