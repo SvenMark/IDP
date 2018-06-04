@@ -185,12 +185,12 @@ class Legs(object):
                     self.update_sequence()
                 self.get_delta()
 
-                if len(legs_not_ready) > 0:
-                    for i in range(len(legs_not_ready)):
-                        for y in range(len(legs_not_ready[i].servos)):
-                            legs_not_ready[i].servos[y].set_speed(speed)
-                        legs_not_ready[i].update(delta)
-                        print("update leg " + str(i))
+            if len(legs_not_ready) > 0:
+                for i in range(len(legs_not_ready)):
+                    for y in range(len(legs_not_ready[i].servos)):
+                        legs_not_ready[i].servos[y].set_speed(speed)
+                    legs_not_ready[i].update(delta)
+                    print("update leg " + str(i))
 
                 time.sleep(0.02)
 
