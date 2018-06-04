@@ -47,9 +47,8 @@ class Legs(object):
         self.recent_package = [0, 0, 0]
 
         self.updater = False
-
-        self.update_thread = Thread(target=self.leg_updater, args=(self,))
-        self.update_thread.start()
+        # self.update_thread = Thread(target=self.leg_updater, args=(self, ))
+        # self.update_thread.start()
 
         print("Legs setup, retracting")
         
@@ -122,8 +121,15 @@ class Legs(object):
 
         self.update_legs()
 
+    def start_update_thread(self):
+        update_thread = Thread(target=self.update_thread, args=(self, ))
+        update_thread.start()
+
     def update_legs(self):
-        # while legs_not_ready are not ready, update
+        self.start_update_thread()
+
+    def update_thread(self, args):
+        print("Updating legs in new thread")
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
         self.get_delta()
         while len(legs_not_ready) != 0:
@@ -131,6 +137,7 @@ class Legs(object):
             for i in range(len(legs_not_ready)):
                 legs_not_ready[i].update(delta)
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+        print("Finished move")
 
     def get_delta(self):
         next_time = datetime.datetime.now()
