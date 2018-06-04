@@ -168,7 +168,7 @@ class Legs(object):
 
             delta = self.get_delta()
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-            # print(str(speed) + "  not ready : " + str(len(legs_not_ready)) + " deployed " + str(self.deployed) + " y" + str(y_axis) + " x" + str(x_axis))
+            print(str(speed) + "  not ready : " + str(len(legs_not_ready)) + " deployed " + str(self.deployed) + " y" + str(y_axis) + " x" + str(x_axis))
             if self.deployed and len(legs_not_ready) == 0:
                 if 500 < y_axis < 530:
                     self.deploy(200)
