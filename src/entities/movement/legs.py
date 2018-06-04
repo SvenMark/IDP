@@ -65,7 +65,7 @@ class Legs(object):
             else updates must be handled for movement
         :return: None
         """
-
+        
         self.leg_front_left.move(leg_0_moves, delay, speeds)
         # self.leg_front_right.move(leg_1_moves[0], leg_1_moves[1], leg_1_moves[2], delay)
         # self.leg_rear_left.move(leg_2_moves[0], leg_2_moves[1], leg_2_moves[2], delay)
