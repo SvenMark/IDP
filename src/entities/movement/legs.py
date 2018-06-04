@@ -130,7 +130,6 @@ class Legs(object):
 
     def update_legs(self):
         # wait thread while not ready
-        legs_not_ready = [elem for elem in self.legs if not elem.ready()]
         while self.updating:
             time.sleep(0.2)
 
