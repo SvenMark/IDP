@@ -206,6 +206,7 @@ class Legs(object):
                 # If the controller is in the neutral position,
                 # put the leg in the deploy position
                 if 500 < y_axis < 530:
+                    print("Deploying")
                     self.deploy(200)
                 # If the controller is pushed forward, run the forward walking sequence
                 if y_axis > 530:
