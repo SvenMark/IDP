@@ -124,7 +124,6 @@ class Legs(object):
         self.update_legs()
 
     def update_legs(self):
-        self.updating = True
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
         self.get_delta()
         while len(legs_not_ready) != 0:
@@ -133,7 +132,6 @@ class Legs(object):
                 legs_not_ready[i].update(delta)
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
         # print("Finished move")
-        self.updating = False
 
     def get_delta(self):
         next_time = datetime.datetime.now()
