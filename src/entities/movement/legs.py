@@ -234,7 +234,7 @@ class Legs(object):
                     legs_not_ready[i].update(delta)
 
                 # Add a little delay so the legs move smoothly
-                # time.sleep(0.02)
+                time.sleep(0.02)
 
         # Move according to joystick direction
         # self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
