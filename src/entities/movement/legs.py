@@ -126,6 +126,7 @@ class Legs(object):
     def update_legs(self):
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
         self.get_delta()
+        print(str(len(legs_not_ready)) + " hoaom")
         while len(legs_not_ready) != 0:
             delta = self.get_delta()
             for i in range(len(legs_not_ready)):
