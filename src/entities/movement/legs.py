@@ -153,6 +153,7 @@ class Legs(object):
             elif deploy == 0 and self.deployed:
                 self.retract(200)
 
+            speed = 0
             if y_axis > 530:
                 speed = (y_axis - 512) * 0.4
             if y_axis < 500:
