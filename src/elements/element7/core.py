@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, '../../../src')
 
 from entities.vision.vision import Vision
-from entities.vision.helpers.helpers import Color
+from entities.vision.helpers.vision_helper import Color
 
 # Initialize color ranges for detection
 color_range = [Color("orange", [0, 69, 124], [13, 255, 255]),
@@ -20,6 +20,8 @@ saved_buildings = [[
         ]
 ]
 
+img = "C:/Users/lars-/Downloads/test.jpeg"
 
-vision = Vision(color_range, saved_buildings)
-vision.saving.run()
+
+vision = Vision(color_range, saved_buildings, img)
+vision.helpers.hsv_picker.run()

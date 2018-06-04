@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0, '../../../src')
 
-from entities.vision.helpers.helpers import *
+from entities.vision.helpers.vision_helper import *
 from tkinter import *
 
 
@@ -10,7 +10,7 @@ class Saving(object):
     def __init__(self, color_range):
         self.color_range = color_range
         self.positions = []
-        self.helper = Helpers()
+        self.helper = Helper()
 
         # Saving variables
         self.save_length = 0

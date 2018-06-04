@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
-from entities.vision.helpers.helpers import *
+from entities.vision.helpers.vision_helper import *
 
 
 # print("uncomment run before starting..")
@@ -32,7 +32,7 @@ class Calibrate(object):
                                    "orange": (0, 165, 255),
                                    "yellow": (0, 255, 255)})
 
-        self.helper = Helpers()
+        self.helper = Helper()
 
         self.result = []
 

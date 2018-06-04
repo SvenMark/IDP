@@ -8,17 +8,24 @@ sys.path.insert(0, '../../../src')
 
 class Hsv_picker:
 
-    def __init__(self):
-        self.createtrackbars("1")
+    def __init__(self, helpers, img=None):
         self.color_to_save = ""
+        self.img = cv2.imread(img)
+        self.helpers = helpers
 
     def run(self):
+        self.createtrackbars("1")
         print("run hsvpicker")
         cap = cv2.VideoCapture(0)
 
         while True:
-            ret, img = cap.read()
+            if self.img is not None:
+                img = self.img
+            else:
+                ret, img = cap.read()
             img = cv2.GaussianBlur(img, (9, 9), 0)
+
+            img = self.helpers.helper.image_resize(img, 500)
 
             lowh = cv2.getTrackbarPos('Low H', '1')
             lows = cv2.getTrackbarPos('Low S', '1')
@@ -45,6 +52,7 @@ class Hsv_picker:
                     cv2.drawContours(output, [cnt], -1, (255, 255, 255), 5)
 
             cv2.imshow('hsv-picker', output)
+            cv2.imshow('original', img)
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 self.savehigherlower(lowh, lows, lowv, highh, highs, highv)
@@ -86,12 +94,12 @@ class Hsv_picker:
         cv2.namedWindow(name)
 
         # create trackbars for lower
-        cv2.createTrackbar('Low H', name, 90, 180, self.nothing)
-        cv2.createTrackbar('Low S', name, 100, 255, self.nothing)
-        cv2.createTrackbar('Low V', name, 100, 255, self.nothing)
+        cv2.createTrackbar('Low H', name, 0, 180, self.nothing)
+        cv2.createTrackbar('Low S', name, 0, 255, self.nothing)
+        cv2.createTrackbar('Low V', name, 0, 255, self.nothing)
 
         # create trackbars for higher
-        cv2.createTrackbar('High H', name, 120, 180, self.nothing)
+        cv2.createTrackbar('High H', name, 180, 180, self.nothing)
         cv2.createTrackbar('High S', name, 255, 255, self.nothing)
         cv2.createTrackbar('High V', name, 255, 255, self.nothing)
 

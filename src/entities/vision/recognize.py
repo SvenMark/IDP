@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
-from entities.vision.helpers.helpers import *
+from entities.vision.helpers.vision_helper import *
 
 
 class Recognize(object):
@@ -12,7 +12,7 @@ class Recognize(object):
         self.color_range = color_range
         self.positions = []
         self.saved_buildings = saved_buildings
-        self.helper = Helpers()
+        self.helper = Helper()
 
     def run(self):
         # Initialize camera
