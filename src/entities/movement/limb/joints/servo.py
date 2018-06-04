@@ -134,7 +134,7 @@ class Servo(object):
         :return: Whether or not the servo has completed it`s last move
         """
         if self.last_position is None or self.goal is None:
-            print("No last position or goal in servo " + self.servo_id)
+            print("No last position or goal in servo " + str(self.servo_id))
             return True
 
         return abs(round(self.last_position) - round(self.goal)) <= self.sensitivity
