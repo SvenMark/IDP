@@ -58,7 +58,7 @@ class Servo(object):
             self.start_position = self.last_position
             step = (self.goal - self.start_position) * delta * self.current_speed
 
-        print("Delta: " + str(delta) + " Step: " + str(step) + " Goal: " + str(self.goal) + " Last_pos: " + str(self.last_position) + " Start_pos: " + str(self.start_position))
+        # print("Delta: " + str(delta) + " Step: " + str(step) + " Goal: " + str(self.goal) + " Last_pos: " + str(self.last_position) + " Start_pos: " + str(self.start_position))
         if self.last_position + step > 1024 or self.last_position + step < 0:
             print(str(self.last_position + step) + " not in range " + str(self.servo_id) + "speed "
                   + str(self.current_speed) + "delta " + str(delta))
@@ -71,7 +71,7 @@ class Servo(object):
         self.start_position = self.last_position
         self.goal = degrees
         self.current_speed = speed * self.current_speed_multiplier
-        print("servo " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
+        # print("servo " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
 
     def move_speed(self, degrees, delay, max_speed):
         """
@@ -104,7 +104,7 @@ class Servo(object):
         for i in range(total_steps):
             current_position += step
             speed = math.sin((i + 0.5) / total_steps * math.pi) * max_speed
-            print("Servo " + str(self.servo_id) + ", step: " + str(i) + ", speed: " + str(round(speed)) + ", degrees: " + str(round(current_position)))
+            # print("Servo " + str(self.servo_id) + ", step: " + str(i) + ", speed: " + str(round(speed)) + ", degrees: " + str(round(current_position)))
             # Move the servo using the ax12 library with the servo id and degrees.
             try:
                 self.ax12.move_speed(self.servo_id, round(current_position), round(speed))

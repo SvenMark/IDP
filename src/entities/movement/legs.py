@@ -132,7 +132,7 @@ class Legs(object):
             for i in range(len(legs_not_ready)):
                 legs_not_ready[i].update(delta)
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-        print("Finished move")
+        # print("Finished move")
         self.updating = False
 
     def get_delta(self):
@@ -142,7 +142,7 @@ class Legs(object):
         return elapsed_time.total_seconds()
 
     def handle_controller_input(self, deploy, x_axis, y_axis):
-        print("NEW PACKAGE")
+        # print("NEW PACKAGE")
         self.recent_package = [deploy, x_axis, y_axis]
 
     def leg_updater(self, args):
@@ -167,7 +167,7 @@ class Legs(object):
 
             delta = self.get_delta()
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-            print(str(speed) + "  not ready : " + str(len(legs_not_ready)) + " deployed " + str(self.deployed) + " y" + str(y_axis) + " x" + str(x_axis))
+            # print(str(speed) + "  not ready : " + str(len(legs_not_ready)) + " deployed " + str(self.deployed) + " y" + str(y_axis) + " x" + str(x_axis))
             if self.deployed and len(legs_not_ready) == 0:
                 if 500 < y_axis < 530:
                     self.deploy(200)
@@ -186,9 +186,7 @@ class Legs(object):
                 self.get_delta()
 
             if len(legs_not_ready) > 0:
-                print("update a leg ")
                 for i in range(len(legs_not_ready)):
-                    print("update leg " + str(i))
                     for y in range(len(legs_not_ready[i].servos)):
                         legs_not_ready[i].servos[y].set_speed(speed)
                     legs_not_ready[i].update(delta)
