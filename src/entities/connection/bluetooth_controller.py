@@ -42,12 +42,12 @@ class BluetoothController(object):
                 data += str(sock.recv(1024))[2:][:-1]
                 print("Data old:" + data)
 
-                data_end = data.find('\\n')
+                data_end = data_new.find('\\n')
                 if data_end != -1:
-                    rec = data[:data_end]
+                    rec = data_new[:data_end]
                     # print(rec)
                     self.handle_data(rec)
-                    data = ""
+                    data_new = ""
                     count += 1
 
             except KeyboardInterrupt:
