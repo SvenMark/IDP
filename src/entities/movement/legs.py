@@ -48,8 +48,8 @@ class Legs(object):
         self.recent_package = [0, 0, 0]
 
         self.updater = False
-        # self.update_thread = Thread(target=self.leg_updater, args=(self, ))
-        # self.update_thread.start()
+        self.update_thread = Thread(target=self.leg_updater, args=(self, ))
+        self.update_thread.start()
 
         print("Legs setup, retracting")
         
@@ -153,7 +153,7 @@ class Legs(object):
             x_axis = self.recent_package[1]
             y_axis = self.recent_package[2]
 
-            # print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
+            print("UPDATE d= " + str(deploy) + ", y=" + str(y_axis))
 
             if deploy == 1 and not self.deployed:
                 self.deploy(200)
