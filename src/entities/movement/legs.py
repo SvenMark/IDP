@@ -237,6 +237,7 @@ class Legs(object):
             sequences = [0, 1, 2, 3]
 
         for moves in sequences:
+            print(str(sequences))
             self.move(leg_0_moves=sequence[moves][0],
                       leg_1_moves=sequence[moves][1],
                       leg_2_moves=sequence[moves][2],
