@@ -1,10 +1,12 @@
 import datetime
+import time
 import sys
+from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
 from entities.movement.limb.leg import Leg
-from entities.movement.sequences.walking_sequences import *
+from entities.movement.sequences.sequences import *
 
 
 class Legs(object):
@@ -24,7 +26,6 @@ class Legs(object):
 
         self.previous = datetime.datetime.now()
 
-
         # Initialise a leg for each corner of the robot
         self.leg_front_left = Leg(leg_0_servos, [530, 210, 475])
         # self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
@@ -32,16 +33,27 @@ class Legs(object):
         # self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
 
         self.legs = [self.leg_front_left,
-                     #self.leg_front_right, self.leg_rear_left, self.leg_rear_right
+                     # self.leg_front_right,
+                     # self.leg_rear_left,
+                     # self.leg_rear_right
                      ]
 
+        self.sequence = 0
         self.type = 'legs'
         self.deployed = False
         self.retract(120)
+        self.updating = False
+
+        # deploy, x-axis, y-axis
+        self.recent_package = [0, 0, 0]
+
+        self.updater = False
+        self.update_thread = Thread(target=self.leg_updater, args=(self, ))
+        # self.update_thread.start()
 
         print("Legs setup, retracting")
         
-    def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speeds, self_update=True):
+    def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speeds, self_update):
         """
         Function to move the legs_not_ready together
         :param leg_0_moves: Array of positions for leg 0
@@ -66,20 +78,6 @@ class Legs(object):
         if self_update:
             self.update_legs()
 
-    def update_legs(self):
-        # while legs_not_ready are not ready, update
-        legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-        while len(legs_not_ready) != 0:
-            for i in range(len(legs_not_ready)):
-                legs_not_ready[i].update(self.get_delta())
-            legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-
-    def get_delta(self):
-        next_time = datetime.datetime.now()
-        elapsed_time = next_time - self.previous
-        self.previous = next_time
-        return elapsed_time.total_seconds()
-
     def deploy(self, speed):
         """
         Deploys the legs so they can be used for walking
@@ -98,9 +96,9 @@ class Legs(object):
         # self.leg_rear_left.move(leg_2_deploy, delay, [speed, speed, speed])
         # self.leg_rear_right.move(leg_3_deploy, delay, [speed, speed, speed])
 
-        self.update_legs()
-
         self.deployed = True
+
+        self.update_legs()
 
     def retract(self, speed):
         """
@@ -116,50 +114,132 @@ class Legs(object):
         delay = 0.1
         
         self.leg_front_left.move(leg_0_retract, delay, [speed, speed, speed])
+
         # self.leg_front_right.move(leg_1_retract, delay, [speed, speed, speed])
         # self.leg_rear_left.move(leg_2_retract, delay, [speed, speed, speed])
         # self.leg_rear_right.move(leg_3_retract, delay, [speed, speed, speed])
 
-        self.update_legs()
-
         self.deployed = False
 
-    def handle_controller_input(self, deploy, x_axis, y_axis):
-        if deploy == 1 and not self.deployed:
-            self.deploy(200)
-        elif deploy == 0 and self.deployed:
-            self.retract(200)
+        self.update_legs()
 
+    def update_legs(self):
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-
-        # init
-        speed = 0
-        if y_axis > 530:
-            speed = (y_axis - 512) * 0.7
-        if y_axis < 500:
-            speed = (512 - y_axis) * 0.7
-
-        # if legs are deployed and all legs are finished
-        if self.deployed and len(legs_not_ready) == 0:
-            if 500 < y_axis < 530:
-                self.deploy(200)
-            if y_axis > 530:
-                walk_forward(self, [speed, speed, speed],
-                             self_update=False)
-            if y_axis < 500:
-                walk_backward(self, [speed, speed, speed],
-                              self_update=False)
-        # not all legs finished
-        elif self.deployed:
+        self.get_delta()
+        while len(legs_not_ready) != 0:
+            delta = self.get_delta()
             for i in range(len(legs_not_ready)):
-                for y in range(len(legs_not_ready[i].servos)):
-                    legs_not_ready[i].servos[y].set_speed(speed)
-                legs_not_ready[i].update(self.get_delta())
+                legs_not_ready[i].update(delta)
+            legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+        # print("Finished move")
 
-            # Move according to joystick direction
-            # self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
-            #           [650, 400, 400],
-            #           [400, 400, 400],
-            #           [600, 400, 400],
-            #           0,
-            #           [200, 200, 200])
+    def get_delta(self):
+        next_time = datetime.datetime.now()
+        elapsed_time = next_time - self.previous
+        self.previous = next_time
+        return elapsed_time.total_seconds()
+
+    def handle_controller_input(self, deploy, x_axis, y_axis):
+        # print("NEW PACKAGE")
+        self.recent_package = [deploy, x_axis, y_axis]
+
+    def leg_updater(self, args):
+        self.updater = True
+
+        while True:
+
+            deploy = self.recent_package[0]
+            x_axis = self.recent_package[1]
+            y_axis = self.recent_package[2]
+
+            if deploy == 0 and x_axis == 0 and y_axis == 0:
+                continue
+
+            if deploy == 1 and not self.deployed:
+                self.deploy(200)
+            elif deploy == 0 and self.deployed:
+                self.retract(200)
+
+            speed = 0
+            if y_axis > 530:
+                speed = (y_axis - 512) * 0.4
+            if y_axis < 500:
+                speed = (512 - y_axis) * 0.4
+
+            delta = self.get_delta()
+            legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+            print(str(speed) + "  not ready : " + str(len(legs_not_ready)) + " deployed " + str(self.deployed) + " y" + str(y_axis) + " x" + str(x_axis))
+            if self.deployed and len(legs_not_ready) == 0:
+                if 500 < y_axis < 530:
+                    self.deploy(200)
+                if y_axis > 530:
+                    self.run_sequence(speeds=[100, 100, 100],
+                                      self_update=False,
+                                      sequences=[self.sequence],
+                                      sequence=forward)
+                    self.update_sequence()
+                if y_axis < 500:
+                    self.run_sequence(speeds=[100, 100, 100],
+                                      self_update=False,
+                                      sequences=[self.sequence],
+                                      sequence=backward)
+                    self.update_sequence()
+                self.get_delta()
+
+            if len(legs_not_ready) > 0:
+                for i in range(len(legs_not_ready)):
+                    for y in range(len(legs_not_ready[i].servos)):
+                        legs_not_ready[i].servos[y].set_speed(speed)
+                    legs_not_ready[i].update(delta)
+
+                time.sleep(0.02)
+
+        # Move according to joystick direction
+        # self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
+        #           [650, 400, 400],
+        #           [400, 400, 400],
+        #           [600, 400, 400],
+        #           0,
+        #           [200, 200, 200])
+
+    def update_sequence(self):
+        """
+        Function that updates on which part of the movement sequence the legs are in
+        when controller by the controller.
+        :return: None
+        """
+        if self.sequence < 3:
+            self.sequence = self.sequence + 1
+        else:
+            self.sequence = 0
+
+    def run_sequence(self, speeds, self_update=True, sequences=None, sequence=None):
+        """
+        Function that runs one of the leg movement sequences
+        :param speeds: Array of speeds, one for each leg
+        :param self_update: Variable that is false if controlled by controller and true if autonomous
+        :param sequences: The moves of the sequence you want to run
+        :param sequence: The movement sequence you want to run
+        :return: None
+        """
+
+        if sequence is None:
+            sequence = forward
+        elif sequence is dab and sequences is None:
+            sequences = [0]
+        elif sequence is wave and sequences is None or sequence is march and sequences is None:
+            sequences = [0, 1]
+        elif sequence is hood_handshake:
+            sequences = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+        if sequences is None:
+            sequences = [0, 1, 2, 3]
+
+        for moves in sequences:
+            self.move(leg_0_moves=sequence[moves][0],
+                      leg_1_moves=sequence[moves][1],
+                      leg_2_moves=sequence[moves][2],
+                      leg_3_moves=sequence[moves][3],
+                      delay=0,
+                      speeds=speeds,
+                      self_update=self_update)

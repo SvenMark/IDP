@@ -1,0 +1,41 @@
+Servo found with id: 14 and position: 512
+Servo found with id: 21 and position: 499
+Servo found with id: 61 and position: 678
+Servo found with id: 63 and position: 938
+
+
+Servo found with id: 14 and position: 446
+Servo found with id: 21 and position: 499
+Servo found with id: 61 and position: 678
+Servo found with id: 63 and position: 948
+
+
+Servo found with id: 14 and position: 597
+Servo found with id: 21 and position: 499
+Servo found with id: 61 and position: 678
+Servo found with id: 63 and position: 948
+
+
+Servo found with id: 14 and position: 520
+Servo found with id: 21 and position: 499
+Servo found with id: 61 and position: 390
+Servo found with id: 63 and position: 965
+
+
+Servo found with id: 14 and position: 511
+Servo found with id: 21 and position: 499
+Servo found with id: 61 and position: 618
+Servo found with id: 63 and position: 593
+
+
+Servo found with id: 14 and position: 520
+Servo found with id: 21 and position: 499
+Servo found with id: 61 and position: 301
+Servo found with id: 63 and position: 581
+
+
+Servo found with id: 14 and position: 519
+Servo found with id: 21 and position: 499
+Servo found with id: 61 and position: 523
+Servo found with id: 63 and position: 802
+

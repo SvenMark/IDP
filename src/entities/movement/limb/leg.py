@@ -41,4 +41,5 @@ class Leg(object):
 
     def update(self, delta):
         for i in range(len(self.servos)):
-            self.servos[i].update(delta)
+            if not self.servos[i].is_ready():
+                self.servos[i].update(delta)

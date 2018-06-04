@@ -28,14 +28,15 @@ class Servo(object):
         print("Setting servo " + str(servo_id) + " to " + str(initial_position))
         # Set the servo variables and move servo to initial position.
         self.servo_id = servo_id
-        self.last_position = self.ax12.read_position(self.servo_id)
+        self.busy = False
+        self.last_position = self.read_position()
         self.goal = initial_position
         self.current_speed = 200
-        self.current_speed_multiplier = 0.06
+        self.current_speed_multiplier = 0.02
 
         self.start_position = self.last_position
 
-        self.ax12.move_speed(servo_id, initial_position, 300)
+        # self.move(servo_id, initial_position, 300)
 
         self.sensitivity = 3
         print("rw : " + str(self.ax12.read_rw_status(self.servo_id)))
@@ -48,7 +49,17 @@ class Servo(object):
     def update(self, delta):
         # move towards new position
         step = (self.goal - self.start_position) * delta * self.current_speed
-        if self.last_position + step > 998 or self.last_position + step < 0:
+
+        if step > 0 and self.last_position > self.goal:
+            self.start_position = self.last_position
+            step = (self.goal - self.start_position) * delta * self.current_speed
+
+        if step < 0 and self.last_position < self.goal:
+            self.start_position = self.last_position
+            step = (self.goal - self.start_position) * delta * self.current_speed
+
+        # print("Delta: " + str(delta) + " Step: " + str(step) + " Goal: " + str(self.goal) + " Last_pos: " + str(self.last_position) + " Start_pos: " + str(self.start_position))
+        if self.last_position + step > 1024 or self.last_position + step < 0:
             print(str(self.last_position + step) + " not in range " + str(self.servo_id) + "speed "
                   + str(self.current_speed) + "delta " + str(delta))
             return
@@ -56,7 +67,7 @@ class Servo(object):
         self.ax12.move(self.servo_id, round(self.last_position))
 
     def move(self, degrees, delay, speed):
-        self.last_position = self.ax12.read_position(self.servo_id)
+        self.last_position = self.read_position()
         self.start_position = self.last_position
         self.goal = degrees
         self.current_speed = speed * self.current_speed_multiplier
@@ -72,7 +83,7 @@ class Servo(object):
         """
 
         # If degrees are out of range print an error
-        if degrees < 0 or degrees > 998:
+        if degrees < 0 or degrees > 1024:
             print("In servo " + str(self.servo_id) + ", degrees: " + str(degrees) + ", must be between 0 and 998")
 
         # While the servo has not completed it last command wait a bit and check again.
@@ -93,7 +104,7 @@ class Servo(object):
         for i in range(total_steps):
             current_position += step
             speed = math.sin((i + 0.5) / total_steps * math.pi) * max_speed
-            print("Servo " + str(self.servo_id) + ", step: " + str(i) + ", speed: " + str(round(speed)) + ", degrees: " + str(round(current_position)))
+            # print("Servo " + str(self.servo_id) + ", step: " + str(i) + ", speed: " + str(round(speed)) + ", degrees: " + str(round(current_position)))
             # Move the servo using the ax12 library with the servo id and degrees.
             try:
                 self.ax12.move_speed(self.servo_id, round(current_position), round(speed))
@@ -122,6 +133,7 @@ class Servo(object):
         Function that checks if a servo completed it`s last move
         :return: Whether or not the servo has completed it`s last move
         """
+
         return abs(round(self.last_position) - round(self.goal)) <= self.sensitivity
 
     def read_position(self):
@@ -129,7 +141,12 @@ class Servo(object):
         Read the position of the servo
         :return: Current position of this servo
         """
-        return self.ax12.read_position(self.servo_id)
+        result = self.ax12.read_position(self.servo_id)
+        while result is None:
+            print("Can't read position, trying again")
+            result = self.ax12.read_position(self.servo_id)
+
+        return result
 
     def read_speed(self):
         """
