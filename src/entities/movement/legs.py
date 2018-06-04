@@ -143,6 +143,7 @@ class Legs(object):
         return elapsed_time.total_seconds()
 
     def handle_controller_input(self, deploy, x_axis, y_axis):
+        print("NEW PACKAGE")
         self.recent_package = [deploy, x_axis, y_axis]
 
     def leg_updater(self, args):
