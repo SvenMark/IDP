@@ -29,5 +29,5 @@ legs = Legs(leg_0_servos=[
             )
 
 
-legs.run_sequence([100, 100, 100], self_update=True, sequences=None, sequence=hood_handshake)
+legs.run_sequence([120, 120, 120], self_update=True, sequences=None, sequence=hood_handshake)
 
