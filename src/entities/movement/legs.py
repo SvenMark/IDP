@@ -201,13 +201,14 @@ class Legs(object):
             # Retrieve unready legs
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
 
+            # If the controller is in the neutral position,
+            # put the leg in the deploy position
+            if 500 < y_axis < 530:
+                print("Deploying")
+                self.deploy(200)
+
             # Run this if legs are deployed and ready
             if self.deployed and len(legs_not_ready) == 0:
-                # If the controller is in the neutral position,
-                # put the leg in the deploy position
-                if 500 < y_axis < 530:
-                    print("Deploying")
-                    self.deploy(200)
                 # If the controller is pushed forward, run the forward walking sequence
                 if y_axis > 530:
                     self.run_sequence(speeds=[100, 100, 100],
