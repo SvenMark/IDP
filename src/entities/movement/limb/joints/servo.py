@@ -29,7 +29,7 @@ class Servo(object):
         # Set the servo variables and move servo to initial position.
         self.servo_id = servo_id
         self.busy = False
-        self.last_position = self.read_position(self)
+        self.last_position = self.read_position()
         self.goal = initial_position
         self.current_speed = 200
         self.current_speed_multiplier = 0.02
@@ -67,7 +67,7 @@ class Servo(object):
         self.ax12.move(self.servo_id, round(self.last_position))
 
     def move(self, degrees, delay, speed):
-        self.last_position = self.read_position(self)
+        self.last_position = self.read_position()
         self.start_position = self.last_position
         self.goal = degrees
         self.current_speed = speed * self.current_speed_multiplier
