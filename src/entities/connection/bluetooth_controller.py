@@ -32,13 +32,15 @@ class BluetoothController(object):
         sock.connect((self.bluetooth_address, port))
 
         data = ""
+        data_new = ""
 
         count = 0
         while 1:
             try:
-                # data += str(sock.recv(1024).decode("utf-8"))
+                data_new += str(sock.recv(1024).decode("utf-8"))
+                print("Data new: " + data_new)
                 data += str(sock.recv(1024))[2:][:-1]
-                print(data)
+                print("Data old:" + data)
 
                 data_end = data.find('\\n')
                 if data_end != -1:
