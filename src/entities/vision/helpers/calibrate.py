@@ -49,7 +49,7 @@ class Calibrate(object):
                 break
 
             # Calculate the masks
-            mask = self.calculate_mask(img, self.color_range, set_contour=True)
+            mask, dead_memes = self.calculate_mask(img, self.color_range, self.min_block_size, set_contour=True)
 
             # Draw a helper for placing the calibating img
             self.draw_helper(img)

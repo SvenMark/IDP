@@ -183,5 +183,99 @@ class Helper:
 
         return positions
 
+    def calculate_mask(self, img, color_range, min_block_size, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
+        """
+        Calculates the mask with the given image
+        :param img: The image to calculate the mask on
+        :param color_range: Color range for the masks
+        :param conversion: Conversion for the mask
+        :param set_contour: Boolean to set the contours
+        :return: The new mask
+        """
+
+        valid_contour = []
+
+        # Convert the image
+        hsv = cv2.cvtColor(img, conversion)
+
+        if set_contour:
+            # Set contours for given image and color ranges
+            img_mask, valid_cntr = self.set_contours(cv2.inRange(hsv, color_range[0].lower, color_range[0].upper), color_range[0].color, img, min_block_size)
+            valid_contour += valid_cntr
+            for i in range(1, len(color_range)):
+                mask, valid_cntr = self.set_contours(cv2.inRange(hsv, color_range[i].lower, color_range[i].upper), color_range[i].color, img, min_block_size)
+                valid_cntr += valid_cntr
+                img_mask += mask
+        else:
+            # Calculate the mask for all color ranges
+            img_mask = cv2.inRange(hsv, color_range[0].lower, color_range[0].upper)
+            for i in range(1, len(color_range)):
+                img_mask += cv2.inRange(hsv, color_range[i].lower, color_range[i].upper)
+
+        # Return the new mask
+        return img_mask, valid_contour
+
+    def set_contours(self, mask, color, img, min_block_size):
+        """
+        Sets contours for selected masks
+        :param min_block_size: Minimal block size
+        :param mask: The mask to apply on the image
+        :param color: Color of the mask to give contours
+        :param img: Current image
+        :return: New image with the contours
+        """
+
+        # Initialize valid contours for adding to the positions array
+        valid_contours = []
+
+        # Calculates the per-element bit-wise conjunction of two arrays or an array and a scalar
+        img_mask = cv2.bitwise_and(img, img, mask=mask)
+
+        # Calculate the threshhold with the mask
+        ret, thresh = cv2.threshold(mask, 127, 255, 0)
+
+        # Find the contours with the threshold
+        im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+        for contour in range(len(contours)):
+            # Create a convexhull of the contour
+            c = cv2.convexHull(contours[contour])
+
+            # Check if the contour is a vlid block
+            if self.check_valid_convex(c, 4, min_block_size, 10000):
+                # Image moments help you to calculate some features like center of mass of the object
+                moment = cv2.moments(c)
+                area = cv2.contourArea(c)
+
+                x, y, w, h = cv2.boundingRect(c)
+                # Calculate the centre of mass
+                cx = int(moment['m10'] / moment['m00'])
+                cy = int(moment['m01'] / moment['m00'])
+
+                # Draw the convexhull for the block
+                cv2.drawContours(img_mask, [c], 0, (255, 255, 255), 3)
+
+                # Draw a circle in the centre of the block
+                cv2.circle(img_mask, (cx, cy), 2, (255, 255, 255), 5)
+
+                block_position = "bottom/top"
+                if w > 100:
+                    block_position = "laying"
+                elif h > 100:
+                    block_position = "standing"
+
+                # Write the color and position of the block
+                cv2.putText(img_mask, color, (cx - 15, cy - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+                cv2.putText(img_mask, str((cx, cy)), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+                cv2.putText(img_mask, block_position, (cx - 30, cy + 30), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+                cv2.putText(img_mask, str(area), (cx - 30, cy + 45), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+
+                # Append the new block to the global POSITIONS array
+                valid_contours.append((cx, cy))
+
+        # Return the new mask
+        return img_mask, valid_contours
+
+
 
 
