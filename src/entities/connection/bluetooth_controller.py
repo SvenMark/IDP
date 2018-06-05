@@ -42,15 +42,21 @@ class BluetoothController(object):
                     "Reconnecting"
                     sock.close()
                     sock.connect((self.bluetooth_address, port))
-                data += str(sock.recv(1024))[2:][:-1]
+                try:
+                    data += str(sock.recv(1024))[2:][:-1]
 
-                data_end = data.find('\\n')
-                if data_end != -1:
-                    rec = data[:data_end]
-                    # print(rec)
-                    self.handle_data(rec)
-                    data = ""
-                    count += 1
+                    data_end = data.find('\\n')
+                    if data_end != -1:
+                        rec = data[:data_end]
+                        # print(rec)
+                        self.handle_data(rec)
+                        data = ""
+                        count += 1
+
+                except bluetooth.btcommon.BluetoothError:
+                    "Reconnecting"
+                    sock.close()
+                    sock.connect((self.bluetooth_address, port))
 
             except KeyboardInterrupt:
                 break
