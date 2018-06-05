@@ -36,10 +36,7 @@ class BluetoothController(object):
         data_new = ""
         while True:
             try:
-                data_new += str(sock.recv(1024).decode("utf-8"))
-                print("Decode data: " + data_new)
                 data += str(sock.recv(1024))[2:][:-1]
-                print("Original data: " + data)
 
                 if data is "":
                     print("Closing socket")
