@@ -38,7 +38,7 @@ class BluetoothController(object):
         while 1:
             try:
                 # data_new += str(sock.recv(1024).decode("utf-8"))
-                if not sock.connected:
+                if not sock.connected():
                     "Reconnecting"
                     sock.close()
                     sock.connect((self.bluetooth_address, port))
