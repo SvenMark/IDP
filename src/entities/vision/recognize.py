@@ -8,12 +8,13 @@ from entities.vision.helpers.vision_helper import *
 
 class Recognize(object):
 
-    def __init__(self, color_range, min_block_size, saved_buildings=None):
+    def __init__(self, color_range, min_block_size, saved_buildings=None, settings=None):
         self.color_range = color_range
         self.positions = []
         self.saved_buildings = saved_buildings
         self.helper = Helper()
         self.min_block_size = min_block_size
+        self.settings = settings
 
     def run(self):
         # Initialize camera
@@ -29,7 +30,8 @@ class Recognize(object):
             # Calculate the masks
             mask, dead_memes = self.helper.calculate_mask(img, self.color_range, self.min_block_size)
 
-            img = self.helper.crop_to_contours(mask, img)
+            image_width = img.size
+            img, center = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
             mask_cropped, valid_contours = self.helper.calculate_mask(img, self.color_range, self.min_block_size, set_contour=True)
@@ -40,7 +42,7 @@ class Recognize(object):
 
             # Recognize building
             if self.saved_buildings:
-                self.recognize_building(self.positions)
+                self.recognize_building(self.positions, image_width, center)
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
@@ -51,7 +53,7 @@ class Recognize(object):
         cap.release()
         cv2.destroyAllWindows()
 
-    def recognize_building(self, positions):
+    def recognize_building(self, positions, image_width, center):
         """
         Checks if the currents positions of the blocks matches any saved building
         :param positions: Current reading of POSITIONS
@@ -78,5 +80,26 @@ class Recognize(object):
         # Use audio to state the recognized building
         print("At time: " + time.ctime() + " Found: ", result[0], result[1])
 
+        # If recent settings are handled
+        if not self.settings.new:
+            cx = center
+
+            percentage_position = cx / image_width * 100
+
+            # Add to settings
+            self.settings.current_building = result[0]
+            self.settings.current_side = result[1]
+            self.settings.current_position = percentage_position
+
+            self.settings.new = True
+
         # Return whether a building has been found
         return True
+
+    def get_centre(self, b):
+        total = 0
+
+        for block in range(len(b)):
+            total += b[block][0]
+
+        return total / len(b)

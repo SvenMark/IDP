@@ -115,11 +115,13 @@ class Helper:
         if y + h > 0 and x + w > 0:
             img = img[y:y + h, x:x + w]
 
+        center = x
+
         # Resize to new size
         img = self.image_resize(img, height=400)
 
         # Return the resized image
-        return img
+        return img, center
 
     @staticmethod
     def image_resize(img, width=None, height=None, inter=cv2.INTER_AREA):
@@ -195,8 +197,12 @@ class Helper:
 
         valid_contour = []
 
-        # Convert the image
-        hsv = cv2.cvtColor(img, conversion)
+        try:
+            # Convert the image
+            hsv = cv2.cvtColor(img, conversion)
+        except TypeError:
+            print("TypeError")
+            return
 
         if set_contour:
             # Set contours for given image and color ranges

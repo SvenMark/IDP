@@ -1,8 +1,11 @@
 import sys
 sys.path.insert(0, '../../../src')
+import threading
+import time
 
 from entities.vision.vision import Vision
 from entities.vision.helpers.vision_helper import Color
+from entities.vision.recognize_settings import Recognize_settings
 
 # Initialize color ranges for detection
 color_range = [Color("orange", [0, 69, 124], [13, 255, 255]),
@@ -30,7 +33,18 @@ saved_buildings = [[
 
 img = "C:/Users/lars-/Downloads/test.jpeg"
 
-vision = Vision(color_range=color_range_test_room,
-                saved_buildings=saved_buildings)
-vision.saving.run()
+settings = Recognize_settings()
 
+vision = Vision(color_range=color_range_test_room,
+                saved_buildings=saved_buildings,
+                settings=settings)
+
+threading.Thread(target=vision.recognize.run).start()
+
+while True:
+    if settings.new:
+        print("Moving to building " + str(settings.current_building) + ", position: " + str(settings.current_position))
+        settings.new = False
+    else:
+        print("Rotating")
+    time.sleep(0.05)
