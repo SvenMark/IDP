@@ -23,6 +23,10 @@ class ColorRange:
 
 class Helper:
 
+    def __init__(self, min_block_size, max_block_size):
+        self.min_block_size = min_block_size
+        self.max_block_size = max_block_size
+
     @staticmethod
     def is_duplicate(centre, positions, sensitivity=10):
         """
@@ -45,8 +49,7 @@ class Helper:
 
         return False
 
-    @staticmethod
-    def check_valid_convex(c, sides, area_min, area_max):
+    def check_valid_convex(self, c, sides):
         """
         Checks if a convex is a valid block
         :return: True if the contour is a block
@@ -62,7 +65,7 @@ class Helper:
         area = cv2.contourArea(c)
 
         # If the convexhull counts 4 sides and an area bigger than 4000
-        return len(approx) == sides and area_max > area > area_min
+        return len(approx) == sides and self.max_block_size > area > self.min_block_size
 
     def crop_to_contours(self, mask, img):
         """
@@ -88,7 +91,7 @@ class Helper:
             c = cv2.convexHull(cnt)
 
             # Check if the convex is a valid block
-            if self.check_valid_convex(c, 4, 1000, 10000):
+            if self.check_valid_convex(c, 4):
                 # Calculate extremes of the hull
                 min_x = tuple(cnt[cnt[:, :, 0].argmin()][0])
                 max_x = tuple(cnt[cnt[:, :, 0].argmax()][0])
@@ -183,7 +186,7 @@ class Helper:
 
         return positions
 
-    def calculate_mask(self, img, color_range, min_block_size, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
+    def calculate_mask(self, img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
         """
         Calculates the mask with the given image
         :param img: The image to calculate the mask on
@@ -215,7 +218,7 @@ class Helper:
         # Return the new mask
         return img_mask, valid_contour
 
-    def set_contours(self, mask, color, img, min_block_size):
+    def set_contours(self, mask, color, img):
         """
         Sets contours for selected masks
         :param min_block_size: Minimal block size
@@ -242,7 +245,7 @@ class Helper:
             c = cv2.convexHull(contours[contour])
 
             # Check if the contour is a vlid block
-            if self.check_valid_convex(c, 4, min_block_size, 10000):
+            if self.check_valid_convex(c, 4):
                 # Image moments help you to calculate some features like center of mass of the object
                 moment = cv2.moments(c)
                 area = cv2.contourArea(c)

@@ -8,11 +8,10 @@ sys.path.insert(0, '../../../src')
 
 class Hsv_picker:
 
-    def __init__(self, helpers, img, min_block_size):
+    def __init__(self, helpers, img):
         self.color_to_save = ""
         self.img = cv2.imread(img)
-        self.helpers = helpers
-        self.min_block_size = min_block_size
+        self.helper = helpers.helper
 
     def run(self):
         self.createtrackbars("1")
@@ -26,7 +25,7 @@ class Hsv_picker:
                 ret, img = cap.read()
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
-            img = self.helpers.helper.image_resize(img, 500)
+            img = self.helper.image_resize(img, 500)
 
             lowh = cv2.getTrackbarPos('Low H', '1')
             lows = cv2.getTrackbarPos('Low S', '1')
@@ -49,7 +48,7 @@ class Hsv_picker:
 
             for cnt in contours:
                 area = cv2.contourArea(cnt)
-                if area > self.min_block_size:
+                if area > self.helper.min_block_size:
                     cv2.drawContours(output, [cnt], -1, (255, 255, 255), 5)
 
             cv2.imshow('hsv-picker', output)

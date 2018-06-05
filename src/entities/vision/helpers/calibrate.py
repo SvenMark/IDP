@@ -12,11 +12,10 @@ from entities.vision.helpers.vision_helper import *
 
 class Calibrate(object):
 
-    def __init__(self, color_range, min_block_size):
+    def __init__(self, helpers, color_range):
         self.positions = []
         self.CALIBRATED = False
         self.calibrated_colors = []
-        self.min_block_size = min_block_size
 
         self.calibrating_building = [Block("orange", (267, 356)),
                                      Block("yellow", (252, 140)),
@@ -33,7 +32,7 @@ class Calibrate(object):
                                    "orange": (0, 165, 255),
                                    "yellow": (0, 255, 255)})
 
-        self.helper = Helper()
+        self.helper = helpers.helper
 
         self.result = []
 

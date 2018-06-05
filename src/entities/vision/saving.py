@@ -7,12 +7,10 @@ from tkinter import *
 
 class Saving(object):
 
-    def __init__(self, color_range, min_block_size):
+    def __init__(self, helpers, color_range):
         self.color_range = color_range
         self.positions = []
-        self.helper = Helper()
-
-        self.min_block_size = min_block_size
+        self.helper = helpers.helper
 
         # Saving variables
         self.save_length = 0
@@ -23,7 +21,7 @@ class Saving(object):
     def run(self):
         # Initialize camera
         cap = cv2.VideoCapture(0)
-
+        # Lekker vieze methode om dit te doen
         while True:
             # Read frame from the camera
             ret, img = cap.read()
@@ -32,12 +30,12 @@ class Saving(object):
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
             # Calculate the masks
-            mask, dead_memes = self.helper.calculate_mask(img, self.color_range, self.min_block_size)
+            mask, dead_memes = self.helper.calculate_mask(img, self.color_range)
 
             img = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
-            mask_cropped, valid_contours = self.helper.calculate_mask(img, self.color_range, self.min_block_size, set_contour=True)
+            mask_cropped, valid_contours = self.helper.calculate_mask(img, self.color_range, set_contour=True)
 
             # Append the valid contours to the positions array
             for cnt in range(len(valid_contours)):
