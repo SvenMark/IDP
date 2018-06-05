@@ -37,13 +37,19 @@ class BluetoothController(object):
         while True:
             try:
                 data_new += str(sock.recv(1024).decode("utf-8"))
-                print("Decode data: " + str(data_new))
+                print("Decode data: " + data_new)
                 data += str(sock.recv(1024))[2:][:-1]
-                print("Original data: " + str(data))
+                print("Original data: " + data)
+
                 if data is "":
-                    print("Reconnecting")
+                    print("Closing socket")
                     sock.close()
-                    sock.connect((self.bluetooth_address, port))
+                    while data is "":
+                        try:
+                            sock.connect((self.bluetooth_address, port))
+                            data += str(sock.recv(1024))[2:][:-1]
+                        except bluetooth.BluetoothError:
+                            print("Cannot connect, attempting to reconnect")
 
                 data_end = data.find('\\n')
                 if data_end != -1:
@@ -64,7 +70,7 @@ class BluetoothController(object):
         :param data: A data string
         :return: None
         """
-        # print(data)
+        print(data)
         # Index for button to stop motors
         s_index = data.find('s')
         # Index for vertical movement of motors
