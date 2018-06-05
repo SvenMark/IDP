@@ -42,6 +42,9 @@ class BluetoothController(object):
                 # data_new += str(sock.recv(1024).decode("utf-8"))
 
                 data += str(sock.recv(1024))[2:][:-1]
+                if data is "":
+                    sock.close()
+                    sock.connect((self.bluetooth_address, port))
 
                 data_end = data.find('\\n')
                 if data_end != -1:
