@@ -3,7 +3,7 @@ import sys
 sys.path.insert(0, '../../../src')
 
 from entities.movement.movement import Movement
-from entities.vision.vision import Vision
+# from entities.vision.vision import Vision
 from entities.connection.bluetooth_controller import BluetoothController
 
 
@@ -23,7 +23,7 @@ class Robot(object):
         self.limbs = limbs
         self.lights = lights
         self.movement = Movement(limbs, lights)
-        self.vision = Vision()
+        # self.vision = Vision()
         self.controller = BluetoothController(limbs, bluetooth_address)
 
     @property

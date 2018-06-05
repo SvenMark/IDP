@@ -85,7 +85,7 @@ class DCMotor(object):
 
 
 def main():
-    motor = DCMotor(18)
+    motor = DCMotor(18, 9, 10)
     motor.clean_up()
 
 

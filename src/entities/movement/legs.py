@@ -24,6 +24,7 @@ class Legs(object):
         :param leg_3_servos: Array of servo id`s for leg 3
         """
 
+        # The time used for delta timing
         self.previous = datetime.datetime.now()
 
         # Initialise a leg for each corner of the robot
@@ -38,17 +39,21 @@ class Legs(object):
                      # self.leg_rear_right
                      ]
 
+        # The current move sequence
         self.sequence = 0
         self.type = 'legs'
         self.deployed = False
+
+        # Retract on constructing
         self.retract(120)
         self.updating = False
 
-        # deploy, x-axis, y-axis
+        # The bluetooth packages used for legs
         self.recent_package = [0, 0, 0]
 
-        self.updater = False
+        # The thread which keeps running the leg updater
         self.update_thread = Thread(target=self.leg_updater, args=(self, ))
+
         # self.update_thread.start()
 
         print("Legs setup, retracting")
@@ -75,6 +80,7 @@ class Legs(object):
         # setting previous time, because the delta time would be too big
         self.previous = datetime.datetime.now()
 
+        # Run this for autonomous movement
         if self_update:
             self.update_legs()
 
@@ -124,6 +130,10 @@ class Legs(object):
         self.update_legs()
 
     def update_legs(self):
+        """
+        Function that keeps updating the leg positions as long as they are not ready
+        :return: None
+        """
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
         self.get_delta()
         while len(legs_not_ready) != 0:
@@ -131,52 +141,81 @@ class Legs(object):
             for i in range(len(legs_not_ready)):
                 legs_not_ready[i].update(delta)
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-        # print("Finished move")
 
     def get_delta(self):
+        """
+        Calculate the delta time, which can be used so movement always happens at same speed
+        :return: Delta time
+        """
         next_time = datetime.datetime.now()
         elapsed_time = next_time - self.previous
         self.previous = next_time
         return elapsed_time.total_seconds()
 
     def handle_controller_input(self, deploy, x_axis, y_axis):
-        # print("NEW PACKAGE")
+        """
+        Update the deploy, x_axis and y_axis status according to the bluetooth controller
+        :param deploy: Int that determines if legs need to be deployed or not. 1 is deployed, 0 is retracted
+        :param x_axis: The value of the x_axis
+        :param y_axis: The value of the y_axis
+        :return: None
+        """
         self.recent_package = [deploy, x_axis, y_axis]
 
     def leg_updater(self, args):
-        self.updater = True
-
+        """
+        Function that runs on a thread and constantly updates where the legs
+        need to move according to the controller input
+        :param args: Possible arguments from thread
+        :return: None
+        """
+        # Keep rerunning so movement is always exactly same as controller input
         while True:
 
+            # Set the variables received from controller
             deploy = self.recent_package[0]
             x_axis = self.recent_package[1]
             y_axis = self.recent_package[2]
 
+            # If all inputs are 0 do nothing
             if deploy == 0 and x_axis == 0 and y_axis == 0:
                 continue
 
+            # If deploy command is true and legs are not deployed, deploy
             if deploy == 1 and not self.deployed:
                 self.deploy(200)
+            # If deploy command is false and legs are deployed, retract
             elif deploy == 0 and self.deployed:
                 self.retract(200)
 
+            # Set the speed according to the y_axis (vertical position of controller)
             speed = 0
             if y_axis > 530:
                 speed = (y_axis - 512) * 0.4
             if y_axis < 500:
                 speed = (512 - y_axis) * 0.4
 
+            # Get the delta time
             delta = self.get_delta()
+
+            # Retrieve unready legs
             legs_not_ready = [elem for elem in self.legs if not elem.ready()]
-            print(str(speed) + "  not ready : " + str(len(legs_not_ready)) + " deployed " + str(self.deployed) + " y" + str(y_axis) + " x" + str(x_axis))
+
+            # If the controller is in the neutral position,
+            # put the leg in the deploy position
+            if 500 < y_axis < 530 and self.deployed:
+                print("Deploying")
+                self.deploy(200)
+
+            # Run this if legs are deployed and ready
             if self.deployed and len(legs_not_ready) == 0:
-                if 500 < y_axis < 530:
-                    self.deploy(200)
+                # If the controller is pushed forward, run the forward walking sequence
                 if y_axis > 530:
                     self.run_sequence(speeds=[100, 100, 100],
                                       self_update=False,
                                       sequences=[self.sequence],
                                       sequence=forward)
+                    # Update which part of the current movement sequence is being ran
                     self.update_sequence()
                 if y_axis < 500:
                     self.run_sequence(speeds=[100, 100, 100],
@@ -184,14 +223,19 @@ class Legs(object):
                                       sequences=[self.sequence],
                                       sequence=backward)
                     self.update_sequence()
+                # Update the delta time
                 self.get_delta()
 
+            # Run this if not all legs are ready
             if len(legs_not_ready) > 0:
                 for i in range(len(legs_not_ready)):
                     for y in range(len(legs_not_ready[i].servos)):
+                        # for each servo in leg set the speed to the speed sent by the controller
                         legs_not_ready[i].servos[y].set_speed(speed)
+                    # Update the leg
                     legs_not_ready[i].update(delta)
 
+                # Add a little delay so the legs move smoothly
                 time.sleep(0.02)
 
         # Move according to joystick direction

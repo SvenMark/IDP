@@ -32,11 +32,12 @@ class BluetoothController(object):
         sock.connect((self.bluetooth_address, port))
 
         data = ""
+        data_new = ""
 
         count = 0
         while 1:
             try:
-                # data += str(sock.recv(1024).decode("utf-8"))
+                # data_new += str(sock.recv(1024).decode("utf-8"))
                 data += str(sock.recv(1024))[2:][:-1]
 
                 data_end = data.find('\\n')
@@ -85,7 +86,7 @@ class BluetoothController(object):
                 h = ((h * (1000 / 1024)) - 500) / 5
 
                 # Send data to tracks class
-                self.tracks.handle_controller_input(stop_motors=s, vertical_speed=v, horizontal_speed=h, dead_zone=5)
+                self.tracks.handle_controller_input(stop_motors=s, vertical_speed=h, horizontal_speed=v, dead_zone=5)
             except ValueError:
                 print("Invalid value in package")
 

@@ -152,7 +152,14 @@ class Tracks(object):
         self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 0, 1)
 
     def handle_controller_input(self, stop_motors, vertical_speed, horizontal_speed, dead_zone):
-        # print("Vertical: " + str(vertical_speed) + " Horizontal: " + str(horizontal_speed))
+        """
+
+        :param stop_motors:
+        :param vertical_speed:
+        :param horizontal_speed:
+        :param dead_zone:
+        :return:
+        """
 
         if stop_motors == 1:
             self.stop()
@@ -160,6 +167,7 @@ class Tracks(object):
             if -dead_zone < vertical_speed < dead_zone and -dead_zone < horizontal_speed < dead_zone:
                 self.stop()
 
+            # Move backwards
             if vertical_speed < -dead_zone:
                 if -dead_zone < horizontal_speed < dead_zone:
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
@@ -179,9 +187,9 @@ class Tracks(object):
                                   delay=0,
                                   acceleration=0)
 
+            # Move forward
             if vertical_speed > dead_zone:
                 if -dead_zone < horizontal_speed < dead_zone:
-                    print("Going forward")
                     self.forward(duty_cycle_track_left=vertical_speed,
                                  duty_cycle_track_right=vertical_speed,
                                  delay=0,
@@ -199,6 +207,7 @@ class Tracks(object):
                                  delay=0,
                                  acceleration=0)
 
+            # Turn around it`s axis
             if -dead_zone < vertical_speed < dead_zone:
                 if horizontal_speed > dead_zone:
                     self.turn_right(duty_cycle_track_left=horizontal_speed,
