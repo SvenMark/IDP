@@ -189,10 +189,10 @@ class Tracks(object):
             # Move forward
             if vertical_speed > dead_zone:
                 if -dead_zone < horizontal_speed < dead_zone:
-                    self.forward(duty_cycle_track_left=vertical_speed,
-                                 duty_cycle_track_right=vertical_speed,
+                    self.forward(duty_cycle_track_left=200,
+                                 duty_cycle_track_right=200,
                                  delay=0,
-                                 acceleration=0)
+                                 acceleration=5)
                 if horizontal_speed > dead_zone:
                     horizontal_speed = horizontal_speed / 5
                     self.forward(duty_cycle_track_left=vertical_speed,
