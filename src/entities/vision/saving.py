@@ -51,6 +51,7 @@ class Saving(object):
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
+            cv2.imshow('Original', mask)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
