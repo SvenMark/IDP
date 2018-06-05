@@ -79,10 +79,10 @@ class Tracks(object):
                 speed_1 = 0
             if speed_2 < 0:
                 speed_2 = 0
-            if speed_1 > 100:
-                speed_1 = 100
-            if speed_2 > 100:
-                speed_2 = 100
+            # if speed_1 > 100:
+            #     speed_1 = 100
+            # if speed_2 > 100:
+            #     speed_2 = 100
 
             # Pass the new speed to each motor.
             # Track direction 1 is forwards, direction 0 is backwards.
