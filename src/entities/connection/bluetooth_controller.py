@@ -5,6 +5,7 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
+
 class BluetoothController(object):
     """
     Base class for the bluetooth smart controller
@@ -28,16 +29,11 @@ class BluetoothController(object):
         """
 
         port = 1
-
         sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-
         sock.connect((self.bluetooth_address, port))
 
         data = ""
-        data_new = ""
-
-        count = 0
-        while 1:
+        while True:
             try:
                 # data_new += str(sock.recv(1024).decode("utf-8"))
 
@@ -53,10 +49,11 @@ class BluetoothController(object):
                     # print(rec)
                     self.handle_data(rec)
                     data = ""
-                    count += 1
 
             except KeyboardInterrupt:
                 break
+
+        self.tracks.clean_up()
         sock.close()
 
     def handle_data(self, data):
@@ -78,37 +75,30 @@ class BluetoothController(object):
         x_index = data.find('x')
         # Index of y axis for legs
         y_index = data.find('y')
+        # Index for the element that needs to be ran
+        e_index = data.find('e')
 
-        # Tracks
-        # Check if indexes are not -1
-        if s_index != -1 and v_index != -1 and h_index != -1:
-            try:
-                # Convert the indexes to usable integers
-                s = int(str(data[s_index + 2:v_index].replace(" ", "")))
-                v = int(str(data[v_index + 2:h_index].replace(" ", "")))
-                h = int(str(data[h_index + 2:d_index].replace(" ", "")))
+        try:
+            s = int(str(data[s_index + 2:v_index].replace(" ", "")))
+            v = int(str(data[v_index + 2:h_index].replace(" ", "")))
+            h = int(str(data[h_index + 2:d_index].replace(" ", "")))
+            d = int(str(data[d_index + 2:x_index].replace(" ", "")))
+            x = int(str(data[x_index + 2:y_index].replace(" ", "")))
+            y = int(str(data[y_index + 2:e_index].replace(" ", "")))
+            e = int(str(data[e_index + 2:].replace(" ", "")))
 
-                # Convert v and h to percentage to be used by dc motors
-                v = ((v * (1000 / 1024)) - 500) / 5
-                h = ((h * (1000 / 1024)) - 500) / 5
+            # Convert v and h to percentage to be used by dc motors
+            v = ((v * (1000 / 1024)) - 500) / 5
+            h = ((h * (1000 / 1024)) - 500) / 5
 
-                # Send data to tracks class
-                self.tracks.handle_controller_input(stop_motors=s, vertical_speed=h, horizontal_speed=v, dead_zone=5)
-            except ValueError:
-                print("Invalid value in package")
+            # Send data to tracks class
+            self.tracks.handle_controller_input(stop_motors=s, vertical_speed=h, horizontal_speed=v, dead_zone=5)
 
-        # Legs
-        if x_index != -1 and y_index != -1 and d_index != -1:
-            try:
-                # Convert the indexes to usable integers
-                d = int(str(data[d_index + 2:x_index].replace(" ", "")))
-                x = int(str(data[x_index + 2:y_index].replace(" ", "")))
-                y = int(str(data[y_index + 2:].replace(" ", "")))
+            # Send the data to legs class
+            self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
 
-                # Send the data to legs class
-                self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
-            except ValueError:
-                print("Invalid value in package")
+        except ValueError or IndexError:
+            print("Invalid value in package")
 
 
 def main():
