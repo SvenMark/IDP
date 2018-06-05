@@ -34,27 +34,27 @@ def main():
         #return sys.exit(2)
 
     limbs = [
-            Legs(leg_0_servos=[
-                    14,
-                    61,
-                    63
-                ]
-                # leg_1_servos=[
-                #     13,
-                #     21,
-                #     31
-                # ]
-                # leg_2_servos=[
-                #     14,
-                #     61,
-                #     63
-                # ],
-                # leg_3_servos=[
-                #     14,
-                #     61,
-                #     63
-                # ]
-            ),
+            # Legs(leg_0_servos=[
+            #         14,
+            #         61,
+            #         63
+            #     ]
+            #     # leg_1_servos=[
+            #     #     13,
+            #     #     21,
+            #     #     31
+            #     # ]
+            #     # leg_2_servos=[
+            #     #     14,
+            #     #     61,
+            #     #     63
+            #     # ],
+            #     # leg_3_servos=[
+            #     #     14,
+            #     #     61,
+            #     #     63
+            #     # ]
+            # ),
             Tracks(track_0_pin=18,
                    track_1_pin=13,
                    track_0_forward=22,

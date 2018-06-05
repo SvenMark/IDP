@@ -16,10 +16,10 @@ class BluetoothController(object):
         :param limbs: Array of robot limbs
         """
         self.bluetooth_address = bluetooth_address
-        self.legs = limbs[0]
-        self.tracks = limbs[1]
+        # self.legs = limbs[0]
+        self.tracks = limbs[0]
 
-        self.legs.update_thread.start()
+        # self.legs.update_thread.start()
 
     def receive_data(self):
         """
@@ -99,7 +99,7 @@ class BluetoothController(object):
                 y = int(str(data[y_index + 2:].replace(" ", "")))
 
                 # Send the data to legs class
-                self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
+                # self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
             except ValueError:
                 print("Invalid value in package")
 
