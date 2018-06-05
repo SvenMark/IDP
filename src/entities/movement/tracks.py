@@ -84,6 +84,9 @@ class Tracks(object):
             if speed_2 > 100:
                 speed_2 = 100
 
+            speed_1 = speed_1 / 3
+            speed_2 = speed_2 / 3
+
             # Pass the new speed to each motor.
             # Track direction 1 is forwards, direction 0 is backwards.
             if track_left_direction == 1 and track_right_direction == 1:
