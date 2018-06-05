@@ -209,10 +209,10 @@ class Helper:
 
         if set_contour:
             # Set contours for given image and color ranges
-            img_mask, valid_cntr = self.set_contours(cv2.inRange(hsv, color_range[0].lower, color_range[0].upper), color_range[0].color, img, min_block_size)
+            img_mask, valid_cntr = self.set_contours(cv2.inRange(hsv, color_range[0].lower, color_range[0].upper), color_range[0].color, img)
             valid_contour += valid_cntr
             for i in range(1, len(color_range)):
-                mask, valid_cntr = self.set_contours(cv2.inRange(hsv, color_range[i].lower, color_range[i].upper), color_range[i].color, img, min_block_size)
+                mask, valid_cntr = self.set_contours(cv2.inRange(hsv, color_range[i].lower, color_range[i].upper), color_range[i].color, img)
                 valid_cntr += valid_cntr
                 img_mask += mask
         else:
