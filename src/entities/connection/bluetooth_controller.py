@@ -1,9 +1,8 @@
 import bluetooth
 import time
+import sys
 
-
-from threading import Thread
-
+sys.path.insert(0, '../../../src')
 
 class BluetoothController(object):
     """
@@ -28,6 +27,9 @@ class BluetoothController(object):
         """
         port = 1
         sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+
+        if sock.connected():
+            sock.close()
 
         sock.connect((self.bluetooth_address, port))
 
