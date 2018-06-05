@@ -43,6 +43,7 @@ class BluetoothController(object):
 
                 data += str(sock.recv(1024))[2:][:-1]
                 if data is "":
+                    print("Reconnecting")
                     sock.close()
                     sock.connect((self.bluetooth_address, port))
 
