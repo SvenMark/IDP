@@ -26,10 +26,9 @@ class BluetoothController(object):
         Retrieve data from bluetooth connection with bluetooth address from the constructor
         :return: None
         """
-        subprocess.call("kill -9 `pidof bluetooth-agent`", shell=True)
-        status = subprocess.call("bluetooth-agent " + "1234" + " &", shell=True)
 
         port = 1
+
         sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
         sock.connect((self.bluetooth_address, port))
