@@ -8,10 +8,11 @@ sys.path.insert(0, '../../../src')
 
 class Hsv_picker:
 
-    def __init__(self, helpers, img):
+    def __init__(self, helpers, img, min_block_size):
         self.color_to_save = ""
         self.img = cv2.imread(img)
         self.helpers = helpers
+        self.min_block_size = min_block_size
 
     def run(self):
         self.createtrackbars("1")
@@ -48,7 +49,7 @@ class Hsv_picker:
 
             for cnt in contours:
                 area = cv2.contourArea(cnt)
-                if area > 100:
+                if area > self.min_block_size:
                     cv2.drawContours(output, [cnt], -1, (255, 255, 255), 5)
 
             cv2.imshow('hsv-picker', output)

@@ -7,10 +7,12 @@ from tkinter import *
 
 class Saving(object):
 
-    def __init__(self, color_range):
+    def __init__(self, color_range, min_block_size):
         self.color_range = color_range
         self.positions = []
         self.helper = Helper()
+
+        self.min_block_size = min_block_size
 
         # Saving variables
         self.save_length = 0
@@ -179,7 +181,7 @@ class Saving(object):
             c = cv2.convexHull(contours[contour])
 
             # Check if the contour is a vlid block
-            if self.helper.check_valid_convex(c, 4, 1000, 10000):
+            if self.helper.check_valid_convex(c, 4, self.min_block_size, 10000):
                 # Image moments help you to calculate some features like center of mass of the object
                 moment = cv2.moments(c)
 

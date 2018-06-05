@@ -33,3 +33,4 @@ img = "C:/Users/lars-/Downloads/test.jpeg"
 vision = Vision(color_range=color_range_test_room,
                 saved_buildings=saved_buildings)
 vision.saving.run()
+
