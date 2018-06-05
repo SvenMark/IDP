@@ -1,4 +1,5 @@
 import bluetooth
+import subprocess
 import time
 import sys
 
@@ -25,11 +26,11 @@ class BluetoothController(object):
         Retrieve data from bluetooth connection with bluetooth address from the constructor
         :return: None
         """
+        subprocess.call("kill -9 `pidof bluetooth-agent`", shell=True)
+        status = subprocess.call("bluetooth-agent " + "1234" + " &", shell=True)
+
         port = 1
         sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-
-        if sock.connected():
-            sock.close()
 
         sock.connect((self.bluetooth_address, port))
 
@@ -40,25 +41,16 @@ class BluetoothController(object):
         while 1:
             try:
                 # data_new += str(sock.recv(1024).decode("utf-8"))
-                if not sock.connected():
-                    "Reconnecting"
-                    sock.close()
-                    sock.connect((self.bluetooth_address, port))
-                try:
-                    data += str(sock.recv(1024))[2:][:-1]
 
-                    data_end = data.find('\\n')
-                    if data_end != -1:
-                        rec = data[:data_end]
-                        # print(rec)
-                        self.handle_data(rec)
-                        data = ""
-                        count += 1
+                data += str(sock.recv(1024))[2:][:-1]
 
-                except bluetooth.btcommon.BluetoothError:
-                    "Reconnecting"
-                    sock.close()
-                    sock.connect((self.bluetooth_address, port))
+                data_end = data.find('\\n')
+                if data_end != -1:
+                    rec = data[:data_end]
+                    # print(rec)
+                    self.handle_data(rec)
+                    data = ""
+                    count += 1
 
             except KeyboardInterrupt:
                 break
