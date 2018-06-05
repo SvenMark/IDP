@@ -24,6 +24,5 @@ saved_buildings = [[
 
 img = "C:/Users/lars-/Downloads/test.jpeg"
 
-
-vision = Vision(tape)
-vision.helpers.hsv_picker.run()
+vision = Vision(color_range=color_range)
+vision.saving()
