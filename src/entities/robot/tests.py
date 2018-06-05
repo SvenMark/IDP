@@ -42,7 +42,7 @@ class CommonTestClass(unittest.TestCase):
             Tire(servo_id=69, position=500)
         ]
         lights = []
-        self.boris = Robot('Boris', limbs, lights)
+        self.boris = Robot('Boris', limbs, lights, "98:D3:31:FD:15:C1")
 
     def test_name(self):
         self.assertEqual(self.boris.name, 'Boris')

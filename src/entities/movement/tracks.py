@@ -153,14 +153,13 @@ class Tracks(object):
 
     def handle_controller_input(self, stop_motors, vertical_speed, horizontal_speed, dead_zone):
         """
-
-        :param stop_motors:
-        :param vertical_speed:
-        :param horizontal_speed:
-        :param dead_zone:
-        :return:
+        Function that handles the bluetooth controller input
+        :param stop_motors: Value that stops or starts motors, 1 is off, 0 is on
+        :param vertical_speed: The vertical speed of the controller joystick
+        :param horizontal_speed: The horizontal speed of the controller joystick
+        :param dead_zone: Variable that determines the size of the dead zone
+        :return: None
         """
-
         if stop_motors == 1:
             self.stop()
         elif stop_motors == 0:

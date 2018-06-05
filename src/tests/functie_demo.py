@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, '../../src')
 
 from entities.movement.legs import Legs
-from entities.movement.sequences.walking_sequences import *
+from entities.movement.sequences.sequences import *
 
 legs = Legs(leg_0_servos=[
                 14,
@@ -29,7 +29,7 @@ legs = Legs(leg_0_servos=[
             )
 
 # legs.deploy(150)
-walk_forward_repeat(legs, [200, 200, 200], 10)
+forward(legs, [200, 200, 200], 10)
 wave(legs, [150, 150, 150], 10)
-enge_dab(legs, [140, 140, 140])
+dab(legs, [140, 140, 140])
 legs.retract(90)
