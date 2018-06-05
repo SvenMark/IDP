@@ -79,10 +79,10 @@ class Tracks(object):
                 speed_1 = 0
             if speed_2 < 0:
                 speed_2 = 0
-            # if speed_1 > 100:
-            #     speed_1 = 100
-            # if speed_2 > 100:
-            #     speed_2 = 100
+            if speed_1 > 100:
+                speed_1 = 100
+            if speed_2 > 100:
+                speed_2 = 100
 
             # Pass the new speed to each motor.
             # Track direction 1 is forwards, direction 0 is backwards.
@@ -189,8 +189,8 @@ class Tracks(object):
             # Move forward
             if vertical_speed > dead_zone:
                 if -dead_zone < horizontal_speed < dead_zone:
-                    self.forward(duty_cycle_track_left=200,
-                                 duty_cycle_track_right=200,
+                    self.forward(duty_cycle_track_left=vertical_speed,
+                                 duty_cycle_track_right=vertical_speed,
                                  delay=0,
                                  acceleration=0)
                 if horizontal_speed > dead_zone:
