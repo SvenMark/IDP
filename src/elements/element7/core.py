@@ -24,5 +24,6 @@ saved_buildings = [[
 
 img = "C:/Users/lars-/Downloads/test.jpeg"
 
-vision = Vision(color_range=color_range)
-vision.saving()
+
+vision = Vision(color_range, min_block_size=1000)
+vision.recognize.run()

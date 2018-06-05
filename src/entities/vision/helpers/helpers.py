@@ -12,10 +12,10 @@ class Helpers(object):
     Base class for vision
     """
 
-    def __init__(self, color_range, img):
+    def __init__(self, color_range, img, min_block_size):
         """
         Constructor for vision class
         """
-        self.hsv_picker = Hsv_picker(self, img)
-        self.calibrate = Calibrate(color_range)
+        self.hsv_picker = Hsv_picker(self, img, min_block_size)
+        self.calibrate = Calibrate(color_range, min_block_size)
         self.helper = Helper()

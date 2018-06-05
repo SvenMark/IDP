@@ -8,11 +8,12 @@ from entities.vision.helpers.vision_helper import *
 
 class Recognize(object):
 
-    def __init__(self, color_range, saved_buildings=None):
+    def __init__(self, color_range, min_block_size, saved_buildings=None):
         self.color_range = color_range
         self.positions = []
         self.saved_buildings = saved_buildings
         self.helper = Helper()
+        self.min_block_size = min_block_size
 
     def run(self):
         # Initialize camera
@@ -96,9 +97,10 @@ class Recognize(object):
             c = cv2.convexHull(contours[contour])
 
             # Check if the contour is a vlid block
-            if self.helper.check_valid_convex(c, 4, 4000, 10000):
+            if self.helper.check_valid_convex(c, 4, self.min_block_size, 10000):
                 # Image moments help you to calculate some features like center of mass of the object
                 moment = cv2.moments(c)
+                area = cv2.contourArea(c)
 
                 x, y, w, h = cv2.boundingRect(c)
                 # Calculate the centre of mass
@@ -121,6 +123,7 @@ class Recognize(object):
                 cv2.putText(img_mask, color, (cx - 15, cy - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
                 cv2.putText(img_mask, str((cx, cy)), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
                 cv2.putText(img_mask, block_position, (cx - 30, cy + 30), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+                cv2.putText(img_mask, str(area), (cx - 30, cy + 45), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
                 # Append the new block to the global POSITIONS array
                 self.positions = self.helper.append_to_positions(self.positions, (cx, cy))

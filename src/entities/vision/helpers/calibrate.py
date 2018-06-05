@@ -12,10 +12,11 @@ from entities.vision.helpers.vision_helper import *
 
 class Calibrate(object):
 
-    def __init__(self, color_range):
+    def __init__(self, color_range, min_block_size):
         self.positions = []
         self.CALIBRATED = False
         self.calibrated_colors = []
+        self.min_block_size = min_block_size
 
         self.calibrating_building = [Block("orange", (267, 356)),
                                      Block("yellow", (252, 140)),
@@ -193,7 +194,7 @@ class Calibrate(object):
             c = cv2.convexHull(contours[contour])
 
             # Check if the contour is a vlid block
-            if self.helper.check_valid_convex(c, 4, 8000, 9500):
+            if self.helper.check_valid_convex(c, 4, self.min_block_size, 10000):
                 # Image moments help you to calculate some features like center of mass of the object
                 moment = cv2.moments(c)
 
