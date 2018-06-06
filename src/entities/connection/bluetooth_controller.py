@@ -5,6 +5,8 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
+from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, element10
+
 
 class BluetoothController(object):
     """
@@ -93,6 +95,9 @@ class BluetoothController(object):
             # y = int(str(data[y_index + 2:e_index].replace(" ", "")))
             # e = int(str(data[e_index + 2:].replace(" ", "")))
 
+            # Run selected element
+            # self.run_element(e)
+
             # Convert v and h to percentage to be used by dc motors
             v = ((v * (1000 / 1024)) - 500) / 5
             h = ((h * (1000 / 1024)) - 500) / 5
@@ -105,6 +110,26 @@ class BluetoothController(object):
 
         except ValueError or IndexError:
             print("Invalid value in package")
+
+    def run_element(self, element):
+        if element is 1:
+            element1.run()
+        if element is 2:
+            element2.run()
+        if element is 3:
+            element3.run()
+        if element is 4:
+            element4.run()
+        if element is 5:
+            element5.run()
+        if element is 6:
+            element6.main()
+        if element is 7:
+            element7.vision()
+        if element is 8:
+            element8.run()
+        if element is 9:
+            element9.run()
 
 
 def main():
