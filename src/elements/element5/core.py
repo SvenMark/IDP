@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '../../../src')
+
 from entities.vision.camera import Camera, Block
 from entities.vision.helpers import Color, Building
 
@@ -27,14 +30,14 @@ saved_buildings = saved_buildings = [
 
 
 def run():
-    print("run element killmyself")
+    print("run element cup")
     detect_cup()
 
 
 def detect_cup():
 
     # Initialize color ranges for detection
-    color_range = [Color("beker", [30, 10, 93], [83, 87, 175])]
+    color_range = [Color("beker", [23, 48, 24], [44, 255, 255])]
 
     cam = Camera(color_range, saved_buildings=None)
     cam.run()

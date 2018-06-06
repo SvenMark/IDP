@@ -78,12 +78,12 @@ def createtrackbars(name):
     cv2.namedWindow(name)
 
     # create trackbars for lower
-    cv2.createTrackbar('Low H', name, 90, 180, nothing)
-    cv2.createTrackbar('Low S', name, 100, 255, nothing)
-    cv2.createTrackbar('Low V', name, 100, 255, nothing)
+    cv2.createTrackbar('Low H', name, 23, 180, nothing)
+    cv2.createTrackbar('Low S', name, 180, 255, nothing)
+    cv2.createTrackbar('Low V', name, 17, 255, nothing)
 
     # create trackbars for higher
-    cv2.createTrackbar('High H', name, 120, 180, nothing)
+    cv2.createTrackbar('High H', name, 89, 180, nothing)
     cv2.createTrackbar('High S', name, 255, 255, nothing)
     cv2.createTrackbar('High V', name, 255, 255, nothing)
 
