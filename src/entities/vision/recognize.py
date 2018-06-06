@@ -92,6 +92,9 @@ class Recognize(object):
 
             self.settings.new = True
 
+        # Notify settings that the current frame is handled
+        self.settings.update = True
+
         # Return whether a building has been found
         return True
 
