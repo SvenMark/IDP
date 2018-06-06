@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0, '../../../src')
 
 from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, element10
-from entities.robot.robot import Robot
+# from entities.robot.robot import Robot
 
 
 class BluetoothController(object):

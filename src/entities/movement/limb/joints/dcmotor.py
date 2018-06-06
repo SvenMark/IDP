@@ -33,7 +33,7 @@ class DCMotor(object):
         GPIO.setup(self.pin_motor_backward, GPIO.OUT)
 
         pin_jurjen1 = 16
-        pin_jurjen2 = 21
+        pin_jurjen2 = 20
         GPIO.setup(pin_jurjen1, GPIO.OUT)
         GPIO.setup(pin_jurjen2, GPIO.OUT)
         GPIO.output(pin_jurjen1, 1)
