@@ -85,7 +85,7 @@ class BluetoothController(object):
         # Index of y axis for legs
         y_index = data.find('y')
         # Index for the element that needs to be ran
-        # e_index = data.find('e')
+        e_index = data.find('e')
 
         try:
             s = int(str(data[s_index + 2:v_index].replace(" ", "")))
@@ -93,12 +93,23 @@ class BluetoothController(object):
             h = int(str(data[h_index + 2:d_index].replace(" ", "")))
             d = int(str(data[d_index + 2:x_index].replace(" ", "")))
             x = int(str(data[x_index + 2:y_index].replace(" ", "")))
-            y = int(str(data[y_index + 2:].replace(" ", "")))
-            # y = int(str(data[y_index + 2:e_index].replace(" ", "")))
-            # e = int(str(data[e_index + 2:].replace(" ", "")))
+            # y = int(str(data[y_index + 2:].replace(" ", "")))
+            y = int(str(data[y_index + 2:e_index].replace(" ", "")))
+            e = int(str(data[e_index + 2:].replace(" ", "")))
 
-            # Run selected element
-            # self.run_element(e)
+            # if e is 0:
+            #     # Convert v and h to percentage to be used by dc motors
+            #     v = ((v * (1000 / 1024)) - 500) / 5
+            #     h = ((h * (1000 / 1024)) - 500) / 5
+            #
+            #     # Send data to tracks class
+            #     self.tracks.handle_controller_input(stop_motors=s, vertical_speed=h, horizontal_speed=v, dead_zone=5)
+            #
+            #     # Send the data to legs class
+            #     self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
+            # else:
+            #     # Run selected element
+            #     self.run_element(e)
 
             # Convert v and h to percentage to be used by dc motors
             v = ((v * (1000 / 1024)) - 500) / 5
@@ -115,6 +126,7 @@ class BluetoothController(object):
 
     # def run_element(self, element):
     #     if element is 1:
+    #         self.tracks.turn_right(50, 50, 5, 5)
     #         name = 'Entree'
     #         boris = Robot(name, self.limbs, self.lights)
     #         element1.run(boris)
