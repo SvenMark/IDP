@@ -37,7 +37,8 @@ class Calibrate(object):
         self.result = []
 
     def run(self):
-        print("run element7")
+        print("Starting calibrating")
+
         cap = cv2.VideoCapture(0)
 
         while True:

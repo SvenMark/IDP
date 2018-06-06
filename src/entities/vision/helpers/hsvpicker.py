@@ -16,6 +16,8 @@ class Hsv_picker:
         self.color_range = color_range
 
     def run(self):
+        print("Starting hsv picker")
+
         for color in range(len(self.color_range)):
             c = self.color_range[color]
             self.createtrackbars(c)

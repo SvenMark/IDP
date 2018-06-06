@@ -16,6 +16,8 @@ class Recognize(object):
         self.settings = settings
 
     def run(self):
+        print("Starting recognize")
+
         # Initialize camera
         cap = cv2.VideoCapture(0)
 

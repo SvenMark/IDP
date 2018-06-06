@@ -38,20 +38,16 @@ settings = Recognize_settings()
 
 vision = Vision(color_range=color_range_test_room,
                 saved_buildings=saved_buildings,
-                settings=settings, max_block_size=12000, min_block_size=2000)
+                settings=settings, max_block_size=35000, min_block_size=2000)
 if len(sys.argv) > 1:
     if sys.argv[1] == "hsv_picker":
         threading.Thread(target=vision.helpers.hsv_picker.run).start()
-        print("Starting: ", sys.argv[1])
     elif sys.argv[1] == "save":
         threading.Thread(target=vision.saving.run).start()
-        print("Starting: ", sys.argv[1])
     else:
-        threading.Thread(target=vision.helpers.hsv_picker.run).start()
-        print("Starting: recognize")
+        threading.Thread(target=vision.recognize.hsv_picker.run).start()
 else:
-    threading.Thread(target=vision.saving.run).start()
-    print("Starting: recognize")
+    threading.Thread(target=vision.recognize.run).start()
 
 rotate_speed = 50
 
