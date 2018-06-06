@@ -30,13 +30,13 @@ class Saving(object):
             # Apply gaussian blue to the image
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
-            # Calculate the masks
-            mask, dead_memes = self.helper.calculate_mask(img, self.color_range)
-
-            img4, dead_memes = self.helper.crop_to_contours(mask, img)
+            # # Calculate the masks
+            # mask, dead_memes = self.helper.calculate_mask(img, self.color_range)
+            #
+            # img4, dead_memes = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
-            mask_cropped, valid_contours = self.helper.calculate_mask(img4, self.color_range, set_contour=True)
+            mask_cropped, valid_contours = self.helper.calculate_mask(img, self.color_range, set_contour=True)
 
             # Append the valid contours to the positions array
             for cnt in range(len(valid_contours)):
@@ -46,11 +46,11 @@ class Saving(object):
                 self.show_input_fields()
 
             if self.save and 3 < len(self.positions) == self.save_length:
-                self.save_building(img4)
+                self.save_building(img)
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
-            cv2.imshow('Original', mask)
+            cv2.imshow('Original', img)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
