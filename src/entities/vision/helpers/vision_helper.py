@@ -221,8 +221,6 @@ class Helper:
             for i in range(1, len(color_range)):
                 img_mask += cv2.inRange(hsv, color_range[i].lower, color_range[i].upper)
 
-        img_mask = cv2.bitwise_and(img, img, mask=img_mask)
-
         # Return the new mask
         return img_mask, valid_contour
 
@@ -239,7 +237,7 @@ class Helper:
         valid_contours = []
 
         # Calculates the per-element bit-wise conjunction of two arrays or an array and a scalar
-        img_mask = mask
+        img_mask = cv2.bitwise_and(img, img, mask=mask)
 
         # Calculate the threshhold with the mask
         ret, thresh = cv2.threshold(mask, 127, 255, 0)

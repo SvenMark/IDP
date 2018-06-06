@@ -67,6 +67,20 @@ class Hsv_picker:
             for cnt in contours:
                 area = cv2.contourArea(cnt)
                 if area > self.helper.min_block_size:
+                    c = cv2.convexHull(contours[cnt])
+                    moment = cv2.moments(c)
+                    area = cv2.contourArea(c)
+
+                    cx = int(moment['m10'] / moment['m00'])
+                    cy = int(moment['m01'] / moment['m00'])
+
+                    # Draw a circle in the centre of the block
+                    cv2.circle(output, (cx, cy), 2, (255, 255, 255), 5)
+
+                    cv2.putText(output, str((cx, cy)), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4,
+                                (255, 255, 255), 1)
+                    cv2.putText(output, str(area), (cx - 30, cy + 45), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255),
+                                1)
                     cv2.drawContours(output, [cnt], -1, (255, 255, 255), 5)
 
             cv2.imshow('hsv-picker', output)
