@@ -6,6 +6,7 @@ import time
 from entities.vision.vision import Vision
 from entities.vision.helpers.vision_helper import Color
 from entities.vision.recognize_settings import Recognize_settings
+from entities.movement.tracks import Tracks
 
 # Initialize color ranges for detection
 color_range = [Color("orange", [0, 69, 124], [13, 255, 255]),
@@ -48,11 +49,28 @@ else:
     threading.Thread(target=vision.recognize.run).start()
     print("Starting: recognize")
 
+rotate_speed = 50
+
+
+# TESTING
+tracks = Tracks(track_0_pin=18,
+                track_1_pin=13,
+                track_0_forward=22,
+                track_0_backward=27,
+                track_1_forward=10,
+                track_1_backward=9)
+
 while True:
     if settings.update:
         settings.update = False
         if settings.new:
-            print("Moving to building " + str(settings.current_building) + ", position: " + str(settings.current_position))
+            tracks.stop()
+            print("Moving to building " + str(settings.current_building)
+                  + ", position: " + str(settings.current_position))
+
             settings.new = False
         else:
             print("Rotating")
+            # acceleration 0.5 seconds for 0.5 seconds, then wait again
+            tracks.turn_left(rotate_speed, rotate_speed, 0.5, 0.5)
+            tracks.stop()
