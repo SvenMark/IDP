@@ -50,7 +50,7 @@ if len(sys.argv) > 1:
         threading.Thread(target=vision.helpers.hsv_picker.run).start()
         print("Starting: recognize")
 else:
-    threading.Thread(target=vision.helpers.hsv_picker.run).start()
+    threading.Thread(target=vision.saving.run).start()
     print("Starting: recognize")
 
 rotate_speed = 50

@@ -204,16 +204,16 @@ class Helper:
         hsv = cv2.cvtColor(img, conversion)
 
         if set_contour:
-            img_mask = cv2.inRange(hsv, np.array([180, 255, 255]), np.array([180, 255, 255]))
-            # Set contours for given image and color ranges
-            for i in range(len(color_range)):
+            img_mask, valid_cntr = self.set_contours(cv2.inRange(hsv, color_range[0].lower, color_range[0].upper), color_range[0].color, img)
+            valid_contour += valid_cntr
+            for i in range(1, len(color_range)):
                 mask, valid_cntr = self.set_contours(cv2.inRange(hsv, color_range[i].lower, color_range[i].upper), color_range[i].color, img)
                 valid_cntr += valid_cntr
                 img_mask += mask
         else:
-            img_mask = cv2.inRange(hsv, np.array([180, 255, 255]), np.array([180, 255, 255]))
+            img_mask = cv2.inRange(hsv, color_range[0].lower, color_range[0].upper)
             # Calculate the mask for all color ranges
-            for i in range(len(color_range)):
+            for i in range(1, len(color_range)):
                 img_mask += cv2.inRange(hsv, color_range[i].lower, color_range[i].upper)
 
         # Return the new mask
