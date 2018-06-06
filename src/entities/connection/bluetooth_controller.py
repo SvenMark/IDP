@@ -6,6 +6,7 @@ import sys
 sys.path.insert(0, '../../../src')
 
 from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, element10
+from entities.robot.robot import Robot
 
 
 class BluetoothController(object):
@@ -19,6 +20,7 @@ class BluetoothController(object):
         :param limbs: Array of robot limbs
         """
         self.bluetooth_address = bluetooth_address
+        self.limbs = limbs
         # self.legs = limbs[0]
         self.tracks = limbs[0]
 
@@ -111,25 +113,43 @@ class BluetoothController(object):
         except ValueError or IndexError:
             print("Invalid value in package")
 
-    def run_element(self, element):
-        if element is 1:
-            element1.run()
-        if element is 2:
-            element2.run()
-        if element is 3:
-            element3.run()
-        if element is 4:
-            element4.run()
-        if element is 5:
-            element5.run()
-        if element is 6:
-            element6.main()
-        if element is 7:
-            element7.vision()
-        if element is 8:
-            element8.run()
-        if element is 9:
-            element9.run()
+    # def run_element(self, element):
+    #     if element is 1:
+    #         name = 'Entree'
+    #         boris = Robot(name, self.limbs, self.lights)
+    #         element1.run(boris)
+    #     if element is 2:
+    #         name = 'Race'
+    #         boris = Robot(name, self.limbs, self.lights)
+    #         element2.run(boris)
+    #     if element is 3:
+    #         name = 'Dance'
+    #         boris = Robot(name, self.limbs, self.lights)
+    #         element3.run(boris)
+    #     if element is 4:
+    #         name = 'Line Dance'
+    #         boris = Robot(name, self.limbs, self.lights)
+    #         element4.run(boris)
+    #     if element is 5:
+    #         name = 'Obstacle Course'
+    #         boris = Robot(name, self.limbs, self.lights)
+    #         element5.run(boris)
+    #     if element is 6:
+    #         name = 'Cannon'
+    #         boris = Robot(name, self.limbs, self.lights)
+    #         element6.main(boris)
+    #     if element is 7:
+    #         name = 'Transport'
+    #         boris = Robot(name, self.limbs, self.lights)
+    #         element7.vision(boris)
+    #     if element is 8:
+    #         name = 'CTF'
+    #         boris = Robot(name, self.limbs, self.lights)
+    #         element8.run(boris)
+    #     if element is 9:
+    #         name = 'Qualification'
+    #         boris = Robot(name, self.limbs, self.lights)
+    #         element9.run(boris)
 
 
 def main():
