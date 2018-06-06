@@ -2,6 +2,7 @@ from tkinter import *
 import numpy as np
 import cv2
 import sys
+import time
 
 sys.path.insert(0, '../../../src')
 
@@ -76,16 +77,7 @@ class Hsv_picker:
             cv2.imshow('original', img)
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
-                for color in range(len(self.color_range)):
-                    c = self.color_range[color]
-                    lowh = cv2.getTrackbarPos('Low H', c.color)
-                    lows = cv2.getTrackbarPos('Low S', c.color)
-                    lowv = cv2.getTrackbarPos('Low V', c.color)
-
-                    highh = cv2.getTrackbarPos('High H', c.color)
-                    highs = cv2.getTrackbarPos('High S', c.color)
-                    highv = cv2.getTrackbarPos('High V', c.color)
-                    self.savehigherlower(c.color, lowh, lows, lowv, highh, highs, highv)
+                self.savehigherlower(self.color_range)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -137,7 +129,7 @@ class Hsv_picker:
         cv2.createTrackbar('High V', name, c.upper[2], 255, self.nothing)
         cv2.createTrackbar('off_on', name, 0, 1, self.nothing)
 
-    def savehigherlower(self, color, lowh, lows, lowv, highh, highs, highv):
+    def savehigherlower(self, color_range):
         """
         Starts form for getting the color of the saving color
         """
@@ -154,15 +146,27 @@ class Hsv_picker:
         # Button(master, text='Save', command=get_color).grid(row=3, column=1, sticky=W)
         # mainloop()
 
-        try:
-            result = "Color(\"{}\", [{}, {}, {}], [{}, {}, {}]),\n".format(color, lowh, lows, lowv, highh,
-                                                                           highs, highv)
-            text_file = open("Output.txt", "a")  # Color("orange", [0, 69, 124], [13, 255, 255])
-            text_file.write(result)
-            text_file.close()
-            print("Saved settings", result)
-        except ValueError:
-            print(ValueError)
+        text_file = open("Output.txt", "a")  # Color("orange", [0, 69, 124], [13, 255, 255])
+        text_file.write("-----------{}-------------".format(time.clock()))
+
+        for color in range(len(color_range)):
+            c = self.color_range[color]
+            lowh = cv2.getTrackbarPos('Low H', c.color)
+            lows = cv2.getTrackbarPos('Low S', c.color)
+            lowv = cv2.getTrackbarPos('Low V', c.color)
+
+            highh = cv2.getTrackbarPos('High H', c.color)
+            highs = cv2.getTrackbarPos('High S', c.color)
+            highv = cv2.getTrackbarPos('High V', c.color)
+            try:
+                result = "Color(\"{}\", [{}, {}, {}], [{}, {}, {}]),\n".format(color, lowh, lows, lowv, highh,
+                                                                               highs, highv)
+                text_file.write(result)
+                text_file.close()
+                print("Saved settings", result)
+            except ValueError:
+                print(ValueError)
+
 
     def nothing(self, x):
         pass
