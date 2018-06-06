@@ -86,7 +86,16 @@ class Hsv_picker:
             cv2.imshow('original', img)
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
-                self.savehigherlower(lowh, lows, lowv, highh, highs, highv)
+                for color in range(len(self.color_range)):
+                    c = self.color_range[color]
+                    lowh = cv2.getTrackbarPos('Low H', c.color)
+                    lows = cv2.getTrackbarPos('Low S', c.color)
+                    lowv = cv2.getTrackbarPos('Low V', c.color)
+
+                    highh = cv2.getTrackbarPos('High H', c.color)
+                    highs = cv2.getTrackbarPos('High S', c.color)
+                    highv = cv2.getTrackbarPos('High V', c.color)
+                    self.savehigherlower(c.color, lowh, lows, lowv, highh, highs, highv)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -137,25 +146,25 @@ class Hsv_picker:
         cv2.createTrackbar('High S', name, c.upper[1], 255, self.nothing)
         cv2.createTrackbar('High V', name, c.upper[2], 255, self.nothing)
 
-    def savehigherlower(self, lowh, lows, lowv, highh, highs, highv):
+    def savehigherlower(self, color, lowh, lows, lowv, highh, highs, highv):
         """
         Starts form for getting the color of the saving color
         """
-        def get_color():
-            self.color_to_save = e1.get()
-            master.destroy()
-
-        master = Tk()
-        Label(master, text="Color").grid(row=0)
-        e1 = Entry(master)
-
-        e1.grid(row=0, column=1)
-
-        Button(master, text='Save', command=get_color).grid(row=3, column=1, sticky=W)
-        mainloop()
+        # def get_color():
+        #     self.color_to_save = e1.get()
+        #     master.destroy()
+        #
+        # master = Tk()
+        # Label(master, text="Color").grid(row=0)
+        # e1 = Entry(master)
+        #
+        # e1.grid(row=0, column=1)
+        #
+        # Button(master, text='Save', command=get_color).grid(row=3, column=1, sticky=W)
+        # mainloop()
 
         try:
-            result = "Color(\"{}\", [{}, {}, {}], [{}, {}, {}]),\n".format(self.color_to_save, lowh, lows, lowv, highh,
+            result = "Color(\"{}\", [{}, {}, {}], [{}, {}, {}]),\n".format(color, lowh, lows, lowv, highh,
                                                                            highs, highv)
             text_file = open("Output.txt", "a")  # Color("orange", [0, 69, 124], [13, 255, 255])
             text_file.write(result)
