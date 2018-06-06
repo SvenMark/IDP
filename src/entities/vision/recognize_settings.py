@@ -8,4 +8,5 @@ class Recognize_settings(object):
         self.current_building = None
         self.current_side = None
         self.new = False
+        self.update = False
 

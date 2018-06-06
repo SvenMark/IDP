@@ -42,9 +42,10 @@ vision = Vision(color_range=color_range_test_room,
 threading.Thread(target=vision.saving.run).start()
 
 while True:
-    if settings.new:
-        print("Moving to building " + str(settings.current_building) + ", position: " + str(settings.current_position))
-        settings.new = False
-    else:
-        print("Rotating")
-    time.sleep(0.05)
+    if settings.update:
+        settings.update = False
+        if settings.new:
+            print("Moving to building " + str(settings.current_building) + ", position: " + str(settings.current_position))
+            settings.new = False
+        else:
+            print("Rotating")
