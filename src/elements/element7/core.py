@@ -1,10 +1,8 @@
 import sys
 sys.path.insert(0, '../../../src')  # Needed for pi
 
-from entities.vision.calibrate import Calibrate
-from entities.vision.camera import Camera
-from entities.vision.saving import Saving
-from entities.vision.helpers import Color
+from entities.vision.vision import Vision
+from entities.vision.helpers.helpers import Color
 
 # Initialize color ranges for detection
 color_range = [Color("orange", [0, 69, 124], [13, 255, 255]),
@@ -25,9 +23,6 @@ saved_buildings = [[
         ]
 ]
 
-save = Saving(color_range_cup)
-save.run()
-# cali = Calibrate(color_range)
-# color_range = cali.run()
-# cam = Camera(color_range, saved_buildings)
-# cam.run()
+
+vision = Vision(color_range, saved_buildings)
+vision.saving.run()
