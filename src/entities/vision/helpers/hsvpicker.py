@@ -1,8 +1,8 @@
+import datetime
 from tkinter import *
 import numpy as np
 import cv2
 import sys
-import time
 
 sys.path.insert(0, '../../../src')
 
@@ -37,7 +37,6 @@ class Hsv_picker:
             for color in range(len(self.color_range)):
                 c = self.color_range[color]
                 on_off = cv2.getTrackbarPos('off_on', c.color)
-                print(on_off)
                 if on_off > 0:
                     lowh = cv2.getTrackbarPos('Low H', c.color)
                     lows = cv2.getTrackbarPos('Low S', c.color)
@@ -147,7 +146,7 @@ class Hsv_picker:
         # mainloop()
 
         text_file = open("Output.txt", "a")  # Color("orange", [0, 69, 124], [13, 255, 255])
-        text_file.write("-----------{}-------------".format(time.clock()))
+        text_file.write("-----------{}-------------\n".format(datetime.datetime.now().time()))
 
         for color in range(len(color_range)):
             c = self.color_range[color]
@@ -159,14 +158,14 @@ class Hsv_picker:
             highs = cv2.getTrackbarPos('High S', c.color)
             highv = cv2.getTrackbarPos('High V', c.color)
             try:
-                result = "Color(\"{}\", [{}, {}, {}], [{}, {}, {}]),\n".format(color, lowh, lows, lowv, highh,
+                result = "Color(\"{}\", [{}, {}, {}], [{}, {}, {}]),\n".format(c.color, lowh, lows, lowv, highh,
                                                                                highs, highv)
                 text_file.write(result)
-                text_file.close()
                 print("Saved settings", result)
             except ValueError:
                 print(ValueError)
 
+        text_file.close()
 
     def nothing(self, x):
         pass
