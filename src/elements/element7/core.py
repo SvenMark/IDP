@@ -38,8 +38,15 @@ settings = Recognize_settings()
 vision = Vision(color_range=color_range_test_room,
                 saved_buildings=saved_buildings,
                 settings=settings)
-
-threading.Thread(target=vision.helpers.hsv_picker.run).start()
+if sys.argv[1] == "hsv_picker":
+    threading.Thread(target=vision.helpers.hsv_picker.run).start()
+    print("Starting: ", sys.argv[1])
+elif sys.argv[1] == "save":
+    threading.Thread(target=vision.saving.run).start()
+    print("Starting: ", sys.argv[1])
+else:
+    threading.Thread(target=vision.recognize.run).start()
+    print("Starting: recognize")
 
 while True:
     if settings.update:
