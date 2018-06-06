@@ -40,7 +40,7 @@ vision = Vision(color_range=color_range_test_room,
                 saved_buildings=saved_buildings,
                 settings=settings)
 
-threading.Thread(target=vision.saving.run).start()
+threading.Thread(target=vision.helpers.hsv_picker.run).start()
 
 rotate_speed = 50
 

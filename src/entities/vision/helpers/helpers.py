@@ -17,5 +17,5 @@ class Helpers(object):
         Constructor for vision class
         """
         self.helper = Helper(min_block_size, max_block_size)
-        self.hsv_picker = Hsv_picker(self, img)
+        self.hsv_picker = Hsv_picker(self, color_range, img)
         self.calibrate = Calibrate(self, color_range)
