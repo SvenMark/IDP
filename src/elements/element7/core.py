@@ -46,7 +46,7 @@ elif sys.argv[1] == "save":
     threading.Thread(target=vision.saving.run).start()
     print("Starting: ", sys.argv[1])
 else:
-    threading.Thread(target=vision.recognize.run).start()
+    threading.Thread(target=vision.helpers.hsv_picker.run).start()
     print("Starting: recognize")
 
 rotate_speed = 50
