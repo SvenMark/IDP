@@ -65,8 +65,7 @@ class Hsv_picker:
             im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
             for cnt in range(len(contours)):
-                c = cv2.convexHull(contours[cnt])
-
+                c = contours[cnt]
                 moment = cv2.moments(c)
                 area = cv2.contourArea(c)
                 if area > self.helper.min_block_size:
