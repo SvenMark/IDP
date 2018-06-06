@@ -15,11 +15,11 @@ color_range = [Color("orange", [0, 69, 124], [13, 255, 255]),
                Color("green", [56, 90, 17], [86, 197, 255]),
                Color("blue", [96, 148, 92], [159, 255, 255])]
 
-color_range_test_room = [Color("blue", [65, 44, 0], [136, 255, 255]),
-                    Color("yellow", [21, 110, 89], [30, 255, 255]),
-                    Color("orange", [0, 125, 103], [12, 255, 255]),
-                    Color("green", [30, 66, 0], [93, 255, 255]),
-                    Color("red", [38, 61, 85], [180, 255, 255])]
+color_range_test_room = [Color("blue", [84, 44, 52], [153, 255, 255]),
+Color("yellow", [21, 110, 89], [30, 255, 255]),
+Color("orange", [0, 108, 104], [6, 255, 255]),
+Color("green", [28, 39, 0], [94, 255, 255]),
+Color("red", [167, 116, 89], [180, 255, 255])]
 
 tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
 
@@ -38,7 +38,7 @@ settings = Recognize_settings()
 
 vision = Vision(color_range=color_range_test_room,
                 saved_buildings=saved_buildings,
-                settings=settings)
+                settings=settings, max_block_size=12000, min_block_size=2000)
 if len(sys.argv) > 1:
     if sys.argv[1] == "hsv_picker":
         threading.Thread(target=vision.helpers.hsv_picker.run).start()
