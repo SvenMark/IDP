@@ -8,13 +8,17 @@ sys.path.insert(0, '../../../src')
 
 class Hsv_picker:
 
-    def __init__(self, helpers, img):
+    def __init__(self, helpers, color_range, img):
         self.color_to_save = ""
         self.img = cv2.imread(img)
         self.helper = helpers.helper
+        self.color_range = color_range
 
     def run(self):
-        self.createtrackbars("1")
+        for color in range(len(self.color_range)):
+            c = self.color_range[color]
+            self.createtrackbars(c)
+
         print("run hsvpicker")
         cap = cv2.VideoCapture(0)
 
@@ -25,21 +29,35 @@ class Hsv_picker:
                 ret, img = cap.read()
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
-            img = self.helper.image_resize(img, 500)
+            first_color = self.color_range[0].color
+            lowh = cv2.getTrackbarPos('Low H', first_color)
+            lows = cv2.getTrackbarPos('Low S', first_color)
+            lowv = cv2.getTrackbarPos('Low V', first_color)
 
-            lowh = cv2.getTrackbarPos('Low H', '1')
-            lows = cv2.getTrackbarPos('Low S', '1')
-            lowv = cv2.getTrackbarPos('Low V', '1')
-
-            highh = cv2.getTrackbarPos('High H', '1')
-            highs = cv2.getTrackbarPos('High S', '1')
-            highv = cv2.getTrackbarPos('High V', '1')
+            highh = cv2.getTrackbarPos('High H', first_color)
+            highs = cv2.getTrackbarPos('High S', first_color)
+            highv = cv2.getTrackbarPos('High V', first_color)
 
             # Hsv Mask
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             lower = np.array([lowh, lows, lowv])
             higher = np.array([highh, highs, highv])
             mask = cv2.inRange(hsv, lower, higher)
+
+            for color in range(1, len(self.color_range)):
+                c = self.color_range[color]
+
+                lowh = cv2.getTrackbarPos('Low H', c.color)
+                lows = cv2.getTrackbarPos('Low S', c.color)
+                lowv = cv2.getTrackbarPos('Low V', c.color)
+
+                highh = cv2.getTrackbarPos('High H', c.color)
+                highs = cv2.getTrackbarPos('High S', c.color)
+                highv = cv2.getTrackbarPos('High V', c.color)
+
+                lower = np.array([lowh, lows, lowv])
+                higher = np.array([highh, highs, highv])
+                mask += cv2.inRange(hsv, lower, higher)
 
             output = cv2.bitwise_and(img, img, mask=mask)
 
@@ -86,22 +104,25 @@ class Hsv_picker:
         mask += cv2.inRange(hsv, lower, higher)
         return mask
 
-    def createtrackbars(self, name):
+    def createtrackbars(self, c):
         """
         Create trackbar form
-        :param name: Name of form
+        :param c: Color to create trackbar for
         """
+        name = c.color
+
         cv2.namedWindow(name)
+        cv2.resizeWindow(name, 300, 250)
 
         # create trackbars for lower
-        cv2.createTrackbar('Low H', name, 0, 180, self.nothing)
-        cv2.createTrackbar('Low S', name, 0, 255, self.nothing)
-        cv2.createTrackbar('Low V', name, 0, 255, self.nothing)
+        cv2.createTrackbar('Low H', name, c.lower[0], 180, self.nothing)
+        cv2.createTrackbar('Low S', name, c.lower[1], 255, self.nothing)
+        cv2.createTrackbar('Low V', name, c.lower[2], 255, self.nothing)
 
         # create trackbars for higher
-        cv2.createTrackbar('High H', name, 180, 180, self.nothing)
-        cv2.createTrackbar('High S', name, 255, 255, self.nothing)
-        cv2.createTrackbar('High V', name, 255, 255, self.nothing)
+        cv2.createTrackbar('High H', name, c.upper[0], 180, self.nothing)
+        cv2.createTrackbar('High S', name, c.upper[1], 255, self.nothing)
+        cv2.createTrackbar('High V', name, c.upper[2], 255, self.nothing)
 
     def savehigherlower(self, lowh, lows, lowv, highh, highs, highv):
         """
