@@ -29,35 +29,26 @@ class Hsv_picker:
                 ret, img = cap.read()
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
-            first_color = self.color_range[0].color
-            lowh = cv2.getTrackbarPos('Low H', first_color)
-            lows = cv2.getTrackbarPos('Low S', first_color)
-            lowv = cv2.getTrackbarPos('Low V', first_color)
-
-            highh = cv2.getTrackbarPos('High H', first_color)
-            highs = cv2.getTrackbarPos('High S', first_color)
-            highv = cv2.getTrackbarPos('High V', first_color)
-
             # Hsv Mask
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-            lower = np.array([lowh, lows, lowv])
-            higher = np.array([highh, highs, highv])
-            mask = cv2.inRange(hsv, lower, higher)
+            mask = cv2.inRange(hsv, np.array([180, 255, 255]), np.array([180, 255, 255]))
 
-            for color in range(1, len(self.color_range)):
+            for color in range(len(self.color_range)):
                 c = self.color_range[color]
+                on_off = cv2.getTrackbarPos('off_on', c.color)
+                print(on_off)
+                if on_off > 0:
+                    lowh = cv2.getTrackbarPos('Low H', c.color)
+                    lows = cv2.getTrackbarPos('Low S', c.color)
+                    lowv = cv2.getTrackbarPos('Low V', c.color)
 
-                lowh = cv2.getTrackbarPos('Low H', c.color)
-                lows = cv2.getTrackbarPos('Low S', c.color)
-                lowv = cv2.getTrackbarPos('Low V', c.color)
+                    highh = cv2.getTrackbarPos('High H', c.color)
+                    highs = cv2.getTrackbarPos('High S', c.color)
+                    highv = cv2.getTrackbarPos('High V', c.color)
 
-                highh = cv2.getTrackbarPos('High H', c.color)
-                highs = cv2.getTrackbarPos('High S', c.color)
-                highv = cv2.getTrackbarPos('High V', c.color)
-
-                lower = np.array([lowh, lows, lowv])
-                higher = np.array([highh, highs, highv])
-                mask += cv2.inRange(hsv, lower, higher)
+                    lower = np.array([lowh, lows, lowv])
+                    higher = np.array([highh, highs, highv])
+                    mask += cv2.inRange(hsv, lower, higher)
 
             output = cv2.bitwise_and(img, img, mask=mask)
 
@@ -69,7 +60,6 @@ class Hsv_picker:
                 moment = cv2.moments(c)
                 area = cv2.contourArea(c)
                 if area > self.helper.min_block_size:
-
                     cx = int(moment['m10'] / moment['m00'])
                     cy = int(moment['m01'] / moment['m00'])
 
@@ -134,7 +124,7 @@ class Hsv_picker:
         name = c.color
 
         cv2.namedWindow(name)
-        cv2.resizeWindow(name, 300, 250)
+        cv2.resizeWindow(name, 300, 300)
 
         # create trackbars for lower
         cv2.createTrackbar('Low H', name, c.lower[0], 180, self.nothing)
@@ -145,6 +135,7 @@ class Hsv_picker:
         cv2.createTrackbar('High H', name, c.upper[0], 180, self.nothing)
         cv2.createTrackbar('High S', name, c.upper[1], 255, self.nothing)
         cv2.createTrackbar('High V', name, c.upper[2], 255, self.nothing)
+        cv2.createTrackbar('off_on', name, 0, 1, self.nothing)
 
     def savehigherlower(self, color, lowh, lows, lowv, highh, highs, highv):
         """
