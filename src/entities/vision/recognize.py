@@ -26,11 +26,11 @@ class Recognize(object):
             # Apply gaussian blue to the image
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
-            # Calculate the masks
-            mask, dead_memes = self.helper.calculate_mask(img, self.color_range)
+            # # Calculate the masks
+            # mask, dead_memes = self.helper.calculate_mask(img, self.color_range)
 
             image_width = img.size
-            img, center = self.helper.crop_to_contours(mask, img)
+            # img, center = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
             mask_cropped, valid_contours = self.helper.calculate_mask(img, self.color_range, set_contour=True)
