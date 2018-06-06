@@ -81,7 +81,7 @@ class Hsv_picker:
                                 (255, 255, 255), 1)
                     cv2.putText(output, str(area), (cx - 30, cy + 45), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255),
                                 1)
-                    cv2.drawContours(output, [cnt], -1, (255, 255, 255), 5)
+                    cv2.drawContours(output, [c], -1, (255, 255, 255), 5)
 
             cv2.imshow('hsv-picker', output)
             cv2.imshow('original', img)
