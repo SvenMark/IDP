@@ -6,7 +6,7 @@ from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
-# from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, element10
+from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, element10
 from entities.threading_.utils import SharedObject
 # from entities.robot.robot import Robot
 
@@ -133,66 +133,66 @@ class BluetoothController(object):
                 self.run_element(e)
 
         except ValueError or IndexError:
-            kek = 0
+            temp = 0
             # print("Invalid value in package")
 
     def run_element(self, element):
         print("Running element " + str(element))
-        # if element is 1:
-        #     name = 'Entree'
-        #     print(name)
-        #
-        #     # starting thread
-        #     Thread(target=element1.run, args=(self.shared_object,)).start()
-        #
-        # if element is 2:
-        #     name = 'Race'
-        #     print(name)
-        #
-        #     # starting thread
-        #     Thread(target=element2.run, args=(self.shared_object,)).start()
-        #
-        # if element is 3:
-        #     name = 'Dance'
-        #     print(name)
-        #
-        #     # starting thread
-        #     Thread(target=element3.run, args=(self.shared_object,)).start()
-        #
-        # if element is 4:
-        #     name = 'Line Dance'
-        #     print(name)
-        #
-        #     # starting thread
-        #     Thread(target=element4.run, args=(self.shared_object,)).start()
-        #
-        # if element is 5:
-        #     name = 'Obstacle course'
-        #     print(name)
-        #
-        #     # starting thread
-        #     Thread(target=element5.run, args=(self.shared_object,)).start()
-        #
-        # if element is 6:
-        #     name = 'Cannon'
-        #     print(name)
-        #
-        #     # starting thread
-        #     Thread(target=element6.Element6.linedetection, args=(self.shared_object,)).start()
-        #
-        # if element is 7:
-        #     name = 'Transport'
-        #     print(name)
-        #
-        #     # starting thread
-        #     Thread(target=element7.run, args=(self.shared_object,)).start()
-        #
-        # if element is 8:
-        #     name = 'Capture the flag'
-        #     print(name)
-        #
-        #     # starting thread
-        #     Thread(target=element8.run, args=(self.shared_object,)).start()
+        if element is 1:
+            name = 'Entree'
+            print(name)
+
+            # starting thread
+            Thread(target=element1.run, args=(self.shared_object,)).start()
+
+        if element is 2:
+            name = 'Race'
+            print(name)
+
+            # starting thread
+            Thread(target=element2.run, args=(self.shared_object,)).start()
+
+        if element is 3:
+            name = 'Dance'
+            print(name)
+
+            # starting thread
+            Thread(target=element3.run, args=(self.shared_object,)).start()
+
+        if element is 4:
+            name = 'Line Dance'
+            print(name)
+
+            # starting thread
+            Thread(target=element4.run, args=(self.shared_object,)).start()
+
+        if element is 5:
+            name = 'Obstacle course'
+            print(name)
+
+            # starting thread
+            # Thread(target=element5.run, args=(self.shared_object,)).start()
+
+        if element is 6:
+            name = 'Cannon'
+            print(name)
+
+            # starting thread
+            # Thread(target=element6.Element6.linedetection, args=(self.shared_object,)).start()
+
+        if element is 7:
+            name = 'Transport'
+            print(name)
+
+            # starting thread
+            # Thread(target=element7.run, args=(self.shared_object,)).start()
+
+        if element is 8:
+            name = 'Capture the flag'
+            print(name)
+
+            # starting thread
+            Thread(target=element8.run, args=(self.shared_object,)).start()
 
 
 def main():

@@ -1,7 +1,7 @@
 import os
+import time
 import sys
-
-sys.path.insert(0, '../../src')
+sys.path.insert(0, '../../../src')
 
 from entities.audio.listen import Listen
 from entities.audio.microphone_recognition import Microphone_recognition
@@ -10,9 +10,11 @@ from entities.audio.speak import Speak
 
 def run(shared_object):
     print("run element2")
-    speak = Speak()
-    speak.tts("Hello", 'en-GB-Standard-D')
-    speak.play("\"C:\\Users\\renda\\Desktop\\Git\\IDP\\src\\resources\\Whats going on.mp3\"")
 
+    while not shared_object.has_to_stop():
+        print("Doing calculations and stuff")
+        time.sleep(0.5)
 
-run()
+    # Notify shared object that this thread has been stopped
+    shared_object.has_been_stopped()
+

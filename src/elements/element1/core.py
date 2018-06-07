@@ -1,21 +1,15 @@
+import sys
+import time
+sys.path.insert(0, '../../../src')
+
 from entities.movement.limb.leg import Leg
 from entities.movement.tracks import Tracks
 from entities.robot.robot import Robot
 
-import time
-
 
 # todo implement according to truth
 def run(shared_object):
-    lights = []
-    limbs = [
-        # Leg(),
-        # Tire(),
-        # Tracks()
-    ]
-    name = 'Boris'
-
-    boris = Robot(name, limbs, lights)
+    print("Running element 1")
 
     while not shared_object.has_to_stop():
         print("Doing calculations and stuff")
