@@ -1,8 +1,12 @@
 import datetime
 from tkinter import *
+import json
 import numpy as np
 import cv2
 import sys
+
+from entities.vision.helpers.vision_helper import Color
+from entities.vision.helpers.range_handler import Range_Handler
 
 sys.path.insert(0, '../../../src')
 
@@ -14,6 +18,7 @@ class Hsv_picker:
         self.img = cv2.imread(img)
         self.helper = helpers.helper
         self.color_range = color_range
+        self.range_handler = Range_Handler()
 
     def run(self):
         print("Starting hsv picker")
@@ -134,21 +139,9 @@ class Hsv_picker:
         """
         Starts form for getting the color of the saving color
         """
-        # def get_color():
-        #     self.color_to_save = e1.get()
-        #     master.destroy()
-        #
-        # master = Tk()
-        # Label(master, text="Color").grid(row=0)
-        # e1 = Entry(master)
-        #
-        # e1.grid(row=0, column=1)
-        #
-        # Button(master, text='Save', command=get_color).grid(row=3, column=1, sticky=W)
-        # mainloop()
 
-        text_file = open("Output.txt", "a")  # Color("orange", [0, 69, 124], [13, 255, 255])
-        text_file.write("-----------{}-------------\n".format(datetime.datetime.now().time()))
+        text_file = open("Output.txt", "w")
+        correct_ranges = []
 
         for color in range(len(color_range)):
             c = self.color_range[color]
@@ -159,14 +152,11 @@ class Hsv_picker:
             highh = cv2.getTrackbarPos('High H', c.color)
             highs = cv2.getTrackbarPos('High S', c.color)
             highv = cv2.getTrackbarPos('High V', c.color)
-            try:
-                result = "Color(\"{}\", [{}, {}, {}], [{}, {}, {}]),\n".format(c.color, lowh, lows, lowv, highh,
-                                                                               highs, highv)
-                text_file.write(result)
-                print("Saved settings", result)
-            except ValueError:
-                print(ValueError)
 
+            correct_ranges.append((c.color, [lowh, lows, lowv], [highh, highs, highv]))
+
+        self.range_handler.set_color_range(correct_ranges)
+        print("Saved settings")
         text_file.close()
 
     def nothing(self, x):
