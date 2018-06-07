@@ -4,11 +4,13 @@ from entities.vision.helpers.vision_helper import Color
 
 
 class Range_Handler:
-    def __init__(self, file_name):
-        self.file_name = file_name
+    def __init__(self):
+        self.file_name = "output.txt"
 
     def set_color_range(self, color_range):
-        json.dump(color_range, self.file_name)
+        saved_file = open(self.file_name, "w")
+        json.dump(color_range, saved_file)
+        saved_file.close()
 
     def get_color_range(self):
         color_range = []

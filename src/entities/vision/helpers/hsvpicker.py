@@ -139,8 +139,6 @@ class Hsv_picker:
         """
         Starts form for getting the color of the saving color
         """
-
-        text_file = open("Output.txt", "w")
         correct_ranges = []
 
         for color in range(len(color_range)):
@@ -157,7 +155,6 @@ class Hsv_picker:
 
         self.range_handler.set_color_range(correct_ranges)
         print("Saved settings")
-        text_file.close()
 
     def nothing(self, x):
         pass
