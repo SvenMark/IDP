@@ -215,6 +215,7 @@ class Helper:
             # Calculate the mask for all color ranges
             for i in range(1, len(color_range)):
                 img_mask += cv2.inRange(hsv, color_range[i].lower, color_range[i].upper)
+                img_mask = cv2.bitwise_and(img, img, mask=img_mask)
 
         # Return the new mask
         return img_mask, valid_contour
