@@ -113,8 +113,8 @@ class BluetoothController(object):
                 print("E is not 0")
 
         except ValueError or IndexError:
+            m = 1
             # print("Invalid value in package")
-            print("")
 
     def run_element(self, element):
         if element is 1:
