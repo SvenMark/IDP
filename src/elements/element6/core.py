@@ -1,5 +1,8 @@
+import sys
+sys.path.insert(0, '../../../src')  # Needed for pi
+
 from imutils.video import WebcamVideoStream
-from helpers import Point, Color
+from elements.element6.helpers import Point, Color
 from decimal import Decimal
 import time
 import numpy as np
@@ -31,8 +34,8 @@ class Element6(object):
 
             # Hsv Mask
             hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-            low_black = np.array([0, 0, 0])
-            high_black = np.array([180, 255, 30])
+            low_black = np.array([0, 0, 40])
+            high_black = np.array([157, 118, 120])
             mask = cv2.inRange(hsv, low_black, high_black)
 
             # Red detection
@@ -137,5 +140,5 @@ def main():
     bld.linedetection()
 
 
-print ("uncomment main before starting..")
+print("uncomment main before starting..")
 main()  # disabled for travis

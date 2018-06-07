@@ -1,15 +1,19 @@
+import sys
+sys.path.insert(0, '../../../src')
+
 from entities.vision.recognize import Recognize, Block
 from entities.vision.helpers import Color
 
+
 def run():
-    print("run element killmyself")
-    detect_bridge()
+    print("run element cup")
+    detect_cup()
 
 
 def detect_cup():
 
     # Initialize color ranges for detection
-    color_range = [Color("beker", [30, 10, 93], [83, 87, 175])]
+    color_range = [Color("beker", [23, 48, 24], [44, 255, 255])]
 
     cam = Recognize(color_range)
     cam.run()
