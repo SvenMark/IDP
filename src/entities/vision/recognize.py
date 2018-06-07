@@ -61,6 +61,7 @@ class Recognize(object):
         :return: True if a building is recognized
         """
         result = []
+        found = True
 
         # If there are no blocks in view return false
         if not len(positions) > 0:
@@ -69,19 +70,52 @@ class Recognize(object):
         # For each building in the saved building list
         for building in range(len(self.saved_buildings)):
             b = self.saved_buildings[building]
-            # For each block on the front side of the saved building
-            for block in range(len(b)):
-                bl = b[block]
-                result = [building, "front"]
-                # If the current block color and position does not match a saved position,
-                # break and check the next side.
-                if not self.helper.is_duplicate(bl, positions, 20):
-                    return False
 
-        # Use audio to state the recognized building
-        print("At time: " + time.ctime() + " Found: ", result[0], result[1])
+            # For each block on the front side of the saved building
+            found = self.check_building_side(b, positions, b.front)
+            result = [building, "front"]
+
+            # For each block on the back side of the saved building
+            if not found:
+                found = self.check_building_side(b, positions, b.back)
+                result = [building, "back"]
+
+            # For each block on the left side of the saved building
+            if not found:
+                found = self.check_building_side(b, positions, b.left)
+                result = [building, "left"]
+
+            # For each block on the right side of the saved building
+            if not found:
+                found = self.check_building_side(b, positions, b.right)
+                result = [building, "right"]
 
         # If recent settings are handled
+        self.check_settings(center, image_width)
+
+        if found:
+            # Use audio to state the recognized building
+            print("At time: " + time.ctime() + " Found: ", result[0], result[1])
+
+        # Return whether a building has been found
+        return found
+
+    @staticmethod
+    def get_centre(b):
+        total = 0
+
+        for block in range(len(b)):
+            total += b[block][0]
+
+        return total / len(b)
+
+    def check_building_side(self, b, positions, side):
+        for block in range(len(side)):
+            bl = b[block]
+            if not self.helper.is_duplicate(bl, positions, 20):
+                return False
+
+    def check_settings(self, center, image_width):
         if not self.settings.new:
             cx = center
 
@@ -96,14 +130,3 @@ class Recognize(object):
 
         # Notify settings that the current frame is handled
         self.settings.update = True
-
-        # Return whether a building has been found
-        return True
-
-    def get_centre(self, b):
-        total = 0
-
-        for block in range(len(b)):
-            total += b[block][0]
-
-        return total / len(b)

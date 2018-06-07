@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+from enum import Enum
 
 
 class Color:
@@ -7,6 +8,20 @@ class Color:
         self.color = color
         self.lower = np.array(lower)
         self.upper = np.array(upper)
+
+
+class Side(Enum):
+    front_back = 1
+    left_right = 2
+
+
+class Building:
+    def __init__(self, front, back, left, right, pick_up_vertical):
+        self.front = front
+        self.back = back
+        self.left = left
+        self.right = right
+        self.pick_up_vertical = pick_up_vertical
 
 
 class Block:

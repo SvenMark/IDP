@@ -1,10 +1,10 @@
 import sys
-sys.path.insert(0, '../../../src')
 import threading
-import time
+
+sys.path.insert(0, '../../../src')
 
 from entities.vision.vision import Vision
-from entities.vision.helpers.vision_helper import Color
+from entities.vision.helpers.vision_helper import Color, Building, Side
 from entities.vision.recognize_settings import Recognize_settings
 from entities.vision.helpers.range_handler import Range_Handler
 # from entities.movement.tracks import Tracks
@@ -21,13 +21,25 @@ class Core:
         self.color_range = Range_Handler().get_color_range()
         self.tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
 
-        self.saved_buildings = [[
-            (28, 91),
-            (136, 83),
-            (137, 312),
-            (82, 200),
-            (29, 316),
-        ]]
+        self.saved_buildings = [
+            Building(front=[
+                (28, 91),
+                (136, 83),
+                (137, 312),
+                (82, 200),
+                (29, 316)],
+                     back=[
+
+                     ],
+                     left=[
+
+                     ],
+                     right=[
+
+                     ],
+                     pick_up_vertical=Side.left_right
+            )
+        ]
 
         self.img = "C:/Users/lars-/Downloads/test.jpeg"
 
