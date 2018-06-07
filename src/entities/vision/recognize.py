@@ -91,7 +91,7 @@ class Recognize(object):
                 result = [building, "right"]
 
         # If recent settings are handled
-        self.check_settings(center, image_width)
+        self.check_settings(center, image_width, result)
 
         if found:
             # Use audio to state the recognized building
@@ -111,11 +111,11 @@ class Recognize(object):
 
     def check_building_side(self, b, positions, side):
         for block in range(len(side)):
-            bl = b[block]
+            bl = side[block]
             if not self.helper.is_duplicate(bl, positions, 20):
                 return False
 
-    def check_settings(self, center, image_width):
+    def check_settings(self, center, image_width, result):
         if not self.settings.new:
             cx = center
 
