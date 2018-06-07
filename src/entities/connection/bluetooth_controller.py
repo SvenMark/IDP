@@ -21,8 +21,9 @@ class BluetoothController(object):
         """
         self.bluetooth_address = bluetooth_address
         self.limbs = limbs
-        # self.legs = limbs[0]
-        self.tracks = limbs[0]
+        self.legs = limbs[0]
+        self.tracks = limbs[1]
+
         self.current_element = 0
 
         # self.legs.update_thread.start()
@@ -70,7 +71,7 @@ class BluetoothController(object):
         :param data: A data string
         :return: None
         """
-        # print(data)
+        print(data)
         # Index for button to stop motors
         s_index = data.find('s')
         # Index for vertical movement of motors
@@ -95,25 +96,30 @@ class BluetoothController(object):
             y = int(str(data[y_index + 2:e_index].replace(" ", "")))
             e = int(str(data[e_index + 2:].replace(" ", "")))
 
+            # Convert v and h to percentage to be used by dc motors
+            v = ((v * (1000 / 1024)) - 500) / 5
+            h = ((h * (1000 / 1024)) - 500) / 5
+
             if e is 0:
-                print("E is 0")
-                # Convert v and h to percentage to be used by dc motors
-                v = ((v * (1000 / 1024)) - 500) / 5
-                h = ((h * (1000 / 1024)) - 500) / 5
+                self.current_element = 0
 
                 # Send data to tracks class
                 self.tracks.handle_controller_input(stop_motors=s, vertical_speed=h, horizontal_speed=v, dead_zone=5)
 
                 # Send the data to legs class
-                # self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
-            else:
+                self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
+
+            if e is not self.current_element and e is not 0:
                 # Run selected element
+                self.current_element = e
                 self.run_element(e)
 
         except ValueError or IndexError:
             print("Invalid value in package")
 
     def run_element(self, element):
+        if element is 0:
+            name = 'raw controller'
         if element is 1:
             name = 'Entree'
             print(name)
@@ -136,7 +142,7 @@ class BluetoothController(object):
             name = 'Transport'
             print(name)
         if element is 8:
-            name = 'CTF'
+            name = 'Capture the flag'
             print(name)
 
 def main():
