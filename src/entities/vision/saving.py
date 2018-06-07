@@ -101,6 +101,8 @@ class Saving(object):
             b = self.positions[circle]
             cv2.circle(img, b, 2, (255, 255, 255), 5)
 
+        cv2.imshow('Spider Cam Result', img)
+
         def confirmed():
             """
             Confirms the building and saves it to a file
@@ -127,7 +129,5 @@ class Saving(object):
         Button(master, text='OK', command=confirmed).grid(row=0, column=1, sticky=W)
         Button(master, text='Retry', command=master.destroy).grid(row=0, column=0, sticky=W)
         mainloop()
-
-        cv2.imshow('Spider Cam Result', img)
 
         self.last_positions = self.positions
