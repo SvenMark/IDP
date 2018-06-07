@@ -23,6 +23,7 @@ class BluetoothController(object):
         self.limbs = limbs
         # self.legs = limbs[0]
         self.tracks = limbs[0]
+        self.current_element = 0
 
         # self.legs.update_thread.start()
 
@@ -31,13 +32,11 @@ class BluetoothController(object):
         Retrieve data from bluetooth connection with bluetooth address from the constructor
         :return: None
         """
-
         port = 1
         sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
         sock.connect((self.bluetooth_address, port))
 
         data = ""
-        data_new = ""
         while True:
             try:
                 data += str(sock.recv(1024))[2:][:-1]
@@ -49,7 +48,7 @@ class BluetoothController(object):
                         try:
                             sock.connect((self.bluetooth_address, port))
                             data += str(sock.recv(1024))[2:][:-1]
-                        except bluetooth.BluetoothError:
+                        except bluetooth.btcommon.BluetoothError:
                             print("Cannot connect, attempting to reconnect")
 
                 data_end = data.find('\\n')
@@ -112,12 +111,10 @@ class BluetoothController(object):
                 self.run_element(e)
 
         except ValueError or IndexError:
-            m = 1
-            # print("Invalid value in package")
+            print("Invalid value in package")
 
     def run_element(self, element):
         if element is 1:
-            self.tracks.turn_right(50, 50, 5, 5)
             name = 'Entree'
             print(name)
         if element is 2:
