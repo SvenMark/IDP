@@ -17,38 +17,29 @@ class BeatDetection(object):
         self.highhighs = 2500  # high value borders
         self.running = False
 
-    def start(self):
-        p = pyaudio.PyAudio()  # start the PyAudio class
-        stream = p.open(format=pyaudio.paInt16, channels=1, rate=self.RATE, input=True,
-                        frames_per_buffer=self.CHUNK)  # uses default input device
+    def detect(self, stream):
 
         count = 0
-        while self.running:  # Number of outputs
-            data = np.fromstring(stream.read(self.CHUNK), dtype=np.int16)
-            left = data[0::2]
-            lf = np.fft.rfft(left)
+        data = np.fromstring(stream.read(self.CHUNK), dtype=np.int16)
+        left = data[0::2]
+        lf = np.fft.rfft(left)
 
-            lows = 0
-            for i in range(self.lowlows, self.highlows):
-                lows = lows + abs(lf)[i]
-            meds = 0
-            for i in range(self.lowmeds, self.highmeds):
-                meds = meds + abs(lf)[i]
-            high = 0
-            for i in range(self.lowhighs, self.highhighs):
-                high = high + abs(lf)[i]
+        lows = 0
+        for i in range(self.lowlows, self.highlows):
+            lows = lows + abs(lf)[i]
+        meds = 0
+        for i in range(self.lowmeds, self.highmeds):
+            meds = meds + abs(lf)[i]
+        high = 0
+        for i in range(self.lowhighs, self.highhighs):
+            high = high + abs(lf)[i]
 
-            # Print de values
-            # value = [int(lows), int(meds), int(high)]
-            # print("Low: " + str(value[0]) + ", Med: " + str(value[1]) + ", High: " + str(value[2]))
+        # Print de values
+        value = [int(lows), int(meds), int(high)]
+        print("Low: " + str(value[0]) + ", Med: " + str(value[1]) + ", High: " + str(value[2]))
 
-            if lows > 9000000:
-                count += 1
-                print("Bass #" + str(count))
+        if lows > 9000000:
+            count += 1
+            print("Bass #" + str(count))
 
-        stream.stop_stream()
-        stream.close()
-        p.terminate()
 
-    def stop(self):
-        self.running = False
