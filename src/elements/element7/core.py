@@ -53,7 +53,7 @@ class Core:
             else:
                 threading.Thread(target=self.vision.recognize.hsv_picker.run).start()
         else:
-            threading.Thread(target=self.vision.helpers.hsv_picker.run).start()
+            threading.Thread(target=self.vision.saving.run).start()
 
 
 def main():
