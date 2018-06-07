@@ -19,7 +19,8 @@ class Speak(Audio):
         :param file_name: Audio file
         :return: None
         """
-        path = file_name
+        path = Audio.get_file_path(self, file_name)
+        print(path)
         if self.windows:  # windows
             os.system("\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" -I null -q --no-qt-system-tray --qt-start-minimized --play-and-exit " + path)
         else:  # linux
@@ -41,7 +42,7 @@ class Speak(Audio):
 
 def main():
     sp = Speak()
-    sp.tts("Ik ben een robot. biep bliep", 'en')
+    sp.play("gay.mp3")
 
 
 if __name__ == '__main__':

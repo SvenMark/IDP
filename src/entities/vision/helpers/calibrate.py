@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
-from entities.vision.helpers.helpers import *
+from entities.vision.helpers.vision_helper import *
 
 
 # print("uncomment run before starting..")
@@ -12,7 +12,7 @@ from entities.vision.helpers.helpers import *
 
 class Calibrate(object):
 
-    def __init__(self, color_range):
+    def __init__(self, helpers, color_range):
         self.positions = []
         self.CALIBRATED = False
         self.calibrated_colors = []
@@ -32,12 +32,13 @@ class Calibrate(object):
                                    "orange": (0, 165, 255),
                                    "yellow": (0, 255, 255)})
 
-        self.helper = Helpers()
+        self.helper = helpers.helper
 
         self.result = []
 
     def run(self):
-        print("run element7")
+        print("Starting calibrating")
+
         cap = cv2.VideoCapture(0)
 
         while True:
@@ -47,12 +48,14 @@ class Calibrate(object):
             if self.calibrate():
                 break
 
-            # calculate the masks
-            mask = self.calculate_mask(img, self.color_range, set_contour=True)
+            # Calculate the masks
+            mask, dead_memes = self.calculate_mask(img, self.color_range, self.min_block_size, set_contour=True)
 
+            # Draw a helper for placing the calibating img
             self.draw_helper(img)
             self.draw_helper(mask)
 
+            # Flip the image for easier placing
             img = cv2.flip(img, 1)
 
             cv2.imshow('Spider Cam 2000', mask)
@@ -83,10 +86,14 @@ class Calibrate(object):
         Traverses through color spectrum untill it finds the right color
         :return: True is all colors calibrated
         """
+        # For each color in color range
         for i in range(len(self.color_range)):
             c = self.color_range[i]
+            # If it is not already calibrated
             if c.color not in self.calibrated_colors:
+                # If it is not calibrated
                 if not self.calibrated_color(self.positions, 50, c.color):
+                    # Shift the upper and lower ranges by 10
                     if c.upper[0] < 255:
                         c.lower[0] += 10
                         c.upper[0] += 10
@@ -94,7 +101,7 @@ class Calibrate(object):
                         c.lower[0] = randint(0, 30)
                         c.upper[0] = randint(0, 30)
                 else:
-
+                    # Save the color range
                     self.calibrated_colors.append(c.color)
                     self.result.append(Color(c.color, c.lower, c.upper))
                     if len(self.calibrated_colors) >= 5:
@@ -116,19 +123,24 @@ class Calibrate(object):
         :param color: Color to check
         :return: True if the color is calibrated
         """
-        for j in range(len(positions)):  # for each current position
+        # For each current position
+        for j in range(len(positions)):
             pos = positions[j]
             if pos.color == color:
-                for k in range(len(self.calibrating_building)):  # and saved position
+                # For each saved position
+                for k in range(len(self.calibrating_building)):
                     saved_block = self.calibrating_building[k]
-                    if saved_block.color == pos.color:  # if the colors match
+                    # If the colors match
+                    if saved_block.color == pos.color:
                         b = pos.centre
                         a = saved_block.centre
 
                         distance = np.linalg.norm(a - b)
 
-                        if distance <= sensitivity:  # and the positions match
-                            return True  # the color is calibrated
+                        # And the positions match
+                        if distance <= sensitivity:
+                            # The color is calibrated
+                            return True
 
         return False
 
@@ -182,7 +194,7 @@ class Calibrate(object):
             c = cv2.convexHull(contours[contour])
 
             # Check if the contour is a vlid block
-            if self.helper.check_valid_convex(c, 4, 8000, 9500):
+            if self.helper.check_valid_convex(c, 4, self.min_block_size, 10000):
                 # Image moments help you to calculate some features like center of mass of the object
                 moment = cv2.moments(c)
 
