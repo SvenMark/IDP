@@ -12,12 +12,6 @@ from entities.vision.helpers.range_handler import Range_Handler
 
 class Core:
     def __init__(self):
-        self.back_up_color_range = [Color("blue", [84, 44, 52], [153, 255, 255]),
-                                    Color("yellow", [21, 110, 89], [30, 255, 255]),
-                                    Color("orange", [0, 108, 104], [6, 255, 255]),
-                                    Color("green", [28, 39, 0], [94, 255, 255]),
-                                    Color("red", [167, 116, 89], [180, 255, 255])]
-
         self.color_range = Range_Handler().get_color_range()
         self.tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
 
