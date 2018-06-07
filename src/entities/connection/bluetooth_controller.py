@@ -110,7 +110,6 @@ class BluetoothController(object):
             else:
                 # Run selected element
                 self.run_element(e)
-                print("E is not 0")
 
         except ValueError or IndexError:
             m = 1
