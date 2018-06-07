@@ -118,8 +118,6 @@ class BluetoothController(object):
             print("Invalid value in package")
 
     def run_element(self, element):
-        if element is 0:
-            name = 'raw controller'
         if element is 1:
             name = 'Entree'
             print(name)
