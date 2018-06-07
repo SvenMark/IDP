@@ -17,11 +17,12 @@ class Core:
 
         self.saved_buildings = [
             Building(front=[
-                (28, 91),
-                (136, 83),
-                (137, 312),
-                (82, 200),
-                (29, 316)],
+                (271, 213),
+                (294, 209),
+                (187, 109),
+                (59, 321),
+                (87, 160)
+                ],
                      back=[
 
                      ],
@@ -40,7 +41,7 @@ class Core:
         self.settings = Recognize_settings()
         self.vision = Vision(color_range=self.color_range,
                              saved_buildings=self.saved_buildings,
-                             settings=self.settings, max_block_size=35000, min_block_size=200)
+                             settings=self.settings, max_block_size=35000, min_block_size=1000)
 
         self.rotate_speed = 50
 
