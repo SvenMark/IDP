@@ -1,5 +1,5 @@
 import sys
-from datetime import time
+import time
 
 sys.path.insert(0, '../../../src')
 
@@ -99,9 +99,7 @@ class Saving(object):
         Saves the current building with the given img
         :param img: The current frame
         """
-        for circle in range(len(positions)):
-            b = positions[circle]
-            cv2.circle(img, b, 2, (255, 255, 255), 5)
+        time.sleep(1)
 
         cv2.imshow('Spider Cam Result', img)
 
@@ -118,6 +116,7 @@ class Saving(object):
 
             for block in range(len(self.positions)):
                 b = self.positions[block]
+                print(b)
                 if block == len(self.positions):
                     out.write("        ({}, {})\n".format(b[0], b[1]))
                 else:
