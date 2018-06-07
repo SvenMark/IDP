@@ -5,7 +5,7 @@ sys.path.insert(0, '../src')
 
 from entities.movement.legs import Legs
 from entities.movement.tracks import Tracks
-from entities.robot.robot import Robot
+# from entities.robot.robot import Robot
 from entities.connection.bluetooth_controller import BluetoothController
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
@@ -49,11 +49,11 @@ def main():
     while True:
         bluetooth_controller.receive_data()
 
-    name = 'Boris'
-    boris = Robot(name, limbs, lights, bluetooth_address="98:D3:31:FD:15:C1")
-
-    while True:
-        boris.controller.receive_data()
+    # name = 'Boris'
+    # boris = Robot(name, limbs, lights, bluetooth_address="98:D3:31:FD:15:C1")
+    #
+    # while True:
+    #     boris.controller.receive_data()
 
 
 if __name__ == "__main__":
