@@ -2,10 +2,6 @@ import sys
 import time
 sys.path.insert(0, '../../../src')
 
-from entities.movement.limb.leg import Leg
-from entities.movement.tracks import Tracks
-from entities.robot.robot import Robot
-
 
 # todo implement according to truth
 def run(shared_object):
