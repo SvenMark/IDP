@@ -5,7 +5,7 @@ from entities.vision.vision import Vision
 from entities.vision.helpers.helpers import Color
 
 
-def run():
+def run(shared_object):
     # Initialize color ranges for detection
     color_range = [Color("orange", [0, 69, 124], [13, 255, 255]),
                    Color("yellow", [15, 103, 124], [31, 255, 255]),

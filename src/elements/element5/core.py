@@ -1,7 +1,7 @@
 from entities.vision.recognize import Recognize, Block
 from entities.vision.helpers import Color
 
-def run():
+def run(shared_object):
     print("run element killmyself")
     detect_bridge()
 
