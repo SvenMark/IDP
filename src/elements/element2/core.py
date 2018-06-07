@@ -1,11 +1,7 @@
 import os
 import time
 import sys
-sys.path.insert(0, '../../src')
-
-from entities.audio.listen import Listen
-from entities.audio.microphone_recognition import Microphone_recognition
-from entities.audio.speak import Speak
+sys.path.insert(0, '../../../src')
 
 
 def run(shared_object):
