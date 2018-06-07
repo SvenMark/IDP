@@ -23,6 +23,10 @@ color_range_test_room = [Color("blue", [84, 44, 52], [153, 255, 255]),
 
 tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
 
+color_range_cup = [Color("green", [28, 7, 87], [48, 255, 142]),
+                   Color("white", [0, 0, 136], [180, 28, 219])]
+
+
 saved_buildings = [[
         (28, 91),
         (136, 83),

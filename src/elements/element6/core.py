@@ -1,5 +1,5 @@
 from imutils.video import WebcamVideoStream
-from helpers import Point, Color
+from elements.element6.helpers import Point, Color
 from decimal import Decimal
 import time
 import numpy as np
@@ -137,5 +137,5 @@ def main():
     bld.linedetection()
 
 
-print ("uncomment main before starting..")
+print("uncomment main before starting..")
 main()  # disabled for travis
