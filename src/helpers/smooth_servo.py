@@ -1,5 +1,9 @@
 from __future__ import division
+
+import sys
 import math
+
+sys.path.insert(0, '../../src')
 
 start = 100
 

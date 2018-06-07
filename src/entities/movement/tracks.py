@@ -1,4 +1,7 @@
 import time
+import sys
+
+sys.path.insert(0, '../../../src')
 
 from entities.movement.limb.joints.dcmotor import DCMotor
 from entities.movement.limb.track import Track
@@ -9,16 +12,20 @@ class Tracks(object):
     Base class for tracks that implements DC motors
     """
 
-    def __init__(self, track_0_pin, track_1_pin):
+    def __init__(self, track_0_pin, track_1_pin, track_0_forward, track_0_backward, track_1_forward, track_1_backward):
         """
         Constructor for the tracks class
         :param track_0_pin: The GPIO pin which the first track is connected to
         :param track_1_pin: The GPIO pin which the second track is connected to
+        :param track_0_forward: GPIO direction pin for track 0
+        :param track_0_backward: GPIO direction pin for track 0
+        :param track_1_forward: GPIO direction pin for track 1
+        :param track_1_backward: GPIO direction pin for track 1
         """
 
         # Initialise both motors as tracks. Each track has 1 motor.
-        self.track_left = Track(track_0_pin)
-        self.track_right = Track(track_1_pin)
+        self.track_left = Track(track_0_pin, track_0_forward, track_0_backward)
+        self.track_right = Track(track_1_pin, track_1_forward, track_1_backward)
         self.type = 'tracks'
 
         print("Tracks setup")
@@ -145,7 +152,14 @@ class Tracks(object):
         self.move_helper(duty_cycle_track_left, duty_cycle_track_right, delay, acceleration, 0, 1)
 
     def handle_controller_input(self, stop_motors, vertical_speed, horizontal_speed, dead_zone):
-        print("Vertical: " + str(vertical_speed) + " Horizontal: " + str(horizontal_speed))
+        """
+
+        :param stop_motors:
+        :param vertical_speed:
+        :param horizontal_speed:
+        :param dead_zone:
+        :return:
+        """
 
         if stop_motors == 1:
             self.stop()
@@ -153,6 +167,7 @@ class Tracks(object):
             if -dead_zone < vertical_speed < dead_zone and -dead_zone < horizontal_speed < dead_zone:
                 self.stop()
 
+            # Move backwards
             if vertical_speed < -dead_zone:
                 if -dead_zone < horizontal_speed < dead_zone:
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
@@ -172,9 +187,9 @@ class Tracks(object):
                                   delay=0,
                                   acceleration=0)
 
+            # Move forward
             if vertical_speed > dead_zone:
                 if -dead_zone < horizontal_speed < dead_zone:
-                    print("Going forward")
                     self.forward(duty_cycle_track_left=vertical_speed,
                                  duty_cycle_track_right=vertical_speed,
                                  delay=0,
@@ -192,6 +207,7 @@ class Tracks(object):
                                  delay=0,
                                  acceleration=0)
 
+            # Turn around it`s axis
             if -dead_zone < vertical_speed < dead_zone:
                 if horizontal_speed > dead_zone:
                     self.turn_right(duty_cycle_track_left=horizontal_speed,

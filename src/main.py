@@ -1,13 +1,14 @@
 import os
 import sys
 
+sys.path.insert(0, '../src')
 # from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, \
 #    element10
 from entities.movement.legs import Legs
 from entities.movement.tracks import Tracks
 from entities.robot.robot import Robot
 from entities.movement.limb.tire import Tire
-from entities.movement.sequences.walking_sequences import *
+from entities.movement.sequences.sequences import *
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
 
@@ -54,7 +55,12 @@ def main():
                 #     63
                 # ]
             ),
-            Tracks(track_0_pin=18, track_1_pin=13),
+            Tracks(track_0_pin=18,
+                   track_1_pin=13,
+                   track_0_forward=22,
+                   track_0_backward=27,
+                   track_1_forward=10,
+                   track_1_backward=9),
             Tire(servo_id=21, position=500)
         ]
 
@@ -65,12 +71,6 @@ def main():
 
     while True:
         boris.controller.receive_data()
-
-    boris.movement.tracks.forward(80, 10, 2)
-    walk_forward(boris.movement.legs, 10)
-    wave(boris.movement.legs, [250, 250, 250], 10)
-    enge_dab(boris.movement.legs, [140, 140, 140])
-    boris.movement.legs.retract(90)
 
     # part = sys.argv[1]
 

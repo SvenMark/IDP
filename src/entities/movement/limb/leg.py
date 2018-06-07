@@ -1,3 +1,7 @@
+import sys
+
+sys.path.insert(0, '../../../../src')
+
 from entities.movement.limb.joints.servo import Servo
 
 
@@ -21,6 +25,10 @@ class Leg(object):
         print("Leg setup")
 
     def ready(self):
+        """
+        Checks if all servos of this leg are ready
+        :return: If all the servos are ready or not
+        """
         return len([elem for elem in self.servos if elem.is_ready()]) == 3
 
     def move(self, positions, delay, speeds):
@@ -36,5 +44,11 @@ class Leg(object):
         self.servo_2.move(positions[2], delay, speeds[2])
 
     def update(self, delta):
+        """
+        Update all the unready servos
+        :param delta: The delta time
+        :return: None
+        """
         for i in range(len(self.servos)):
-            self.servos[i].update(delta)
+            if not self.servos[i].is_ready():
+                self.servos[i].update(delta)
