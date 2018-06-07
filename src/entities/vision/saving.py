@@ -99,9 +99,8 @@ class Saving(object):
         Saves the current building with the given img
         :param img: The current frame
         """
-        time.sleep(1)
-
         cv2.imshow('Spider Cam Result', img)
+        time.sleep(1)
 
         def confirmed():
             """
