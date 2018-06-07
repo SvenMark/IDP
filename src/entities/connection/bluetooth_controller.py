@@ -2,10 +2,11 @@ import bluetooth
 import subprocess
 import time
 import sys
+from threading import Thread
 
 sys.path.insert(0, '../../../src')
-
-# from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, element10
+from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, element10
+from entities.threading_.utils import SharedObject
 # from entities.robot.robot import Robot
 
 
@@ -25,6 +26,7 @@ class BluetoothController(object):
         self.tracks = limbs[1]
 
         self.current_element = 0
+        self.shared_object = SharedObject()
 
         # self.legs.update_thread.start()
 
@@ -100,16 +102,31 @@ class BluetoothController(object):
             v = ((v * (1000 / 1024)) - 500) / 5
             h = ((h * (1000 / 1024)) - 500) / 5
 
+            # Max speed
+            speed_factor = 1
+
+            # Not max speed in controlled mode
             if e is 0:
+                speed_factor = 0.75
+
+            if e is 0 or e is 2:
                 self.current_element = 0
 
                 # Send data to tracks class
-                self.tracks.handle_controller_input(stop_motors=s, vertical_speed=h, horizontal_speed=v, dead_zone=5)
+                self.tracks.handle_controller_input(stop_motors=s, vertical_speed=h * speed_factor,
+                                                    horizontal_speed=v * speed_factor, dead_zone=5)
 
                 # Send the data to legs class
                 self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
 
             if e is not self.current_element and e is not 0:
+                # Stopping the current element
+                self.shared_object.stop = True
+
+                # Wait for it to stop ?
+                while not self.shared_object.has_stopped:
+                    time.sleep(0.01)
+
                 # Run selected element
                 self.current_element = e
                 self.run_element(e)
@@ -118,32 +135,62 @@ class BluetoothController(object):
             print("Invalid value in package")
 
     def run_element(self, element):
-        if element is 0:
-            name = 'raw controller'
         if element is 1:
             name = 'Entree'
             print(name)
+
+            # starting thread
+            Thread(target=element1.run, args=(self.shared_object,)).start()
+
         if element is 2:
             name = 'Race'
             print(name)
+
+            # starting thread
+            Thread(target=element2.run, args=(self.shared_object,)).start()
+
         if element is 3:
             name = 'Dance'
             print(name)
+
+            # starting thread
+            Thread(target=element3.run, args=(self.shared_object,)).start()
+
         if element is 4:
             name = 'Line Dance'
             print(name)
+
+            # starting thread
+            Thread(target=element4.run, args=(self.shared_object,)).start()
+
         if element is 5:
             name = 'Obstacle course'
             print(name)
+
+            # starting thread
+            Thread(target=element5.run, args=(self.shared_object,)).start()
+
         if element is 6:
             name = 'Cannon'
             print(name)
+
+            # starting thread
+            Thread(target=element6.Element6.linedetection, args=(self.shared_object,)).start()
+
         if element is 7:
             name = 'Transport'
             print(name)
+
+            # starting thread
+            Thread(target=element7.run, args=(self.shared_object,)).start()
+
         if element is 8:
             name = 'Capture the flag'
             print(name)
+
+            # starting thread
+            Thread(target=element8.run, args=(self.shared_object,)).start()
+
 
 def main():
     limbs = [0, 1]

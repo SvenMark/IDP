@@ -45,7 +45,7 @@ class Core:
 
         self.rotate_speed = 50
 
-    def run(self):
+    def run(self, shared_object):
         if len(sys.argv) > 1:
             if sys.argv[1] == "hsv_picker":
                 threading.Thread(target=self.vision.helpers.hsv_picker.run).start()

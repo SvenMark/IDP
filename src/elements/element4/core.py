@@ -2,7 +2,7 @@ import pyaudio
 import numpy as np
 
 
-def run():
+def run(shared_object):
     print("run element4")
     CHUNK = 10000  # speed of data point reading, smaller == less datapoints == faster updates
     RATE = 44100  # time resolution of the recording device (Hz) Higher == Better accuracy
