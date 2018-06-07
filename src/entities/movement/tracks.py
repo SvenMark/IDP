@@ -153,14 +153,13 @@ class Tracks(object):
 
     def handle_controller_input(self, stop_motors, vertical_speed, horizontal_speed, dead_zone):
         """
-
-        :param stop_motors:
-        :param vertical_speed:
-        :param horizontal_speed:
-        :param dead_zone:
-        :return:
+        Function that handles the bluetooth controller input
+        :param stop_motors: Value that stops or starts motors, 1 is off, 0 is on
+        :param vertical_speed: The vertical speed of the controller joystick
+        :param horizontal_speed: The horizontal speed of the controller joystick
+        :param dead_zone: Variable that determines the size of the dead zone
+        :return: None
         """
-
         if stop_motors == 1:
             self.stop()
         elif stop_motors == 0:
@@ -174,14 +173,14 @@ class Tracks(object):
                                   duty_cycle_track_right=abs(vertical_speed),
                                   delay=0,
                                   acceleration=0)
-                if horizontal_speed > dead_zone:
-                    horizontal_speed = horizontal_speed / 5
-                    self.backward(duty_cycle_track_left=abs(vertical_speed),
-                                  duty_cycle_track_right=abs(vertical_speed) - horizontal_speed,
+                if horizontal_speed < -dead_zone:
+                    horizontal_speed = horizontal_speed / 2
+                    self.backward(duty_cycle_track_left=abs(vertical_speed) - horizontal_speed,
+                                  duty_cycle_track_right=abs(vertical_speed),
                                   delay=0,
                                   acceleration=0)
-                if horizontal_speed < -dead_zone:
-                    horizontal_speed = abs(horizontal_speed / 5)
+                if horizontal_speed > dead_zone:
+                    horizontal_speed = abs(horizontal_speed / 2)
                     self.backward(duty_cycle_track_left=abs(vertical_speed) - horizontal_speed,
                                   duty_cycle_track_right=abs(vertical_speed),
                                   delay=0,
@@ -194,14 +193,14 @@ class Tracks(object):
                                  duty_cycle_track_right=vertical_speed,
                                  delay=0,
                                  acceleration=0)
-                if horizontal_speed > dead_zone:
-                    horizontal_speed = horizontal_speed / 5
-                    self.forward(duty_cycle_track_left=vertical_speed,
-                                 duty_cycle_track_right=vertical_speed - horizontal_speed,
+                if horizontal_speed < -dead_zone:
+                    horizontal_speed = horizontal_speed / 2
+                    self.forward(duty_cycle_track_left=vertical_speed - horizontal_speed,
+                                 duty_cycle_track_right=vertical_speed,
                                  delay=0,
                                  acceleration=0)
-                if horizontal_speed < -dead_zone:
-                    horizontal_speed = abs(horizontal_speed / 5)
+                if horizontal_speed > dead_zone:
+                    horizontal_speed = abs(horizontal_speed / 2)
                     self.forward(duty_cycle_track_left=vertical_speed - horizontal_speed,
                                  duty_cycle_track_right=vertical_speed,
                                  delay=0,
@@ -210,14 +209,14 @@ class Tracks(object):
             # Turn around it`s axis
             if -dead_zone < vertical_speed < dead_zone:
                 if horizontal_speed > dead_zone:
-                    self.turn_right(duty_cycle_track_left=horizontal_speed,
-                                    duty_cycle_track_right=horizontal_speed,
+                    self.turn_right(duty_cycle_track_left=horizontal_speed / 2,
+                                    duty_cycle_track_right=horizontal_speed / 2,
                                     delay=0,
                                     acceleration=0)
 
                 if horizontal_speed < -dead_zone:
-                    self.turn_left(duty_cycle_track_left=abs(horizontal_speed),
-                                   duty_cycle_track_right=abs(horizontal_speed),
+                    self.turn_left(duty_cycle_track_left=abs(horizontal_speed) / 2,
+                                   duty_cycle_track_right=abs(horizontal_speed) / 2,
                                    delay=0,
                                    acceleration=0)
 

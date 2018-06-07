@@ -1,5 +1,4 @@
 from entities.movement.limb.leg import Leg
-from entities.movement.limb.tire import Tire
 from entities.movement.tracks import Tracks
 from entities.robot.robot import Robot
 

@@ -28,24 +28,24 @@ legs = Legs(leg_0_servos=[
 #            ]
             )
 
-for i in range(5):
-    legs.run_sequence([250, 250, 250], self_update=True, sequences=None, sequence=forward)
-
-for i in range(5):
-    legs.run_sequence([250, 250, 250], True, None, backward)
-
-for i in range(5):
-    legs.run_sequence([200, 200, 200], True, None, pull)
-
-for i in range(5):
-    legs.run_sequence([200, 200, 200], True, None, push)
-
-for i in range(5):
-    legs.run_sequence([150, 150, 150], True, None, wave)
-
-for i in range(5):
-    legs.run_sequence([150, 150, 150], True, None, march)
-
-for i in range(5):
-    legs.run_sequence([150, 150, 150], True, None, dab)
-    legs.deploy(200)
+# for i in range(5):
+#     legs.run_sequence([250, 250, 250], self_update=True, sequences=None, sequence=forward)
+#
+# for i in range(5):
+#     legs.run_sequence([250, 250, 250], True, None, backward)
+#
+# for i in range(5):
+#     legs.run_sequence([200, 200, 200], True, None, pull)
+#
+# for i in range(5):
+#     legs.run_sequence([200, 200, 200], True, None, push)
+#
+# for i in range(5):
+#     legs.run_sequence([150, 150, 150], True, None, wave)
+#
+# for i in range(5):
+#     legs.run_sequence([150, 150, 150], True, None, march)
+#
+# for i in range(5):
+#     legs.run_sequence([150, 150, 150], True, None, dab)
+#     legs.deploy(200)
