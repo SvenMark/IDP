@@ -4,6 +4,7 @@ from entities.robot.robot import Robot
 
 import time
 
+
 # todo implement according to truth
 def run(shared_object):
     lights = []

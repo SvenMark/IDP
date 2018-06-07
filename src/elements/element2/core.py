@@ -8,7 +8,7 @@ from entities.audio.microphone_recognition import Microphone_recognition
 from entities.audio.speak import Speak
 
 
-def run():
+def run(shared_object):
     print("run element2")
     speak = Speak()
     speak.tts("Hello", 'en-GB-Standard-D')
