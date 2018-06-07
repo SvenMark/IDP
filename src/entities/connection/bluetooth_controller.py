@@ -71,7 +71,7 @@ class BluetoothController(object):
         :param data: A data string
         :return: None
         """
-        print(data)
+        # print(data)
         # Index for button to stop motors
         s_index = data.find('s')
         # Index for vertical movement of motors
@@ -97,6 +97,7 @@ class BluetoothController(object):
             e = int(str(data[e_index + 2:].replace(" ", "")))
 
             if e is 0:
+                print("E is 0")
                 # Convert v and h to percentage to be used by dc motors
                 v = ((v * (1000 / 1024)) - 500) / 5
                 h = ((h * (1000 / 1024)) - 500) / 5
@@ -108,51 +109,39 @@ class BluetoothController(object):
                 # self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
             else:
                 # Run selected element
-                # self.run_element(e)
+                self.run_element(e)
                 print("E is not 0")
 
         except ValueError or IndexError:
-            print("Invalid value in package")
+            # print("Invalid value in package")
+            print("")
 
-    # def run_element(self, element):
-    #     if element is 1:
-    #         self.tracks.turn_right(50, 50, 5, 5)
-    #         name = 'Entree'
-    #         boris = Robot(name, self.limbs, self.lights)
-    #         element1.run(boris)
-    #     if element is 2:
-    #         name = 'Race'
-    #         boris = Robot(name, self.limbs, self.lights)
-    #         element2.run(boris)
-    #     if element is 3:
-    #         name = 'Dance'
-    #         boris = Robot(name, self.limbs, self.lights)
-    #         element3.run(boris)
-    #     if element is 4:
-    #         name = 'Line Dance'
-    #         boris = Robot(name, self.limbs, self.lights)
-    #         element4.run(boris)
-    #     if element is 5:
-    #         name = 'Obstacle Course'
-    #         boris = Robot(name, self.limbs, self.lights)
-    #         element5.run(boris)
-    #     if element is 6:
-    #         name = 'Cannon'
-    #         boris = Robot(name, self.limbs, self.lights)
-    #         element6.main(boris)
-    #     if element is 7:
-    #         name = 'Transport'
-    #         boris = Robot(name, self.limbs, self.lights)
-    #         element7.vision(boris)
-    #     if element is 8:
-    #         name = 'CTF'
-    #         boris = Robot(name, self.limbs, self.lights)
-    #         element8.run(boris)
-    #     if element is 9:
-    #         name = 'Qualification'
-    #         boris = Robot(name, self.limbs, self.lights)
-    #         element9.run(boris)
-
+    def run_element(self, element):
+        if element is 1:
+            self.tracks.turn_right(50, 50, 5, 5)
+            name = 'Entree'
+            print(name)
+        if element is 2:
+            name = 'Race'
+            print(name)
+        if element is 3:
+            name = 'Dance'
+            print(name)
+        if element is 4:
+            name = 'Line Dance'
+            print(name)
+        if element is 5:
+            name = 'Obstacle course'
+            print(name)
+        if element is 6:
+            name = 'Cannon'
+            print(name)
+        if element is 7:
+            name = 'Transport'
+            print(name)
+        if element is 8:
+            name = 'CTF'
+            print(name)
 
 def main():
     limbs = [0, 1]
