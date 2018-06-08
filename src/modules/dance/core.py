@@ -7,8 +7,8 @@ sys.path.insert(0, '../../../src')
 def run(name, shared_object, movement):
     print("run " + str(name))
 
-    legs = movement[0]
-    tracks = movement[1]
+    legs = movement.limbs[0]
+    tracks = movement.limbs[1]
 
     while not shared_object.has_to_stop():
         print("Doing calculations and stuff")
