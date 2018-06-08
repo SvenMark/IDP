@@ -182,9 +182,10 @@ class Helper:
         # Return the resized image
         return resized
 
-    def append_to_positions(self, positions, block):
+    def append_to_positions(self, positions, block, sensitivity):
         """
         Appends a unique block to the array
+        :param sensitivity: Sensitivity to check, higher rejects more distance
         :param positions: Positions array of the current view
         :param block: Centre point
         """
@@ -197,7 +198,7 @@ class Helper:
             positions.append(block)
         else:
             # Check if the given block is not a duplicate
-            if not self.is_duplicate(block, positions, 5):
+            if not self.is_duplicate(block, positions, sensitivity):
                 # Append the block to positions
                 positions.append(block)
 
