@@ -35,7 +35,6 @@ class Hsv_picker:
                 img = self.img
             else:
                 ret, img = cap.read()
-            img = cv2.GaussianBlur(img, (9, 9), 0)
 
             # Hsv Mask
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
