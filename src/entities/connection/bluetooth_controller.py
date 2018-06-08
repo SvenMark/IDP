@@ -1,8 +1,13 @@
 import bluetooth
+import subprocess
 import time
-
-
+import sys
 from threading import Thread
+
+sys.path.insert(0, '../../../src')
+from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, element10
+from entities.threading_.utils import SharedObject
+# from entities.robot.robot import Robot
 
 
 class BluetoothController(object):
@@ -16,10 +21,14 @@ class BluetoothController(object):
         :param limbs: Array of robot limbs
         """
         self.bluetooth_address = bluetooth_address
+        self.limbs = limbs
         self.legs = limbs[0]
         self.tracks = limbs[1]
 
-        self.legs.update_thread.start()
+        self.current_element = 0
+        self.shared_object = SharedObject()
+
+        # self.legs.update_thread.start()
 
     def receive_data(self):
         """
@@ -28,17 +37,22 @@ class BluetoothController(object):
         """
         port = 1
         sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-
         sock.connect((self.bluetooth_address, port))
 
         data = ""
-        data_new = ""
-
-        count = 0
-        while 1:
+        while True:
             try:
-                # data_new += str(sock.recv(1024).decode("utf-8"))
                 data += str(sock.recv(1024))[2:][:-1]
+
+                if data is "":
+                    print("Closing socket")
+                    sock.close()
+                    while data is "":
+                        try:
+                            sock.connect((self.bluetooth_address, port))
+                            data += str(sock.recv(1024))[2:][:-1]
+                        except bluetooth.btcommon.BluetoothError:
+                            print("Cannot connect, attempting to reconnect")
 
                 data_end = data.find('\\n')
                 if data_end != -1:
@@ -46,10 +60,11 @@ class BluetoothController(object):
                     # print(rec)
                     self.handle_data(rec)
                     data = ""
-                    count += 1
 
             except KeyboardInterrupt:
                 break
+
+        self.tracks.clean_up()
         sock.close()
 
     def handle_data(self, data):
@@ -71,37 +86,110 @@ class BluetoothController(object):
         x_index = data.find('x')
         # Index of y axis for legs
         y_index = data.find('y')
+        # Index for the element that needs to be ran
+        e_index = data.find('e')
 
-        # Tracks
-        # Check if indexes are not -1
-        if s_index != -1 and v_index != -1 and h_index != -1:
-            try:
-                # Convert the indexes to usable integers
-                s = int(str(data[s_index + 2:v_index].replace(" ", "")))
-                v = int(str(data[v_index + 2:h_index].replace(" ", "")))
-                h = int(str(data[h_index + 2:d_index].replace(" ", "")))
+        try:
+            s = int(str(data[s_index + 2:v_index].replace(" ", "")))
+            v = int(str(data[v_index + 2:h_index].replace(" ", "")))
+            h = int(str(data[h_index + 2:d_index].replace(" ", "")))
+            d = int(str(data[d_index + 2:x_index].replace(" ", "")))
+            x = int(str(data[x_index + 2:y_index].replace(" ", "")))
+            y = int(str(data[y_index + 2:e_index].replace(" ", "")))
+            e = int(str(data[e_index + 2:].replace(" ", "")))
 
-                # Convert v and h to percentage to be used by dc motors
-                v = ((v * (1000 / 1024)) - 500) / 5
-                h = ((h * (1000 / 1024)) - 500) / 5
+            # Convert v and h to percentage to be used by dc motors
+            v = ((v * (1000 / 1024)) - 500) / 5
+            h = ((h * (1000 / 1024)) - 500) / 5
+
+            # Max speed
+            speed_factor = 1
+
+            # Not max speed in controlled mode
+            if e is 0:
+                speed_factor = 0.75
+
+            if e is 0 or e is 2:
+                self.current_element = 0
 
                 # Send data to tracks class
-                self.tracks.handle_controller_input(stop_motors=s, vertical_speed=h, horizontal_speed=v, dead_zone=5)
-            except ValueError:
-                print("Invalid value in package")
-
-        # Legs
-        if x_index != -1 and y_index != -1 and d_index != -1:
-            try:
-                # Convert the indexes to usable integers
-                d = int(str(data[d_index + 2:x_index].replace(" ", "")))
-                x = int(str(data[x_index + 2:y_index].replace(" ", "")))
-                y = int(str(data[y_index + 2:].replace(" ", "")))
+                self.tracks.handle_controller_input(stop_motors=s, vertical_speed=h * speed_factor,
+                                                    horizontal_speed=v * speed_factor, dead_zone=5)
 
                 # Send the data to legs class
                 self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
-            except ValueError:
-                print("Invalid value in package")
+
+            if e is not self.current_element and e is not 0:
+                # Stopping the current element
+                self.shared_object.stop = True
+
+                # Wait for it to stop ?
+                while not self.shared_object.has_stopped:
+                    time.sleep(0.01)
+
+                # Run selected element
+                self.current_element = e
+                self.run_element(e)
+
+        except ValueError or IndexError:
+            print("Invalid value in package")
+
+    def run_element(self, element):
+        if element is 1:
+            name = 'Entree'
+            print(name)
+
+            # starting thread
+            Thread(target=element1.run, args=(self.shared_object,)).start()
+
+        if element is 2:
+            name = 'Race'
+            print(name)
+
+            # starting thread
+            Thread(target=element2.run, args=(self.shared_object,)).start()
+
+        if element is 3:
+            name = 'Dance'
+            print(name)
+
+            # starting thread
+            Thread(target=element3.run, args=(self.shared_object,)).start()
+
+        if element is 4:
+            name = 'Line Dance'
+            print(name)
+
+            # starting thread
+            Thread(target=element4.run, args=(self.shared_object,)).start()
+
+        if element is 5:
+            name = 'Obstacle course'
+            print(name)
+
+            # starting thread
+            Thread(target=element5.run, args=(self.shared_object,)).start()
+
+        if element is 6:
+            name = 'Cannon'
+            print(name)
+
+            # starting thread
+            Thread(target=element6.Element6.linedetection, args=(self.shared_object,)).start()
+
+        if element is 7:
+            name = 'Transport'
+            print(name)
+
+            # starting thread
+            Thread(target=element7.run, args=(self.shared_object,)).start()
+
+        if element is 8:
+            name = 'Capture the flag'
+            print(name)
+
+            # starting thread
+            Thread(target=element8.run, args=(self.shared_object,)).start()
 
 
 def main():

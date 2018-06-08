@@ -10,60 +10,53 @@ from entities.vision.helpers.range_handler import Range_Handler
 # from entities.movement.tracks import Tracks
 
 
-class Core:
-    def __init__(self):
-        self.color_range = Range_Handler().get_color_range()
-        self.tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
+color_range = Range_Handler().get_color_range()
+tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
 
-        self.saved_buildings = [
-            Building(front=[
-                (28, 91),
-                (136, 83),
-                (137, 312),
-                (82, 200),
-                (29, 316)],
-                     back=[
+saved_buildings = [
+    Building(front=[
+        (271, 213),
+        (294, 209),
+        (187, 109),
+        (59, 321),
+        (87, 160)
+        ],
+             back=[
 
-                     ],
-                     left=[
+             ],
+             left=[
 
-                     ],
-                     right=[
+             ],
+             right=[
 
-                     ],
-                     pick_up_vertical=Side.left_right
-            )
-        ]
+             ],
+             pick_up_vertical=Side.left_right
+    )
+]
 
-        self.img = "C:/Users/lars-/Downloads/test.jpeg"
+img = "C:/Users/lars-/Downloads/test.jpeg"
 
-        self.settings = Recognize_settings()
-        self.vision = Vision(color_range=self.color_range,
-                             saved_buildings=self.saved_buildings,
-                             settings=self.settings, max_block_size=35000, min_block_size=2000)
+settings = Recognize_settings()
+vision = Vision(color_range=color_range,
+                saved_buildings=saved_buildings,
+                settings=settings, max_block_size=35000, min_block_size=1000)
 
-        self.rotate_speed = 50
+rotate_speed = 50
 
-    def run(self):
-        if len(sys.argv) > 1:
-            if sys.argv[1] == "hsv_picker":
-                threading.Thread(target=self.vision.helpers.hsv_picker.run).start()
-            elif sys.argv[1] == "save":
-                threading.Thread(target=self.vision.saving.run).start()
-            else:
-                threading.Thread(target=self.vision.recognize.hsv_picker.run).start()
+
+def run(shared_object):
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "hsv_picker":
+            threading.Thread(target=vision.helpers.hsv_picker.run).start()
+        elif sys.argv[1] == "save":
+            threading.Thread(target=vision.saving.run).start()
         else:
-            threading.Thread(target=self.vision.helpers.hsv_picker.run).start()
+            threading.Thread(target=vision.recognize.run).start()
+    else:
+        threading.Thread(target=vision.saving.run).start()
 
 
-def main():
-    core = Core()
-    core.run()
-
-
-if __name__ == '__main__':
-    main()
-
+run("")
 
 
 #

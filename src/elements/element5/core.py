@@ -5,7 +5,7 @@ from entities.vision.recognize import Recognize, Block
 from entities.vision.helpers.vision_helper import Color
 
 
-def run():
+def run(shared_object):
     print("run element cup")
     detect_cup()
 

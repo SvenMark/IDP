@@ -1,8 +1,11 @@
 import sys
+import time
+
 sys.path.insert(0, '../../../src')
 
 from entities.vision.helpers.vision_helper import *
 from tkinter import *
+from threading import Thread
 
 
 class Saving(object):
@@ -46,7 +49,9 @@ class Saving(object):
                 self.show_input_fields()
 
             if self.save and 3 < len(self.positions) == self.save_length:
-                self.save_building(img4)
+                self.save_building(mask_cropped, self.positions)
+                for pos in range(len(self.positions)):
+                    print(self.positions[pos])
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
@@ -92,14 +97,14 @@ class Saving(object):
         mainloop()
         self.save = True
 
-    def save_building(self, img):
+    def save_building(self, img, positions):
         """
         Saves the current building with the given img
         :param img: The current frame
         """
-        for circle in range(len(self.positions)):
-            b = self.positions[circle]
-            cv2.circle(img, b, 2, (255, 255, 255), 5)
+
+        cv2.imshow('Spider Cam Result', img)
+        time.sleep(1)
 
         def confirmed():
             """
@@ -109,11 +114,12 @@ class Saving(object):
             print("saved ", self.building_to_save)
             master.destroy()
 
-            out = open("helpers/save.txt", "a")
+            out = open("save.txt", "w")
             out.write("{} = [\n".format(self.building_to_save))
 
             for block in range(len(self.positions)):
                 b = self.positions[block]
+                print(b)
                 if block == len(self.positions):
                     out.write("        ({}, {})\n".format(b[0], b[1]))
                 else:
@@ -127,7 +133,5 @@ class Saving(object):
         Button(master, text='OK', command=confirmed).grid(row=0, column=1, sticky=W)
         Button(master, text='Retry', command=master.destroy).grid(row=0, column=0, sticky=W)
         mainloop()
-
-        cv2.imshow('Spider Cam Result', img)
 
         self.last_positions = self.positions
