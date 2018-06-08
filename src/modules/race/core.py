@@ -8,8 +8,6 @@ def run(name, stop_motors, vertical_speed, horizontal_speed, dead_zone, speed_fa
     print("run " + str(name))
 
     while not shared_object.has_to_stop():
-        print("Doing calculations and stuff")
-
         movement.tracks.handle_controller_input(stop_motors=stop_motors,
                                                 vertical_speed=horizontal_speed * speed_factor,
                                                 horizontal_speed=vertical_speed * speed_factor,
