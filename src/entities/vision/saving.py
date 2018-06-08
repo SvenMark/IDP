@@ -37,6 +37,7 @@ class Saving(object):
             mask, dead_memes = self.helper.calculate_mask(img, self.color_range)
 
             img4, dead_memes = self.helper.crop_to_contours(mask, img)
+            # xd
 
             # Calculate new cropped masks
             mask_cropped, valid_contours = self.helper.calculate_mask(img4, self.color_range, set_contour=True)
