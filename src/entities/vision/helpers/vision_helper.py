@@ -182,7 +182,7 @@ class Helper:
         # Return the resized image
         return resized
 
-    def append_to_positions(self, positions, block, sensitivity, max_pos_len=6):
+    def append_to_positions(self, positions, block, sensitivity=5, max_pos_len=6):
         """
         Appends a unique block to the array
         :param sensitivity: Sensitivity to check, higher rejects more distance
