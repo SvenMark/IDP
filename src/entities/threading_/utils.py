@@ -7,7 +7,7 @@ class SharedObject(object):
 
     def __init__(self):
         self.stop = False
-        self.has_stopped = False
+        self.has_stopped = True
 
     # Get status
     def has_to_stop(self):

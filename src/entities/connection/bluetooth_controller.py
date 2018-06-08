@@ -129,7 +129,6 @@ class BluetoothController(object):
                 # Wait for it to stop ?
                 while not self.shared_object.has_stopped:
                     time.sleep(0.01)
-                    print(str(self.shared_object.has_stopped))
                 self.shared_object.has_stopped = False
 
                 # Run selected element
