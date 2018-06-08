@@ -205,7 +205,6 @@ class Legs(object):
             # If the controller is in the neutral position,
             # put the leg in the deploy position
             if 500 < y_axis < 530 and self.deployed:
-                print("Deploying")
                 self.deploy(200)
 
             # Run this if legs are deployed and ready
