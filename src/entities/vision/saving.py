@@ -98,9 +98,10 @@ class Saving(object):
     def save_building(self, img, positions):
         """
         Saves the current building with the given img
-        :param img: The current frame
+        :param img: The current frame                                                                                        s
         """
-        Thread(target=cv2.imshow, args=('Spider Cam Result', img)).start()
+        show_img = Thread(target=cv2.imshow('Spider Cam Result', img), args=(self, ))
+        show_img.start()
 
         for pos in range(len(positions)):
             print(positions[pos])
