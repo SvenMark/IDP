@@ -43,20 +43,18 @@ class Saving(object):
             mask_cropped, valid_contours = self.helper.calculate_mask(img4, self.color_range, set_contour=True)
 
             # Append the valid contours to the positions array
-            for cnt in range(len(valid_contours)):
-                print(valid_contours[cnt])
-                self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt], 5, self.save_length)
+            # for cnt in range(len(valid_contours)):
+            #     print(valid_contours[cnt])
+            #     self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt], 5, self.save_length)
 
-            print(len(self.positions))
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 self.show_input_fields()
 
-            print(len(self.positions))
-            if self.save and 3 < len(self.positions) == self.save_length:
+            if self.save and 3 < len(valid_contours) == self.save_length:
+                for cnt in range(len(valid_contours)):
+                    print(valid_contours[cnt])
                 cv2.imshow('Spider Cam Result', mask_cropped)
-                for pos in range(len(self.positions)):
-                    print(self.positions[pos])
-                self.save_building(mask_cropped, self.positions)
+                self.save_building(mask_cropped, valid_contours)
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
