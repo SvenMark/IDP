@@ -126,15 +126,13 @@ class BluetoothController(object):
 
             if e is 0 or e is 2:
                 if not self.manual_control:
-                    if self.threads_started:
-                        self.shared_object.stop = True
 
-                    if not self.threads_started:
-                        self.threads_started = True
+                    self.shared_object.stop = True
 
                     # Wait for it to stop ?
                     while not self.shared_object.has_stopped:
                         time.sleep(0.01)
+
                     self.manual_control = True
 
                 self.current_element = e
@@ -152,11 +150,13 @@ class BluetoothController(object):
 
             if e is not self.current_element and e is not 0 and e is not 2:
                 # If this is the first time it runs skip
-                if self.threads_started:
-                    self.shared_object.stop = True
+                self.shared_object.stop = True
 
-                if not self.threads_started:
-                    self.threads_started = True
+                # if self.threads_started:
+                #     self.shared_object.stop = True
+                #
+                # if not self.threads_started:
+                #     self.threads_started = True
 
                 # Wait for it to stop ?
                 while not self.shared_object.has_stopped:
