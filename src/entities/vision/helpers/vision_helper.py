@@ -182,7 +182,7 @@ class Helper:
         # Return the resized image
         return resized
 
-    def append_to_positions(self, positions, block, sensitivity):
+    def append_to_positions(self, positions, block, sensitivity, max_pos_len=6):
         """
         Appends a unique block to the array
         :param sensitivity: Sensitivity to check, higher rejects more distance
@@ -191,7 +191,7 @@ class Helper:
         """
 
         # If the POSITIONS length is getting too long clear it
-        if len(positions) >= 6:
+        if len(positions) >= max_pos_len:
             del positions[:]
         # If the POSITIONS array is empty append the block
         if len(positions) == 0:
