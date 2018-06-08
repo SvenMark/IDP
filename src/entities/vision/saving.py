@@ -50,6 +50,8 @@ class Saving(object):
 
             if self.save and 3 < len(self.positions) == self.save_length:
                 self.save_building(mask_cropped, self.positions)
+                for pos in range(len(self.positions)):
+                    print(self.positions[pos])
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
@@ -98,13 +100,10 @@ class Saving(object):
     def save_building(self, img, positions):
         """
         Saves the current building with the given img
-        :param img: The current frame                                                                                        s
+        :param img: The current frame
         """
-        show_img = Thread(target=cv2.imshow('Spider Cam Result', img), args=(self, ))
-        show_img.start()
 
-        for pos in range(len(positions)):
-            print(positions[pos])
+        cv2.imshow('Spider Cam Result', img)
         time.sleep(1)
 
         def confirmed():
