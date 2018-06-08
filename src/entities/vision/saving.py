@@ -100,6 +100,8 @@ class Saving(object):
         :param img: The current frame
         """
         cv2.imshow('Spider Cam Result', img)
+        for pos in range(len(positions)):
+            print(positions[pos])
         time.sleep(1)
 
         def confirmed():
