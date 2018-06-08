@@ -47,14 +47,13 @@ class Saving(object):
                 self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt])
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
-                for pos in range(len(self.positions)):
-                    print(self.positions[pos])
-                self.save_building(mask_cropped, self.positions)
+                self.show_input_fields()
 
             if self.save and 3 < len(self.positions) == self.save_length:
                 for pos in range(len(self.positions)):
                     print(self.positions[pos])
                 self.save_building(mask_cropped, self.positions)
+
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
