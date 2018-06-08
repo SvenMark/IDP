@@ -46,15 +46,15 @@ class BluetoothController(object):
             try:
                 data += str(sock.recv(1024))[2:][:-1]
 
-                if data is "":
-                    print("Closing socket")
-                    sock.close()
-                    while data is "":
-                        try:
-                            sock.connect((self.bluetooth_address, port))
-                            data += str(sock.recv(1024))[2:][:-1]
-                        except bluetooth.btcommon.BluetoothError:
-                            print("Cannot connect, attempting to reconnect")
+                # if data is "":
+                #     print("Closing socket")
+                #     sock.close()
+                #     while data is "":
+                #         try:
+                #             sock.connect((self.bluetooth_address, port))
+                #             data += str(sock.recv(1024))[2:][:-1]
+                #         except bluetooth.btcommon.BluetoothError:
+                #             print("Cannot connect, attempting to reconnect")
 
                 data_end = data.find('\\n')
                 if data_end != -1:
