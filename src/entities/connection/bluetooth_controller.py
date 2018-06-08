@@ -6,7 +6,8 @@ from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
-from modules import base_module, cannon, capture_flag, dance, line_dance, obstacle_course, race, transport_rebuild
+from modules import base_module, capture_flag, dance, entering_arena, line_dance, race, transport_rebuild
+# from modules import cannon, obstacle_course
 from entities.threading_.utils import SharedObject
 from entities.robot.robot import Robot
 
@@ -142,52 +143,37 @@ class BluetoothController(object):
         print("Running element " + str(element))
         if element is 1:
             name = 'Entree'
-            print(name)
-
             # starting thread
-            Thread(target=element1.run, args=(self.shared_object,)).start()
+            Thread(target=entering_arena.run(name), args=(self.shared_object,)).start()
+
+        if element is 2:
+            name = 'Race'
+            Thread(target=entering_arena.run(name), args=(self.shared_object,)).start()
 
         if element is 3:
             name = 'Dance'
-            print(name)
-
-            # starting thread
-            Thread(target=element3.run, args=(self.shared_object,)).start()
+            Thread(target=dance.run(name), args=(self.shared_object,)).start()
 
         if element is 4:
             name = 'Line Dance'
-            print(name)
-
-            # starting thread
-            Thread(target=element4.run, args=(self.shared_object,)).start()
+            Thread(target=line_dance.run(name), args=(self.shared_object,)).start()
 
         if element is 5:
             name = 'Obstacle course'
-            print(name)
-
-            # starting thread
-            # Thread(target=element5.run, args=(self.shared_object,)).start()
+            # Thread(target=element5.run(name), args=(self.shared_object,)).start()
 
         if element is 6:
             name = 'Cannon'
-            print(name)
-
-            # starting thread
             # Thread(target=element6.Element6.linedetection, args=(self.shared_object,)).start()
 
         if element is 7:
             name = 'Transport'
-            print(name)
-
-            # starting thread
-            # Thread(target=element7.run, args=(self.shared_object,)).start()
+            # Thread(target=element7.run(name), args=(self.shared_object,)).start()
 
         if element is 8:
             name = 'Capture the flag'
-            print(name)
-
             # starting thread
-            Thread(target=element8.run, args=(self.shared_object,)).start()
+            Thread(target=capture_flag.run(name), args=(self.shared_object,)).start()
 
 
 def main():
