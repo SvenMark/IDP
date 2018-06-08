@@ -39,7 +39,6 @@ class Speak(Audio):
         self.play(filename)
 
 
-
 def main():
     sp = Speak()
     sp.play("gay.mp3")

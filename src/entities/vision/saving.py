@@ -1,10 +1,11 @@
 import sys
-from datetime import time
+import time
 
 sys.path.insert(0, '../../../src')
 
 from entities.vision.helpers.vision_helper import *
 from tkinter import *
+from threading import Thread
 
 
 class Saving(object):
@@ -49,6 +50,8 @@ class Saving(object):
 
             if self.save and 3 < len(self.positions) == self.save_length:
                 self.save_building(mask_cropped, self.positions)
+                for pos in range(len(self.positions)):
+                    print(self.positions[pos])
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
@@ -99,11 +102,9 @@ class Saving(object):
         Saves the current building with the given img
         :param img: The current frame
         """
-        for circle in range(len(positions)):
-            b = positions[circle]
-            cv2.circle(img, b, 2, (255, 255, 255), 5)
 
         cv2.imshow('Spider Cam Result', img)
+        time.sleep(1)
 
         def confirmed():
             """
@@ -118,6 +119,7 @@ class Saving(object):
 
             for block in range(len(self.positions)):
                 b = self.positions[block]
+                print(b)
                 if block == len(self.positions):
                     out.write("        ({}, {})\n".format(b[0], b[1]))
                 else:
