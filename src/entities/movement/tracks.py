@@ -160,9 +160,6 @@ class Tracks(object):
         :param dead_zone: Variable that determines the size of the dead zone
         :return: None
         """
-
-        print("Getting controller input")
-
         if stop_motors == 1:
             self.stop()
         elif stop_motors == 0:
