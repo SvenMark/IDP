@@ -85,7 +85,7 @@ class BluetoothController(object):
         :param data: A data string
         :return: None
         """
-        # print(data)
+        print(data)
         # Index for button to stop motors
         s_index = data.find('s')
         # Index for vertical movement of motors
@@ -149,8 +149,7 @@ class BluetoothController(object):
                 self.run_module(e)
 
         except ValueError or IndexError:
-            temp = 0
-            # print("Invalid value in package")
+            print("Invalid value in package")
 
     def run_module(self, element):
         if element is 1:
