@@ -1,5 +1,6 @@
 import sys
 import time
+import datetime
 
 sys.path.insert(0, '../../../src')
 
@@ -51,9 +52,9 @@ class Saving(object):
                 self.show_input_fields()
 
             if self.save and 3 < len(valid_contours) == self.save_length:
+                print("--------{}-------".format(datetime.datetime.now().time()))
                 for cnt in range(len(valid_contours)):
                     print(valid_contours[cnt])
-                cv2.imshow('Spider Cam Result', mask_cropped)
                 self.save_building(mask_cropped, valid_contours)
 
             # Show the created image
