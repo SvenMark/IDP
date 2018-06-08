@@ -13,6 +13,7 @@ RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
 
 def main():
     bluetooth_address = "98:D3:31:FD:15:C1"
+    name = 'Boris'
 
     limbs = [
             Legs(leg_0_servos=[
@@ -46,7 +47,7 @@ def main():
 
     lights = []
 
-    bluetooth_controller = BluetoothController(limbs, lights, bluetooth_address)
+    bluetooth_controller = BluetoothController(name, limbs, lights, bluetooth_address)
 
     while True:
         bluetooth_controller.receive_data()

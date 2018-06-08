@@ -7,8 +7,10 @@ from threading import Thread
 sys.path.insert(0, '../../../src')
 
 from modules import base_module, capture_flag, dance, entering_arena, line_dance, race, transport_rebuild, cannon, obstacle_course
-from entities.threading_.utils import SharedObject
+from entities.threading.utils import SharedObject
 from entities.robot.robot import Robot
+from entities.movement.movement import Movement
+from entities.vision.vision import Vision
 
 
 class BluetoothController(object):
@@ -16,21 +18,28 @@ class BluetoothController(object):
     Base class for the bluetooth smart controller
     """
 
-    def __init__(self, limbs, lights, bluetooth_address):
+    def __init__(self, name, limbs, lights, bluetooth_address):
         """
         Constructor for the bluetooth controller class
         :param limbs: Array of robot limbs
         """
         self.bluetooth_address = bluetooth_address
+        self.name = name
         self.limbs = limbs
         self.lights = lights
-        self.legs = limbs[0]
-        self.tracks = limbs[1]
+
+        self.movement = Movement(limbs, lights)
+        self.vision = Vision(color_range=[1, 2],
+                             saved_buildings=None,
+                             img=None,
+                             min_block_size=1000,
+                             max_block_size=10000,
+                             settings=None)
 
         self.current_element = 0
         self.shared_object = SharedObject()
 
-        self.legs.update_thread.start()
+        self.movement.legs.update_thread.start()
 
     def receive_data(self):
         """
@@ -66,7 +75,7 @@ class BluetoothController(object):
             except KeyboardInterrupt:
                 break
 
-        self.tracks.clean_up()
+        self.movement.tracks.clean_up()
         sock.close()
 
     def handle_data(self, data):
@@ -115,15 +124,15 @@ class BluetoothController(object):
                 self.current_element = 0
 
                 # Send data to tracks class
-                self.tracks.handle_controller_input(stop_motors=s,
-                                                    vertical_speed=h * speed_factor,
-                                                    horizontal_speed=v * speed_factor,
-                                                    dead_zone=5)
+                self.movement.tracks.handle_controller_input(stop_motors=s,
+                                                             vertical_speed=h * speed_factor,
+                                                             horizontal_speed=v * speed_factor,
+                                                             dead_zone=5)
 
                 # Send the data to legs class
-                self.legs.handle_controller_input(deploy=d,
-                                                  x_axis=x,
-                                                  y_axis=y)
+                self.movement.legs.handle_controller_input(deploy=d,
+                                                           x_axis=x,
+                                                           y_axis=y)
 
             if e is not self.current_element and e is not 0:
                 # Stopping the current element
