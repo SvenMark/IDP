@@ -5,6 +5,7 @@ sys.path.insert(0, '../../../src')
 
 from entities.vision.helpers.vision_helper import *
 from tkinter import *
+from threading import Thread
 
 
 class Saving(object):
@@ -99,7 +100,8 @@ class Saving(object):
         Saves the current building with the given img
         :param img: The current frame
         """
-        cv2.imshow('Spider Cam Result', img)
+        Thread(target=cv2.imshow, args=('Spider Cam Result', img)).start()
+
         for pos in range(len(positions)):
             print(positions[pos])
         time.sleep(1)
