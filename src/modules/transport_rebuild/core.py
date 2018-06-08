@@ -64,9 +64,6 @@ def run(name, shared_object):
     # Notify shared object that this thread has been stopped
     shared_object.has_been_stopped()
 
-run("")
-
-
 #
 # # TESTING
 # tracks = Tracks(track_0_pin=18,
