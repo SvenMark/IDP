@@ -6,9 +6,7 @@ from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
-from elements import element1, element3, element4, element8
-# element5, element6, element7,
-# element9, element10
+from modules import base_module, cannon, capture_flag, dance, line_dance, obstacle_course, race, transport_rebuild
 from entities.threading_.utils import SharedObject
 from entities.robot.robot import Robot
 
