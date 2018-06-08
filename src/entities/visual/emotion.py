@@ -17,6 +17,9 @@ class Emotion(object):
         self.spi_device = 0
         self.pixels = Adafruit_WS2801.WS2801Pixels(self.pixel_count, spi=SPI.SpiDev(self.spi_port, self.spi_device),
                                                    gpio=GPIO)
+        self.pixels.clear()
+        self.pixels.show()  # Make sure to call show() after changing any pixels!
+
 
     def neutral(self):
         raise NotImplementedError
@@ -49,6 +52,18 @@ class Emotion(object):
             pos -= 170
             return Adafruit_WS2801.RGB_to_color(0, pos * 3, 255 - pos * 3)
 
+    def brightness_decrease(self, wait=0.01, step=1):
+        for j in range(int(256 // step)):
+            for i in range(self.pixels.count()):
+                r, g, b = self.pixels.get_pixel_rgb(i)
+                r = int(max(0, r - step))
+                g = int(max(0, g - step))
+                b = int(max(0, b - step))
+                self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
+            self.pixels.show()
+            if wait > 0:
+                time.sleep(wait)
+
     def rainbow_cycle(self, wait=0.005):
         for j in range(256):  # one cycle of all 256 colors in the wheel
             for i in range(self.pixels.count()):
@@ -60,4 +75,4 @@ class Emotion(object):
 
 if __name__ == '__main__':
     emotion = Emotion()
-    emotion.sad()
+    emotion.success()
