@@ -37,6 +37,8 @@ class BluetoothController(object):
                              settings=None)
 
         self.current_element = 0
+
+        self.threads_started = False
         self.shared_object = SharedObject()
 
         self.movement.legs.update_thread.start()
@@ -136,8 +138,12 @@ class BluetoothController(object):
                                                            y_axis=y)
 
             if e is not self.current_element and e is not 0 and e is not 2:
-                # Stopping the current element
-                self.shared_object.stop = True
+                # If this is the first time it runs skip
+                if self.threads_started:
+                    self.shared_object.stop = True
+
+                if not self.threads_started:
+                    self.threads_started = True
 
                 # Wait for it to stop ?
                 while not self.shared_object.has_stopped:
