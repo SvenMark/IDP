@@ -38,7 +38,8 @@ class Emotion(object):
         raise NotImplementedError
 
     # Define wheel function to interpolate between different hues.
-    def wheel(self, pos):
+    @staticmethod
+    def wheel(pos):
         if pos < 85:
             return Adafruit_WS2801.RGB_to_color(pos * 3, 255 - pos * 3, 0)
         elif pos < 170:
