@@ -17,7 +17,7 @@ chatbot = ChatBot(
 # chatbot.train("chatterbot.corpus.english")
 
 
-class Microphone_recognition:
+class MicrophoneRecognition:
 
     def __init__(self):
         self.result = "Hello"
