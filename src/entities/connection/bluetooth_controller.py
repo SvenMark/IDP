@@ -39,6 +39,7 @@ class BluetoothController(object):
         self.current_element = 0
 
         self.threads_started = False
+        self.manual_control = True
         self.shared_object = SharedObject()
 
         self.movement.legs.update_thread.start()
@@ -123,7 +124,22 @@ class BluetoothController(object):
             if e is 0:
                 speed_factor = 0.75
 
-            if e is 0:
+            if e is 0 or e is 2:
+                if not self.manual_control:
+                    if self.threads_started:
+                        self.shared_object.stop = True
+
+                    if not self.threads_started:
+                        self.threads_started = True
+
+                    # Wait for it to stop ?
+                    while not self.shared_object.has_stopped:
+                        time.sleep(0.01)
+
+                    self.shared_object.has_stopped = False
+                    self.shared_object.stop = False
+                    self.manual_control = True
+
                 self.current_element = e
 
                 # Send data to tracks class
@@ -137,7 +153,7 @@ class BluetoothController(object):
                                                            x_axis=x,
                                                            y_axis=y)
 
-            if e is not self.current_element:
+            if e is not self.current_element and e is not 0 and e is not 2:
                 # If this is the first time it runs skip
                 if self.threads_started:
                     self.shared_object.stop = True
@@ -151,24 +167,21 @@ class BluetoothController(object):
 
                 self.shared_object.has_stopped = False
                 self.shared_object.stop = False
+                self.manual_control = False
 
                 # Run selected element
                 self.current_element = e
-                self.run_module(e, s, h, v, d, x, y, speed_factor)
+                self.run_module(e)
 
         except ValueError or IndexError:
             do_nothing = 0
             #print("Invalid value in package")
 
-    def run_module(self, element, s, h, v, d, x, y, speed_factor):
+    def run_module(self, element):
         if element is 1:
             name = 'Entree'
             # starting thread
             Thread(target=entering_arena.run, args=(name, self.shared_object,)).start()
-
-        if element is 2:
-            name = 'Race'
-            Thread(target=race.run, args=(name, s, v, h, 5, speed_factor, self.movement, self.shared_object,)).start()
 
         if element is 3:
             name = 'Dance'
