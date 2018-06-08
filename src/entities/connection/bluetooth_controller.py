@@ -123,21 +123,21 @@ class BluetoothController(object):
             if e is 0:
                 speed_factor = 0.75
 
-            if e is 0 or e is 2:
-                self.current_element = e
+            # if e is 0 or e is 2:
+            #     self.current_element = e
+            #
+            #     # Send data to tracks class
+            #     self.movement.tracks.handle_controller_input(stop_motors=s,
+            #                                                  vertical_speed=h * speed_factor,
+            #                                                  horizontal_speed=v * speed_factor,
+            #                                                  dead_zone=5)
+            #
+            #     # Send the data to legs class
+            #     self.movement.legs.handle_controller_input(deploy=d,
+            #                                                x_axis=x,
+            #                                                y_axis=y)
 
-                # Send data to tracks class
-                self.movement.tracks.handle_controller_input(stop_motors=s,
-                                                             vertical_speed=h * speed_factor,
-                                                             horizontal_speed=v * speed_factor,
-                                                             dead_zone=5)
-
-                # Send the data to legs class
-                self.movement.legs.handle_controller_input(deploy=d,
-                                                           x_axis=x,
-                                                           y_axis=y)
-
-            if e is not self.current_element and e is not 0 and e is not 2:
+            if e is not self.current_element:
                 # If this is the first time it runs skip
                 if self.threads_started:
                     self.shared_object.stop = True
@@ -154,13 +154,25 @@ class BluetoothController(object):
 
                 # Run selected element
                 self.current_element = e
-                self.run_module(e)
+                self.run_module(e, s, h, v, d, x, y, speed_factor)
 
         except ValueError or IndexError:
             do_nothing = 0
             #print("Invalid value in package")
 
-    def run_module(self, element):
+    def run_module(self, element, s, h, v, d, x, y, speed_factor):
+        if element is 0:
+            # Send data to tracks class
+            self.movement.tracks.handle_controller_input(stop_motors=s,
+                                                         vertical_speed=h * speed_factor,
+                                                         horizontal_speed=v * speed_factor,
+                                                         dead_zone=5)
+
+            # Send the data to legs class
+            self.movement.legs.handle_controller_input(deploy=d,
+                                                       x_axis=x,
+                                                       y_axis=y)
+
         if element is 1:
             name = 'Entree'
             # starting thread
