@@ -44,19 +44,19 @@ vision = Vision(color_range=color_range,
 rotate_speed = 50
 
 
-def run(self, shared_object):
+def run(shared_object):
     if len(sys.argv) > 1:
         if sys.argv[1] == "hsv_picker":
-            threading.Thread(target=self.vision.helpers.hsv_picker.run).start()
+            threading.Thread(target=vision.helpers.hsv_picker.run).start()
         elif sys.argv[1] == "save":
-            threading.Thread(target=self.vision.saving.run).start()
+            threading.Thread(target=vision.saving.run).start()
         else:
-            threading.Thread(target=self.vision.recognize.run).start()
+            threading.Thread(target=vision.recognize.run).start()
     else:
-        threading.Thread(target=self.vision.recognize.run).start()
+        threading.Thread(target=vision.recognize.run).start()
 
 
-run()
+run("")
 
 
 #
