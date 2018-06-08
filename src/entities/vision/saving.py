@@ -32,7 +32,6 @@ class Saving(object):
             ret, img = cap.read()
 
             # Apply gaussian blue to the image
-            img = cv2.GaussianBlur(img, (9, 9), 0)
 
             # Calculate the masks
             mask, dead_memes = self.helper.calculate_mask(img, self.color_range)
