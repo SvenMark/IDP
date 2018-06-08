@@ -50,10 +50,11 @@ class Saving(object):
                 self.show_input_fields()
 
             if self.save and 3 < len(self.positions) == self.save_length:
+                c = cv2.moments(mask_cropped)
+                cv2.imshow('Spider Cam Result', c)
                 for pos in range(len(self.positions)):
                     print(self.positions[pos])
                 self.save_building(mask_cropped, self.positions)
-
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
@@ -105,7 +106,6 @@ class Saving(object):
         :param img: The current frame
         """
 
-        cv2.imshow('Spider Cam Result', img)
         time.sleep(1)
 
         def confirmed():
