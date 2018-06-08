@@ -4,7 +4,7 @@ import time
 sys.path.insert(0, '../../../src')
 
 
-def run(name, shared_object, movement):
+def run(name, movement, shared_object):
     print("run " + str(name))
 
     legs = movement.limbs[0]

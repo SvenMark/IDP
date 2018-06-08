@@ -123,19 +123,19 @@ class BluetoothController(object):
             if e is 0:
                 speed_factor = 0.75
 
-            # if e is 0 or e is 2:
-            #     self.current_element = e
-            #
-            #     # Send data to tracks class
-            #     self.movement.tracks.handle_controller_input(stop_motors=s,
-            #                                                  vertical_speed=h * speed_factor,
-            #                                                  horizontal_speed=v * speed_factor,
-            #                                                  dead_zone=5)
-            #
-            #     # Send the data to legs class
-            #     self.movement.legs.handle_controller_input(deploy=d,
-            #                                                x_axis=x,
-            #                                                y_axis=y)
+            if e is 0:
+                self.current_element = e
+
+                # Send data to tracks class
+                self.movement.tracks.handle_controller_input(stop_motors=s,
+                                                             vertical_speed=h * speed_factor,
+                                                             horizontal_speed=v * speed_factor,
+                                                             dead_zone=5)
+
+                # Send the data to legs class
+                self.movement.legs.handle_controller_input(deploy=d,
+                                                           x_axis=x,
+                                                           y_axis=y)
 
             if e is not self.current_element:
                 # If this is the first time it runs skip
@@ -161,26 +161,18 @@ class BluetoothController(object):
             #print("Invalid value in package")
 
     def run_module(self, element, s, h, v, d, x, y, speed_factor):
-        if element is 0:
-            # Send data to tracks class
-            self.movement.tracks.handle_controller_input(stop_motors=s,
-                                                         vertical_speed=h * speed_factor,
-                                                         horizontal_speed=v * speed_factor,
-                                                         dead_zone=5)
-
-            # Send the data to legs class
-            self.movement.legs.handle_controller_input(deploy=d,
-                                                       x_axis=x,
-                                                       y_axis=y)
-
         if element is 1:
             name = 'Entree'
             # starting thread
             Thread(target=entering_arena.run, args=(name, self.shared_object,)).start()
 
+        if element is 2:
+            name = 'Race'
+            Thread(target=race.run, args=(name, s, v, h, 5, speed_factor, self.movement, self.shared_object,)).start()
+
         if element is 3:
             name = 'Dance'
-            Thread(target=dance.run, args=(name, self.shared_object, self.movement,)).start()
+            Thread(target=dance.run, args=(name, self.movement, self.shared_object,)).start()
 
         if element is 4:
             name = 'Line Dance'
