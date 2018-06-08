@@ -49,6 +49,7 @@ class Saving(object):
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 self.show_input_fields()
 
+            print(len(self.positions))
             if self.save and 3 < len(self.positions) == self.save_length:
                 cv2.imshow('Spider Cam Result', mask_cropped)
                 for pos in range(len(self.positions)):
