@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, '../../../src')
 
 from entities.vision.recognize import Recognize, Block
-from entities.vision.helpers import Color
+from entities.vision.helpers.vision_helper import Color
 
 
 def run(shared_object):
