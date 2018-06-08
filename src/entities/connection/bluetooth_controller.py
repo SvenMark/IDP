@@ -122,7 +122,7 @@ class BluetoothController(object):
                 speed_factor = 0.75
 
             if e is 0 or e is 2:
-                self.current_element = 0
+                self.current_element = e
 
                 # Send data to tracks class
                 self.movement.tracks.handle_controller_input(stop_motors=s,
@@ -135,7 +135,7 @@ class BluetoothController(object):
                                                            x_axis=x,
                                                            y_axis=y)
 
-            if e is not self.current_element and e is not 0:
+            if e is not self.current_element and e is not 0 and e is not 2:
                 # Stopping the current element
                 self.shared_object.stop = True
 
@@ -146,22 +146,17 @@ class BluetoothController(object):
 
                 # Run selected element
                 self.current_element = e
-                self.run_element(e)
+                self.run_module(e)
 
         except ValueError or IndexError:
             temp = 0
             # print("Invalid value in package")
 
-    def run_element(self, element):
-        print("Running element " + str(element))
+    def run_module(self, element):
         if element is 1:
             name = 'Entree'
             # starting thread
             Thread(target=entering_arena.run, args=(name, self.shared_object,)).start()
-
-        if element is 2:
-            name = 'Race'
-            # Thread(target=entering_arena.run, args=(name, self.shared_object,)).start()
 
         if element is 3:
             name = 'Dance'

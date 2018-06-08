@@ -10,7 +10,7 @@ import cv2
 
 
 def run(name, shared_object):
-    print("run" + str(name))
+    print("run " + str(name))
     # line_detection()
 
     while not shared_object.has_to_stop():
