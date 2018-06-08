@@ -85,7 +85,7 @@ class BluetoothController(object):
         :param data: A data string
         :return: None
         """
-        print(data)
+        # print(data)
         # Index for button to stop motors
         s_index = data.find('s')
         # Index for vertical movement of motors
