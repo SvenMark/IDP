@@ -6,8 +6,7 @@ from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
-from modules import base_module, capture_flag, dance, entering_arena, line_dance, race, transport_rebuild
-# from modules import cannon, obstacle_course
+from modules import base_module, capture_flag, dance, entering_arena, line_dance, race, transport_rebuild, cannon, obstacle_course
 from entities.threading_.utils import SharedObject
 from entities.robot.robot import Robot
 
@@ -116,11 +115,15 @@ class BluetoothController(object):
                 self.current_element = 0
 
                 # Send data to tracks class
-                self.tracks.handle_controller_input(stop_motors=s, vertical_speed=h * speed_factor,
-                                                    horizontal_speed=v * speed_factor, dead_zone=5)
+                self.tracks.handle_controller_input(stop_motors=s,
+                                                    vertical_speed=h * speed_factor,
+                                                    horizontal_speed=v * speed_factor,
+                                                    dead_zone=5)
 
                 # Send the data to legs class
-                self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
+                self.legs.handle_controller_input(deploy=d,
+                                                  x_axis=x,
+                                                  y_axis=y)
 
             if e is not self.current_element and e is not 0:
                 # Stopping the current element
@@ -144,36 +147,36 @@ class BluetoothController(object):
         if element is 1:
             name = 'Entree'
             # starting thread
-            Thread(target=entering_arena.run(name), args=(self.shared_object,)).start()
+            Thread(target=entering_arena.run(name, self.shared_object), args=(self.shared_object,)).start()
 
         if element is 2:
             name = 'Race'
-            Thread(target=entering_arena.run(name), args=(self.shared_object,)).start()
+            # Thread(target=entering_arena.run(name, self.shared_object), args=(self.shared_object,)).start()
 
         if element is 3:
             name = 'Dance'
-            Thread(target=dance.run(name), args=(self.shared_object,)).start()
+            Thread(target=dance.run(name, self.shared_object), args=(self.shared_object,)).start()
 
         if element is 4:
             name = 'Line Dance'
-            Thread(target=line_dance.run(name), args=(self.shared_object,)).start()
+            Thread(target=line_dance.run(name, self.shared_object), args=(self.shared_object,)).start()
 
         if element is 5:
             name = 'Obstacle course'
-            # Thread(target=element5.run(name), args=(self.shared_object,)).start()
+            Thread(target=obstacle_course.run(name, self.shared_object), args=(self.shared_object,)).start()
 
         if element is 6:
             name = 'Cannon'
-            # Thread(target=element6.Element6.linedetection, args=(self.shared_object,)).start()
+            Thread(target=cannon.run(name, self.shared_object), args=(self.shared_object,)).start()
 
         if element is 7:
             name = 'Transport'
-            # Thread(target=element7.run(name), args=(self.shared_object,)).start()
+            Thread(target=transport_rebuild.run(name, self.shared_object), args=(self.shared_object,)).start()
 
         if element is 8:
             name = 'Capture the flag'
             # starting thread
-            Thread(target=capture_flag.run(name), args=(self.shared_object,)).start()
+            Thread(target=capture_flag.run(name, self.shared_object), args=(self.shared_object,)).start()
 
 
 def main():

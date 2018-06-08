@@ -9,7 +9,7 @@ from entities.vision.helpers.vision_helper import Color
 
 def run(name, shared_object):
     print("run" + str(name))
-    detect_cup()
+    # detect_cup()
 
     while not shared_object.has_to_stop():
         print("Doing calculations and stuff")

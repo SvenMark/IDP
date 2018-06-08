@@ -11,10 +11,17 @@ import cv2
 
 def run(name, shared_object):
     print("run" + str(name))
-    linedetection()
+    # line_detection()
+
+    while not shared_object.has_to_stop():
+        print("Doing calculations and stuff")
+        time.sleep(0.5)
+
+    # Notify shared object that this thread has been stopped
+    shared_object.has_been_stopped()
 
 
-def linedetection():
+def line_detection():
     cap = WebcamVideoStream(src=0).start()
     time.sleep(1)  # startup
 
@@ -31,8 +38,8 @@ def linedetection():
 
     while True:
         img = cap.read()
-        imgCropped = setregion(img, np.array([vertices], np.int32))
-        blur = cv2.GaussianBlur(imgCropped, (9, 9), 0)
+        img_cropped = set_region(img, np.array([vertices], np.int32))
+        blur = cv2.GaussianBlur(img_cropped, (9, 9), 0)
 
         # Hsv Mask
         hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
@@ -41,7 +48,7 @@ def linedetection():
         mask = cv2.inRange(hsv, low_black, high_black)
 
         # Red detection
-        if detectred(img, hsv):
+        if detect_red(img, hsv):
             print("red detected (possible sleep)")
             # time.sleep(10)
 
@@ -55,20 +62,20 @@ def linedetection():
                                 min_line_length, max_line_gap)
 
         # Draw lines
-        linecolor = (255, 0, 0)
-        imgClone = img.copy()
+        line_color = (255, 0, 0)
+        img_clone = img.copy()
 
         if lines is not None:
             for line in lines:
                 for x1, y1, x2, y2 in line:
                     p1 = Point(x1, y1)
                     p2 = Point(x2, y2)
-                    cv2.line(imgClone, (p1.x, p1.y), (p2.x, p2.y), linecolor, 5)
-            left, right = averagedistance(lines, width)
+                    cv2.line(img_clone, (p1.x, p1.y), (p2.x, p2.y), line_color, 5)
+            left, right = average_distance(lines, width)
             print("Percentage left: " + str(round(left)) + "%")
             print("Percentage right: " + str(round(right)) + "%")
 
-        cv2.imshow('camservice-lijn', imgClone)
+        cv2.imshow('camservice-lijn', img_clone)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -77,7 +84,7 @@ def linedetection():
     cv2.destroyAllWindows()
 
 
-def setregion(img, vertices):       # Region for search
+def set_region(img, vertices):       # Region for search
     mask = np.zeros_like(img)
     channel_count = img.shape[2]
     match_mask_color = (255,) * channel_count
@@ -100,7 +107,7 @@ def midpoint(p1, p2):
     return midp
 
 
-def averagedistance(lines, width):
+def average_distance(lines, width):
     count = 0
     totaldr = 0  # Total distance to right
     totaldl = 0  # Total distance to left
@@ -114,13 +121,13 @@ def averagedistance(lines, width):
             count += 1
 
     # Average to sides (x-as)
-    percentageleft = Decimal((Decimal(Decimal(totaldl) / Decimal(count)) / Decimal(width)) * Decimal(100))
-    percentageright = Decimal((Decimal(Decimal(totaldr) / Decimal(count)) / Decimal(width)) * Decimal(100))
+    percentage_left = Decimal((Decimal(Decimal(totaldl) / Decimal(count)) / Decimal(width)) * Decimal(100))
+    percentage_right = Decimal((Decimal(Decimal(totaldr) / Decimal(count)) / Decimal(width)) * Decimal(100))
 
-    return percentageleft, percentageright
+    return percentage_left, percentage_right
 
 
-def detectred(img, hsv):
+def detect_red(img, hsv):
     red = Color([170, 100, 100], [190, 255, 255])
     mask = cv2.inRange(hsv, red.lower, red.upper)
     red = cv2.bitwise_and(img, img, mask=mask)
