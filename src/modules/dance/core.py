@@ -16,4 +16,5 @@ def run(name, shared_object, movement):
         tracks.turn_right(100, 100, 0, 10)
 
     # Notify shared object that this thread has been stopped
+    print("Stopped" + str(name))
     shared_object.has_been_stopped()
