@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, '../../../src')
 
 from entities.vision.recognize import Recognize, Block
-from entities.vision.helpers import Color
+from entities.vision.helpers.vision_helper import Color
 
 
 def run():
@@ -31,6 +31,7 @@ def detect_cup():
         QueryImg = cv2.cvtColor(QueryImgBGR, cv2.COLOR_BGR2GRAY)
         queryKP, queryDesc = detector.detectAndCompute(QueryImg, None)
         matches = flann.knnMatch(queryDesc, trainDesc, k=2)
+        cv2.imshow("Points", cv2.drawKeypoints(QueryImgBGR, queryKP, None))
 
         goodMatch = []
         for m, n in matches:
