@@ -9,7 +9,6 @@ sys.path.insert(0, '../../../src')
 from modules import base_module, capture_flag, dance, entering_arena, line_dance, race, \
     transport_rebuild, cannon, obstacle_course
 from entities.threading.utils import SharedObject
-from entities.robot.robot import Robot
 from entities.movement.movement import Movement
 from entities.vision.vision import Vision
 
@@ -159,7 +158,7 @@ class BluetoothController(object):
 
         if element is 3:
             name = 'Dance'
-            Thread(target=dance.run, args=(name, self.shared_object,)).start()
+            Thread(target=dance.run, args=(name, self.shared_object, self.movement,)).start()
 
         if element is 4:
             name = 'Line Dance'
