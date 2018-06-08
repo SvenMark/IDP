@@ -1,5 +1,6 @@
 import sys
 import threading
+import time
 
 sys.path.insert(0, '../../../src')
 
@@ -44,7 +45,8 @@ vision = Vision(color_range=color_range,
 rotate_speed = 50
 
 
-def run(shared_object):
+def run(name, shared_object):
+    print("run" + str(name))
     if len(sys.argv) > 1:
         if sys.argv[1] == "hsv_picker":
             threading.Thread(target=vision.helpers.hsv_picker.run).start()
@@ -55,6 +57,12 @@ def run(shared_object):
     else:
         threading.Thread(target=vision.saving.run).start()
 
+    while not shared_object.has_to_stop():
+        print("Doing calculations and stuff")
+        time.sleep(0.5)
+
+    # Notify shared object that this thread has been stopped
+    shared_object.has_been_stopped()
 
 run("")
 

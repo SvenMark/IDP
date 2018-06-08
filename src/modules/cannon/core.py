@@ -11,8 +11,8 @@ import cv2
 
 class Element6(object):
     @staticmethod
-    def linedetection(shared_object):
-        print("run element6")
+    def linedetection(name, shared_object):
+        print("run" + str(name))
         cap = WebcamVideoStream(src=0).start()
         time.sleep(1)  # startup
 

@@ -4,8 +4,8 @@ import time
 sys.path.insert(0, '../../../src')
 
 
-def run(shared_object):
-    print("run element3")
+def run(name, shared_object):
+    print("run" + str(name))
 
     while not shared_object.has_to_stop():
         print("Doing calculations and stuff")
