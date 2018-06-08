@@ -2,6 +2,7 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
+
 class SharedObject(object):
 
     def __init__(self):

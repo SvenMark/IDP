@@ -31,7 +31,7 @@ class BluetoothController(object):
         self.current_element = 0
         self.shared_object = SharedObject()
 
-        # self.legs.update_thread.start()
+        self.legs.update_thread.start()
 
     def receive_data(self):
         """
@@ -76,7 +76,7 @@ class BluetoothController(object):
         :param data: A data string
         :return: None
         """
-        print(data)
+        # print(data)
         # Index for button to stop motors
         s_index = data.find('s')
         # Index for vertical movement of motors
@@ -129,6 +129,7 @@ class BluetoothController(object):
                 # Wait for it to stop ?
                 while not self.shared_object.has_stopped:
                     time.sleep(0.01)
+                    print("Stuck")
                 self.shared_object.has_stopped = False
 
                 # Run selected element
