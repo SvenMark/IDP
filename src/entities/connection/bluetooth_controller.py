@@ -6,11 +6,11 @@ from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
-from elements import element1, element2, element3, element4, element8
+from elements import element1, element3, element4, element8
 # element5, element6, element7,
 # element9, element10
 from entities.threading_.utils import SharedObject
-# from entities.robot.robot import Robot
+from entities.robot.robot import Robot
 
 
 class BluetoothController(object):
@@ -18,13 +18,14 @@ class BluetoothController(object):
     Base class for the bluetooth smart controller
     """
 
-    def __init__(self, limbs, bluetooth_address):
+    def __init__(self, limbs, lights, bluetooth_address):
         """
         Constructor for the bluetooth controller class
         :param limbs: Array of robot limbs
         """
         self.bluetooth_address = bluetooth_address
         self.limbs = limbs
+        self.lights = lights
         self.legs = limbs[0]
         self.tracks = limbs[1]
 
@@ -147,13 +148,6 @@ class BluetoothController(object):
 
             # starting thread
             Thread(target=element1.run, args=(self.shared_object,)).start()
-
-        if element is 2:
-            name = 'Race'
-            print(name)
-
-            # starting thread
-            Thread(target=element2.run, args=(self.shared_object,)).start()
 
         if element is 3:
             name = 'Dance'
