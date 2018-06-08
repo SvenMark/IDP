@@ -46,6 +46,7 @@ class Saving(object):
             for cnt in range(len(valid_contours)):
                 self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt], 5, self.save_length)
 
+            print(len(self.positions))
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 self.show_input_fields()
 
