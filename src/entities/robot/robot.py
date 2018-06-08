@@ -3,7 +3,7 @@ import sys
 sys.path.insert(0, '../../../src')
 
 from entities.movement.movement import Movement
-from entities.connection.bluetooth_controller import BluetoothController
+from entities.vision.vision import Vision
 
 
 class Robot(object):
@@ -11,7 +11,7 @@ class Robot(object):
     Robot class
     """
 
-    def __init__(self, name, limbs, lights, bluetooth_address):
+    def __init__(self, name, limbs, lights, color_range):
         """
         Constructor for the robot class
         :param name: Name for the robot
@@ -22,7 +22,12 @@ class Robot(object):
         self.limbs = limbs
         self.lights = lights
         self.movement = Movement(limbs, lights)
-        self.controller = BluetoothController(limbs, bluetooth_address)
+        self.vision = Vision(color_range,
+                             saved_buildings=None,
+                             img=None,
+                             min_block_size=1000,
+                             max_block_size=10000,
+                             settings=None)
 
     @property
     def get_name(self):

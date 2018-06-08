@@ -28,8 +28,6 @@ legs = Legs(leg_0_servos=[
 #            ]
             )
 
-# legs.deploy(150)
-forward(legs, [200, 200, 200], 10)
-wave(legs, [150, 150, 150], 10)
-dab(legs, [140, 140, 140])
-legs.retract(90)
+
+legs.run_sequence([120, 120, 120], self_update=True, sequences=None, sequence=hood_handshake)
+
