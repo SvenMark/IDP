@@ -124,6 +124,16 @@ class BluetoothController(object):
                 speed_factor = 0.75
 
             if e is 0 or e is 2:
+                if self.threads_started:
+                    self.shared_object.stop = True
+
+                if not self.threads_started:
+                    self.threads_started = True
+
+                while not self.shared_object.has_stopped:
+                    time.sleep(0.01)
+                self.shared_object.has_stopped = False
+
                 self.current_element = e
 
                 # Send data to tracks class
