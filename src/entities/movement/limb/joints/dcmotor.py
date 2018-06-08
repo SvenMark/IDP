@@ -32,13 +32,6 @@ class DCMotor(object):
         GPIO.setup(self.pin_motor_forward, GPIO.OUT)
         GPIO.setup(self.pin_motor_backward, GPIO.OUT)
 
-        pin_jurjen1 = 16
-        pin_jurjen2 = 20
-        GPIO.setup(pin_jurjen1, GPIO.OUT)
-        GPIO.setup(pin_jurjen2, GPIO.OUT)
-        GPIO.output(pin_jurjen1, 1)
-        GPIO.output(pin_jurjen2, 1)
-
         # Create an instance of a pwm motor
         self.pwm_motor = GPIO.PWM(self.pin_pwm, self.frequency)
         self.pwm_motor.start(self.stop)

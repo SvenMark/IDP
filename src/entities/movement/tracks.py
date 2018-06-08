@@ -48,7 +48,7 @@ class Tracks(object):
 
         # If acceleration is smaller or equal to 0 set it to 0.01 to prevent sudden shocks in the power train.
         if acceleration <= 0:
-            print("Warning, setting acceleration to 0.01")
+            # print("Warning, setting acceleration to 0.01")
             acceleration = 0.01
 
         # Calculate the difference between the required duty cycle and current duty cycle.

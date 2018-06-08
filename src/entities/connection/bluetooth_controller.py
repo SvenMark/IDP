@@ -5,9 +5,10 @@ import sys
 from threading import Thread
 
 sys.path.insert(0, '../../../src')
-from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, element10
+
+from modules import base_module, cannon, capture_flag, dance, line_dance, obstacle_course, race, transport_rebuild
 from entities.threading_.utils import SharedObject
-# from entities.robot.robot import Robot
+from entities.robot.robot import Robot
 
 
 class BluetoothController(object):
@@ -15,20 +16,21 @@ class BluetoothController(object):
     Base class for the bluetooth smart controller
     """
 
-    def __init__(self, limbs, bluetooth_address):
+    def __init__(self, limbs, lights, bluetooth_address):
         """
         Constructor for the bluetooth controller class
         :param limbs: Array of robot limbs
         """
         self.bluetooth_address = bluetooth_address
         self.limbs = limbs
+        self.lights = lights
         self.legs = limbs[0]
         self.tracks = limbs[1]
 
         self.current_element = 0
         self.shared_object = SharedObject()
 
-        # self.legs.update_thread.start()
+        self.legs.update_thread.start()
 
     def receive_data(self):
         """
@@ -126,28 +128,24 @@ class BluetoothController(object):
                 # Wait for it to stop ?
                 while not self.shared_object.has_stopped:
                     time.sleep(0.01)
+                self.shared_object.has_stopped = False
 
                 # Run selected element
                 self.current_element = e
                 self.run_element(e)
 
         except ValueError or IndexError:
-            print("Invalid value in package")
+            temp = 0
+            # print("Invalid value in package")
 
     def run_element(self, element):
+        print("Running element " + str(element))
         if element is 1:
             name = 'Entree'
             print(name)
 
             # starting thread
             Thread(target=element1.run, args=(self.shared_object,)).start()
-
-        if element is 2:
-            name = 'Race'
-            print(name)
-
-            # starting thread
-            Thread(target=element2.run, args=(self.shared_object,)).start()
 
         if element is 3:
             name = 'Dance'
@@ -168,21 +166,21 @@ class BluetoothController(object):
             print(name)
 
             # starting thread
-            Thread(target=element5.run, args=(self.shared_object,)).start()
+            # Thread(target=element5.run, args=(self.shared_object,)).start()
 
         if element is 6:
             name = 'Cannon'
             print(name)
 
             # starting thread
-            Thread(target=element6.Element6.linedetection, args=(self.shared_object,)).start()
+            # Thread(target=element6.Element6.linedetection, args=(self.shared_object,)).start()
 
         if element is 7:
             name = 'Transport'
             print(name)
 
             # starting thread
-            Thread(target=element7.run, args=(self.shared_object,)).start()
+            # Thread(target=element7.run, args=(self.shared_object,)).start()
 
         if element is 8:
             name = 'Capture the flag'
