@@ -6,7 +6,8 @@ from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
-from modules import base_module, capture_flag, dance, entering_arena, line_dance, race, transport_rebuild, cannon, obstacle_course
+from modules import base_module, capture_flag, dance, entering_arena, line_dance, race, \
+    transport_rebuild, cannon, obstacle_course
 from entities.threading.utils import SharedObject
 from entities.robot.robot import Robot
 from entities.movement.movement import Movement
@@ -156,41 +157,43 @@ class BluetoothController(object):
         if element is 1:
             name = 'Entree'
             # starting thread
-            Thread(target=entering_arena.run(name, self.shared_object), args=(self.shared_object,)).start()
+            Thread(target=entering_arena.run, args=(name, self.shared_object,)).start()
 
         if element is 2:
             name = 'Race'
-            # Thread(target=entering_arena.run(name, self.shared_object), args=(self.shared_object,)).start()
+            # Thread(target=entering_arena.run, args=(name, self.shared_object,)).start()
 
         if element is 3:
             name = 'Dance'
-            Thread(target=dance.run(name, self.shared_object), args=(self.shared_object,)).start()
+            Thread(target=dance.run, args=(name, self.shared_object,)).start()
 
         if element is 4:
             name = 'Line Dance'
-            Thread(target=line_dance.run(name, self.shared_object), args=(self.shared_object,)).start()
+            Thread(target=line_dance.run, args=(name, self.shared_object,)).start()
 
         if element is 5:
             name = 'Obstacle course'
-            Thread(target=obstacle_course.run(name, self.shared_object), args=(self.shared_object,)).start()
+            Thread(target=obstacle_course.run, args=(name, self.shared_object,)).start()
 
         if element is 6:
             name = 'Cannon'
-            Thread(target=cannon.run(name, self.shared_object), args=(self.shared_object,)).start()
+            Thread(target=cannon.run, args=(name, self.shared_object,)).start()
 
         if element is 7:
             name = 'Transport'
-            Thread(target=transport_rebuild.run(name, self.shared_object), args=(self.shared_object,)).start()
+            Thread(target=transport_rebuild.run, args=(name, self.shared_object,)).start()
 
         if element is 8:
             name = 'Capture the flag'
             # starting thread
-            Thread(target=capture_flag.run(name, self.shared_object), args=(self.shared_object,)).start()
+            Thread(target=capture_flag.run, args=(name, self.shared_object,)).start()
 
 
 def main():
     limbs = [0, 1]
-    bluetooth = BluetoothController(limbs=limbs, bluetooth_address="98:D3:31:FD:15:C1")
+    lights = []
+    name = 'Boris'
+    bluetooth = BluetoothController(name=name, limbs=limbs, lights=lights, bluetooth_address="98:D3:31:FD:15:C1")
 
 
 if __name__ == '__main__':
