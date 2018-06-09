@@ -40,6 +40,7 @@ def run(name, shared_object):
     GPIO.output(pin_jurjen2, 0)
 
     # Notify shared object that this thread has been stopped
+    print("Stopped" + str(name))
     shared_object.has_been_stopped()
 
 

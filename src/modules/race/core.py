@@ -14,4 +14,5 @@ def run(name, stop_motors, vertical_speed, horizontal_speed, dead_zone, speed_fa
                                                 dead_zone=dead_zone)
 
     # Notify shared object that this thread has been stopped
+    print("Stopped" + str(name))
     shared_object.has_been_stopped()
