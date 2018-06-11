@@ -182,22 +182,23 @@ class Helper:
         # Return the resized image
         return resized
 
-    def append_to_positions(self, positions, block):
+    def append_to_positions(self, positions, block, sensitivity=5, max_pos_len=6):
         """
         Appends a unique block to the array
+        :param sensitivity: Sensitivity to check, higher rejects more distance
         :param positions: Positions array of the current view
         :param block: Centre point
         """
 
         # If the POSITIONS length is getting too long clear it
-        if len(positions) >= 6:
+        if len(positions) >= max_pos_len:
             del positions[:]
         # If the POSITIONS array is empty append the block
         if len(positions) == 0:
             positions.append(block)
         else:
             # Check if the given block is not a duplicate
-            if not self.is_duplicate(block, positions, 5):
+            if not self.is_duplicate(block, positions, sensitivity):
                 # Append the block to positions
                 positions.append(block)
 
@@ -223,7 +224,7 @@ class Helper:
             valid_contour += valid_cntr
             for i in range(1, len(color_range)):
                 mask, valid_cntr = self.set_contours(cv2.inRange(hsv, color_range[i].lower, color_range[i].upper), color_range[i].color, img)
-                valid_cntr += valid_cntr
+                valid_contour += valid_cntr
                 img_mask += mask
         else:
             img_mask = cv2.inRange(hsv, color_range[0].lower, color_range[0].upper)

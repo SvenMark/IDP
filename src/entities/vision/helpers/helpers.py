@@ -2,7 +2,6 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
-from entities.vision.helpers.calibrate import Calibrate
 from entities.vision.helpers.hsvpicker import Hsv_picker
 from entities.vision.helpers.vision_helper import Helper
 
@@ -18,4 +17,3 @@ class Helpers(object):
         """
         self.helper = Helper(min_block_size, max_block_size)
         self.hsv_picker = Hsv_picker(self, color_range, img)
-        self.calibrate = Calibrate(self, color_range)

@@ -1,5 +1,6 @@
 import sys
 import time
+import datetime
 
 sys.path.insert(0, '../../../src')
 
@@ -37,21 +38,24 @@ class Saving(object):
             mask, dead_memes = self.helper.calculate_mask(img, self.color_range)
 
             img4, dead_memes = self.helper.crop_to_contours(mask, img)
+            # xd
 
             # Calculate new cropped masks
             mask_cropped, valid_contours = self.helper.calculate_mask(img4, self.color_range, set_contour=True)
 
             # Append the valid contours to the positions array
-            for cnt in range(len(valid_contours)):
-                self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt])
+            # for cnt in range(len(valid_contours)):
+            #     print(valid_contours[cnt])
+            #     self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt], 5, self.save_length)
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 self.show_input_fields()
 
-            if self.save and 3 < len(self.positions) == self.save_length:
-                self.save_building(mask_cropped, self.positions)
-                for pos in range(len(self.positions)):
-                    print(self.positions[pos])
+            if self.save and 3 < len(valid_contours) == self.save_length:
+                print("--------{}-------".format(datetime.datetime.now().time()))
+                for cnt in range(len(valid_contours)):
+                    print(valid_contours[cnt])
+                self.save_building(mask_cropped, valid_contours)
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
@@ -103,7 +107,6 @@ class Saving(object):
         :param img: The current frame
         """
 
-        cv2.imshow('Spider Cam Result', img)
         time.sleep(1)
 
         def confirmed():
