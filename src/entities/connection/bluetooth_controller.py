@@ -160,17 +160,17 @@ class BluetoothController(object):
 
                 # Run selected element
                 self.current_element = e
-                self.run_module(e, self.movement)
+                self.run_module(e, self.movement, s, v, h, speed_factor)
 
         except ValueError or IndexError:
             meme = 3123
             # print("Invalid value in package")
 
-    def run_module(self, element, movement):
+    def run_module(self, element, movement, s, v, h, speed_factor):
         if element is 1:
             name = 'Entree'
             # starting thread
-            Thread(target=entering_arena.run, args=(name, movement, self.shared_object,)).start()
+            Thread(target=entering_arena.run, args=(name, movement, s, v, h, speed_factor, self.shared_object,)).start()
 
         if element is 3:
             name = 'Dance'
