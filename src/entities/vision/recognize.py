@@ -23,13 +23,7 @@ class Recognize(object):
         # Initialize camera
         cap = cv2.VideoCapture(0)
 
-        cv2.namedWindow('cam properties')
-        cv2.resizeWindow('cam properties', 300, 300)
-
-        # create trackbars for lower
-        cv2.createTrackbar('brightness', 'cam properties', 50, 100, self.nothing)
-        cv2.createTrackbar('contrast', 'cam properties', 50, 100, self.nothing)
-        cv2.createTrackbar('saturation', 'cam properties', 50, 100, self.nothing)
+        self.helper.create_cam_properties()
 
         while True:
             # set cam properties

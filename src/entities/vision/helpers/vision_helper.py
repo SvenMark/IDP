@@ -42,6 +42,18 @@ class Helper:
         self.min_block_size = min_block_size
         self.max_block_size = max_block_size
 
+    def create_cam_properties(self):
+        cv2.namedWindow('cam properties')
+        cv2.resizeWindow('cam properties', 300, 300)
+
+        # create trackbars for lower
+        cv2.createTrackbar('brightness', 'cam properties', 50, 100, self.nothing)
+        cv2.createTrackbar('contrast', 'cam properties', 50, 100, self.nothing)
+        cv2.createTrackbar('saturation', 'cam properties', 50, 100, self.nothing)
+
+    def nothing(self, x):
+        pass
+
     @staticmethod
     def is_duplicate(centre, positions, sensitivity=10):
         """
@@ -181,28 +193,6 @@ class Helper:
 
         # Return the resized image
         return resized
-
-    def append_to_positions(self, positions, block, sensitivity=5, max_pos_len=6):
-        """
-        Appends a unique block to the array
-        :param sensitivity: Sensitivity to check, higher rejects more distance
-        :param positions: Positions array of the current view
-        :param block: Centre point
-        """
-
-        # If the POSITIONS length is getting too long clear it
-        if len(positions) >= max_pos_len:
-            del positions[:]
-        # If the POSITIONS array is empty append the block
-        if len(positions) == 0:
-            positions.append(block)
-        else:
-            # Check if the given block is not a duplicate
-            if not self.is_duplicate(block, positions, sensitivity):
-                # Append the block to positions
-                positions.append(block)
-
-        return positions
 
     def calculate_mask(self, img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
         """

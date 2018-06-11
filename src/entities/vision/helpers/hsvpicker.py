@@ -27,13 +27,7 @@ class Hsv_picker:
             c = self.color_range[color]
             self.createtrackbars(c)
 
-        cv2.namedWindow('brightness')
-        cv2.resizeWindow('brightness', 300, 300)
-
-        # create trackbars for lower
-        cv2.createTrackbar('brightness', 'brightness', 50, 100, self.nothing)
-        cv2.createTrackbar('contrast', 'brightness', 50, 100, self.nothing)
-        cv2.createTrackbar('saturation', 'brightness', 50, 100, self.nothing)
+        self.helper.create_cam_properties()
 
         print("run hsvpicker")
         cap = cv2.VideoCapture(0)
