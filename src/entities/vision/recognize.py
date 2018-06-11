@@ -15,6 +15,7 @@ class Recognize(object):
         self.saved_buildings = saved_buildings
         self.helper = helpers.helper
         self.settings = settings
+        self.recognize = True
 
     def run(self):
         print("Starting recognize")
@@ -43,7 +44,7 @@ class Recognize(object):
             #     self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt])
 
             # Recognize building
-            if self.saved_buildings:
+            if self.saved_buildings and self.recognize:
                 self.recognize_building(valid_contours, image_width, center)
 
             # Show the created image
@@ -97,6 +98,7 @@ class Recognize(object):
         if found:
             # Use audio to state the recognized building
             print("At time: " + str(datetime.datetime.now().time()) + " Found: ", result[0], result[1])
+            self.recognize = False
 
         # Return whether a building has been found
         return found
