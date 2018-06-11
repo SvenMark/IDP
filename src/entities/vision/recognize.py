@@ -77,20 +77,20 @@ class Recognize(object):
             found = self.check_building_side(positions, b.front)
             result = [building, "front"]
 
-            # # For each block on the back side of the saved building
-            # if not found:
-            #     found = self.check_building_side(positions, b.back)
-            #     result = [building, "back"]
-            #
-            # # For each block on the left side of the saved building
-            # if not found:
-            #     found = self.check_building_side(positions, b.left)
-            #     result = [building, "left"]
-            #
-            # # For each block on the right side of the saved building
-            # if not found:
-            #     found = self.check_building_side(positions, b.right)
-            #     result = [building, "right"]
+            # For each block on the back side of the saved building
+            if not found:
+                found = self.check_building_side(positions, b.back)
+                result = [building, "back"]
+            
+            # For each block on the left side of the saved building
+            if not found:
+                found = self.check_building_side(positions, b.left)
+                result = [building, "left"]
+
+            # For each block on the right side of the saved building
+            if not found:
+                found = self.check_building_side(positions, b.right)
+                result = [building, "right"]
 
         # If recent settings are handled
         self.check_settings(center, image_width, result)
