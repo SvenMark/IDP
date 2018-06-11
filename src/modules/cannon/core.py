@@ -45,7 +45,8 @@ def run(name, movement, shared_object):
                 else:
                     right -= offset
 
-                movement.tracks.forward()
+                movement.tracks.forward(duty_cycle_track_left=left, duty_cycle_track_right=right,
+                                        delay=0, acceleration=0)
 
         time.sleep(0.1)
 
