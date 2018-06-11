@@ -42,14 +42,14 @@ class Helper:
         self.min_block_size = min_block_size
         self.max_block_size = max_block_size
 
-    def create_cam_properties(self):
-        cv2.namedWindow('cam properties')
-        cv2.resizeWindow('cam properties', 300, 300)
+    def create_cam_properties(self, name):
+        cv2.namedWindow(name)
+        cv2.resizeWindow(name, 300, 300)
 
         # create trackbars for lower
-        cv2.createTrackbar('brightness', 'cam properties', 50, 100, self.nothing)
-        cv2.createTrackbar('contrast', 'cam properties', 50, 100, self.nothing)
-        cv2.createTrackbar('saturation', 'cam properties', 50, 100, self.nothing)
+        cv2.createTrackbar('brightness', name, 50, 100, self.nothing)
+        cv2.createTrackbar('contrast', name, 50, 100, self.nothing)
+        cv2.createTrackbar('saturation', name, 50, 100, self.nothing)
 
     def nothing(self, x):
         pass

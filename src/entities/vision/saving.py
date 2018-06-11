@@ -24,16 +24,16 @@ class Saving(object):
 
     def run(self):
         print("Starting saving")
-
-        self.helper.create_cam_properties()
+        name = "cam_props"
+        self.helper.create_cam_properties(name)
 
         # Initialize camera
         cap = cv2.VideoCapture(0)
         while True:
             # set cam properties
-            cap.set(10, cv2.getTrackbarPos('brightness', 'brightness') / 100)
-            cap.set(11, cv2.getTrackbarPos('contrast', 'brightness') / 100)
-            cap.set(12, cv2.getTrackbarPos('saturation', 'brightness') / 100)
+            cap.set(10, cv2.getTrackbarPos('brightness', name) / 100)
+            cap.set(11, cv2.getTrackbarPos('contrast', name) / 100)
+            cap.set(12, cv2.getTrackbarPos('saturation', name) / 100)
 
             # Read frame from the camera
             ret, img = cap.read()
