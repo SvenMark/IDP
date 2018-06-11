@@ -64,10 +64,6 @@ class Recognize(object):
         result = []
         found = True
 
-        print("--------{}-------".format(datetime.datetime.now().time()))
-        for block in positions:
-            print(str(block))
-
         # If there are no blocks in view return false
         if not len(positions) > 0:
             return False
@@ -100,7 +96,7 @@ class Recognize(object):
 
         if found:
             # Use audio to state the recognized building
-            print("At time: " + time.ctime() + " Found: ", result[0], result[1])
+            print("At time: " + datetime.datetime.now().time() + " Found: ", result[0], result[1])
 
         # Return whether a building has been found
         return found
@@ -115,7 +111,12 @@ class Recognize(object):
         return total / len(b)
 
     def check_building_side(self, positions, side):
+        print("--------{}-------".format(datetime.datetime.now().time()))
+        for block in positions:
+            print(str(block))
+            print("----- vs -----")
         for block in range(len(side)):
+            print(str(block))
             bl = side[block]
             if not self.helper.is_duplicate(bl, positions, 20):
                 return False
