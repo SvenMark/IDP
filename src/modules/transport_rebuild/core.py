@@ -54,7 +54,8 @@ def run(shared_object):
         else:
             threading.Thread(target=vision.recognize.run).start()
     else:
-        threading.Thread(target=vision.recognize.run).start()
+        threading.Thread(target=vision.recognize
+                         .run).start()
 
 
 run("")

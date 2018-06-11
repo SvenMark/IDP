@@ -21,7 +21,6 @@ class Hsv_picker:
         self.range_handler = Range_Handler()
 
     def run(self):
-        print("lars is gay")
         print("Starting hsv picker")
 
         for color in range(len(self.color_range)):
