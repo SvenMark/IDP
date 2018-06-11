@@ -2,7 +2,7 @@ import os
 
 from gtts import gTTS
 
-from audio import Audio
+from entities.audio.audio import Audio
 
 
 class Speak(Audio):
