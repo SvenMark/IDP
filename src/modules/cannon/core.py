@@ -3,26 +3,58 @@ sys.path.insert(0, '../../../src')  # Needed for pi
 
 from imutils.video import WebcamVideoStream
 from modules.cannon.helpers import Point, Color
+from entities.audio.speak import Speak
 from decimal import Decimal
 import time
+from threading import Thread
 import numpy as np
 import cv2
 
+# last known position of the line with left percentage
+last_position = -1000
 
-def run(name, shared_object):
+red_detected = False
+
+
+def run(name, movement, shared_object):
     print("run " + str(name))
     # line_detection()
 
+    Thread(target=line_detection, args=(shared_object,)).start()
+
     while not shared_object.has_to_stop():
-        print("Doing calculations and stuff")
-        time.sleep(0.5)
+        global last_position, red_detected
+        offset = 50 - last_position
+        print(offset)
+
+        if last_position == -1000:
+            Speak().tts("Waiting for line detection", "en-US")
+            while last_position == -1000:
+                time.sleep(0.1)
+
+        if red_detected:
+            print("Red detected")
+            if movement is not None:
+                movement.tracks.stop()
+        else:
+            if movement is not None:
+                left = 50
+                right = 50
+                if offset < 0:
+                    left += offset
+                else:
+                    right -= offset
+
+                movement.tracks.forward()
+
+        time.sleep(0.1)
 
     # Notify shared object that this thread has been stopped
     print("Stopped" + str(name))
     shared_object.has_been_stopped()
 
 
-def line_detection():
+def line_detection(shared_object):
     cap = WebcamVideoStream(src=0).start()
     time.sleep(1)  # startup
 
@@ -37,7 +69,7 @@ def line_detection():
         (width, height),
     ]
 
-    while True:
+    while not shared_object.has_to_stop():
         img = cap.read()
         img_cropped = set_region(img, np.array([vertices], np.int32))
         blur = cv2.GaussianBlur(img_cropped, (9, 9), 0)
@@ -49,9 +81,12 @@ def line_detection():
         mask = cv2.inRange(hsv, low_black, high_black)
 
         # Red detection
+        global red_detected
         if detect_red(img, hsv):
+            red_detected = True
             print("red detected (possible sleep)")
             # time.sleep(10)
+        red_detected = False
 
         # Get lines
         theta = np.pi / 180
@@ -73,11 +108,12 @@ def line_detection():
                     p2 = Point(x2, y2)
                     cv2.line(img_clone, (p1.x, p1.y), (p2.x, p2.y), line_color, 5)
             left, right = average_distance(lines, width)
-            print("Percentage left: " + str(round(left)) + "%")
-            print("Percentage right: " + str(round(right)) + "%")
+            # print("Percentage left: " + str(round(left)) + "%")
+            # print("Percentage right: " + str(round(right)) + "%")
+            global last_position
+            last_position = round(left)
 
         cv2.imshow('camservice-lijn', img_clone)
-
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
@@ -136,10 +172,13 @@ def detect_red(img, hsv):
     ret, thresh = cv2.threshold(mask, 127, 255, 0)
     im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
+    total_area = 0
     for cnt in contours:
         cv2.drawContours(img, [cnt], -1, (0, 0, 255), 10)
         cv2.imshow("red", red)
-    if len(contours) < 2:
+        total_area += cv2.contourArea(cnt)
+    # print(str(total_area))
+    if len(contours) == 0 or total_area < 5500:
         return False
     else:
         return True

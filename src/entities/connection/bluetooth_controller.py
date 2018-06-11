@@ -160,41 +160,41 @@ class BluetoothController(object):
 
                 # Run selected element
                 self.current_element = e
-                self.run_module(e)
+                self.run_module(e, self.movement)
 
         except ValueError or IndexError:
             print("Invalid value in package")
 
-    def run_module(self, element):
+    def run_module(self, element, movement):
         if element is 1:
             name = 'Entree'
             # starting thread
-            Thread(target=entering_arena.run, args=(name, self.shared_object,)).start()
+            Thread(target=entering_arena.run, args=(name, movement, self.shared_object,)).start()
 
         if element is 3:
             name = 'Dance'
-            Thread(target=dance.run, args=(name, self.movement, self.shared_object,)).start()
+            Thread(target=dance.run, args=(name, movement, self.shared_object,)).start()
 
         if element is 4:
             name = 'Line Dance'
-            Thread(target=line_dance.run, args=(name, self.shared_object,)).start()
+            Thread(target=line_dance.run, args=(name, movement, self.shared_object,)).start()
 
         if element is 5:
             name = 'Obstacle course'
-            Thread(target=obstacle_course.run, args=(name, self.shared_object,)).start()
+            Thread(target=obstacle_course.run, args=(name, movement, self.shared_object,)).start()
 
         if element is 6:
             name = 'Cannon'
-            Thread(target=cannon.run, args=(name, self.shared_object,)).start()
+            Thread(target=cannon.run, args=(name, movement, self.shared_object,)).start()
 
         if element is 7:
             name = 'Transport'
-            Thread(target=transport_rebuild.run, args=(name, self.shared_object,)).start()
+            Thread(target=transport_rebuild.run, args=(name, movement, self.shared_object,)).start()
 
         if element is 8:
             name = 'Capture the flag'
             # starting thread
-            Thread(target=capture_flag.run, args=(name, self.shared_object,)).start()
+            Thread(target=capture_flag.run, args=(name, movement, self.shared_object,)).start()
 
 
 def main():
