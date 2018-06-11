@@ -80,7 +80,7 @@ class Helper:
         area = cv2.contourArea(c)
 
         # If the convexhull counts 4 sides and an area bigger than 4000
-        return len(approx) == sides and area > self.min_block_size
+        return area > self.min_block_size
 
     def crop_to_contours(self, mask, img):
         """
