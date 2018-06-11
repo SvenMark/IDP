@@ -38,12 +38,12 @@ class Recognize(object):
             mask_cropped, valid_contours = self.helper.calculate_mask(img, self.color_range, set_contour=True)
 
             # Append the valid contours to the positions array
-            for cnt in range(len(valid_contours)):
-                self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt])
+            # for cnt in range(len(valid_contours)):
+            #     self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt])
 
             # Recognize building
             if self.saved_buildings:
-                self.recognize_building(self.positions, image_width, center)
+                self.recognize_building(valid_contours, image_width, center)
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
@@ -63,6 +63,9 @@ class Recognize(object):
         result = []
         found = True
 
+        for block in positions:
+            print(str(block))
+
         # If there are no blocks in view return false
         if not len(positions) > 0:
             return False
@@ -72,22 +75,22 @@ class Recognize(object):
             b = self.saved_buildings[building]
 
             # For each block on the front side of the saved building
-            found = self.check_building_side(b, positions, b.front)
+            found = self.check_building_side(positions, b.front)
             result = [building, "front"]
 
             # For each block on the back side of the saved building
             if not found:
-                found = self.check_building_side(b, positions, b.back)
+                found = self.check_building_side(positions, b.back)
                 result = [building, "back"]
 
             # For each block on the left side of the saved building
             if not found:
-                found = self.check_building_side(b, positions, b.left)
+                found = self.check_building_side(positions, b.left)
                 result = [building, "left"]
 
             # For each block on the right side of the saved building
             if not found:
-                found = self.check_building_side(b, positions, b.right)
+                found = self.check_building_side(positions, b.right)
                 result = [building, "right"]
 
         # If recent settings are handled
@@ -109,7 +112,7 @@ class Recognize(object):
 
         return total / len(b)
 
-    def check_building_side(self, b, positions, side):
+    def check_building_side(self, positions, side):
         for block in range(len(side)):
             bl = side[block]
             if not self.helper.is_duplicate(bl, positions, 20):
