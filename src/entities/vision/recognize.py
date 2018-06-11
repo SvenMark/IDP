@@ -76,27 +76,27 @@ class Recognize(object):
             found = self.check_building_side(positions, b.front)
             result = [building, "front"]
 
-            # For each block on the back side of the saved building
-            if not found:
-                found = self.check_building_side(positions, b.back)
-                result = [building, "back"]
-
-            # For each block on the left side of the saved building
-            if not found:
-                found = self.check_building_side(positions, b.left)
-                result = [building, "left"]
-
-            # For each block on the right side of the saved building
-            if not found:
-                found = self.check_building_side(positions, b.right)
-                result = [building, "right"]
+            # # For each block on the back side of the saved building
+            # if not found:
+            #     found = self.check_building_side(positions, b.back)
+            #     result = [building, "back"]
+            #
+            # # For each block on the left side of the saved building
+            # if not found:
+            #     found = self.check_building_side(positions, b.left)
+            #     result = [building, "left"]
+            #
+            # # For each block on the right side of the saved building
+            # if not found:
+            #     found = self.check_building_side(positions, b.right)
+            #     result = [building, "right"]
 
         # If recent settings are handled
         self.check_settings(center, image_width, result)
 
         if found:
             # Use audio to state the recognized building
-            print("At time: " + datetime.datetime.now().time() + " Found: ", result[0], result[1])
+            print("At time: " + str(datetime.datetime.now().time()) + " Found: ", result[0], result[1])
 
         # Return whether a building has been found
         return found
@@ -114,12 +114,13 @@ class Recognize(object):
         print("--------{}-------".format(datetime.datetime.now().time()))
         for bl in positions:
             print(str(bl))
-        print("----- vs -----")
-        for block in range(len(side)):
+        print("----- vs -----", len(side))
+        for block in side:
             print(str(block))
-            bl = side[block]
-            if not self.helper.is_duplicate(bl, positions, 20):
+            if not self.helper.is_duplicate(block, positions, 20):
                 return False
+
+        return True
 
     def check_settings(self, center, image_width, result):
         if not self.settings.new:

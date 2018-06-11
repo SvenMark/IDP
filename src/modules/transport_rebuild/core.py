@@ -15,12 +15,12 @@ tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
 
 saved_buildings = [
     Building(front=[
-(124, 31),
-(38, 367),
-(63, 166),
-(253, 364),
-(154, 295),
-(210, 156)
+            (124, 31),
+            (38, 367),
+            (63, 166),
+            (253, 364),
+            (154, 295),
+            (210, 156)
         ],
              back=[
 
@@ -54,7 +54,7 @@ def run(shared_object):
         else:
             threading.Thread(target=vision.recognize.run).start()
     else:
-        threading.Thread(target=vision.saving.run).start()
+        threading.Thread(target=vision.recognize.run).start()
 
 
 run("")
