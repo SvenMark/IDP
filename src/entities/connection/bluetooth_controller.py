@@ -86,7 +86,7 @@ class BluetoothController(object):
         :param data: A data string
         :return: None
         """
-
+        print(data)
         # Index for button to stop motors
         s_index = data.find('s')
         # Index for vertical movement of motors
@@ -103,8 +103,6 @@ class BluetoothController(object):
         e_index = data.find('e')
 
         try:
-            print(data)
-
             s = int(str(data[s_index + 2:v_index].replace(" ", "")))
             v = int(str(data[v_index + 2:h_index].replace(" ", "")))
             h = int(str(data[h_index + 2:d_index].replace(" ", "")))
