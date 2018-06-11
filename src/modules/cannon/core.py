@@ -18,9 +18,7 @@ red_detected = False
 
 def run(name, movement, shared_object):
     print("run " + str(name))
-    # line_detection()
-
-    Thread(target=line_detection, args=(shared_object,)).start()
+    line_detection(shared_object)
 
     while not shared_object.has_to_stop():
         global last_position, red_detected
@@ -28,10 +26,10 @@ def run(name, movement, shared_object):
         print(offset)
 
         if last_position == -1000:
-            Speak().tts("Waiting for line detection", "en-US")
+            print("Waiting")
             while last_position == -1000:
                 time.sleep(0.1)
-
+        print("Doing shit")
         if red_detected:
             print("Red detected")
             if movement is not None:
@@ -56,12 +54,12 @@ def run(name, movement, shared_object):
 
 
 def line_detection(shared_object):
-    cap = WebcamVideoStream(src=0).start()
+    cap = cv2.VideoCapture(0)
     time.sleep(1)  # startup
 
-    sample = cap.read()
-    height = sample.shape[0]  # get height
-    width = sample.shape[1]  # get width
+    ret, sample = cap.read()
+    height, width, channel = sample.shape
+
     print("w: " + str(width) + " " + "h: " + str(height))
 
     vertices = [
@@ -71,7 +69,7 @@ def line_detection(shared_object):
     ]
 
     while not shared_object.has_to_stop():
-        img = cap.read()
+        ret, img = cap.read()
         img_cropped = set_region(img, np.array([vertices], np.int32))
         blur = cv2.GaussianBlur(img_cropped, (9, 9), 0)
 
