@@ -23,7 +23,20 @@ class Recognize(object):
         # Initialize camera
         cap = cv2.VideoCapture(0)
 
+        cv2.namedWindow('cam properties')
+        cv2.resizeWindow('cam properties', 300, 300)
+
+        # create trackbars for lower
+        cv2.createTrackbar('brightness', 'cam properties', 50, 100, self.nothing)
+        cv2.createTrackbar('contrast', 'cam properties', 50, 100, self.nothing)
+        cv2.createTrackbar('saturation', 'cam properties', 50, 100, self.nothing)
+
         while True:
+            # set cam properties
+            cap.set(10, cv2.getTrackbarPos('brightness', 'brightness') / 100)
+            cap.set(11, cv2.getTrackbarPos('contrast', 'brightness') / 100)
+            cap.set(12, cv2.getTrackbarPos('saturation', 'brightness') / 100)
+
             # Read frame from the camera
             ret, img = cap.read()
 
@@ -139,3 +152,6 @@ class Recognize(object):
 
         # Notify settings that the current frame is handled
         self.settings.update = True
+
+    def nothing(self, x):
+        pass
