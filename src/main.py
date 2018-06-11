@@ -41,8 +41,8 @@ def main():
                    track_1_pin=13,
                    track_0_forward=22,
                    track_0_backward=27,
-                   track_1_forward=10,  # 19
-                   track_1_backward=9),  # 26
+                   track_1_forward=19,  # 19
+                   track_1_backward=26),  # 26
         ]
 
     lights = []
