@@ -37,8 +37,8 @@ def main():
                     63
                 ]
             ),
-            Tracks(track_0_pin=18,
-                   track_1_pin=13,
+            Tracks(track_0_pin=13,
+                   track_1_pin=18,
                    track_0_forward=22,
                    track_0_backward=27,
                    track_1_forward=19,  # 19
