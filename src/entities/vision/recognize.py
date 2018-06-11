@@ -112,9 +112,9 @@ class Recognize(object):
 
     def check_building_side(self, positions, side):
         print("--------{}-------".format(datetime.datetime.now().time()))
-        for block in positions:
-            print(str(block))
-            print("----- vs -----")
+        for bl in positions:
+            print(str(bl))
+        print("----- vs -----")
         for block in range(len(side)):
             print(str(block))
             bl = side[block]
