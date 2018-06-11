@@ -4,10 +4,17 @@ import time
 sys.path.insert(0, '../../../src')
 
 from entities.movement.sequences.sequences import *
+from entities.visual.emotion import Emotion
+from entities.audio.speak import Speak
 
 
 def run(name, movement, s, v, h, speed_factor, shared_object):
     print("run " + str(name))
+
+    emotion = Emotion()
+    audio = Speak()
+
+    audio.play("russiananthem.mp3")
 
     while not shared_object.has_to_stop():
         movement.tracks.handle_controller_input(stop_motors=s,
