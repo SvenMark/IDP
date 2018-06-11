@@ -64,8 +64,8 @@ def run(shared_object):
 run("")
 
 
-#
-# # TESTING
+
+# TESTING
 # tracks = Tracks(track_0_pin=18,
 #                 track_1_pin=13,
 #                 track_0_forward=22,
@@ -87,3 +87,4 @@ run("")
 #             # acceleration 0.5 seconds for 0.5 seconds, then wait again
 #             tracks.turn_left(rotate_speed, rotate_speed, 0.5, 0.5)
 #             tracks.stop()
+
