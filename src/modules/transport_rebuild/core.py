@@ -45,7 +45,7 @@ vision = Vision(color_range=color_range,
 rotate_speed = 50
 
 
-def run(name, shared_object):
+def run(name, movement, shared_object):
     print("run " + str(name))
     if len(sys.argv) > 1:
         if sys.argv[1] == "hsv_picker":
