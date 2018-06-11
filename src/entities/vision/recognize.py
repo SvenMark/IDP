@@ -1,3 +1,4 @@
+import datetime
 import time
 import sys
 
@@ -63,6 +64,7 @@ class Recognize(object):
         result = []
         found = True
 
+        print("--------{}-------".format(datetime.datetime.now().time()))
         for block in positions:
             print(str(block))
 
