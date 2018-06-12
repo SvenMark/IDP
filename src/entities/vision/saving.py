@@ -24,10 +24,17 @@ class Saving(object):
 
     def run(self):
         print("Starting saving")
+        name = "cam_props"
+        self.helper.create_cam_properties(name)
 
         # Initialize camera
         cap = cv2.VideoCapture(0)
         while True:
+            # set cam properties
+            cap.set(10, cv2.getTrackbarPos('brightness', name) / 100)
+            cap.set(11, cv2.getTrackbarPos('contrast', name) / 100)
+            cap.set(12, cv2.getTrackbarPos('saturation', name) / 100)
+
             # Read frame from the camera
             ret, img = cap.read()
 
@@ -38,15 +45,9 @@ class Saving(object):
             mask, dead_memes = self.helper.calculate_mask(img, self.color_range)
 
             img4, dead_memes = self.helper.crop_to_contours(mask, img)
-            # xd
 
             # Calculate new cropped masks
             mask_cropped, valid_contours = self.helper.calculate_mask(img4, self.color_range, set_contour=True)
-
-            # Append the valid contours to the positions array
-            # for cnt in range(len(valid_contours)):
-            #     print(valid_contours[cnt])
-            #     self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt], 5, self.save_length)
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 self.show_input_fields()
