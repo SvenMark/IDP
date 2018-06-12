@@ -55,7 +55,7 @@ def run(name, movement, shared_object):
 
 def line_detection(shared_object):
     cap = cv2.VideoCapture(0)
-    time.sleep(1)  # startup
+    # time.sleep(1)  # startup
 
     ret, sample = cap.read()
     height, width, channel = sample.shape
@@ -113,7 +113,7 @@ def line_detection(shared_object):
             global last_position
             last_position = round(left)
 
-        cv2.imshow('camservice-lijn', img_clone)
+        # cv2.imshow('camservice-lijn', img_clone)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
@@ -175,7 +175,7 @@ def detect_red(img, hsv):
     total_area = 0
     for cnt in contours:
         cv2.drawContours(img, [cnt], -1, (0, 0, 255), 10)
-        cv2.imshow("red", red)
+        # cv2.imshow("red", red)
         total_area += cv2.contourArea(cnt)
     # print(str(total_area))
     if len(contours) == 0 or total_area < 1:
