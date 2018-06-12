@@ -29,12 +29,25 @@ def detect_cup():
     cam = cv2.VideoCapture(0)
     while True:
         ret, frame = cam.read()
-        QueryImg = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
         green = Color('green', [28, 39, 0], [94, 255, 255])
         mask = cv2.inRange(cv2.cvtColor(frame, cv2.COLOR_BGR2HSV), green.lower, green.upper)
-        queryKP, queryDesc = detector.detectAndCompute(QueryImg, mask=mask)
+
+        ret, thresh = cv2.threshold(mask, 127, 255, 0)
+        im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        for cnt in contours:
+            area = cv2.contourArea(cnt)
+            if area > 1000:
+                print(area)
+                cv2.drawContours(mask, [cnt], -1, (255, 255, 255), 10)
+
+        # cont = cv2.drawContours(mask, contours, -1, (255, 255, 255), 10)
+        cv2.imshow('mask', mask)
+
+        queryKP, queryDesc = detector.detectAndCompute(frame_gray, mask=mask)
         matches = flann.knnMatch(queryDesc, trainDesc, k=2)
-        cv2.imshow("Points", cv2.drawKeypoints(frame, queryKP, None))
+        # cv2.imshow("Points", cv2.drawKeypoints(frame, queryKP, None))
 
         goodMatch = []
         for m, n in matches:
