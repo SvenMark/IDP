@@ -11,10 +11,10 @@ from entities.movement.sequences.sequences import *
 
 class Grabber(object):
 
-    def __init__(self, id_servo, positions):
-        self.servo_0 = Servo(id_servo[0], positions[0])
-        self.servo_1 = Servo(id_servo[1], positions[1])
-        self.servo_2 = Servo(id_servo[2], positions[2])
+    def __init__(self, id_servo):
+        self.servo_0 = Servo(id_servo[0], 850)
+        self.servo_1 = Servo(id_servo[1], 450)
+        self.servo_2 = Servo(id_servo[2], 550)
 
         self.servos = [self.servo_0, self.servo_1, self.servo_2]
 

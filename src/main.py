@@ -6,6 +6,7 @@ sys.path.insert(0, '../src')
 from entities.movement.legs import Legs
 from entities.movement.tracks import Tracks
 from entities.robot.robot import Robot
+from entities.movement.grabber import Grabber
 from entities.connection.bluetooth_controller import BluetoothController
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
@@ -16,34 +17,39 @@ def main():
     name = 'Boris'
 
     limbs = [
-            Legs(leg_0_servos=[
-                    1,
-                    6,
-                    13
-                ],
-                leg_1_servos=[
-                    15,
-                    16,
-                    17
-                ],
-                leg_2_servos=[
-                    18,
-                    41,
-                    52
-                ],
-                leg_3_servos=[
-                    53,
-                    62,
-                    63
-                ]
-            ),
-            Tracks(track_0_pin=13,
-                   track_1_pin=18,
-                   track_0_forward=22,
-                   track_0_backward=27,
-                   track_1_forward=19,  # 19
-                   track_1_backward=26),  # 26
-        ]
+        Legs(leg_0_servos=[
+                6,
+                13,
+                15
+            ],
+            leg_1_servos=[
+                16,
+                17,
+                18
+            ],
+            leg_2_servos=[
+                41,
+                52,
+                62
+            ],
+            leg_3_servos=[
+                0,
+                0,
+                0,
+            ]
+        ),
+        Tracks(track_0_pin=13,
+               track_1_pin=18,
+               track_0_forward=22,
+               track_0_backward=27,
+               track_1_forward=19,
+               track_1_backward=26),
+        Grabber(id_servo=[
+            1,
+            13,
+            53
+        ])
+    ]
 
     lights = []
 
