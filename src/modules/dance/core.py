@@ -10,7 +10,7 @@ def run(name, movement, shared_object):
     while not shared_object.has_to_stop():
         print("Doing calculations and stuff")
 
-        movement.tracks.turn_right(100, 100, 0, 0)
+        movement.tracks.turn_right(10, 10, 0.1, 0)
 
     # Notify shared object that this thread has been stopped
     print("Stopped" + str(name))
