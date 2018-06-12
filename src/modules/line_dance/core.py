@@ -25,8 +25,7 @@ def run(name, movement, shared_object):
                     frames_per_buffer=10000)  # uses default input device
 
     test = BeatDetection()
-    for i in range(10):
-        test.detect(stream)
+    test.detect(stream, 10)
 
     stream.stop_stream()
     stream.close()
