@@ -1,3 +1,4 @@
+import math
 import sys
 sys.path.insert(0, '../../../src')
 
@@ -8,7 +9,7 @@ from entities.vision.helpers.vision_helper import Color
 def run(shared_object):
     print("run element cup")
     detect_cup()
-
+    
 
 def detect_cup():
     import cv2
@@ -27,11 +28,13 @@ def detect_cup():
 
     cam = cv2.VideoCapture(0)
     while True:
-        ret, QueryImgBGR = cam.read()
-        QueryImg = cv2.cvtColor(QueryImgBGR, cv2.COLOR_BGR2GRAY)
-        queryKP, queryDesc = detector.detectAndCompute(QueryImg, None)
+        ret, frame = cam.read()
+        QueryImg = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        green = Color('green', [28, 39, 0], [94, 255, 255])
+        mask = cv2.inRange(cv2.cvtColor(frame, cv2.COLOR_BGR2HSV), green.lower, green.upper)
+        queryKP, queryDesc = detector.detectAndCompute(QueryImg, mask=mask)
         matches = flann.knnMatch(queryDesc, trainDesc, k=2)
-        cv2.imshow("Points", cv2.drawKeypoints(QueryImgBGR, queryKP, None))
+        cv2.imshow("Points", cv2.drawKeypoints(frame, queryKP, None))
 
         goodMatch = []
         for m, n in matches:
@@ -57,12 +60,12 @@ def detect_cup():
             cx = int(moment['m10'] / moment['m00'])
             cy = int(moment['m01'] / moment['m00'])
 
-            cv2.putText(QueryImgBGR, "Cup", (cx - 30, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
-            cv2.polylines(QueryImgBGR, [np.int32(queryBorder)], True, (255, 255, 255), 4)
+            cv2.putText(frame, "Cup", (cx - 30, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
+            cv2.polylines(frame, [np.int32(queryBorder)], True, (255, 255, 255), 4)
             print("Cup detected at distance: " + str(distance) + "cm")
         else:
             print("Not Enough match found- %d/%d" % (len(goodMatch), MIN_MATCH_COUNT))
-        cv2.imshow('result', QueryImgBGR)
+        cv2.imshow('result', frame)
         if cv2.waitKey(10) == ord('q'):
             break
     cam.release()
@@ -82,4 +85,4 @@ def detect_bridge():
 
 
 if __name__ == '__main__':
-    run()  # disabled for travis
+    run(shared_object=None)  # disabled for travis
