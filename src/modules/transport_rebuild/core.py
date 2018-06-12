@@ -16,14 +16,19 @@ tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
 
 saved_buildings = [
     Building(front=[
-        (271, 213),
-        (294, 209),
-        (187, 109),
-        (59, 321),
-        (87, 160)
+            (124, 31),
+            (38, 367),
+            (63, 166),
+            (253, 364),
+            (154, 295),
+            (210, 156)
         ],
              back=[
-
+            (116, 236),
+            (111, 368),
+            (98, 98),
+            (196, 301),
+            (21, 306)
              ],
              left=[
 
@@ -65,8 +70,8 @@ def run(name, movement, shared_object):
     print("Stopped" + str(name))
     shared_object.has_been_stopped()
 
-#
-# # TESTING
+
+# TESTING
 # tracks = Tracks(track_0_pin=18,
 #                 track_1_pin=13,
 #                 track_0_forward=22,
@@ -88,3 +93,4 @@ def run(name, movement, shared_object):
 #             # acceleration 0.5 seconds for 0.5 seconds, then wait again
 #             tracks.turn_left(rotate_speed, rotate_speed, 0.5, 0.5)
 #             tracks.stop()
+
