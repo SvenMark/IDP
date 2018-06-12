@@ -18,7 +18,7 @@ red_detected = False
 
 def run(name, movement, shared_object):
     print("run " + str(name))
-    line_detection(shared_object)
+    Thread(target=line_detection, args=(shared_object,)).start()
 
     while not shared_object.has_to_stop():
         global last_position, red_detected
