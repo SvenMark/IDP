@@ -36,8 +36,8 @@ def run(name, movement, shared_object):
                 movement.tracks.stop()
         else:
             if movement is not None:
-                left = 50
-                right = 50
+                left = 20
+                right = 20
                 if offset < 0:
                     left += offset
                 else:
@@ -116,7 +116,7 @@ def line_detection(shared_object):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    cap.stop()
+    cap.release()
     cv2.destroyAllWindows()
 
 
@@ -177,7 +177,7 @@ def detect_red(img, hsv):
         cv2.imshow("red", red)
         total_area += cv2.contourArea(cnt)
     # print(str(total_area))
-    if len(contours) == 0 or total_area < 5500:
+    if len(contours) == 0 or total_area < 30:
         return False
     else:
         return True
