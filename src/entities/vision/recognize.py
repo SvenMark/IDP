@@ -36,6 +36,8 @@ class Recognize(object):
             image_width = img.size
             img, center = self.helper.crop_to_contours(mask, img)
 
+            print("center: {}".format(center))
+
             # Calculate new cropped masks
             mask_cropped, valid_contours = self.helper.calculate_mask(img, self.color_range, set_contour=True)
 
@@ -104,7 +106,7 @@ class Recognize(object):
         return found
 
     @staticmethod
-    def get_centre(b):
+    def get_center(b):
         total = 0
 
         for block in range(len(b)):

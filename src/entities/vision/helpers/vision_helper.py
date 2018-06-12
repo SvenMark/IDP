@@ -145,7 +145,7 @@ class Helper:
         if y + h > 0 and x + w > 0:
             img = img[y:y + h, x:x + w]
 
-        center = x
+        center = (x + extremes[1]) / 2
 
         # Resize to new size
         img = self.image_resize(img, height=400)

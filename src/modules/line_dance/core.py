@@ -14,7 +14,7 @@ def run(shared_object):
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
     pin_jurjen1 = 16
-    pin_jurjen2 = 20
+    pin_jurjen2 = 20  # clean code
     GPIO.setup(pin_jurjen1, GPIO.OUT)
     GPIO.setup(pin_jurjen2, GPIO.OUT)
     GPIO.output(pin_jurjen1, 1)
