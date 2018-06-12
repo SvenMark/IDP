@@ -3,29 +3,12 @@ import time
 
 sys.path.insert(0, '../../src')
 
-from entities.movement.limb.joints.servo import Servo
-from entities.movement.legs import Legs
+from libs.ax12 import Ax12
 
-legs = Legs(leg_0_servos=[
-                1,
-                13,
-                53
-            ],
-            leg_1_servos=[
-                13,
-                21,
-                31
-            ],
-            leg_2_servos=[
-                14,
-                61,
-                63
-            ],
-            leg_3_servos=[
-                14,
-                61,
-                63
-            ]
-        )
+ax12 = Ax12()
 
-legs.move([850, 425, 595], [850, 425, 595], [850, 425, 595], [850, 425, 595], 0, [80, 80, 80], True)
+ax12.move(1, 850)
+time.sleep(2)
+ax12.move(13, 425)
+time.sleep(2)
+ax12.move(53, 595)
