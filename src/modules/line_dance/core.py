@@ -8,7 +8,7 @@ import sys
 sys.path.insert(0, '../../../src')
 
 
-def run(name, shared_object):
+def run(name, movement, shared_object):
     print("run " + str(name))
 
     GPIO.setmode(GPIO.BCM)
