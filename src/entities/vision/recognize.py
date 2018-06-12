@@ -33,7 +33,7 @@ class Recognize(object):
             # # Calculate the masks
             mask, dead_memes = self.helper.calculate_mask(img, self.color_range)
 
-            image_width = img.size
+            image_width, image_height = img.shape[:2]
             img, center = self.helper.crop_to_contours(mask, img)
 
             print("center: {}".format(center))

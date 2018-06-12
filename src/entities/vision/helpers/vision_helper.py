@@ -102,7 +102,7 @@ class Helper:
         :return: The cropped image
         """
 
-        image_width = img.size
+        height, image_width, channels = img.shape
 
         # Create the threshold for the mask
         ret, thresh = cv2.threshold(mask, 127, 255, 0)
@@ -149,7 +149,7 @@ class Helper:
 
         center = (x + extremes[1]) / 2
 
-        print(center, image_width)
+        print(center / image_width * 100)
 
         # Resize to new size
         img = self.image_resize(img, height=400)
