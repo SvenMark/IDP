@@ -85,7 +85,8 @@ def line_detection(shared_object):
             red_detected = True
             print("red detected (possible sleep)")
             # time.sleep(10)
-        red_detected = False
+        else:
+            red_detected = False
 
         # Get lines
         theta = np.pi / 180
@@ -177,7 +178,7 @@ def detect_red(img, hsv):
         cv2.imshow("red", red)
         total_area += cv2.contourArea(cnt)
     # print(str(total_area))
-    if len(contours) == 0 or total_area < 30:
+    if len(contours) == 0 or total_area < 1:
         return False
     else:
         return True
