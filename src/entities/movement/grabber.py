@@ -33,6 +33,7 @@ class Grabber(object):
         self.servo_2 = Servo(id_servo[2], initial_positions[2])
 
         self.servos = [self.servo_0, self.servo_1, self.servo_2]
+        self.reposition = False
 
         self.servo_0.move_speed(initial_positions[0], 50)
         self.servo_1.move_speed(initial_positions[1], 50)
@@ -49,13 +50,23 @@ class Grabber(object):
         """
         return len([elem for elem in self.servos if elem.is_ready()]) == 3
 
-    def grab(self, positions, delay, speeds):
+    def grab(self, speeds):
         positions = [765, 555, 730]
         self.servo_0.move_speed(positions[0], speeds[0])
         self.servo_1.move_speed(positions[1], speeds[1])
+
+        counter = 0
+
+        while self.ready() is not 3:
+            if counter > 5:
+                self.reposition = True
+                self.loosen([100, 100, 100])
+            time.sleep(0.01)
+            counter += 1
+
         self.servo_2.move_speed(positions[2], speeds[2])
 
-    def loosen(self, positions, delay, speeds):
+    def loosen(self, speeds):
         positions = [1023, 290, 690]
         self.servo_0.move_speed(positions[0], speeds[0])
         self.servo_1.move_speed(positions[1], speeds[1])
