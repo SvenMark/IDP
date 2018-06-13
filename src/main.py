@@ -50,9 +50,9 @@ def main():
             13
         ],
             initial_positions=[
-                1020,
-                270,
-                815])
+                160,
+                615,
+                693])
     ]
 
     lights = []
