@@ -39,4 +39,5 @@ for leg in legs:
             print("Servo with id: {}, has not responded".format(ax_id))
         leg_positions.append(positions)
     sequence.append(leg_positions)
+    # im gay
 print("NAME = {}".format(sequence))
