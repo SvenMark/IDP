@@ -9,22 +9,6 @@ from entities.movement.limb.joints.servo import Servo
 from entities.movement.sequences.sequences import *
 
 
-# Maximum grab state:
-#     (1)Grabberarm 0 max pos: 740
-#     (53)Grabberarm 1 max pos: 610
-#     (13)Grabber pusher max pos: 850
-
-# Retracted state:
-# 	(1)Grabberarm 0 min pos: 1020
-# 	(53)Grabberarm 1 min pos: 270
-# 	(13)Grabber pusher min pos: 815
-
-# Grab tower state:
-# 	(1)Grabberarm 0  810
-# 	(53)Grabberarm 1: 540
-# 	(13)Grabber pusher: 755
-
-
 class Grabber(object):
 
     def __init__(self, id_servo, initial_positions):
@@ -51,7 +35,7 @@ class Grabber(object):
         return len([elem for elem in self.servos if elem.is_ready()]) == 3
 
     def grab(self, speeds):
-        positions = [765, 555, 730]
+        positions = [186, 528, 600]
         self.servo_0.move_speed(positions[0], speeds[0])
         self.servo_1.move_speed(positions[1], speeds[1])
 
@@ -67,7 +51,7 @@ class Grabber(object):
         self.servo_2.move_speed(positions[2], speeds[2])
 
     def loosen(self, speeds):
-        positions = [1023, 290, 690]
+        positions = [465, 198, 512]
         self.servo_0.move_speed(positions[0], speeds[0])
         self.servo_1.move_speed(positions[1], speeds[1])
         self.servo_2.move_speed(positions[2], speeds[2])
