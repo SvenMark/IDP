@@ -47,12 +47,12 @@ class Grabber(object):
 
     def grab(self, positions, delay, speeds):
         positions = [810, 540, 755]
-        self.servo_0.move(positions[0], delay, speeds[0])
-        self.servo_1.move(positions[1], delay, speeds[1])
-        self.servo_2.move(positions[2], delay, speeds[2])
+        self.servo_0.move_speed(positions[0], speeds[0])
+        self.servo_1.move_speed(positions[1], speeds[1])
+        self.servo_2.move_speed(positions[2], speeds[2])
 
     def loosen(self, positions, delay, speeds):
         positions = [1020, 270, 815]
-        self.servo_0.move(positions[0], delay, speeds[0])
-        self.servo_1.move(positions[1], delay, speeds[1])
-        self.servo_2.move(positions[2], delay, speeds[2])
+        self.servo_0.move_speed(positions[0], speeds[0])
+        self.servo_1.move_speed(positions[1], speeds[1])
+        self.servo_2.move_speed(positions[2], speeds[2])
