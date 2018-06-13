@@ -27,16 +27,23 @@ class Hsv_picker:
             c = self.color_range[color]
             self.createtrackbars(c)
 
+        name = "cam_props"
+        self.helper.create_cam_properties(name)
+
         print("run hsvpicker")
         cap = cv2.VideoCapture(0)
 
         while True:
+            cap.set(10, cv2.getTrackbarPos('brightness', name)/100)
+            cap.set(11, cv2.getTrackbarPos('contrast', name)/100)
+            cap.set(12, cv2.getTrackbarPos('saturation', name)/100)
             if self.img is not None:
                 img = self.img
             else:
                 ret, img = cap.read()
-            img = cv2.GaussianBlur(img, (9, 9), 0)
 
+            img = cv2.GaussianBlur(img, (9, 9), 0)
+                        
             # Hsv Mask
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             mask = cv2.inRange(hsv, np.array([180, 255, 255]), np.array([180, 255, 255]))

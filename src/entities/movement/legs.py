@@ -29,16 +29,16 @@ class Legs(object):
         self.previous = datetime.datetime.now()
 
         # Initialise a leg for each corner of the robot
-        # self.leg_front_left = Leg(leg_0_servos, [530, 210, 475])
-        # self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
-        # self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
-        # self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
+        self.leg_front_left = Leg(leg_0_servos, [820, 385, 565])
+        self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
+        self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
+        self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
 
         self.legs = [
-                 # self.leg_front_left,
-                 # self.leg_front_right,
-                 # self.leg_rear_left,
-                 # self.leg_rear_right
+                 self.leg_front_left,
+                 self.leg_front_right,
+                 self.leg_rear_left,
+                 self.leg_rear_right
             ]
 
         # The current move sequence
@@ -56,8 +56,6 @@ class Legs(object):
         # The thread which keeps running the leg updater
         self.update_thread = Thread(target=self.leg_updater, args=(self, ))
 
-        # self.update_thread.start()
-
         print("Legs setup, retracting")
 
     def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speeds, self_update):
@@ -74,10 +72,10 @@ class Legs(object):
         :return: None
         """
 
-        # self.leg_front_left.move(leg_0_moves, delay, speeds)
-        # self.leg_front_right.move(leg_1_moves[0], leg_1_moves[1], leg_1_moves[2], delay)
-        # self.leg_rear_left.move(leg_2_moves[0], leg_2_moves[1], leg_2_moves[2], delay)
-        # self.leg_rear_right.move(leg_3_moves[0], leg_3_moves[1], leg_3_moves[2], delay)
+        self.leg_front_left.move(leg_0_moves, delay, speeds)
+        self.leg_front_right.move(leg_1_moves[0], leg_1_moves[1], leg_1_moves[2], delay)
+        self.leg_rear_left.move(leg_2_moves[0], leg_2_moves[1], leg_2_moves[2], delay)
+        self.leg_rear_right.move(leg_3_moves[0], leg_3_moves[1], leg_3_moves[2], delay)
 
         # setting previous time, because the delta time would be too big
         self.previous = datetime.datetime.now()
@@ -99,10 +97,10 @@ class Legs(object):
         leg_3_deploy = [0, 0, 0]
         delay = 0.1
 
-        # self.leg_front_left.move(leg_0_deploy, delay, [speed, speed, speed])
-        # self.leg_front_right.move(leg_1_deploy, delay, [speed, speed, speed])
-        # self.leg_rear_left.move(leg_2_deploy, delay, [speed, speed, speed])
-        # self.leg_rear_right.move(leg_3_deploy, delay, [speed, speed, speed])
+        self.leg_front_left.move(leg_0_deploy, delay, [speed, speed, speed])
+        self.leg_front_right.move(leg_1_deploy, delay, [speed, speed, speed])
+        self.leg_rear_left.move(leg_2_deploy, delay, [speed, speed, speed])
+        self.leg_rear_right.move(leg_3_deploy, delay, [speed, speed, speed])
 
         self.deployed = True
 
@@ -121,10 +119,10 @@ class Legs(object):
         leg_3_retract = [0, 0, 0]
         delay = 0.1
 
-        # self.leg_front_left.move(leg_0_retract, delay, [speed, speed, speed])
-        # self.leg_front_right.move(leg_1_retract, delay, [speed, speed, speed])
-        # self.leg_rear_left.move(leg_2_retract, delay, [speed, speed, speed])
-        # self.leg_rear_right.move(leg_3_retract, delay, [speed, speed, speed])
+        self.leg_front_left.move(leg_0_retract, delay, [speed, speed, speed])
+        self.leg_front_right.move(leg_1_retract, delay, [speed, speed, speed])
+        self.leg_rear_left.move(leg_2_retract, delay, [speed, speed, speed])
+        self.leg_rear_right.move(leg_3_retract, delay, [speed, speed, speed])
 
         self.deployed = False
 
@@ -205,7 +203,6 @@ class Legs(object):
             # If the controller is in the neutral position,
             # put the leg in the deploy position
             if 500 < y_axis < 530 and self.deployed:
-                print("Deploying")
                 self.deploy(200)
 
             # Run this if legs are deployed and ready

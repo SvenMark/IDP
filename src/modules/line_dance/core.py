@@ -8,13 +8,13 @@ import sys
 sys.path.insert(0, '../../../src')
 
 
-def run(shared_object):
-    print("run element4")
+def run(name, movement, shared_object):
+    print("run " + str(name))
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
     pin_jurjen1 = 16
-    pin_jurjen2 = 20
+    pin_jurjen2 = 20  # clean code
     GPIO.setup(pin_jurjen1, GPIO.OUT)
     GPIO.setup(pin_jurjen2, GPIO.OUT)
     GPIO.output(pin_jurjen1, 1)
@@ -25,8 +25,7 @@ def run(shared_object):
                     frames_per_buffer=10000)  # uses default input device
 
     test = BeatDetection()
-    for i in range(10):
-        test.detect(stream)
+    test.detect(stream, 10)
 
     stream.stop_stream()
     stream.close()
@@ -40,6 +39,7 @@ def run(shared_object):
     GPIO.output(pin_jurjen2, 0)
 
     # Notify shared object that this thread has been stopped
+    print("Stopped" + str(name))
     shared_object.has_been_stopped()
 
 

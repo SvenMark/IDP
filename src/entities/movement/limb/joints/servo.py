@@ -92,6 +92,11 @@ class Servo(object):
         self.current_speed = speed * self.current_speed_multiplier
         print("servo " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
 
+    def move_speed(self, position, speed):
+            self.goal = position
+            self.ax12.move_speed(self.servo_id, position, speed)
+            self.last_position = position
+
     def is_ready(self):
         """
         Function that checks if a servo completed it`s last move

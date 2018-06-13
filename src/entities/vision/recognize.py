@@ -1,3 +1,4 @@
+import datetime
 import time
 import sys
 
@@ -14,6 +15,7 @@ class Recognize(object):
         self.saved_buildings = saved_buildings
         self.helper = helpers.helper
         self.settings = settings
+        self.recognize = True
 
     def run(self):
         print("Starting recognize")
@@ -34,16 +36,18 @@ class Recognize(object):
             image_width = img.size
             img, center = self.helper.crop_to_contours(mask, img)
 
+            print("center: {}".format(center))
+
             # Calculate new cropped masks
             mask_cropped, valid_contours = self.helper.calculate_mask(img, self.color_range, set_contour=True)
 
             # Append the valid contours to the positions array
-            for cnt in range(len(valid_contours)):
-                self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt])
+            # for cnt in range(len(valid_contours)):
+            #     self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt])
 
             # Recognize building
-            if self.saved_buildings:
-                self.recognize_building(self.positions, image_width, center)
+            if self.saved_buildings and self.recognize:
+                self.recognize_building(valid_contours, image_width, center)
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
@@ -72,22 +76,22 @@ class Recognize(object):
             b = self.saved_buildings[building]
 
             # For each block on the front side of the saved building
-            found = self.check_building_side(b, positions, b.front)
+            found = self.check_building_side(positions, b.front)
             result = [building, "front"]
 
             # For each block on the back side of the saved building
             if not found:
-                found = self.check_building_side(b, positions, b.back)
+                found = self.check_building_side(positions, b.back)
                 result = [building, "back"]
-
+            
             # For each block on the left side of the saved building
             if not found:
-                found = self.check_building_side(b, positions, b.left)
+                found = self.check_building_side(positions, b.left)
                 result = [building, "left"]
 
             # For each block on the right side of the saved building
             if not found:
-                found = self.check_building_side(b, positions, b.right)
+                found = self.check_building_side(positions, b.right)
                 result = [building, "right"]
 
         # If recent settings are handled
@@ -95,13 +99,14 @@ class Recognize(object):
 
         if found:
             # Use audio to state the recognized building
-            print("At time: " + time.ctime() + " Found: ", result[0], result[1])
+            print("At time: " + str(datetime.datetime.now().time()) + " Found: ", result[0], result[1])
+            self.recognize = False
 
         # Return whether a building has been found
         return found
 
     @staticmethod
-    def get_centre(b):
+    def get_center(b):
         total = 0
 
         for block in range(len(b)):
@@ -109,11 +114,17 @@ class Recognize(object):
 
         return total / len(b)
 
-    def check_building_side(self, b, positions, side):
-        for block in range(len(side)):
-            bl = side[block]
-            if not self.helper.is_duplicate(bl, positions, 20):
+    def check_building_side(self, positions, side):
+        print("--------{}-------".format(datetime.datetime.now().time()))
+        for bl in positions:
+            print(str(bl))
+        print("----- vs -----", len(side))
+        for block in side:
+            print(str(block))
+            if not self.helper.is_duplicate(block, positions, 20):
                 return False
+
+        return True
 
     def check_settings(self, center, image_width, result):
         if not self.settings.new:
@@ -130,3 +141,6 @@ class Recognize(object):
 
         # Notify settings that the current frame is handled
         self.settings.update = True
+
+    def nothing(self, x):
+        pass

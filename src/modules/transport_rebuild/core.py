@@ -1,5 +1,6 @@
 import sys
 import threading
+import time
 
 sys.path.insert(0, '../../../src')
 
@@ -15,14 +16,19 @@ tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
 
 saved_buildings = [
     Building(front=[
-        (271, 213),
-        (294, 209),
-        (187, 109),
-        (59, 321),
-        (87, 160)
+            (124, 31),
+            (38, 367),
+            (63, 166),
+            (253, 364),
+            (154, 295),
+            (210, 156)
         ],
              back=[
-
+            (116, 236),
+            (111, 368),
+            (98, 98),
+            (196, 301),
+            (21, 306)
              ],
              left=[
 
@@ -44,7 +50,8 @@ vision = Vision(color_range=color_range,
 rotate_speed = 50
 
 
-def run(shared_object):
+def run(name, movement, shared_object):
+    print("run " + str(name))
     if len(sys.argv) > 1:
         if sys.argv[1] == "hsv_picker":
             threading.Thread(target=vision.helpers.hsv_picker.run).start()
@@ -55,12 +62,21 @@ def run(shared_object):
     else:
         threading.Thread(target=vision.saving.run).start()
 
+    while not shared_object.has_to_stop():
 
-run("")
+        movement.grabber.grab([80, 80, 80])
+        if movement.grabber.reposition is True:
+            movement.tracks.forward(30, 30, 2, 3)
+            movement.grabber.reposition = False
+
+        time.sleep(0.5)
+
+    # Notify shared object that this thread has been stopped
+    print("Stopped" + str(name))
+    shared_object.has_been_stopped()
 
 
-#
-# # TESTING
+# TESTING
 # tracks = Tracks(track_0_pin=18,
 #                 track_1_pin=13,
 #                 track_0_forward=22,
@@ -82,3 +98,4 @@ run("")
 #             # acceleration 0.5 seconds for 0.5 seconds, then wait again
 #             tracks.turn_left(rotate_speed, rotate_speed, 0.5, 0.5)
 #             tracks.stop()
+

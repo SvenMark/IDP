@@ -2,7 +2,7 @@ import os
 
 from gtts import gTTS
 
-from audio import Audio
+from entities.audio.audio import Audio
 
 
 class Speak(Audio):
@@ -41,7 +41,7 @@ class Speak(Audio):
 
 def main():
     sp = Speak()
-    sp.play("gay.mp3")
+    sp.play("heya.mp3")
 
 
 if __name__ == '__main__':

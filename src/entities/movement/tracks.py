@@ -175,14 +175,14 @@ class Tracks(object):
                                   acceleration=0)
                 if horizontal_speed < -dead_zone:
                     horizontal_speed = horizontal_speed / 2
-                    self.backward(duty_cycle_track_left=abs(vertical_speed) - horizontal_speed,
-                                  duty_cycle_track_right=abs(vertical_speed),
+                    self.backward(duty_cycle_track_left=abs(vertical_speed),
+                                  duty_cycle_track_right=abs(vertical_speed)  - horizontal_speed,
                                   delay=0,
                                   acceleration=0)
                 if horizontal_speed > dead_zone:
                     horizontal_speed = abs(horizontal_speed / 2)
-                    self.backward(duty_cycle_track_left=abs(vertical_speed) - horizontal_speed,
-                                  duty_cycle_track_right=abs(vertical_speed),
+                    self.backward(duty_cycle_track_left=abs(vertical_speed),
+                                  duty_cycle_track_right=abs(vertical_speed) - horizontal_speed,
                                   delay=0,
                                   acceleration=0)
 
@@ -195,28 +195,28 @@ class Tracks(object):
                                  acceleration=0)
                 if horizontal_speed < -dead_zone:
                     horizontal_speed = horizontal_speed / 2
-                    self.forward(duty_cycle_track_left=vertical_speed - horizontal_speed,
-                                 duty_cycle_track_right=vertical_speed,
+                    self.forward(duty_cycle_track_left=vertical_speed,
+                                 duty_cycle_track_right=vertical_speed - horizontal_speed,
                                  delay=0,
                                  acceleration=0)
                 if horizontal_speed > dead_zone:
                     horizontal_speed = abs(horizontal_speed / 2)
-                    self.forward(duty_cycle_track_left=vertical_speed - horizontal_speed,
-                                 duty_cycle_track_right=vertical_speed,
+                    self.forward(duty_cycle_track_left=vertical_speed,
+                                 duty_cycle_track_right=vertical_speed - horizontal_speed,
                                  delay=0,
                                  acceleration=0)
 
             # Turn around it`s axis
             if -dead_zone < vertical_speed < dead_zone:
                 if horizontal_speed > dead_zone:
-                    self.turn_right(duty_cycle_track_left=horizontal_speed / 2,
-                                    duty_cycle_track_right=horizontal_speed / 2,
+                    self.turn_right(duty_cycle_track_left=horizontal_speed / 1.5,
+                                    duty_cycle_track_right=horizontal_speed / 1.5,
                                     delay=0,
                                     acceleration=0)
 
                 if horizontal_speed < -dead_zone:
-                    self.turn_left(duty_cycle_track_left=abs(horizontal_speed) / 2,
-                                   duty_cycle_track_right=abs(horizontal_speed) / 2,
+                    self.turn_left(duty_cycle_track_left=abs(horizontal_speed) / 1.5,
+                                   duty_cycle_track_right=abs(horizontal_speed) / 1.5,
                                    delay=0,
                                    acceleration=0)
 
