@@ -51,7 +51,7 @@ def run(name, movement, shared_object):
         time.sleep(0.1)
 
     # Notify shared object that this thread has been stopped
-    print("[STOP]" + str(name))
+    print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
 
 

@@ -2,6 +2,8 @@ import math
 import sys
 import time
 
+from imutils.video import VideoStream
+
 sys.path.insert(0, '../../../src')
 
 from entities.vision.recognize import Recognize, Block
@@ -9,15 +11,15 @@ from entities.vision.helpers.vision_helper import Color
 
 
 def run(name, movement, shared_object):
-    print("run " + str(name))
-    # detect_cup()
+    print("[RUN] " + str(name))
+    detect_cup()
 
     while not shared_object.has_to_stop():
-        print("Doing calculations and stuff")
-        time.sleep(0.5)
+        print("[INFO] Doing calculations and stuff")
+        time.sleep(0.1)
 
     # Notify shared object that this thread has been stopped
-    print("Stopped" + str(name))
+    print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
 
 
@@ -36,9 +38,10 @@ def detect_cup():
     trainImg = cv2.imread("ding.jpg", 0)
     trainKP, trainDesc = detector.detectAndCompute(trainImg, None)
 
-    cam = cv2.VideoCapture(0)
+    cam = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+    time.sleep(0.3)  # startup
     while True:
-        ret, frame = cam.read()
+        frame = cam.read()
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         green = Color('green', [28, 39, 0], [94, 255, 255])
@@ -85,9 +88,9 @@ def detect_cup():
 
             cv2.putText(frame, "Cup", (cx - 30, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
             cv2.polylines(frame, [np.int32(queryBorder)], True, (255, 255, 255), 4)
-            print("Cup detected at distance: " + str(distance) + "cm")
+            print("[INFO] Cup detected at distance: " + str(distance) + "cm")
         else:
-            print("Not Enough match found- %d/%d" % (len(goodMatch), MIN_MATCH_COUNT))
+            print("[INFO] Not Enough match found- %d/%d" % (len(goodMatch), MIN_MATCH_COUNT))
         cv2.imshow('result', frame)
         if cv2.waitKey(10) == ord('q'):
             break
