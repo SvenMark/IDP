@@ -28,6 +28,7 @@ legs = [
     ]
 ]
 
+sequence = []
 for leg in legs:
     leg_positions = []
     for ax_id in leg:
@@ -37,4 +38,5 @@ for leg in legs:
         except:
             print("Servo with id: {}, has not responded".format(ax_id))
         leg_positions.append(positions)
-    print("NAME = {}".format(leg_positions))
+    sequence.append(leg_positions)
+print("NAME = {}".format(sequence))
