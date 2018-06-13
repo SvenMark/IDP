@@ -19,7 +19,7 @@ def main():
     limbs = [
         Legs(leg_0_servos=[
                 6,
-                13,
+                14,
                 15
             ],
             leg_1_servos=[
@@ -28,14 +28,14 @@ def main():
                 18
             ],
             leg_2_servos=[
+                21,
                 41,
-                52,
-                62
+                52
             ],
             leg_3_servos=[
-                0,
-                0,
-                0,
+                61,
+                62,
+                63,
             ]
         ),
         Tracks(track_0_pin=13,
