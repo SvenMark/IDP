@@ -46,8 +46,8 @@ def main():
                track_1_backward=26),
         Grabber(id_servo=[
             1,
-            13,
-            53
+            53,
+            13
         ])
     ]
 
