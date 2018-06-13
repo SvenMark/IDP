@@ -49,20 +49,25 @@ rotate_speed = 50
 
 
 def run(shared_object):
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
-            threading.Thread(target=vision.helpers.hsv_picker.run).start()
-        elif sys.argv[1] == "saving":
-            threading.Thread(target=vision.saving.run).start()
-        elif sys.argv[1] == "recognize":
-            threading.Thread(target=vision.recognize.run).start()
-        else:
-            print("Wrong argument given..")
-            run(shared_object)
+    try:
+        if len(sys.argv) > 1:
+            if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
+                threading.Thread(target=vision.helpers.hsv_picker.run).start()
+            elif sys.argv[1] == "saving":
+                threading.Thread(target=vision.saving.run).start()
+            elif sys.argv[1] == "recognize":
+                threading.Thread(target=vision.recognize.run).start()
+            else:
+                print("Wrong argument given..")
+                run(shared_object)
 
-    # Default no argument
-    else:
-        threading.Thread(target=vision.saving.run).start()
+        # Default no argument
+        else:
+            threading.Thread(target=vision.helpers.hsv_picker.run).start()
+    except AttributeError:
+        print("Something went wrong..")
+        run(shared_object)
+
 
 
 run("")
