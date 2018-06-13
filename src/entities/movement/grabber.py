@@ -27,12 +27,16 @@ from entities.movement.sequences.sequences import *
 
 class Grabber(object):
 
-    def __init__(self, id_servo):
-        self.servo_0 = Servo(id_servo[0], 1020)
-        self.servo_1 = Servo(id_servo[1], 270)
-        self.servo_2 = Servo(id_servo[2], 815)
+    def __init__(self, id_servo, initial_positions):
+        self.servo_0 = Servo(id_servo[0], initial_positions[0])
+        self.servo_1 = Servo(id_servo[1], initial_positions[1])
+        self.servo_2 = Servo(id_servo[2], initial_positions[2])
 
         self.servos = [self.servo_0, self.servo_1, self.servo_2]
+
+        self.servo_0.move_speed(initial_positions[0], 50)
+        self.servo_1.move_speed(initial_positions[1], 50)
+        self.servo_2.move_speed(initial_positions[2], 50)
 
         self.type = 'grabber'
 
