@@ -34,38 +34,20 @@ class Grabber(object):
         Checks if all servos of this leg are ready
         :return: If all the servos are ready or not
         """
+        result = []
         for elem in self.servos:
-            elem.last_position = elem.read_position()
-        return len([elem for elem in self.servos if elem.is_ready()]) == 3
+            if not elem.is_ready():
+                result.append(elem)
+                # elem.last_position = elem.read_position()
+        return len(result) == 3
 
     def grab(self, speeds):
         positions = [186, 528, 260]
-        self.servo_0.move_speed(positions[0], speeds[0])
-        self.servo_1.move_speed(positions[1], speeds[1])
-
-        # counter = 0
-        #
-        # while self.ready() is not 3:
-        #     if counter > 5:
-        #         self.reposition = True
-        #         self.loosen([100, 100, 100])
-        #     time.sleep(0.01)
-        #     counter += 1
-
-        while self.ready() is not 3:
-            time.sleep(0.1)
-
-        self.servo_2.move_speed(positions[2], speeds[2])
-
-        self.update()
+        self.move_grabber(positions, speeds)
 
     def loosen(self, speeds):
         positions = [465, 198, 200]
-        self.servo_0.move_speed(positions[0], speeds[0])
-        self.servo_1.move_speed(positions[1], speeds[1])
-        self.servo_2.move_speed(positions[2], speeds[2])
-
-        self.update()
+        self.move_grabber(positions, speeds)
 
     def get_delta(self):
         """
@@ -76,6 +58,11 @@ class Grabber(object):
         elapsed_time = next_time - self.previous
         self.previous = next_time
         return elapsed_time.total_seconds()
+
+    def move_grabber(self, positions, speeds):
+        for i in range(len(self.servos)):
+            self.servos[i].move(positions[i], 0, speeds[i])
+        self.update()
 
     def update(self):
         """
