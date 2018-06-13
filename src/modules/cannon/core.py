@@ -13,6 +13,9 @@ import cv2
 # last known position of the line with left percentage
 last_position = -1000
 
+# from 0 to 1
+TORQUE = 1
+
 red_detected = False
 
 
@@ -21,8 +24,10 @@ def run(name, movement, shared_object):
     Thread(target=line_detection, args=(shared_object,)).start()
 
     while not shared_object.has_to_stop():
-        global last_position, red_detected
+        global last_position, red_detected, TORQUE
         offset = 50 - last_position
+        offset = offset * TORQUE
+
         print(offset)
 
         if last_position == -1000:
@@ -178,7 +183,8 @@ def detect_red(img, hsv):
         # cv2.imshow("red", red)
         total_area += cv2.contourArea(cnt)
     # print(str(total_area))
-    if len(contours) == 0 or total_area < 1:
+    print("red area: {}".format(total_area))
+    if len(contours) == 0 or total_area < 100:
         return False
     else:
         return True
