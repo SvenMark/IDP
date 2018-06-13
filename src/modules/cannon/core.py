@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, '../../../src')  # Needed for pi
+sys.path.insert(0, '../../../src')
 
 from imutils.video import VideoStream
 from modules.cannon.helpers import Point, Color
@@ -19,7 +19,7 @@ red_detected = False
 
 
 def run(name, movement, shared_object):
-    print("[RUN]" + str(name))
+    print("[RUN] " + str(name))
     Thread(target=line_detection, args=(shared_object,)).start()
 
     while not shared_object.has_to_stop():
@@ -27,13 +27,11 @@ def run(name, movement, shared_object):
         offset = 50 - last_position
         offset = offset * TORQUE
 
-        print("[INFO]" + str(offset))
-
         if last_position == -1000:
             print("[INFO] Waiting")
             while last_position == -1000:
                 time.sleep(0.1)
-        print("[INFO] Doing shit")
+        print("[INFO] Doing shit with offset:" + str(offset))
         if red_detected:
             print("[INFO] Red detected")
             if movement is not None:
@@ -59,9 +57,9 @@ def run(name, movement, shared_object):
 
 def line_detection(shared_object):
     cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
-    # time.sleep(1)  # startup
+    time.sleep(0.3)  # startup
 
-    ret, sample = cap.read()
+    sample = cap.read()
     height, width, channel = sample.shape
 
     # print("w: " + str(width) + " " + "h: " + str(height))
@@ -73,7 +71,7 @@ def line_detection(shared_object):
     ]
 
     while not shared_object.has_to_stop():
-        ret, img = cap.read()
+        img = cap.read()
         img_cropped = set_region(img, np.array([vertices], np.int32))
         blur = cv2.GaussianBlur(img_cropped, (9, 9), 0)
 
@@ -87,7 +85,6 @@ def line_detection(shared_object):
         global red_detected
         if detect_red(img, hsv):
             red_detected = True
-            # time.sleep(10)
         else:
             red_detected = False
 
@@ -180,8 +177,7 @@ def detect_red(img, hsv):
         cv2.drawContours(img, [cnt], -1, (0, 0, 255), 10)
         # cv2.imshow("red", red)
         total_area += cv2.contourArea(cnt)
-    # print(str(total_area))
-    print("red area: {}".format(total_area))
+    # print("[INFO] Known red area: {}".format(total_area))
     if len(contours) == 0 or total_area < 100:
         return False
     else:
