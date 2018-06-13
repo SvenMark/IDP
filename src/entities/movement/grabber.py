@@ -50,6 +50,9 @@ class Grabber(object):
         #     time.sleep(0.01)
         #     counter += 1
 
+        while self.ready() is not 3:
+            time.sleep(0.1)
+
         self.servo_2.move_speed(positions[2], speeds[2])
 
         self.update()
