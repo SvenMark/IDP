@@ -76,6 +76,7 @@ class Grabber(object):
         servos_not_ready = [elem for elem in self.servos if not elem.is_ready()]
         self.get_delta()
         while len(servos_not_ready) != 0:
+            print(servos_not_ready)
             delta = self.get_delta()
             for i in range(len(servos_not_ready)):
                 self.servos[i].update(delta)
