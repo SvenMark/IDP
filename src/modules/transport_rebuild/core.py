@@ -63,7 +63,12 @@ def run(name, movement, shared_object):
         threading.Thread(target=vision.saving.run).start()
 
     while not shared_object.has_to_stop():
-        print("Doing calculations and stuff")
+
+        movement.grabber.grab([80, 80, 80])
+        if movement.grabber.reposition is True:
+            movement.tracks.forward(30, 30, 2, 3)
+            movement.grabber.reposition = False
+
         time.sleep(0.5)
 
     # Notify shared object that this thread has been stopped
