@@ -183,6 +183,7 @@ def detect_red(img, hsv):
         # cv2.imshow("red", red)
         total_area += cv2.contourArea(cnt)
     # print(str(total_area))
+    print("red area: {}".format(total_area))
     if len(contours) == 0 or total_area < 100:
         return False
     else:
