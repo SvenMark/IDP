@@ -29,6 +29,9 @@ class Saving(object):
         # Initialize camera
         cap = cv2.VideoCapture(0)
         while True:
+            cap.set(10, cv2.getTrackbarPos('brightness', name) / 100)
+            cap.set(11, cv2.getTrackbarPos('contrast', name) / 100)
+            cap.set(12, cv2.getTrackbarPos('saturation', name) / 100)
 
             # Read frame from the camera
             ret, img = cap.read()
@@ -51,7 +54,7 @@ class Saving(object):
                 print("--------{}-------".format(datetime.datetime.now().time()))
                 for cnt in range(len(valid_contours)):
                     print(valid_contours[cnt])
-                self.save_building(mask_cropped, valid_contours)
+                self.save_building()
 
             # Show the created image
             cv2.imshow('Spider Cum 3000', mask_cropped)
@@ -97,10 +100,9 @@ class Saving(object):
         mainloop()
         self.save = True
 
-    def save_building(self, img, positions):
+    def save_building(self):
         """
         Saves the current building with the given img
-        :param img: The current frame
         """
 
         time.sleep(1)
@@ -132,5 +134,3 @@ class Saving(object):
         Button(master, text='OK', command=confirmed).grid(row=0, column=1, sticky=W)
         Button(master, text='Retry', command=master.destroy).grid(row=0, column=0, sticky=W)
         mainloop()
-
-        self.last_positions = self.positions

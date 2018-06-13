@@ -131,16 +131,18 @@ class Hsv_picker:
         cv2.namedWindow(name)
         cv2.resizeWindow(name, 300, 300)
 
+        nothing = self.helper.nothing
+
         # create trackbars for lower
-        cv2.createTrackbar('Low H', name, c.lower[0], 180, self.nothing)
-        cv2.createTrackbar('Low S', name, c.lower[1], 255, self.nothing)
-        cv2.createTrackbar('Low V', name, c.lower[2], 255, self.nothing)
+        cv2.createTrackbar('Low H', name, c.lower[0], 180, nothing)
+        cv2.createTrackbar('Low S', name, c.lower[1], 255, nothing)
+        cv2.createTrackbar('Low V', name, c.lower[2], 255, nothing)
 
         # create trackbars for higher
-        cv2.createTrackbar('High H', name, c.upper[0], 180, self.nothing)
-        cv2.createTrackbar('High S', name, c.upper[1], 255, self.nothing)
-        cv2.createTrackbar('High V', name, c.upper[2], 255, self.nothing)
-        cv2.createTrackbar('off_on', name, 0, 1, self.nothing)
+        cv2.createTrackbar('High H', name, c.upper[0], 180, nothing)
+        cv2.createTrackbar('High S', name, c.upper[1], 255, nothing)
+        cv2.createTrackbar('High V', name, c.upper[2], 255, nothing)
+        cv2.createTrackbar('off_on', name, 0, 1, nothing)
 
     def savehigherlower(self, color_range):
         """
