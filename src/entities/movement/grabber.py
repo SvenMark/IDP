@@ -37,7 +37,7 @@ class Grabber(object):
         return len([elem for elem in self.servos if elem.is_ready()]) == 3
 
     def grab(self, speeds):
-        positions = [186, 528, 617]
+        positions = [186, 528, 111]
         self.servo_0.move_speed(positions[0], speeds[0])
         self.servo_1.move_speed(positions[1], speeds[1])
 
@@ -55,7 +55,7 @@ class Grabber(object):
         self.update()
 
     def loosen(self, speeds):
-        positions = [465, 198, 617]
+        positions = [465, 198, 15]
         self.servo_0.move_speed(positions[0], speeds[0])
         self.servo_1.move_speed(positions[1], speeds[1])
         self.servo_2.move_speed(positions[2], speeds[2])
