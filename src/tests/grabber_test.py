@@ -9,8 +9,11 @@ grabber = Grabber(id_servo=[
             1,
             53,
             13
-        ])
+        ],
+        initial_positions=[1020, 270, 815])
 
-grabber.grab([0, 0, 0], 0, [50, 50, 50])
-time.sleep(2)
-grabber.loosen([0, 0, 0], 0, [50, 50, 50])
+for i in range(10):
+    grabber.grab([0, 0, 0], 0, [80, 80, 80])
+    time.sleep(4)
+    grabber.loosen([0, 0, 0], 0, [80, 80, 80])
+    time.sleep(4)

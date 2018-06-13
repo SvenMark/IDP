@@ -27,12 +27,16 @@ from entities.movement.sequences.sequences import *
 
 class Grabber(object):
 
-    def __init__(self, id_servo):
-        self.servo_0 = Servo(id_servo[0], 1020)
-        self.servo_1 = Servo(id_servo[1], 270)
-        self.servo_2 = Servo(id_servo[2], 815)
+    def __init__(self, id_servo, initial_positions):
+        self.servo_0 = Servo(id_servo[0], initial_positions[0])
+        self.servo_1 = Servo(id_servo[1], initial_positions[1])
+        self.servo_2 = Servo(id_servo[2], initial_positions[2])
 
         self.servos = [self.servo_0, self.servo_1, self.servo_2]
+
+        self.servo_0.move_speed(initial_positions[0], 50)
+        self.servo_1.move_speed(initial_positions[1], 50)
+        self.servo_2.move_speed(initial_positions[2], 50)
 
         self.type = 'grabber'
 
@@ -47,12 +51,12 @@ class Grabber(object):
 
     def grab(self, positions, delay, speeds):
         positions = [810, 540, 755]
-        self.servo_0.move(positions[0], delay, speeds[0])
-        self.servo_1.move(positions[1], delay, speeds[1])
-        self.servo_2.move(positions[2], delay, speeds[2])
+        self.servo_0.move_speed(positions[0], speeds[0])
+        self.servo_1.move_speed(positions[1], speeds[1])
+        self.servo_2.move_speed(positions[2], speeds[2])
 
     def loosen(self, positions, delay, speeds):
         positions = [1020, 270, 815]
-        self.servo_0.move(positions[0], delay, speeds[0])
-        self.servo_1.move(positions[1], delay, speeds[1])
-        self.servo_2.move(positions[2], delay, speeds[2])
+        self.servo_0.move_speed(positions[0], speeds[0])
+        self.servo_1.move_speed(positions[1], speeds[1])
+        self.servo_2.move_speed(positions[2], speeds[2])
