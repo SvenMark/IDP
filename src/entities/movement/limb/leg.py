@@ -14,9 +14,9 @@ class Leg(object):
         :param positions: Array of servo positions
         """
         # Create the servo instances with correct id and starting position.
-        self.servo_0 = Servo(id_servo[0], positions[0])
-        self.servo_1 = Servo(id_servo[1], positions[1])
-        self.servo_2 = Servo(id_servo[2], positions[2])
+        self.servo_0 = Servo(id_servo[0], positions[0], 3)
+        self.servo_1 = Servo(id_servo[1], positions[1], 3)
+        self.servo_2 = Servo(id_servo[2], positions[2], 3)
 
         self.servos = [self.servo_0, self.servo_1, self.servo_2]
 

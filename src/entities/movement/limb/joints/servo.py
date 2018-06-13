@@ -15,7 +15,7 @@ class Servo(object):
     Base class for servo
     """
 
-    def __init__(self, servo_id, initial_position):
+    def __init__(self, servo_id, initial_position, sensitivity):
         """
         Constructor for servo class
         :param servo_id: ID of the servo
@@ -38,7 +38,7 @@ class Servo(object):
 
         # self.move(servo_id, initial_position, 300)
 
-        self.sensitivity = 3
+        self.sensitivity = sensitivity
 
         time.sleep(0.1)
 
