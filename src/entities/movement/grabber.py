@@ -12,6 +12,11 @@ from entities.movement.sequences.sequences import *
 class Grabber(object):
 
     def __init__(self, id_servo, initial_positions):
+        """
+
+        :param id_servo:
+        :param initial_positions:
+        """
         self.previous = datetime.datetime.now()
 
         self.servo_0 = Servo(id_servo[0], initial_positions[0])
@@ -21,9 +26,7 @@ class Grabber(object):
         self.servos = [self.servo_0, self.servo_1, self.servo_2]
         self.reposition = False
 
-        self.servo_0.move_speed(initial_positions[0], 50)
-        self.servo_1.move_speed(initial_positions[1], 50)
-        self.servo_2.move_speed(initial_positions[2], 50)
+        self.move_grabber(initial_positions, [50, 50, 50])
 
         self.type = 'grabber'
 
