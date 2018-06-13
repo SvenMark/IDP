@@ -11,7 +11,7 @@ from libs.ax12 import Ax12
 grabber = Grabber(id_servo=[
             1,
             53,
-            13
+            43
         ],
         initial_positions=[465, 198, 15])
 

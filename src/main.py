@@ -47,7 +47,7 @@ def main():
         Grabber(id_servo=[
             1,
             53,
-            13
+            43
         ],
             initial_positions=[
                 160,
