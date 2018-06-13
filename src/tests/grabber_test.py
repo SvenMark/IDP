@@ -13,7 +13,7 @@ grabber = Grabber(id_servo=[
             53,
             13
         ],
-        initial_positions=[465, 198, 450])
+        initial_positions=[465, 198, 10])
 
 grabber.grab([80, 80, 80])
 time.sleep(3)
