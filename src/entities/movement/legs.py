@@ -35,10 +35,10 @@ class Legs(object):
         # self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
 
         self.legs = [
-                 self.leg_front_left,
-                 self.leg_front_right,
-                 self.leg_rear_left,
-                 self.leg_rear_right
+                 # self.leg_front_left,
+                 # self.leg_front_right,
+                 # self.leg_rear_left,
+                 # self.leg_rear_right
             ]
 
         # The current move sequence
