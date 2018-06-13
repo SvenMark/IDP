@@ -10,7 +10,7 @@ grabber = Grabber(id_servo=[
             53,
             13
         ],
-        initial_positions=[1020, 300, 755])
+        initial_positions=[1023, 290, 690])
 
 for i in range(10):
     grabber.grab([0, 0, 0], 0, [80, 80, 80])
