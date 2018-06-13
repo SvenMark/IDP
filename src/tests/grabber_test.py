@@ -14,5 +14,6 @@ grabber = Grabber(id_servo=[
 
 for i in range(10):
     grabber.grab([0, 0, 0], 0, [80, 80, 80])
-    time.sleep(2)
+    time.sleep(4)
     grabber.loosen([0, 0, 0], 0, [80, 80, 80])
+    time.sleep(4)
