@@ -1,9 +1,9 @@
 import sys
+sys.path.insert(0, '../../../src')
+
 from entities.vision.helpers.helpers import Helpers
 from entities.vision.recognize import Recognize
 from entities.vision.saving import Saving
-
-sys.path.insert(0, '../../../src')
 
 
 class Vision(object):

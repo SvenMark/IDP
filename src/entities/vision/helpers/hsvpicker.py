@@ -8,8 +8,6 @@ from imutils.video import VideoStream
 from entities.vision.helpers.vision_helper import Color
 from entities.vision.helpers.range_handler import Range_Handler
 
-sys.path.insert(0, '../../../src')
-
 
 class Hsv_picker:
     def __init__(self, helpers, color_range, img):

@@ -4,8 +4,6 @@ from entities.vision.helpers.vision_helper import *
 from tkinter import *
 from threading import Thread
 
-sys.path.insert(0, '../../../src')
-
 
 class Saving(object):
 

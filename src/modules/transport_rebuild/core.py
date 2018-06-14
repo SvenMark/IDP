@@ -1,11 +1,11 @@
 import sys
 import threading
+sys.path.insert(0, '../../../src')
+
 from entities.vision.vision import Vision
 from entities.vision.helpers.vision_helper import Color, Building, Side
 from entities.vision.recognize_settings import Recognize_settings
 from entities.vision.helpers.range_handler import Range_Handler
-
-sys.path.insert(0, '../../../src')
 
 # from entities.movement.tracks import Tracks
 
