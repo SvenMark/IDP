@@ -67,15 +67,9 @@ class Json_Handler:
             elif side == Side.right:
                 new_building.right = positions
             current.append(new_building)
-        for bl in current:
-            print(bl.front)
 
-        open(self.file_name_building, "w").close()
-        obj_text = codecs.open(self.file_name_building, 'r', encoding='utf-8').read()
-        b_new = json.loads(obj_text)
-        a_new = np.array(b_new)
         saved_file = open(self.file_name_building, "w")
-        json.dump(a_new, saved_file)
+        json.dump(current, saved_file)
         saved_file.close()
 
     def get_save_buildings(self):
