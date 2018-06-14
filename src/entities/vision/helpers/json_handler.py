@@ -1,4 +1,8 @@
+import codecs
 import sys
+
+import numpy as np
+
 sys.path.insert(0, '../../../src')
 
 import json
@@ -66,8 +70,11 @@ class Json_Handler:
         for bl in current:
             print(bl.front)
 
+        obj_text = codecs.open(self.file_name_building, 'r', encoding='utf-8').read()
+        b_new = json.loads(obj_text)
+        a_new = np.array(b_new)
         saved_file = open(self.file_name_building, "w")
-        json.dump(current, saved_file)
+        json.dump(a_new, saved_file)
         saved_file.close()
 
     def get_save_buildings(self):
