@@ -31,14 +31,14 @@ class Legs(object):
         # Initialise a leg for each corner of the robot
         # self.leg_front_left = Leg(leg_0_servos, [820, 385, 565])
         # self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
-        # self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
-        self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
+        self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
+        # self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
 
         self.legs = [
                  # self.leg_front_left,
                  # self.leg_front_right,
-                 # self.leg_rear_left,
-                 self.leg_rear_right
+                 self.leg_rear_left,
+                 # self.leg_rear_right
             ]
 
         # The current move sequence
@@ -121,8 +121,8 @@ class Legs(object):
 
         # self.leg_front_left.move(leg_0_retract, delay, [speed, speed, speed])
         # self.leg_front_right.move(leg_1_retract, delay, [speed, speed, speed])
-        # self.leg_rear_left.move(leg_2_retract, delay, [speed, speed, speed])
-        self.leg_rear_right.move(leg_3_retract, delay, [speed, speed, speed])
+        self.leg_rear_left.move(leg_2_retract, delay, [speed, speed, speed])
+        # self.leg_rear_right.move(leg_3_retract, delay, [speed, speed, speed])
 
         self.deployed = False
 
