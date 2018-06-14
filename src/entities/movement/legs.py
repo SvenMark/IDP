@@ -36,7 +36,7 @@ class Legs(object):
 
         self.legs = [
                  # self.leg_front_left,
-                 # self.leg_front_right,
+                 self.leg_front_right,
                  # self.leg_rear_left,
                  # self.leg_rear_right
             ]
