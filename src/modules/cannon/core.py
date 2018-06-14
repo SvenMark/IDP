@@ -56,13 +56,13 @@ def run(name, movement, shared_object):
 
 
 def line_detection(shared_object):
+    # Get view of picamera and do a small warmup of 0.3s
     cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
-    time.sleep(0.3)  # startup
+    time.sleep(0.3)
 
+    # Get width and height of the frame and make vertices for a traingle shaped region
     sample = cap.read()
     height, width, channel = sample.shape
-
-    # print("w: " + str(width) + " " + "h: " + str(height))
 
     vertices = [
         (0, height),
@@ -71,24 +71,26 @@ def line_detection(shared_object):
     ]
 
     while not shared_object.has_to_stop():
+        # Get current frame from picamera and make a cropped image with the vertices above with set_region
         img = cap.read()
         img_cropped = set_region(img, np.array([vertices], np.int32))
+
+        # Add blur to the cropped image
         blur = cv2.GaussianBlur(img_cropped, (9, 9), 0)
 
-        # Hsv Mask
+        # Generate and set a mask for a range of black (color of the line) to the cropped image
         hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-        low_black = np.array([0, 0, 40])
-        high_black = np.array([157, 118, 120])
-        mask = cv2.inRange(hsv, low_black, high_black)
+        black = Color([0, 0, 40], [157, 118, 120])
+        mask = cv2.inRange(hsv, black.lower, black.upper)
 
-        # Red detection
+        # Checks if the color red is detected and calls function detect_red with the img
         global red_detected
         if detect_red(img, hsv):
             red_detected = True
         else:
             red_detected = False
 
-        # Get lines
+        # Set variables and get lines with Houghlines function on the mask of black
         theta = np.pi / 180
         threshold = 150
         min_line_length = 40
@@ -97,23 +99,25 @@ def line_detection(shared_object):
         lines = cv2.HoughLinesP(mask, 2, theta, threshold, np.array([]),
                                 min_line_length, max_line_gap)
 
-        # Draw lines
+        # Set line color to blue and clone the image to draw the lines on
         line_color = (255, 0, 0)
         img_clone = img.copy()
 
         if lines is not None:
             for line in lines:
                 for x1, y1, x2, y2 in line:
+                    # Make two points with the pixels of the line and draw the line on the cloned image
                     p1 = Point(x1, y1)
                     p2 = Point(x2, y2)
                     cv2.line(img_clone, (p1.x, p1.y), (p2.x, p2.y), line_color, 5)
+            # Calculate avarge distance with avarge_distance in percentages to the left and right
             left, right = average_distance(lines, width)
-            # print("Percentage left: " + str(round(left)) + "%")
-            # print("Percentage right: " + str(round(right)) + "%")
             global last_position
             last_position = round(left)
 
         # cv2.imshow('camservice-lijn', img_clone)
+
+        # If q is pressed, break while loop
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
@@ -121,7 +125,8 @@ def line_detection(shared_object):
     cv2.destroyAllWindows()
 
 
-def set_region(img, vertices):       # Region for search
+# Set the triangle region with the vertices on the img
+def set_region(img, vertices):
     mask = np.zeros_like(img)
     channel_count = img.shape[2]
     match_mask_color = (255,) * channel_count
@@ -137,6 +142,7 @@ def set_region(img, vertices):       # Region for search
     return masked_img + bg
 
 
+# Calculate midpoint of 2 points
 def midpoint(p1, p2):
     midp = Point(0, 0)
     midp.x = (p1.x + p2.x) / 2
@@ -144,6 +150,7 @@ def midpoint(p1, p2):
     return midp
 
 
+# Calculate the average distance from left and right to center
 def average_distance(lines, width):
     count = 0
     totaldr = 0  # Total distance to right
