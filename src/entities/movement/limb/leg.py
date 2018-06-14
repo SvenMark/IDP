@@ -31,6 +31,7 @@ class Leg(object):
         Checks if all servos of this leg are ready
         :return: If all the servos are ready or not
         """
+        print("Check in leg")
         return len([elem for elem in self.servos if elem.is_ready()]) == 3
 
     def move(self, positions, delay, speeds):
