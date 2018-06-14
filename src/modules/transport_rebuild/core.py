@@ -53,35 +53,22 @@ def run(name, movement, shared_object):
         print("[ERROR] Something went wrong..")
         run(name, movement, shared_object)
 
-    while not shared_object.has_to_stop():
-
-        movement.grabber.grab([80, 80, 80])
-        if movement.grabber.reposition is True:
-            movement.tracks.forward(30, 30, 2, 3)
-            movement.grabber.reposition = False
-
-        time.sleep(0.5)
-
-    # Notify shared object that this thread has been stopped
-    print("Stopped" + str(name))
-    shared_object.has_been_stopped()
+    # while not shared_object.has_to_stop():
+    #
+    #     movement.grabber.grab([80, 80, 80])
+    #     if movement.grabber.reposition is True:
+    #         movement.tracks.forward(30, 30, 2, 3)
+    #         movement.grabber.reposition = False
+    #
+    #     time.sleep(0.5)
+    #
+    # # Notify shared object that this thread has been stopped
+    # print("Stopped" + str(name))
+    # shared_object.has_been_stopped()
 
 
 limbs = [
-    Legs(
-         leg_0_servos=[6, 14, 15],
-         leg_1_servos=[16, 17, 18],
-         leg_2_servos=[21, 41, 52],
-         leg_3_servos=[61, 62, 63]
-         ),
-    Tracks(track_0_pin=13,
-           track_1_pin=18,
-           track_0_forward=22,
-           track_0_backward=27,
-           track_1_forward=19,
-           track_1_backward=26),
-    Grabber(id_servo=[1, 53, 43],
-            initial_positions=[465, 198, 200])
+
 ]
 
 lights = []
