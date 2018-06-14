@@ -15,7 +15,7 @@ class Json_Handler:
                                     Color("orange", [0, 108, 104], [6, 255, 255]),
                                     Color("green", [28, 39, 0], [94, 255, 255]),
                                     Color("red", [167, 116, 89], [180, 255, 255])]
-        self.back_up_building = (0, 0)
+        self.back_up_building = [Building((0, 0), (0, 0), (0, 0), (0, 0), False, 0)]
 
     def set_color_range(self, color_range):
         saved_file = open(self.file_name_color, "w")
