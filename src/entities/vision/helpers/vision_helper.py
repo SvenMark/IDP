@@ -19,7 +19,7 @@ class Side(Enum):
 
 
 class Building:
-    def __init__(self, front=(0, 0), back=(0, 0), left=(0, 0), right=(0, 0), pick_up_vertical=False, number=0):
+    def __init__(self, front=None, back=None, left=None, right=None, pick_up_vertical=False, number=0):
         self.front = front
         self.back = back
         self.left = left
