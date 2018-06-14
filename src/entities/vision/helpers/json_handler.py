@@ -64,6 +64,8 @@ class Json_Handler:
             elif side == Side.right:
                 new_building.right = positions
             current.append(new_building)
+        for bl in current:
+            print(bl.front)
 
         saved_file = open(self.file_name_building, "w")
         json.dump(current, saved_file)
