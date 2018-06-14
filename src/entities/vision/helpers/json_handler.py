@@ -38,9 +38,11 @@ class Json_Handler:
 
     def set_save_building(self, positions, building, side):
         current = self.get_save_buildings()
+        exist = False
         for saved_building in current:
             print(saved_building.number)
             if saved_building.number == building:
+                exist = True
                 if side == Side.front:
                     saved_building.front = positions
                 elif side == Side.back:
@@ -49,17 +51,18 @@ class Json_Handler:
                     saved_building.left = positions
                 elif side == Side.right:
                     saved_building.right = positions
-            else:
-                new_building = Building(number=building)
-                if side == Side.front:
-                    new_building.front = positions
-                elif side == Side.back:
-                    new_building.back = positions
-                elif side == Side.left:
-                    new_building.left = positions
-                elif side == Side.right:
-                    new_building.right = positions
-                current.append(new_building)
+
+        if not exist:
+            new_building = Building(number=building)
+            if side == Side.front:
+                new_building.front = positions
+            elif side == Side.back:
+                new_building.back = positions
+            elif side == Side.left:
+                new_building.left = positions
+            elif side == Side.right:
+                new_building.right = positions
+            current.append(new_building)
 
         saved_file = open(self.file_name_building, "w")
         json.dump(current, saved_file)
