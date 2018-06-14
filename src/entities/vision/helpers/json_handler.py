@@ -58,13 +58,13 @@ class Json_Handler:
 
         if not exist:
             new_building = Building(front=[[]], back=[[]], left=[[]], right=[[]], pick_up_vertical=False, number=building)
-            if side == Side.front:
+            if side == 0:
                 new_building.front = positions
-            elif side == Side.back:
+            elif side == 1:
                 new_building.back = positions
-            elif side == Side.left:
+            elif side == 2:
                 new_building.left = positions
-            elif side == Side.right:
+            elif side == 3:
                 new_building.right = positions
             current.append(new_building)
 

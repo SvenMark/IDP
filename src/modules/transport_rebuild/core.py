@@ -10,7 +10,7 @@ from entities.vision.recognize_settings import Recognize_settings
 from entities.vision.helpers.json_handler import Json_Handler
 from entities.movement.movement import Movement
 from entities.threading.utils import SharedObject
-from entities.movement.grabber import Grabber
+# from entities.movement.grabber import Grabber
 from entities.movement.legs import Legs
 from entities.movement.tracks import Tracks
 
