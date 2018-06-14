@@ -17,7 +17,7 @@ class Hsv_picker:
         self.img = cv2.imread(img)
         self.helper = helpers.helper
         self.color_range = color_range
-        self.range_handler = Json_Handler()
+        self.range_handler = helpers.json_handler()
 
     def run(self):
         print("[RUN] HSV picker")

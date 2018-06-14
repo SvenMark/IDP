@@ -4,6 +4,7 @@ sys.path.insert(0, '../../../src')
 
 from entities.vision.helpers.hsvpicker import Hsv_picker
 from entities.vision.helpers.vision_helper import Helper
+from entities.vision.helpers.json_handler import Json_Handler
 
 
 class Helpers(object):
@@ -17,3 +18,4 @@ class Helpers(object):
         """
         self.helper = Helper(min_block_size, max_block_size)
         self.hsv_picker = Hsv_picker(self, color_range, img)
+        self.json_handler = Json_Handler()

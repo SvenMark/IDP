@@ -12,8 +12,8 @@ class Saving(object):
 
     def __init__(self, helpers, color_range):
         self.color_range = color_range
-        self.positions = []
         self.helper = helpers.helper
+        self.building_handler = helpers.json_handler
 
         # Saving variables
         self.save_length = 0
@@ -51,7 +51,7 @@ class Saving(object):
                 print("--------{}-------".format(datetime.datetime.now().time()))
                 for cnt in range(len(valid_contours)):
                     print("[INFO] Valid contour: " + str(valid_contours[cnt]))
-                self.save_building()
+                self.save_building(valid_contours)
 
             # Show the created image
             cv2.imshow('Spider Cum 3000', mask_cropped)
@@ -101,7 +101,7 @@ class Saving(object):
         mainloop()
         self.save = True
 
-    def save_building(self):
+    def save_building(self, valid_contours):
         """
         Saves the current building with the given img
         """
@@ -114,6 +114,7 @@ class Saving(object):
             """
             self.save = False
             print("[INFO] saved ", self.building_to_save)
+            self.building_handler.set_save_building(valid_contours, self.building_to_save, self.side)
             master.destroy()
 
         # Create new forum
