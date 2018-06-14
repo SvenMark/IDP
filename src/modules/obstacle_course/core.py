@@ -1,13 +1,23 @@
 import sys
+import time
+
 sys.path.insert(0, '../../../src')
 
 from entities.vision.recognize import Recognize, Block
 from entities.vision.helpers.vision_helper import Color
 
 
-def run(shared_object):
-    print("run element cup")
-    detect_cup()
+def run(name, movement, shared_object):
+    print("run " + str(name))
+    # detect_cup()
+
+    while not shared_object.has_to_stop():
+        print("Doing calculations and stuff")
+        time.sleep(0.5)
+
+    # Notify shared object that this thread has been stopped
+    print("Stopped" + str(name))
+    shared_object.has_been_stopped()
 
 
 def detect_cup():

@@ -15,7 +15,7 @@ class Servo(object):
     Base class for servo
     """
 
-    def __init__(self, servo_id, initial_position):
+    def __init__(self, servo_id, initial_position, sensitivity):
         """
         Constructor for servo class
         :param servo_id: ID of the servo
@@ -25,7 +25,6 @@ class Servo(object):
         # Create an instance of the Ax12 servo class from the Ax12 library.
         self.ax12 = Ax12()
 
-        print("Setting servo " + str(servo_id) + " to " + str(initial_position))
         # Set the servo variables and move servo to initial position.
         self.servo_id = servo_id
         self.busy = False
@@ -36,9 +35,7 @@ class Servo(object):
 
         self.start_position = self.last_position
 
-        # self.move(servo_id, initial_position, 300)
-
-        self.sensitivity = 3
+        self.sensitivity = sensitivity
 
         time.sleep(0.1)
 
@@ -67,7 +64,7 @@ class Servo(object):
             self.start_position = self.last_position
             step = (self.goal - self.start_position) * delta * self.current_speed
 
-        # print("Delta: " + str(delta) + " Step: " + str(step) + " Goal: " + str(self.goal) + " Last_pos: " + str(self.last_position) + " Start_pos: " + str(self.start_position))
+        print("Delta: " + str(delta) + " Step: " + str(step) + " Goal: " + str(self.goal) + " Last_pos: " + str(self.last_position) + " Start_pos: " + str(self.start_position))
         if self.last_position + step > 1024 or self.last_position + step < 0:
             print(str(self.last_position + step) + " not in range " + str(self.servo_id) + "speed "
                   + str(self.current_speed) + "delta " + str(delta))
@@ -92,11 +89,17 @@ class Servo(object):
         self.current_speed = speed * self.current_speed_multiplier
         print("servo " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
 
+    def move_speed(self, position, speed):
+            self.goal = position
+            self.ax12.move_speed(self.servo_id, position, speed)
+            self.last_position = position
+
     def is_ready(self):
         """
         Function that checks if a servo completed it`s last move
         :return: Whether or not the servo has completed it`s last move
         """
+        print("Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
         return abs(round(self.last_position) - round(self.goal)) <= self.sensitivity
 
     def read_position(self):
