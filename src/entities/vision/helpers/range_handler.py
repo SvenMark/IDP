@@ -1,5 +1,7 @@
-import json
+import sys
+sys.path.insert(0, '../../../src')
 
+import json
 from entities.vision.helpers.vision_helper import Color
 
 

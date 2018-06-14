@@ -1,7 +1,7 @@
 import sys
-import threading
 sys.path.insert(0, '../../../src')
 
+import threading
 from entities.vision.vision import Vision
 from entities.vision.helpers.vision_helper import Color, Building, Side
 from entities.vision.recognize_settings import Recognize_settings

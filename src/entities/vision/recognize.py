@@ -1,9 +1,9 @@
+import sys
+sys.path.insert(0, '../../../src')
+
 import datetime
 import time
-import sys
 from entities.vision.helpers.vision_helper import *
-
-sys.path.insert(0, '../../../src')
 
 
 class Recognize(object):

@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '../../../src')
+
 import time
 import datetime
 from entities.vision.helpers.vision_helper import *
