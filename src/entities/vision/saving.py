@@ -48,7 +48,7 @@ class Saving(object):
             if self.save and 3 < len(valid_contours) == self.save_length:
                 print("--------{}-------".format(datetime.datetime.now().time()))
                 for cnt in range(len(valid_contours)):
-                    print(valid_contours[cnt])
+                    print("[INFO] Valid contour: " + str(valid_contours[cnt]))
                 self.save_building()
 
             # Show the created image
@@ -115,7 +115,7 @@ class Saving(object):
 
             for block in range(len(self.positions)):
                 b = self.positions[block]
-                print(b)
+                print("[INFO] Block position:" + str(b))
                 if block == len(self.positions):
                     out.write("        ({}, {})\n".format(b[0], b[1]))
                 else:
