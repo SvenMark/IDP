@@ -31,6 +31,7 @@ class Json_Handler:
             for p in data:
                 print("[INFO] Color range {}: {} {}".format(p[0], p[1], p[2]))
                 color_range.append(Color(p[0], p[1], p[2]))
+            saved_file.close()
         except FileNotFoundError:
             color_range = self.back_up_color_range
 
@@ -76,6 +77,8 @@ class Json_Handler:
             data = json.load(saved_file)
             for p in data:
                 saved_building.append(Building(p[0], p[1], p[2], p[3], p[4], p[5]))
+
+            saved_file.close()
         except FileNotFoundError:
             saved_building = self.back_up_building
 
