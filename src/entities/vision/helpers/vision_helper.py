@@ -20,10 +20,10 @@ class Side(Enum):
 
 class Building:
     def __init__(self, front, back, left, right, pick_up_vertical, number):
-        self.front = front
-        self.back = back
-        self.left = left
-        self.right = right
+        self.front = np.asarray(front)
+        self.back = np.asarray(back)
+        self.left = np.asarray(left)
+        self.right = np.asarray(right)
         self.pick_up_vertical = pick_up_vertical
         self.number = number
 
