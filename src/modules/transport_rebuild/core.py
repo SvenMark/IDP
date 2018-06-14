@@ -1,15 +1,15 @@
 import sys
 import threading
-
-sys.path.insert(0, '../../../src')
-
 from entities.vision.vision import Vision
 from entities.vision.helpers.vision_helper import Color, Building, Side
 from entities.vision.recognize_settings import Recognize_settings
 from entities.vision.helpers.range_handler import Range_Handler
+
+sys.path.insert(0, '../../../src')
+
 # from entities.movement.tracks import Tracks
 
-print("Run Transport and Rebuild")
+print("[RUN] Transport and Rebuild")
 
 color_range = Range_Handler().get_color_range()
 tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
@@ -58,16 +58,15 @@ def run(shared_object):
             elif sys.argv[1] == "recognize":
                 threading.Thread(target=vision.recognize.run).start()
             else:
-                print("Wrong argument given..")
+                print("[ERROR] Wrong argument given..")
                 run(shared_object)
 
         # Default no argument
         else:
             threading.Thread(target=vision.helpers.hsv_picker.run).start()
     except AttributeError:
-        print("Something went wrong..")
+        print("[ERROR] Something went wrong..")
         run(shared_object)
-
 
 
 run("")

@@ -21,7 +21,7 @@ class Saving(object):
         self.last_positions = []
 
     def run(self):
-        print("[RUN] Starting saving")
+        print("[RUN] Starting saving...")
 
         # Initialize camera
         cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()

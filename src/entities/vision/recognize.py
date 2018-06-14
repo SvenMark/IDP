@@ -17,7 +17,7 @@ class Recognize(object):
         self.recognize = True
 
     def run(self):
-        print("[RUN] Starting recognize")
+        print("[RUN] Starting recognize...")
 
         # Initialize camera
         cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
