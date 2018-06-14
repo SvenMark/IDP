@@ -18,6 +18,12 @@ class BeatDetection(object):
         self.running = False
 
     def detect(self, stream, repeat):
+        """
+        Function starts detecting bass from the microphone
+        :param stream: The audiostream input from the microphone
+        :param repeat: Amount of times the function has to repeat
+        :return: void
+        """
         count = 0
         for i in range(repeat):
             data = np.fromstring(stream.read(self.CHUNK), dtype=np.int16)

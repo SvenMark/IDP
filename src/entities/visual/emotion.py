@@ -23,29 +23,42 @@ class Emotion(object):
         self.pixels.clear()
         self.pixels.show()  # Make sure to call show() after changing any pixels!
 
+    def set_emotion(self, emotion):
+        """
+        Set the correct emotion based on the input.
+        This includes lights and sounds
+        :param emotion: string with the kind of emotion you want
+        :return:
+        """
+        if emotion == "neutral":
+            # Boston University Red
+            self.set_color(205, 0, 0)
+        elif emotion == "anthem":
+            pass
+        elif emotion == "success":
+            pass
+        elif emotion == "sad":
+            self.brightness_off()
+        elif emotion == "happy":
+            self.rainbow_colors()
 
-    def neutral(self):
-        raise NotImplementedError
+    def set_color(self, r, g, b):
+        """
+        Function to set the color of the leds
+        :param r: red color value
+        :param g: green color value
+        :param b: blue color value
+        :return: void
+        """
+        for i in range(self.pixels.count()):
+            self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
+        self.pixels.show()
 
-    def anthem(self):
-        self.audio.play("russiananthem.mp3")
-
-    def success(self):
-        self.audio.play("success.mp3")
-        self.rainbow_cycle()
-
-    def sad(self):
-        self.audio.play("sad.mp3")
-
-    def happy(self):
-        raise NotImplementedError
-
-    def depressed(self):
-        raise NotImplementedError
-
-    # Define wheel function to interpolate between different hues.
     @staticmethod
     def wheel(pos):
+        """
+        Wheel method to generate all the RGB colors for rainbow effects
+        """
         if pos < 85:
             return Adafruit_WS2801.RGB_to_color(pos * 3, 255 - pos * 3, 0)
         elif pos < 170:
@@ -55,7 +68,13 @@ class Emotion(object):
             pos -= 170
             return Adafruit_WS2801.RGB_to_color(0, pos * 3, 255 - pos * 3)
 
-    def brightness_decrease(self, wait=0.01, step=1):
+    def brightness_off(self, wait=0.01, step=1):
+        """
+        Function to decrease the brightness to 0
+        :param wait: Time to wait after a color change, lower is faster animation.
+        :param step: Amount to go down echt loop, higher is faster animation but more choppy.
+        :return:
+        """
         for j in range(int(256 // step)):
             for i in range(self.pixels.count()):
                 r, g, b = self.pixels.get_pixel_rgb(i)
@@ -68,6 +87,11 @@ class Emotion(object):
                 time.sleep(wait)
 
     def rainbow_cycle(self, wait=0.005):
+        """
+        Function to make the leds display a rainbow cycling animation
+        :param wait: Time to wait after a color change, lower is faster animation.
+        :return: void
+        """
         for j in range(256):  # one cycle of all 256 colors in the wheel
             for i in range(self.pixels.count()):
                 self.pixels.set_pixel(i, self.wheel(((i * 256 // self.pixels.count()) + j) % 256))
@@ -75,7 +99,20 @@ class Emotion(object):
             if wait > 0:
                 time.sleep(wait)
 
+    def rainbow_colors(self, wait=0.05):
+        """
+        Function to make the entire strip cycle rainbow colors at once
+        :param wait:
+        :return:
+        """
+        for j in range(256):  # one cycle of all 256 colors in the wheel
+            for i in range(self.pixels.count()):
+                self.pixels.set_pixel(i, self.wheel((256 // self.pixels.count() + j) % 256))
+            self.pixels.show()
+            if wait > 0:
+                time.sleep(wait)
+
 
 if __name__ == '__main__':
     emotion = Emotion()
-    emotion.success()
+    emotion.set_emotion("happy")
