@@ -5,6 +5,9 @@ from entities.audio.audio import Audio
 
 
 class Listen(Audio):
+    """
+    Class for listening, implements playerback and saveing a recording
+    """
     def __init__(self, duration, channels):
         """
         Recording of audio

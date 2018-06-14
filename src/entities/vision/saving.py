@@ -1,9 +1,8 @@
 import sys
-import time
-import datetime
-
 sys.path.insert(0, '../../../src')
 
+import time
+import datetime
 from entities.vision.helpers.vision_helper import *
 from tkinter import *
 from threading import Thread
@@ -13,30 +12,26 @@ class Saving(object):
 
     def __init__(self, helpers, color_range):
         self.color_range = color_range
-        self.positions = []
         self.helper = helpers.helper
+        self.building_handler = helpers.json_handler
 
         # Saving variables
         self.save_length = 0
         self.save = False
         self.building_to_save = 0
+        self.side = Side.front
         self.last_positions = []
 
     def run(self):
-        print("Starting saving")
-        name = "cam_props"
-        self.helper.create_cam_properties(name)
+        print("[RUN] Starting saving...")
 
         # Initialize camera
-        cap = cv2.VideoCapture(0)
+        cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+        time.sleep(0.3)  # startup
         while True:
-            # set cam properties
-            cap.set(10, cv2.getTrackbarPos('brightness', name) / 100)
-            cap.set(11, cv2.getTrackbarPos('contrast', name) / 100)
-            cap.set(12, cv2.getTrackbarPos('saturation', name) / 100)
 
             # Read frame from the camera
-            ret, img = cap.read()
+            img = cap.read()
 
             # Apply gaussian blue to the image
             img = cv2.GaussianBlur(img, (9, 9), 0)
@@ -55,17 +50,17 @@ class Saving(object):
             if self.save and 3 < len(valid_contours) == self.save_length:
                 print("--------{}-------".format(datetime.datetime.now().time()))
                 for cnt in range(len(valid_contours)):
-                    print(valid_contours[cnt])
-                self.save_building(mask_cropped, valid_contours)
+                    print("[INFO] Valid contour: " + str(valid_contours[cnt]))
+                self.save_building(valid_contours)
 
             # Show the created image
-            cv2.imshow('Spider Cam 3000', mask_cropped)
+            cv2.imshow('Spider Cum 3000', mask_cropped)
             cv2.imshow('Original', img)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
-        cap.release()
+        cap.stop()
         cv2.destroyAllWindows()
 
     def show_input_fields(self):
@@ -87,25 +82,28 @@ class Saving(object):
         # Add labels
         Label(master, text="Amount of blocks").grid(row=0)
         Label(master, text="Building Number").grid(row=1)
+        Label(master, text="Building side").grid(row=2)
         e1 = Entry(master)
         e2 = Entry(master)
+        e3 = Entry(master)
 
         # Insert last length and building to save
         e1.insert(0, self.save_length)
         e2.insert(0, self.building_to_save)
+        e3.insert(0, self.side)
 
         e1.grid(row=0, column=1)
         e2.grid(row=1, column=1)
+        e3.grid(row=2, column=1)
 
         # Create save button
         Button(master, text='Save', command=save_entry_fields).grid(row=3, column=1, sticky=W)
         mainloop()
         self.save = True
 
-    def save_building(self, img, positions):
+    def save_building(self, valid_contours):
         """
         Saves the current building with the given img
-        :param img: The current frame
         """
 
         time.sleep(1)
@@ -115,27 +113,12 @@ class Saving(object):
             Confirms the building and saves it to a file
             """
             self.save = False
-            print("saved ", self.building_to_save)
+            print("[INFO] saved ", self.building_to_save)
+            self.building_handler.set_save_building(valid_contours, self.building_to_save, self.side)
             master.destroy()
-
-            out = open("save.txt", "w")
-            out.write("{} = [\n".format(self.building_to_save))
-
-            for block in range(len(self.positions)):
-                b = self.positions[block]
-                print(b)
-                if block == len(self.positions):
-                    out.write("        ({}, {})\n".format(b[0], b[1]))
-                else:
-                    out.write("        ({}, {}),\n".format(b[0], b[1]))
-
-            out.write("]\n")
-            out.close()
 
         # Create new forum
         master = Tk()
         Button(master, text='OK', command=confirmed).grid(row=0, column=1, sticky=W)
         Button(master, text='Retry', command=master.destroy).grid(row=0, column=0, sticky=W)
         mainloop()
-
-        self.last_positions = self.positions
