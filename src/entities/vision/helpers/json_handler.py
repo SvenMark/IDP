@@ -70,7 +70,7 @@ class Json_Handler:
         for bl in current:
             print(bl.front)
 
-        open(self.file_name_building).close()
+        open(self.file_name_building, "w").close()
         obj_text = codecs.open(self.file_name_building, 'r', encoding='utf-8').read()
         b_new = json.loads(obj_text)
         a_new = np.array(b_new)
