@@ -1,11 +1,11 @@
-import math
 import sys
-import time
-
-from imutils.video import VideoStream
-
 sys.path.insert(0, '../../../src')
 
+import math
+import time
+import cv2
+import numpy as np
+from imutils.video import VideoStream
 from entities.vision.recognize import Recognize, Block
 from entities.vision.helpers.vision_helper import Color
 
@@ -24,9 +24,6 @@ def run(name, movement, shared_object):
 
 
 def detect_cup():
-    import cv2
-    import numpy as np
-
     MIN_MATCH_COUNT = 20
 
     detector = cv2.xfeatures2d.SIFT_create()
@@ -38,7 +35,7 @@ def detect_cup():
     trainImg = cv2.imread("ding.jpg", 0)
     trainKP, trainDesc = detector.detectAndCompute(trainImg, None)
 
-    cam = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+    cam = VideoStream(src=0, usePiCamera=False, resolution=(320, 240)).start()
     time.sleep(0.3)  # startup
     while True:
         frame = cam.read()
@@ -53,10 +50,10 @@ def detect_cup():
             area = cv2.contourArea(cnt)
             if area > 1000:
                 print(area)
-                cv2.drawContours(mask, [cnt], -1, (255, 255, 255), 10)
+                cv2.drawContours(frame, [cnt], -1, (255, 255, 255), 50)
 
         # cont = cv2.drawContours(mask, contours, -1, (255, 255, 255), 10)
-        cv2.imshow('mask', mask)
+        cv2.imshow('mask', frame)
 
         queryKP, queryDesc = detector.detectAndCompute(frame_gray, mask=mask)
         matches = flann.knnMatch(queryDesc, trainDesc, k=2)
@@ -94,7 +91,7 @@ def detect_cup():
         cv2.imshow('result', frame)
         if cv2.waitKey(10) == ord('q'):
             break
-    cam.release()
+    cam.stop()
     cv2.destroyAllWindows()
 
 
