@@ -68,8 +68,8 @@ class Json_Handler:
                 new_building.right = positions
             current.append(new_building)
 
-        saved_file = open(self.file_name_building, "w")
-        json.dump(current, saved_file)
+        saved_file = open(self.file_name_building)
+        json.dump(current, saved_file)  # Building([[0,0]] , [[1,3]], .. , .. , .. , False, 0)
         saved_file.close()
 
     def get_save_buildings(self):
