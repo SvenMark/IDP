@@ -8,6 +8,11 @@ from entities.vision.vision import Vision
 from entities.vision.helpers.vision_helper import Color, Building, Side
 from entities.vision.recognize_settings import Recognize_settings
 from entities.vision.helpers.json_handler import Json_Handler
+from entities.movement.movement import Movement
+from entities.threading.utils import SharedObject
+from entities.movement.grabber import Grabber
+from entities.movement.legs import Legs
+from entities.movement.tracks import Tracks
 
 # from entities.movement.tracks import Tracks
 
@@ -39,14 +44,14 @@ def run(name, movement, shared_object):
                 threading.Thread(target=vision.recognize.run).start()
             else:
                 print("[ERROR] Wrong argument given..")
-                run(shared_object)
+                run(name, movement, shared_object)
 
         # Default no argument
         else:
-            threading.Thread(target=vision.helpers.hsv_picker.run).start()
+            threading.Thread(target=vision.saving.run).start()
     except AttributeError:
         print("[ERROR] Something went wrong..")
-        run(shared_object)
+        run(name, movement, shared_object)
 
     while not shared_object.has_to_stop():
 
@@ -61,6 +66,28 @@ def run(name, movement, shared_object):
     print("Stopped" + str(name))
     shared_object.has_been_stopped()
 
+
+limbs = [
+    Legs(
+         leg_0_servos=[6, 14, 15],
+         leg_1_servos=[16, 17, 18],
+         leg_2_servos=[21, 41, 52],
+         leg_3_servos=[61, 62, 63]
+         ),
+    Tracks(track_0_pin=13,
+           track_1_pin=18,
+           track_0_forward=22,
+           track_0_backward=27,
+           track_1_forward=19,
+           track_1_backward=26),
+    Grabber(id_servo=[1, 53, 43],
+            initial_positions=[465, 198, 200])
+]
+
+lights = []
+movement = Movement(limbs, lights)
+
+run(name="Visiontest", shared_object=SharedObject(), movement=movement)
 
 # TESTING
 # tracks = Tracks(track_0_pin=18,

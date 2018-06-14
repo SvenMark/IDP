@@ -28,7 +28,6 @@ class Json_Handler:
             saved_file = open(self.file_name_color)
             data = json.load(saved_file)
             for p in data:
-                print("[INFO] Color range {}: {} {}".format(p[0], p[1], p[2]))
                 color_range.append(Color(p[0], p[1], p[2]))
             saved_file.close()
         except FileNotFoundError:
