@@ -68,6 +68,20 @@ class Json_Handler:
                 new_building.right = positions
             current.append(new_building)
 
+        for bl in current:
+            front = {}
+            front.update({"front": bl.front})
+            back = {}
+            back.update({"back": bl.back})
+            left = {}
+            left.update({"left": bl.left})
+            right = {}
+            right.update({"right": bl.right})
+            bl.front = front
+            bl.back = back
+            bl.left = left
+            bl.right = right
+
         saved_file = open(self.file_name_building, "w")
         json.dump(current, saved_file)  # Building([[0,0]] , [[1,3]], .. , .. , .. , False, 0)
         saved_file.close()
