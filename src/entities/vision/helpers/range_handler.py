@@ -26,7 +26,7 @@ class Range_Handler:
             saved_file = open(self.file_name)
             data = json.load(saved_file)
             for p in data:
-                print("[INFO] Color range: {}: {} {}".format(p[0], p[1], p[2]))
+                print("[INFO] Color range {}: {} {}".format(p[0], p[1], p[2]))
                 color_range.append(Color(p[0], p[1], p[2]))
         except FileNotFoundError:
             color_range = self.back_up_color_range
