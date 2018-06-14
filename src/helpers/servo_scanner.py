@@ -16,4 +16,4 @@ for i in range(0, 255):
             print("Servo found with id: " + str(i) + " and position: " + str(pos))
             servos.append(i)
     except tester.timeout_error:
-        not_found = True
+        pass
