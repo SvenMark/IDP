@@ -82,11 +82,14 @@ class Json_Handler:
 
         try:
             saved_file = open(self.file_name_building)
-            data = json.load(saved_file)
-            for p in data:
-                saved_building.append(Building(p[0], p[1], p[2], p[3], p[4], p[5]))
+            try:
+                data = json.load(saved_file)
+                for p in data:
+                    saved_building.append(Building(p[0], p[1], p[2], p[3], p[4], p[5]))
 
-            saved_file.close()
+                saved_file.close()
+            except json.decoder.JSONDecodeError:
+                saved_building = []
         except FileNotFoundError:
             saved_building = []
 
