@@ -16,6 +16,6 @@ class Helpers(object):
         """
         Constructor for vision class
         """
+        self.json_handler = Json_Handler()
         self.helper = Helper(min_block_size, max_block_size)
         self.hsv_picker = Hsv_picker(self, color_range, img)
-        self.json_handler = Json_Handler()
