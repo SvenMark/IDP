@@ -131,6 +131,7 @@ class Legs(object):
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
         self.get_delta()
         while len(legs_not_ready) != 0:
+            print("{} servos not ready".format(len(legs_not_ready)))
             delta = self.get_delta()
             for i in range(len(legs_not_ready)):
                 legs_not_ready[i].update(delta)
