@@ -39,6 +39,7 @@ class Json_Handler:
     def set_save_building(self, positions, building, side):
         current = self.get_save_buildings()
         for saved_building in current:
+            print(saved_building.number)
             if saved_building.number == building:
                 if side == Side.front:
                     saved_building.front = positions
