@@ -6,9 +6,11 @@ from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
-from modules import base_module, cannon, capture_flag, dance, line_dance, obstacle_course, race, transport_rebuild
-from entities.threading_.utils import SharedObject
-from entities.robot.robot import Robot
+from modules import base_module, capture_flag, dance, entering_arena, line_dance, race, \
+    transport_rebuild, cannon, obstacle_course
+from entities.threading.utils import SharedObject
+from entities.movement.movement import Movement
+from entities.vision.vision import Vision
 
 
 class BluetoothController(object):
@@ -16,21 +18,30 @@ class BluetoothController(object):
     Base class for the bluetooth smart controller
     """
 
-    def __init__(self, limbs, lights, bluetooth_address):
+    def __init__(self, name, limbs, lights, bluetooth_address):
         """
         Constructor for the bluetooth controller class
         :param limbs: Array of robot limbs
         """
         self.bluetooth_address = bluetooth_address
+        self.name = name
         self.limbs = limbs
         self.lights = lights
-        self.legs = limbs[0]
-        self.tracks = limbs[1]
+
+        self.movement = Movement(limbs, lights)
+        self.vision = Vision(color_range=[1, 2],
+                             saved_buildings=None,
+                             img=None,
+                             min_block_size=1000,
+                             max_block_size=10000,
+                             settings=None)
 
         self.current_element = 0
+
+        self.manual_control = True
         self.shared_object = SharedObject()
 
-        self.legs.update_thread.start()
+        self.movement.legs.update_thread.start()
 
     def receive_data(self):
         """
@@ -46,15 +57,15 @@ class BluetoothController(object):
             try:
                 data += str(sock.recv(1024))[2:][:-1]
 
-                if data is "":
-                    print("Closing socket")
-                    sock.close()
-                    while data is "":
-                        try:
-                            sock.connect((self.bluetooth_address, port))
-                            data += str(sock.recv(1024))[2:][:-1]
-                        except bluetooth.btcommon.BluetoothError:
-                            print("Cannot connect, attempting to reconnect")
+                # if data is "":
+                #     print("Closing socket")
+                #     sock.close()
+                #     while data is "":
+                #         try:
+                #             sock.connect((self.bluetooth_address, port))
+                #             data += str(sock.recv(1024))[2:][:-1]
+                #         except bluetooth.btcommon.BluetoothError:
+                #             print("Cannot connect, attempting to reconnect")
 
                 data_end = data.find('\\n')
                 if data_end != -1:
@@ -66,7 +77,7 @@ class BluetoothController(object):
             except KeyboardInterrupt:
                 break
 
-        self.tracks.clean_up()
+        self.movement.tracks.clean_up()
         sock.close()
 
     def handle_data(self, data):
@@ -75,7 +86,7 @@ class BluetoothController(object):
         :param data: A data string
         :return: None
         """
-        print(data)
+        # print(data)
         # Index for button to stop motors
         s_index = data.find('s')
         # Index for vertical movement of motors
@@ -112,87 +123,86 @@ class BluetoothController(object):
                 speed_factor = 0.75
 
             if e is 0 or e is 2:
-                self.current_element = 0
+                if not self.manual_control:
+
+                    self.shared_object.stop = True
+
+                    # Wait for it to stop ?
+                    while not self.shared_object.has_stopped:
+                        time.sleep(0.01)
+
+                    self.manual_control = True
+
+                self.current_element = e
 
                 # Send data to tracks class
-                self.tracks.handle_controller_input(stop_motors=s, vertical_speed=h * speed_factor,
-                                                    horizontal_speed=v * speed_factor, dead_zone=5)
+                self.movement.tracks.handle_controller_input(stop_motors=s,
+                                                             vertical_speed=h * speed_factor,
+                                                             horizontal_speed=v * speed_factor,
+                                                             dead_zone=5)
 
                 # Send the data to legs class
-                self.legs.handle_controller_input(deploy=d, x_axis=x, y_axis=y)
+                self.movement.legs.handle_controller_input(deploy=d,
+                                                           x_axis=x,
+                                                           y_axis=y)
 
-            if e is not self.current_element and e is not 0:
-                # Stopping the current element
+            if e is not self.current_element and e is not 0 and e is not 2:
+                # If this is the first time it runs skip
                 self.shared_object.stop = True
 
                 # Wait for it to stop ?
                 while not self.shared_object.has_stopped:
                     time.sleep(0.01)
+
                 self.shared_object.has_stopped = False
+                self.shared_object.stop = False
+                self.manual_control = False
 
                 # Run selected element
                 self.current_element = e
-                self.run_element(e)
+                self.run_module(e, self.movement, s, v, h, speed_factor)
 
         except ValueError or IndexError:
-            temp = 0
+            meme = 3123
             # print("Invalid value in package")
 
-    def run_element(self, element):
-        print("Running element " + str(element))
+    def run_module(self, element, movement, s, v, h, speed_factor):
         if element is 1:
             name = 'Entree'
-            print(name)
-
             # starting thread
-            Thread(target=element1.run, args=(self.shared_object,)).start()
+            Thread(target=entering_arena.run, args=(name, movement, s, v, h, speed_factor, self.shared_object,)).start()
 
         if element is 3:
             name = 'Dance'
-            print(name)
-
-            # starting thread
-            Thread(target=element3.run, args=(self.shared_object,)).start()
+            Thread(target=dance.run, args=(name, movement, self.shared_object,)).start()
 
         if element is 4:
             name = 'Line Dance'
-            print(name)
-
-            # starting thread
-            Thread(target=element4.run, args=(self.shared_object,)).start()
+            Thread(target=line_dance.run, args=(name, movement, self.shared_object,)).start()
 
         if element is 5:
             name = 'Obstacle course'
-            print(name)
-
-            # starting thread
-            # Thread(target=element5.run, args=(self.shared_object,)).start()
+            Thread(target=obstacle_course.run, args=(name, movement, self.shared_object,)).start()
 
         if element is 6:
             name = 'Cannon'
-            print(name)
-
-            # starting thread
-            # Thread(target=element6.Element6.linedetection, args=(self.shared_object,)).start()
+            Thread(target=cannon.run, args=(name, movement, self.shared_object,)).start()
 
         if element is 7:
             name = 'Transport'
-            print(name)
-
-            # starting thread
-            # Thread(target=element7.run, args=(self.shared_object,)).start()
+            Thread(target=transport_rebuild.run, args=(name, movement, self.shared_object,)).start()
 
         if element is 8:
             name = 'Capture the flag'
-            print(name)
-
             # starting thread
-            Thread(target=element8.run, args=(self.shared_object,)).start()
+            Thread(target=capture_flag.run, args=(name, movement, self.shared_object,)).start()
 
 
 def main():
     limbs = [0, 1]
-    bluetooth = BluetoothController(limbs=limbs, bluetooth_address="98:D3:31:FD:15:C1")
+    lights = []
+    name = 'Boris'
+    bluetooth = BluetoothController(name=name, limbs=limbs, lights=lights, bluetooth_address="98:D3:31:FD:15:C1")
 
 
 if __name__ == '__main__':

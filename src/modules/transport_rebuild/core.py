@@ -1,7 +1,9 @@
 import sys
+import threading
+import time
+
 sys.path.insert(0, '../../../src')
 
-import threading
 from entities.vision.vision import Vision
 from entities.vision.helpers.vision_helper import Color, Building, Side
 from entities.vision.recognize_settings import Recognize_settings
@@ -25,7 +27,8 @@ vision = Vision(color_range=color_range,
 rotate_speed = 50
 
 
-def run(shared_object):
+def run(name, movement, shared_object):
+    print("run " + str(name))
     try:
         if len(sys.argv) > 1:
             if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
@@ -45,8 +48,19 @@ def run(shared_object):
         print("[ERROR] Something went wrong..")
         run(shared_object)
 
+    while not shared_object.has_to_stop():
 
-run("")
+        movement.grabber.grab([80, 80, 80])
+        if movement.grabber.reposition is True:
+            movement.tracks.forward(30, 30, 2, 3)
+            movement.grabber.reposition = False
+
+        time.sleep(0.5)
+
+    # Notify shared object that this thread has been stopped
+    print("Stopped" + str(name))
+    shared_object.has_been_stopped()
+
 
 # TESTING
 # tracks = Tracks(track_0_pin=18,
