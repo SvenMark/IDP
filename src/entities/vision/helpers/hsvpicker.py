@@ -26,16 +26,10 @@ class Hsv_picker:
             c = self.color_range[color]
             self.createtrackbars(c)
 
-        name = "cam_props"
-        self.helper.create_cam_properties(name)
-
         cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
         time.sleep(0.3)  # startup
 
         while True:
-            cap.set(10, cv2.getTrackbarPos('brightness', name)/100)
-            cap.set(11, cv2.getTrackbarPos('contrast', name)/100)
-            cap.set(12, cv2.getTrackbarPos('saturation', name)/100)
             if self.img is not None:
                 img = self.img
             else:
