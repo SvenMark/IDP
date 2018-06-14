@@ -130,6 +130,7 @@ class Legs(object):
         """
         legs_not_ready = [elem for elem in self.legs if not elem.ready()]
         self.get_delta()
+        print(len(legs_not_ready))
         while len(legs_not_ready) != 0:
             print("{} servos not ready".format(len(legs_not_ready)))
             delta = self.get_delta()
