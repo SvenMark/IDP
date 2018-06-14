@@ -4,7 +4,7 @@ import sys
 import math
 import time
 import numpy as np
-
+from threading import Thread
 sys.path.insert(0, '../../../../../src')
 
 from libs.ax12 import Ax12
@@ -37,6 +37,8 @@ class Servo(object):
 
         self.sensitivity = sensitivity
 
+        Thread(target=self.update, args=(self,)).start()
+
         time.sleep(0.1)
 
     def set_speed(self, speed):
@@ -46,6 +48,12 @@ class Servo(object):
         :return: None
         """
         self.current_speed = speed * self.current_speed_multiplier
+
+    def lock_thread(self):
+        while True:
+            if self.is_ready():
+                self.ax12.move(self.servo_id, round(self.last_position))
+                time.sleep(0.1)
 
     def update(self, delta):
         """
