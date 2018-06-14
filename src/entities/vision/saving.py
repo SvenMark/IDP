@@ -22,7 +22,9 @@ class Saving(object):
 
     def run(self):
         print("[RUN] Starting saving")
+
         name = "cam_props"
+        self.helper.create_cam_properties(name)
 
         # Initialize camera
         cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
