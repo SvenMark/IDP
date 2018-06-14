@@ -5,13 +5,13 @@ import threading
 from entities.vision.vision import Vision
 from entities.vision.helpers.vision_helper import Color, Building, Side
 from entities.vision.recognize_settings import Recognize_settings
-from entities.vision.helpers.range_handler import Range_Handler
+from entities.vision.helpers.json_handler import Json_Handler
 
 # from entities.movement.tracks import Tracks
 
 print("[RUN] Transport and Rebuild")
 
-color_range = Range_Handler().get_color_range()
+color_range = Json_Handler().get_color_range()
 tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
 
 saved_buildings = [

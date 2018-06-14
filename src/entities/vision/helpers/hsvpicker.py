@@ -8,7 +8,7 @@ import cv2
 from tkinter import *
 from imutils.video import VideoStream
 from entities.vision.helpers.vision_helper import Color
-from entities.vision.helpers.range_handler import Range_Handler
+from entities.vision.helpers.json_handler import Json_Handler
 
 
 class Hsv_picker:
@@ -17,7 +17,7 @@ class Hsv_picker:
         self.img = cv2.imread(img)
         self.helper = helpers.helper
         self.color_range = color_range
-        self.range_handler = Range_Handler()
+        self.range_handler = Json_Handler()
 
     def run(self):
         print("[RUN] HSV picker")

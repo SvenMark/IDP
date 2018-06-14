@@ -19,6 +19,7 @@ class Saving(object):
         self.save_length = 0
         self.save = False
         self.building_to_save = 0
+        self.side = Side.front
         self.last_positions = []
 
     def run(self):
@@ -81,15 +82,19 @@ class Saving(object):
         # Add labels
         Label(master, text="Amount of blocks").grid(row=0)
         Label(master, text="Building Number").grid(row=1)
+        Label(master, text="Building side").grid(row=2)
         e1 = Entry(master)
         e2 = Entry(master)
+        e3 = Entry(master)
 
         # Insert last length and building to save
         e1.insert(0, self.save_length)
         e2.insert(0, self.building_to_save)
+        e3.insert(0, self.side)
 
         e1.grid(row=0, column=1)
         e2.grid(row=1, column=1)
+        e3.grid(row=2, column=1)
 
         # Create save button
         Button(master, text='Save', command=save_entry_fields).grid(row=3, column=1, sticky=W)
@@ -110,20 +115,6 @@ class Saving(object):
             self.save = False
             print("[INFO] saved ", self.building_to_save)
             master.destroy()
-
-            out = open("save.txt", "w")
-            out.write("{} = [\n".format(self.building_to_save))
-
-            for block in range(len(self.positions)):
-                b = self.positions[block]
-                print("[INFO] Block position:" + str(b))
-                if block == len(self.positions):
-                    out.write("        ({}, {})\n".format(b[0], b[1]))
-                else:
-                    out.write("        ({}, {}),\n".format(b[0], b[1]))
-
-            out.write("]\n")
-            out.close()
 
         # Create new forum
         master = Tk()

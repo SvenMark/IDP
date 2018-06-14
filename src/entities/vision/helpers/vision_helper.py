@@ -12,17 +12,20 @@ class Color:
 
 
 class Side(Enum):
-    front_back = 1
-    left_right = 2
+    front = 0
+    left = 1
+    right = 2
+    back = 3
 
 
 class Building:
-    def __init__(self, front, back, left, right, pick_up_vertical):
+    def __init__(self, front=(0, 0), back=(0, 0), left=(0, 0), right=(0, 0), pick_up_vertical=False, number=0):
         self.front = front
         self.back = back
         self.left = left
         self.right = right
         self.pick_up_vertical = pick_up_vertical
+        self.number = number
 
 
 class Block:
@@ -60,7 +63,7 @@ class Helper:
             # Calculate distance between the centre points
             a = np.array(centre)
             b = np.array(positions[block])
-            distance = np.linalg.norm(a-b)
+            distance = np.linalg.norm(a - b)
 
             # Check the distance between the blocks
             if distance <= sensitivity:
@@ -206,10 +209,12 @@ class Helper:
         hsv = cv2.cvtColor(img, conversion)
 
         if set_contour:
-            img_mask, valid_cntr = self.set_contours(cv2.inRange(hsv, color_range[0].lower, color_range[0].upper), color_range[0].color, img)
+            img_mask, valid_cntr = self.set_contours(cv2.inRange(hsv, color_range[0].lower, color_range[0].upper),
+                                                     color_range[0].color, img)
             valid_contour += valid_cntr
             for i in range(1, len(color_range)):
-                mask, valid_cntr = self.set_contours(cv2.inRange(hsv, color_range[i].lower, color_range[i].upper), color_range[i].color, img)
+                mask, valid_cntr = self.set_contours(cv2.inRange(hsv, color_range[i].lower, color_range[i].upper),
+                                                     color_range[i].color, img)
                 valid_contour += valid_cntr
                 img_mask += mask
         else:
@@ -271,8 +276,10 @@ class Helper:
 
                 # Write the color and position of the block
                 cv2.putText(img_mask, color, (cx - 15, cy - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
-                cv2.putText(img_mask, str((cx, cy)), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
-                cv2.putText(img_mask, block_position, (cx - 30, cy + 30), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+                cv2.putText(img_mask, str((cx, cy)), (cx - 30, cy + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255),
+                            1)
+                cv2.putText(img_mask, block_position, (cx - 30, cy + 30), cv2.FONT_HERSHEY_SIMPLEX, 0.4,
+                            (255, 255, 255), 1)
                 cv2.putText(img_mask, str(area), (cx - 30, cy + 45), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
                 # Append the new block to the global POSITIONS array
@@ -280,7 +287,3 @@ class Helper:
 
         # Return the new mask
         return img_mask, valid_contours
-
-
-
-
