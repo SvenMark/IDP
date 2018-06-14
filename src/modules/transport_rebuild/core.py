@@ -43,7 +43,7 @@ saved_buildings = [
 settings = Recognize_settings()
 vision = Vision(color_range=color_range,
                 saved_buildings=saved_buildings,
-                settings=settings, max_block_size=35000, min_block_size=1000)
+                settings=settings, max_block_size=35000, min_block_size=500)
 
 rotate_speed = 50
 
