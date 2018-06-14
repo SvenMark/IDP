@@ -281,10 +281,7 @@ class Helper:
                 cv2.putText(img_mask, str(area), (cx - 30, cy + 45), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
                 # Append the new block to the global POSITIONS array
-                result = list()
-                result.append(cx)
-                result.append(cy)
-                valid_contours.append(result)
+                valid_contours.append([cx, cy])
 
         # Return the new mask
         return img_mask, valid_contours
