@@ -42,6 +42,18 @@ class Helper:
         self.min_block_size = min_block_size
         self.max_block_size = max_block_size
 
+    def create_cam_properties(self, name):
+        cv2.namedWindow(name)
+        cv2.resizeWindow(name, 300, 300)
+
+        # create trackbars for lower
+        cv2.createTrackbar('brightness', name, 50, 100, self.nothing)
+        cv2.createTrackbar('contrast', name, 50, 100, self.nothing)
+        cv2.createTrackbar('saturation', name, 50, 100, self.nothing)
+
+    def nothing(self, x):
+        pass
+
     @staticmethod
     def is_duplicate(centre, positions, sensitivity=10):
         """
@@ -80,7 +92,7 @@ class Helper:
         area = cv2.contourArea(c)
 
         # If the convexhull counts 4 sides and an area bigger than 4000
-        return len(approx) == sides and area > self.min_block_size
+        return area > self.min_block_size
 
     def crop_to_contours(self, mask, img):
         """
@@ -89,6 +101,8 @@ class Helper:
         :param img: The image to crop
         :return: The cropped image
         """
+
+        image_width = img.size
 
         # Create the threshold for the mask
         ret, thresh = cv2.threshold(mask, 127, 255, 0)
@@ -133,7 +147,9 @@ class Helper:
         if y + h > 0 and x + w > 0:
             img = img[y:y + h, x:x + w]
 
-        center = x
+        center = (x + extremes[1]) / 2
+
+        print(center, image_width)
 
         # Resize to new size
         img = self.image_resize(img, height=400)
@@ -181,28 +197,6 @@ class Helper:
 
         # Return the resized image
         return resized
-
-    def append_to_positions(self, positions, block, sensitivity=5, max_pos_len=6):
-        """
-        Appends a unique block to the array
-        :param sensitivity: Sensitivity to check, higher rejects more distance
-        :param positions: Positions array of the current view
-        :param block: Centre point
-        """
-
-        # If the POSITIONS length is getting too long clear it
-        if len(positions) >= max_pos_len:
-            del positions[:]
-        # If the POSITIONS array is empty append the block
-        if len(positions) == 0:
-            positions.append(block)
-        else:
-            # Check if the given block is not a duplicate
-            if not self.is_duplicate(block, positions, sensitivity):
-                # Append the block to positions
-                positions.append(block)
-
-        return positions
 
     def calculate_mask(self, img, color_range, conversion=cv2.COLOR_BGR2HSV, set_contour=False):
         """
