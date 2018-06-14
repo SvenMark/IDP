@@ -16,7 +16,7 @@ class Emotion(object):
         # Configure the count of pixels:
         self.pixel_count = 33
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
-        self.spi_port = 10
+        self.spi_port = 0
         self.spi_device = 0
         self.pixels = Adafruit_WS2801.WS2801Pixels(self.pixel_count, spi=SPI.SpiDev(self.spi_port, self.spi_device),
                                                    gpio=GPIO)
