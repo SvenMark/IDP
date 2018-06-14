@@ -20,6 +20,8 @@ class Leg(object):
 
         self.servos = [self.servo_0, self.servo_1, self.servo_2]
 
+        self.sequence = 0
+
         self.type = 'leg'
 
         print("Leg setup")
@@ -42,6 +44,17 @@ class Leg(object):
         self.servo_0.move(positions[0], delay, speeds[0])
         self.servo_1.move(positions[1], delay, speeds[1])
         self.servo_2.move(positions[2], delay, speeds[2])
+
+    def update_sequence(self):
+        """
+        Function that updates on which part of the movement sequence the legs are in
+        when controller by the controller.
+        :return: None
+        """
+        if self.sequence < 3:
+            self.sequence = self.sequence + 1
+        else:
+            self.sequence = 0
 
     def update(self, delta):
         """

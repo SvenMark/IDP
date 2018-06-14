@@ -43,6 +43,7 @@ class Legs(object):
 
         # The current move sequence
         self.sequence = 0
+
         self.type = 'legs'
         self.deployed = False
 
@@ -244,10 +245,10 @@ class Legs(object):
         when controller by the controller.
         :return: None
         """
-        if self.sequence < 3:
-            self.sequence = self.sequence + 1
-        else:
-            self.sequence = 0
+        self.leg_front_right.update_sequence()
+        self.leg_front_left.update_sequence()
+        self.leg_rear_right.update_sequence()
+        self.leg_rear_left.update_sequence()
 
     def run_sequence(self, speeds, self_update=True, sequences=None, sequence=None):
         """
