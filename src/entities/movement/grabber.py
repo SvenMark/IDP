@@ -19,11 +19,12 @@ class Grabber(object):
         """
         self.previous = datetime.datetime.now()
 
-        self.servo_0 = Servo(id_servo[0], initial_positions[0], 5)
-        self.servo_1 = Servo(id_servo[1], initial_positions[1], 5)
-        self.servo_2 = Servo(id_servo[2], initial_positions[2], 5)
+        # self.servo_0 = Servo(id_servo[0], initial_positions[0], 5)
+        # self.servo_1 = Servo(id_servo[1], initial_positions[1], 5)
+        # self.servo_2 = Servo(id_servo[2], initial_positions[2], 5)
 
-        self.servos = [self.servo_0, self.servo_1, self.servo_2]
+        # self.servos = [self.servo_0, self.servo_1, self.servo_2]
+        self.servos = []
         self.reposition = False
 
         self.move_grabber(initial_positions, [50, 50, 50])

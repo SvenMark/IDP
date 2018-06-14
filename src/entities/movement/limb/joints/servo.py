@@ -25,7 +25,6 @@ class Servo(object):
         # Create an instance of the Ax12 servo class from the Ax12 library.
         self.ax12 = Ax12()
 
-        print("Setting servo " + str(servo_id) + " to " + str(initial_position))
         # Set the servo variables and move servo to initial position.
         self.servo_id = servo_id
         self.busy = False
@@ -35,8 +34,6 @@ class Servo(object):
         self.current_speed_multiplier = 0.02
 
         self.start_position = self.last_position
-
-        # self.move(servo_id, initial_position, 300)
 
         self.sensitivity = sensitivity
 
@@ -102,7 +99,7 @@ class Servo(object):
         Function that checks if a servo completed it`s last move
         :return: Whether or not the servo has completed it`s last move
         """
-        return abs(round(self.last_position) - round(self.goal)) <= self.sensitivity
+        return abs(round(self.read_position()) - round(self.goal)) <= self.sensitivity
 
     def read_position(self):
         """
