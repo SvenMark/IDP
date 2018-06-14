@@ -54,7 +54,7 @@ class Json_Handler:
                         saved_building.right = positions
 
         if not exist:
-            new_building = Building(number=building)
+            new_building = Building(front=[], back=[], left=[], right=[], pick_up_vertical=False, number=building)
             if side == Side.front:
                 new_building.front = positions
             elif side == Side.back:

@@ -20,7 +20,6 @@ class Saving(object):
         self.save = False
         self.building_to_save = 0
         self.side = Side.front
-        self.last_positions = []
 
     def run(self):
         print("[RUN] Starting saving...")
@@ -29,7 +28,6 @@ class Saving(object):
         cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
         time.sleep(0.3)  # startup
         while True:
-
             # Read frame from the camera
             img = cap.read()
 
