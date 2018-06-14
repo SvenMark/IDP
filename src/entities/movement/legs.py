@@ -29,16 +29,16 @@ class Legs(object):
         self.previous = datetime.datetime.now()
 
         # Initialise a leg for each corner of the robot
-        # self.leg_front_left = Leg(leg_0_servos, [820, 385, 565])
+        self.leg_front_left = Leg(leg_0_servos, [820, 385, 565])
         # self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
         # self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
-        self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
+        # self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
 
         self.legs = [
-                 # self.leg_front_left,
+                 self.leg_front_left,
                  # self.leg_front_right,
                  # self.leg_rear_left,
-                 self.leg_rear_right
+                 # self.leg_rear_right
             ]
 
         # The current move sequence
@@ -73,10 +73,10 @@ class Legs(object):
         :return: None
         """
 
-        # self.leg_front_left.move(leg_0_moves, delay, speeds)
+        self.leg_front_left.move(leg_0_moves, delay, speeds)
         # self.leg_front_right.move(leg_1_moves, delay, speeds)
         # self.leg_rear_left.move(leg_2_moves, delay, speeds)
-        self.leg_rear_right.move(leg_3_moves, delay, speeds)
+        # self.leg_rear_right.move(leg_3_moves, delay, speeds)
 
         # setting previous time, because the delta time would be too big
         self.previous = datetime.datetime.now()
@@ -95,10 +95,10 @@ class Legs(object):
         speeds = [speed, speed, speed]
         delay = 0.1
 
-        # self.leg_front_left.move(deploy_state, delay, speeds)
+        self.leg_front_left.move(deploy_state, delay, speeds)
         # self.leg_front_right.move(deploy_state, delay, speeds)
         # self.leg_rear_left.move(deploy_state, delay, speeds)
-        self.leg_rear_right.move(deploy_state, delay, speeds)
+        # self.leg_rear_right.move(deploy_state, delay, speeds)
 
         self.deployed = True
 
@@ -114,10 +114,10 @@ class Legs(object):
         speeds = [speed, speed, speed]
         delay = 0.1
 
-        # self.leg_front_left.move(retract_state, delay, speeds)
+        self.leg_front_left.move(retract_state, delay, speeds)
         # self.leg_front_right.move(retract_state, delay, speeds)
         # self.leg_rear_left.move(retract_state, delay, speeds)
-        self.leg_rear_right.move(retract_state, delay, speeds)
+        # self.leg_rear_right.move(retract_state, delay, speeds)
 
         self.deployed = False
 
@@ -247,10 +247,15 @@ class Legs(object):
         when controller by the controller.
         :return: None
         """
-        self.leg_front_right.update_sequence()
-        self.leg_front_left.update_sequence()
-        self.leg_rear_right.update_sequence()
-        self.leg_rear_left.update_sequence()
+        # self.leg_front_right.update_sequence()
+        # self.leg_front_left.update_sequence()
+        # self.leg_rear_right.update_sequence()
+        # self.leg_rear_left.update_sequence()
+
+        if self.sequence < 3:
+            self.sequence = self.sequence + 1
+        else:
+            self.sequence = 0
 
     def run_sequence(self, speeds, self_update=True, sequences=None, sequence=None):
         """
