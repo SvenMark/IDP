@@ -47,13 +47,13 @@ class Json_Handler:
                 print(saved_building.number)
                 if saved_building.number == building:
                     exist = True
-                    if side == Side.front:
+                    if side == 0:
                         saved_building.front = positions
-                    elif side == Side.back:
+                    elif side == 1:
                         saved_building.back = positions
-                    elif side == Side.left:
+                    elif side == 2:
                         saved_building.left = positions
-                    elif side == Side.right:
+                    elif side == 3:
                         saved_building.right = positions
 
         if not exist:
