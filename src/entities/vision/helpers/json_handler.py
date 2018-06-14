@@ -84,6 +84,3 @@ class Json_Handler:
             saved_building = []
 
         return saved_building
-
-
-
