@@ -11,34 +11,11 @@ from entities.vision.helpers.json_handler import Json_Handler
 
 print("[RUN] Transport and Rebuild")
 
-color_range = Json_Handler().get_color_range()
+json_handler = Json_Handler()
+color_range = json_handler.get_color_range()
 tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
 
-saved_buildings = [
-    Building(front=[
-            (124, 31),
-            (38, 367),
-            (63, 166),
-            (253, 364),
-            (154, 295),
-            (210, 156)
-        ],
-             back=[
-            (116, 236),
-            (111, 368),
-            (98, 98),
-            (196, 301),
-            (21, 306)
-             ],
-             left=[
-
-             ],
-             right=[
-
-             ],
-             pick_up_vertical=Side.left_right
-    )
-]
+saved_buildings = json_handler.get_save_buildings()
 
 settings = Recognize_settings()
 vision = Vision(color_range=color_range,
