@@ -1,10 +1,10 @@
 import datetime
-from tkinter import *
+import time
 import json
 import numpy as np
 import cv2
-import sys
-
+from tkinter import *
+from imutils.video import VideoStream
 from entities.vision.helpers.vision_helper import Color
 from entities.vision.helpers.range_handler import Range_Handler
 
@@ -12,7 +12,6 @@ sys.path.insert(0, '../../../src')
 
 
 class Hsv_picker:
-
     def __init__(self, helpers, color_range, img):
         self.color_to_save = ""
         self.img = cv2.imread(img)
@@ -21,7 +20,7 @@ class Hsv_picker:
         self.range_handler = Range_Handler()
 
     def run(self):
-        print("Starting hsv picker")
+        print("[RUN] HSV picker")
 
         for color in range(len(self.color_range)):
             c = self.color_range[color]
@@ -30,8 +29,8 @@ class Hsv_picker:
         name = "cam_props"
         self.helper.create_cam_properties(name)
 
-        print("run hsvpicker")
-        cap = cv2.VideoCapture(0)
+        cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+        time.sleep(0.3)  # startup
 
         while True:
             cap.set(10, cv2.getTrackbarPos('brightness', name)/100)
@@ -40,7 +39,7 @@ class Hsv_picker:
             if self.img is not None:
                 img = self.img
             else:
-                ret, img = cap.read()
+                img = cap.read()
 
             img = cv2.GaussianBlur(img, (9, 9), 0)
                         
@@ -95,7 +94,7 @@ class Hsv_picker:
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
-        cap.release()
+        cap.stop()
         cv2.destroyAllWindows()
 
     @staticmethod
@@ -163,7 +162,7 @@ class Hsv_picker:
             correct_ranges.append((c.color, [lowh, lows, lowv], [highh, highs, highv]))
 
         self.range_handler.set_color_range(correct_ranges)
-        print("Saved settings")
+        print("[INFO] Saved settings")
 
     def nothing(self, x):
         pass

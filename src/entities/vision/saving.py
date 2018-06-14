@@ -1,12 +1,10 @@
-import sys
 import time
 import datetime
-
-sys.path.insert(0, '../../../src')
-
 from entities.vision.helpers.vision_helper import *
 from tkinter import *
 from threading import Thread
+
+sys.path.insert(0, '../../../src')
 
 
 class Saving(object):
@@ -23,18 +21,19 @@ class Saving(object):
         self.last_positions = []
 
     def run(self):
-        print("Starting saving")
+        print("[RUN] Starting saving")
         name = "cam_props"
 
         # Initialize camera
-        cap = cv2.VideoCapture(0)
+        cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+        time.sleep(0.3)  # startup
         while True:
             cap.set(10, cv2.getTrackbarPos('brightness', name) / 100)
             cap.set(11, cv2.getTrackbarPos('contrast', name) / 100)
             cap.set(12, cv2.getTrackbarPos('saturation', name) / 100)
 
             # Read frame from the camera
-            ret, img = cap.read()
+            img = cap.read()
 
             # Apply gaussian blue to the image
             img = cv2.GaussianBlur(img, (9, 9), 0)
@@ -63,7 +62,7 @@ class Saving(object):
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
-        cap.release()
+        cap.stop()
         cv2.destroyAllWindows()
 
     def show_input_fields(self):
@@ -112,7 +111,7 @@ class Saving(object):
             Confirms the building and saves it to a file
             """
             self.save = False
-            print("saved ", self.building_to_save)
+            print("[INFO] saved ", self.building_to_save)
             master.destroy()
 
             out = open("save.txt", "w")

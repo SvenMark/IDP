@@ -1,10 +1,9 @@
 import datetime
 import time
 import sys
+from entities.vision.helpers.vision_helper import *
 
 sys.path.insert(0, '../../../src')
-
-from entities.vision.helpers.vision_helper import *
 
 
 class Recognize(object):
@@ -18,14 +17,15 @@ class Recognize(object):
         self.recognize = True
 
     def run(self):
-        print("Starting recognize")
+        print("[RUN] Starting recognize")
 
         # Initialize camera
-        cap = cv2.VideoCapture(0)
+        cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+        time.sleep(0.3)  # startup
 
         while True:
             # Read frame from the camera
-            ret, img = cap.read()
+            img = cap.read()
 
             # Apply gaussian blue to the image
             img = cv2.GaussianBlur(img, (9, 9), 0)
@@ -53,7 +53,7 @@ class Recognize(object):
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
-        cap.release()
+        cap.stop()
         cv2.destroyAllWindows()
 
     def recognize_building(self, positions, image_width, center):
@@ -97,7 +97,7 @@ class Recognize(object):
 
         if found:
             # Use audio to state the recognized building
-            print("At time: " + str(datetime.datetime.now().time()) + " Found: ", result[0], result[1])
+            print("[INFO] At time: " + str(datetime.datetime.now().time()) + " Found: ", result[0], result[1])
             self.recognize = False
 
         # Return whether a building has been found
