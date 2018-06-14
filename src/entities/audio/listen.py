@@ -1,5 +1,8 @@
 import sounddevice as sd
 import soundfile as sf
+import sys
+
+sys.path.insert(0, '../../../src')
 
 from entities.audio.audio import Audio
 

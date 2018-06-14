@@ -6,6 +6,10 @@ from entities.movement.limb.joints.dcmotor import DCMotor
 
 
 class Track(object):
+    """
+    Base class for track which directly implements dc motor
+    """
+
     def __init__(self, track_pin, pin_forward, pin_backward):
         """
         Constructor for track class which is almost direct copy of dc motor
@@ -13,9 +17,7 @@ class Track(object):
         :param pin_forward: The forward direction pin
         :param pin_backward: The backward direction pin
         """
-
-        # Initialise both motors as tracks. Each track has 1 motor.
-        self.motor = DCMotor(track_pin, pin_forward, pin_backward)
+        self.motor = DCMotor(track_pin, pin_forward, pin_backward)  # Initialise both motors as tracks. Each track has 1 motor.
         self.current_speed = 0
         self.type = 'track'
 
