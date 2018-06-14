@@ -67,14 +67,7 @@ def run(name, movement, shared_object):
     # shared_object.has_been_stopped()
 
 
-limbs = [
-
-]
-
-lights = []
-movement = Movement(limbs, lights)
-
-run(name="Visiontest", shared_object=SharedObject(), movement=movement)
+run(name="Visiontest", shared_object=SharedObject(), movement=None)
 
 # TESTING
 # tracks = Tracks(track_0_pin=18,
