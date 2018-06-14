@@ -91,7 +91,7 @@ class Legs(object):
         :param speed: The speed at which the servo moves
         :return: None
         """
-        deploy_state = [530, 250, 420]
+        deploy_state = [530, 250, 850]
         speeds = [speed, speed, speed]
         delay = 0.1
 
@@ -110,7 +110,7 @@ class Legs(object):
         :param speed: The speed at which the servo moves
         :return: None
         """
-        retract_state = [530, 790, 800]
+        retract_state = [530, 790, 470]
         speeds = [speed, speed, speed]
         delay = 0.1
 

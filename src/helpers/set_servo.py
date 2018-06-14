@@ -6,4 +6,4 @@ from libs.ax12 import Ax12
 
 tester = Ax12()
 
-tester.move(63, 800)
+tester.move(63, 470)
