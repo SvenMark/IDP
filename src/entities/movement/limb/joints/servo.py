@@ -60,9 +60,9 @@ class Servo(object):
         """
 
         # No update needed
-        if not self.is_ready():
-            print("Servo {} is ready, but update has been called".format(self.servo_id))
-            return
+        # if not self.is_ready():
+        #     print("Servo {} is ready, but update has been called".format(self.servo_id))
+        #     return
 
         step = (self.goal - self.start_position) * delta * self.current_speed  # move towards new position
 
