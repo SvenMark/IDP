@@ -126,7 +126,7 @@ class Helper:
 
         center = (x + extremes[1]) / 2
 
-        percentage_left = center / image_width
+        percentage_left = center / image_width * 100
         print("[INFO] Percentage left: {}, width image: {}".format(percentage_left, w))
         if w > 180 and 51 > percentage_left > 49:
             print("grab that ho")
