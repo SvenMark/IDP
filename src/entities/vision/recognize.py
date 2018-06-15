@@ -1,4 +1,7 @@
 import sys
+
+from imutils.video import VideoStream
+
 sys.path.insert(0, '../../../src')
 
 import datetime
@@ -74,23 +77,8 @@ class Recognize(object):
             b = self.saved_buildings[building]
 
             # For each block on the front side of the saved building
-            found = self.check_building_side(positions, b.front)
-            result = [building, "front"]
-
-            # For each block on the back side of the saved building
-            if not found:
-                found = self.check_building_side(positions, b.back)
-                result = [building, "back"]
-            
-            # For each block on the left side of the saved building
-            if not found:
-                found = self.check_building_side(positions, b.left)
-                result = [building, "left"]
-
-            # For each block on the right side of the saved building
-            if not found:
-                found = self.check_building_side(positions, b.right)
-                result = [building, "right"]
+            found = self.check_building_side(positions, b.side)
+            result = [b.number, "some side"]
 
         # If recent settings are handled
         self.check_settings(center, image_width, result)
