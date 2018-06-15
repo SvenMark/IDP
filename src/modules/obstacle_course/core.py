@@ -1,4 +1,5 @@
 import sys
+
 sys.path.insert(0, '../../../src')
 
 import math
@@ -6,7 +7,7 @@ import time
 import cv2
 import numpy as np
 from imutils.video import VideoStream
-from entities.vision.recognize import Recognize, Block
+from entities.vision.recognize import Recognize
 from entities.vision.helpers.vision_helper import Color
 
 
@@ -24,23 +25,30 @@ def run(name, movement, shared_object):
 
 
 def detect_cup():
+    # Set minimal points which he needs to detect the cup
     MIN_MATCH_COUNT = 20
 
+    # Set the detector and create matcher
     detector = cv2.xfeatures2d.SIFT_create()
 
     FLANN_INDEX_KDITREE = 0
     flannParam = dict(algorithm=FLANN_INDEX_KDITREE, tree=5)
     flann = cv2.FlannBasedMatcher(flannParam, {})
 
+    # Get training image of cup
     trainImg = cv2.imread("ding.jpg", 0)
     trainKP, trainDesc = detector.detectAndCompute(trainImg, None)
 
+    # Get video of picamera
     cam = VideoStream(src=0, usePiCamera=False, resolution=(320, 240)).start()
     time.sleep(0.3)  # startup
+
     while True:
+        # Get frame and turn it into black and white
         frame = cam.read()
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
+        # Set mask
         green = Color('green', [28, 39, 0], [94, 255, 255])
         mask = cv2.inRange(cv2.cvtColor(frame, cv2.COLOR_BGR2HSV), green.lower, green.upper)
 
@@ -56,7 +64,6 @@ def detect_cup():
 
         queryKP, queryDesc = detector.detectAndCompute(frame_gray, mask=mask)
         matches = flann.knnMatch(queryDesc, trainDesc, k=2)
-        # cv2.imshow("Points", cv2.drawKeypoints(frame, queryKP, None))
 
         goodMatch = []
         for m, n in matches:
@@ -77,7 +84,7 @@ def detect_cup():
             moment = cv2.moments(queryBorder)
 
             x, y, w, h = cv2.boundingRect(queryBorder)
-            distance = 0.00008650519031141868 * h**2 - 0.10294117647058823 * h + 35
+            distance = 0.00008650519031141868 * h ** 2 - 0.10294117647058823 * h + 35
             # Calculate the centre of mass
             cx = int(moment['m10'] / moment['m00'])
             cy = int(moment['m01'] / moment['m00'])
@@ -95,7 +102,6 @@ def detect_cup():
 
 
 def detect_bridge():
-
     # Initialize color ranges for detection
     color_range = [Color("Brug", [0, 0, 0], [0, 255, 107]),
                    Color("Gat", [0, 0, 0], [0, 0, 255]),
