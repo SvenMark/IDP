@@ -77,7 +77,6 @@ class Recognize(object):
             if found:
                 break
 
-
         # If recent settings are handled
         self.check_settings(center, image_width, result)
 
