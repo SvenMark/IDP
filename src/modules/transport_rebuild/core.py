@@ -5,9 +5,12 @@ import time
 sys.path.insert(0, '../../../src')
 
 from entities.vision.vision import Vision
-from entities.vision.helpers.vision_helper import Color, Building, Side
+from entities.vision.helpers.vision_helper import Color, BuildingSide
 from entities.vision.recognize_settings import Recognize_settings
 from entities.vision.helpers.json_handler import Json_Handler
+from entities.movement.movement import Movement
+from entities.threading.utils import SharedObject
+
 
 # from entities.movement.tracks import Tracks
 
@@ -22,7 +25,7 @@ saved_buildings = json_handler.get_save_buildings()
 settings = Recognize_settings()
 vision = Vision(color_range=color_range,
                 saved_buildings=saved_buildings,
-                settings=settings, max_block_size=35000, min_block_size=500)
+                settings=settings, max_block_size=35000, min_block_size=300)
 
 rotate_speed = 50
 
@@ -39,28 +42,30 @@ def run(name, movement, shared_object):
                 threading.Thread(target=vision.recognize.run).start()
             else:
                 print("[ERROR] Wrong argument given..")
-                run(shared_object)
+                run(name, movement, shared_object)
 
         # Default no argument
         else:
-            threading.Thread(target=vision.helpers.hsv_picker.run).start()
+            threading.Thread(target=vision.recognize.run).start()
     except AttributeError:
         print("[ERROR] Something went wrong..")
-        run(shared_object)
+        run(name, movement, shared_object)
 
-    while not shared_object.has_to_stop():
+    # while not shared_object.has_to_stop():
+    #
+    #     movement.grabber.grab([80, 80, 80])
+    #     if movement.grabber.reposition is True:
+    #         movement.tracks.forward(30, 30, 2, 3)
+    #         movement.grabber.reposition = False
+    #
+    #     time.sleep(0.5)
+    #
+    # # Notify shared object that this thread has been stopped
+    # print("Stopped" + str(name))
+    # shared_object.has_been_stopped()
 
-        movement.grabber.grab([80, 80, 80])
-        if movement.grabber.reposition is True:
-            movement.tracks.forward(30, 30, 2, 3)
-            movement.grabber.reposition = False
 
-        time.sleep(0.5)
-
-    # Notify shared object that this thread has been stopped
-    print("Stopped" + str(name))
-    shared_object.has_been_stopped()
-
+run(name="Visiontest", shared_object=SharedObject(), movement=None)
 
 # TESTING
 # tracks = Tracks(track_0_pin=18,
