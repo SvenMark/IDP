@@ -16,7 +16,6 @@ class Movement(object):
         """
         self.limbs = limbs
         self.lights = lights
-
         self.legs = limbs[0]
         self.tracks = limbs[1]
         self.grabber = limbs[2]

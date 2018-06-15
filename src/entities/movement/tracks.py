@@ -9,7 +9,7 @@ from entities.movement.limb.track import Track
 
 class Tracks(object):
     """
-    Base class for tracks that implements DC motors
+    Base class for tracks that controls the track classes
     """
 
     def __init__(self, track_0_pin, track_1_pin, track_0_forward, track_0_backward, track_1_forward, track_1_backward):
@@ -101,9 +101,7 @@ class Tracks(object):
             if track_left_direction == 0 and track_right_direction == 1:
                 self.track_left.backward(speed_1, 0)
                 self.track_right.forward(speed_2, 0)
-
-            # Add a little delay so the motor accelerates smoothly
-            time.sleep(0.01)
+            time.sleep(0.01)  # Add a little delay so the motor accelerates smoothly
 
         time.sleep(delay)
 
@@ -173,13 +171,19 @@ class Tracks(object):
                                   duty_cycle_track_right=abs(vertical_speed),
                                   delay=0,
                                   acceleration=0)
+                # Backward left
                 if horizontal_speed < -dead_zone:
+                    if horizontal_speed < 150:
+                        horizontal_speed = 150
                     horizontal_speed = horizontal_speed / 2
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
-                                  duty_cycle_track_right=abs(vertical_speed)  - horizontal_speed,
+                                  duty_cycle_track_right=abs(vertical_speed) - horizontal_speed,
                                   delay=0,
                                   acceleration=0)
+                # Backward right
                 if horizontal_speed > dead_zone:
+                    if horizontal_speed > 850:
+                        horizontal_speed = 850
                     horizontal_speed = abs(horizontal_speed / 2)
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
                                   duty_cycle_track_right=abs(vertical_speed) - horizontal_speed,
@@ -193,13 +197,19 @@ class Tracks(object):
                                  duty_cycle_track_right=vertical_speed,
                                  delay=0,
                                  acceleration=0)
+                # Forward left
                 if horizontal_speed < -dead_zone:
+                    if horizontal_speed < 150:
+                        horizontal_speed = 150
                     horizontal_speed = horizontal_speed / 2
                     self.forward(duty_cycle_track_left=vertical_speed,
                                  duty_cycle_track_right=vertical_speed - horizontal_speed,
                                  delay=0,
                                  acceleration=0)
+                # Forward right
                 if horizontal_speed > dead_zone:
+                    if horizontal_speed > 850:
+                        horizontal_speed = 850
                     horizontal_speed = abs(horizontal_speed / 2)
                     self.forward(duty_cycle_track_left=vertical_speed,
                                  duty_cycle_track_right=vertical_speed - horizontal_speed,
