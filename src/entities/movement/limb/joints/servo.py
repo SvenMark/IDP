@@ -62,6 +62,7 @@ class Servo(object):
         # No update needed
         if not self.is_ready():
             print("Servo {} is ready, but update has been called".format(self.servo_id))
+            return
 
         step = (self.goal - self.start_position) * delta * self.current_speed  # move towards new position
 
@@ -73,11 +74,11 @@ class Servo(object):
             self.start_position = self.last_position
             step = (self.goal - self.start_position) * delta * self.current_speed
 
-        print("Delta: " + str(delta) + " Step: " + str(step) + " Goal: " + str(self.goal) + " Last_pos: " + str(self.last_position) + " Start_pos: " + str(self.start_position))
         if self.last_position + step > 1024 or self.last_position + step < 0:
             print(str(self.last_position + step) + " not in range " + str(self.servo_id) + "speed "
                   + str(self.current_speed) + "delta " + str(delta))
             return
+
         self.last_position = self.last_position + step
         self.ax12.move(self.servo_id, round(self.last_position))
 
