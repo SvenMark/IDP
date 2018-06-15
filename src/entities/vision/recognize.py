@@ -44,7 +44,7 @@ class Recognize(object):
             mask_cropped, valid_contours = self.helper.calculate_mask(img_crop, self.color_range, set_contour=True)
 
             # Recognize building
-            if self.saved_buildings and self.start_recognize:
+            if self.saved_buildings:
                 self.recognize_building(valid_contours, image_width, building_center, building_width)
 
             # Show the created image
@@ -73,13 +73,14 @@ class Recognize(object):
         if not len(positions) > 0:
             return False
 
-        # For each building in the saved building list
-        for building in self.saved_buildings:
-            # For each block on the front side of the saved building
-            found = self.check_building_side(positions, building.side)
-            result = [building.number, building.side_number, building.pick_up_vertical]
-            if found:
-                break
+        if self.start_recognize:
+            # For each building in the saved building list
+            for building in self.saved_buildings:
+                # For each block on the front side of the saved building
+                found = self.check_building_side(positions, building.side)
+                result = [building.number, building.side_number, building.pick_up_vertical]
+                if found:
+                    break
 
         # If recent settings are handled
         self.check_settings(building_center, image_width, building_width, result)
