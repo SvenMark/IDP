@@ -127,7 +127,7 @@ class Helper:
         center = (x + extremes[1]) / 2
 
         percentage_left = center / image_width
-        print("[INFO] Percentage left: ", percentage_left)
+        print(w)
 
         # Resize to new size
         img = self.image_resize(img, height=400)
