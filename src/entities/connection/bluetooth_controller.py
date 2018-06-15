@@ -20,19 +20,17 @@ class BluetoothController(object):
     Base class for the bluetooth smart controller
     """
 
-    def __init__(self, name, limbs, lights, bluetooth_address):
+    def __init__(self, name, limbs, bluetooth_address):
         """
         Constructor for the bluetooth controller class
-        :param name:
-        :param limbs:
-        :param lights:
-        :param bluetooth_address:
+        :param name: Name of the robot
+        :param limbs: Array of robot limbs
+        :param bluetooth_address: Address of the bluetooth controller
         """
         self.bluetooth_address = bluetooth_address
         self.name = name
         self.limbs = limbs
-        self.lights = lights
-        self.movement = Movement(limbs, lights)
+        self.movement = Movement(limbs)
         self.vision = Vision(color_range=[1, 2],
                              saved_buildings=None,
                              img=None,
