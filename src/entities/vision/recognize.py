@@ -37,10 +37,10 @@ class Recognize(object):
             mask, u = self.helper.calculate_mask(img, self.color_range)
 
             image_width, image_height = img.shape[:2]
-            img, center = self.helper.crop_to_contours(mask, img)
+            img_crop, center = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
-            mask_cropped, valid_contours = self.helper.calculate_mask(img, self.color_range, set_contour=True)
+            mask_cropped, valid_contours = self.helper.calculate_mask(img_crop, self.color_range, set_contour=True)
 
             # Append the valid contours to the positions array
             # for cnt in range(len(valid_contours)):
