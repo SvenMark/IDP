@@ -100,17 +100,17 @@ class Recognize(object):
     def check_settings(self, building_center, image_width, building_width, result):
         if not self.settings.new:
             percentage_position = building_center / image_width * 100
-            print(building_width)
+            print("[INFO] building with:", building_width)
             if building_width > 80:
                 self.helper.min_block_size = 300
-                print(self.helper.min_block_size)
+                print("[INFO] min blok sies:", self.helper.min_block_size)
             else:
                 self.helper.min_block_size = 0
 
             if self.recognized and 50 > percentage_position > 49 and building_width > 183:
-                print("grab that ho")
+                print("[WOO] building with:grab that ho")
             else:
-                print(percentage_position)
+                print("[INFO] percentage left:", percentage_position)
 
             # Add to settings
             self.settings.current_building = result[0]
