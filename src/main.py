@@ -62,6 +62,18 @@ def main():
                    track_1_forward=19,
                    track_1_backward=26)
         ]
+    elif 1 in servos:
+        print("Initialise limbs with Grabber and Tracks")
+        limbs = [
+            Legs(
+                leg_0_servos=[6, 14, 15],
+                leg_1_servos=[16, 17, 18],
+                leg_2_servos=[21, 41, 52],
+                leg_3_servos=[61, 62, 63]
+            ),
+            Grabber(servos=[1, 53, 43],
+                    initial_positions=[465, 198, 200])
+        ]
     # If no servos are connected
     else:
         print("Initialise limbs with Tracks")
