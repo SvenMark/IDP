@@ -56,6 +56,11 @@ def run(name, movement, shared_object):
 
 
 def line_detection(shared_object):
+    """
+    Detects the line in a special set reagion, calculates the avarge center of the line in the screen and detects red
+    :param shared_object: Thread notifier
+    :return: None
+    """
     # Get view of picamera and do a small warmup of 0.3s
     cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
     time.sleep(0.3)
@@ -127,6 +132,12 @@ def line_detection(shared_object):
 
 # Set the triangle region with the vertices on the img
 def set_region(img, vertices):
+    """
+    Sets a region with the points of vertices on the image
+    :param img: The current frame of the picamera
+    :param vertices: Points on the screen
+    :return: A masked image with only the region
+    """
     mask = np.zeros_like(img)
     channel_count = img.shape[2]
     match_mask_color = (255,) * channel_count
@@ -139,11 +150,17 @@ def set_region(img, vertices):
     bg = np.ones_like(masked_img, np.uint8) * 255
     cv2.bitwise_not(bg, bg, mask=new_mask)
 
-    return masked_img + bg
+    return masked_img
 
 
 # Calculate midpoint of 2 points
 def midpoint(p1, p2):
+    """
+    Calculates a midpoint between two points
+    :param p1: Point number one with a x and y coordinate
+    :param p2: Point number two with a x and y coordinate
+    :return: The midpoint as a point with a x and y coordinate
+    """
     midp = Point(0, 0)
     midp.x = (p1.x + p2.x) / 2
     midp.y = (p1.y + p2.y) / 2
@@ -152,6 +169,13 @@ def midpoint(p1, p2):
 
 # Calculate the average distance from left and right to center
 def average_distance(lines, width):
+    """
+    Calculates the average distance of the lines from the left and the right of the screen so it can
+    centralize
+    :param lines: All the lines it has detected
+    :param width: The width of the frame
+    :return: The average percentage (decimal) of al the lines from the left and the right of the screen
+    """
     # Set count, total distance left and total distance right
     count = 0
     totaldr = 0
@@ -175,6 +199,12 @@ def average_distance(lines, width):
 
 # Detect red in image function
 def detect_red(img, hsv):
+    """
+    Detects red in the frame
+    :param img: The current frame
+    :param hsv: The current frame converted to hsv
+    :return: Returns true if there is a red area larger then 100. Else it returns false
+    """
     # Create red mask to hsv
     red = Color([170, 100, 100], [190, 255, 255])
     mask = cv2.inRange(hsv, red.lower, red.upper)
