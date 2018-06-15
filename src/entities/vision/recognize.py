@@ -42,12 +42,8 @@ class Recognize(object):
             # Calculate new cropped masks
             mask_cropped, valid_contours = self.helper.calculate_mask(img_crop, self.color_range, set_contour=True)
 
-            # Append the valid contours to the positions array
-            # for cnt in range(len(valid_contours)):
-            #     self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt])
-
             # Recognize building
-            if self.saved_buildings and self.recognize:
+            if self.saved_buildings:
                 self.recognize_building(valid_contours, image_width, center)
 
             # Show the created image
@@ -102,12 +98,7 @@ class Recognize(object):
         return total / len(b)
 
     def check_building_side(self, positions, side):
-        print("--------{}-------".format(datetime.datetime.now().time()))
-        for bl in positions:
-            print(str(bl))
-        print("----- vs -----", len(side))
         for block in side:
-            print(str(block))
             if not self.helper.is_duplicate(block, positions, 20):
                 return False
 
