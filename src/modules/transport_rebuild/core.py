@@ -21,6 +21,8 @@ color_range = json_handler.get_color_range()
 tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
 
 saved_buildings = json_handler.get_save_buildings()
+for building in saved_buildings:
+    print(building.side)
 
 settings = Recognize_settings()
 vision = Vision(color_range=color_range,
