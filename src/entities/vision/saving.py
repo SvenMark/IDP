@@ -88,7 +88,7 @@ class Saving(object):
         Label(master, text="Amount of blocks").grid(row=0)
         Label(master, text="Building Number").grid(row=1)
         Label(master, text="Pickup vertical").grid(row=2)
-        Label(master, text="Side").grid(row=2)
+        Label(master, text="Side").grid(row=3)
         e1 = Entry(master)
         e2 = Entry(master)
         e3 = Entry(master)
