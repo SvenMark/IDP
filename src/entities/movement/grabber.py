@@ -10,26 +10,27 @@ from entities.movement.sequences.sequences import *
 
 
 class Grabber(object):
+    """
+    Base class for grabber which directly implements servo
+    """
 
-    def __init__(self, id_servo, initial_positions):
+    def __init__(self, servos, initial_positions):
         """
-
-        :param id_servo:
-        :param initial_positions:
+        Constructor for grabber class
+        :param servos: Array of grabber servo id`s
+        :param initial_positions: Array of servo positions
         """
-        self.previous = datetime.datetime.now()
+        self.previous = datetime.datetime.now()  # The time used for delta timing
 
-        self.servo_0 = Servo(id_servo[0], initial_positions[0], 5)
-        self.servo_1 = Servo(id_servo[1], initial_positions[1], 5)
-        self.servo_2 = Servo(id_servo[2], initial_positions[2], 5)
+        self.servo_0 = Servo(servos[0], initial_positions[0], 5)
+        self.servo_1 = Servo(servos[1], initial_positions[1], 5)
+        self.servo_2 = Servo(servos[2], initial_positions[2], 5)
 
         self.servos = [self.servo_0, self.servo_1, self.servo_2]
+
         self.reposition = False
-
-        self.move_grabber(initial_positions, [50, 50, 50])
-
+        self.move_grabber(initial_positions, [50, 50, 50])  # Set grabber to initial position
         self.type = 'grabber'
-
         print("Grabber setup")
 
     def ready(self):
@@ -45,11 +46,21 @@ class Grabber(object):
         return len(result) == 3
 
     def grab(self, speeds):
-        positions = [186, 528, 260]
+        """
+        Function that contains commands to close grabber
+        :param speeds: Array of speeds for each servo
+        :return: None
+        """
+        positions = [186, 528, 260]  # The servo positions for grabbing
         self.move_grabber(positions, speeds)
 
     def loosen(self, speeds):
-        positions = [465, 198, 200]
+        """
+        Function that contains commands top open grabber
+        :param speeds: Array of speeds for each servo
+        :return: None
+        """
+        positions = [465, 198, 200]  # The servo positions for loosening
         self.move_grabber(positions, speeds)
 
     def get_delta(self):
@@ -63,18 +74,24 @@ class Grabber(object):
         return elapsed_time.total_seconds()
 
     def move_grabber(self, positions, speeds):
+        """
+        Move the grabber servo`s
+        :param positions: Array of servo positions
+        :param speeds: Array of speeds for each servo
+        :return: None
+        """
         for i in range(len(self.servos)):
-            self.servos[i].move(positions[i], 0, speeds[i])
-        self.update()
+            self.servos[i].move(positions[i], speeds[i])
+        self.update()  # Update the servos
 
     def update(self):
         """
         Update all the unready servos
-        :param delta: The delta time
         :return: None
         """
         servos_not_ready = [elem for elem in self.servos if not elem.is_ready()]
         self.get_delta()
+        # While not all servos are ready keep updating
         while len(servos_not_ready) != 0:
             delta = self.get_delta()
             for i in range(len(servos_not_ready)):

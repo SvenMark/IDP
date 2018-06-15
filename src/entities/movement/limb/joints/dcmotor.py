@@ -17,7 +17,6 @@ class DCMotor(object):
         :param pin_forward: The forward direction pin, this pin send a signal if the motor needs to go forward
         :param pin_backward: The backward direction pin, this pin send a signal if the motor needs to go backward
         """
-
         # Set up the gpio and pins for the use of DC motors
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
@@ -28,6 +27,7 @@ class DCMotor(object):
         self.stop = 0
         self.current_speed = 0
 
+        # Set all motor pins as output
         GPIO.setup(self.pin_pwm, GPIO.OUT)
         GPIO.setup(self.pin_motor_forward, GPIO.OUT)
         GPIO.setup(self.pin_motor_backward, GPIO.OUT)
@@ -36,7 +36,7 @@ class DCMotor(object):
         self.pwm_motor = GPIO.PWM(self.pin_pwm, self.frequency)
         self.pwm_motor.start(self.stop)
 
-        print("Setup")
+        print("DC motor on pin " + str(self.pin_pwm) + " setup")
 
     def stop_motor(self):
         """

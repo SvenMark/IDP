@@ -6,6 +6,9 @@ from entities.movement.limb.joints.servo import Servo
 
 
 class Leg(object):
+    """
+    Base class for leg which directly implements servo
+    """
 
     def __init__(self, id_servo, positions):
         """
@@ -33,22 +36,21 @@ class Leg(object):
         """
         return len([elem for elem in self.servos if elem.is_ready()]) == 3
 
-    def move(self, positions, delay, speeds):
+    def move(self, positions, speeds):
         """
         Function that moves the legs in the specified directions
         :param positions: Array of positions for each servo
-        :param delay: Time to wait after executing
         :param speeds: Array of speeds for each servo
         :return: None
         """
-        self.servo_0.move(positions[0], delay, speeds[0])
-        self.servo_1.move(positions[1], delay, speeds[1])
-        self.servo_2.move(positions[2], delay, speeds[2])
+        self.servo_0.move(positions[0], speeds[0])
+        self.servo_1.move(positions[1], speeds[1])
+        self.servo_2.move(positions[2], speeds[2])
 
     def update_sequence(self):
         """
         Function that updates on which part of the movement sequence the legs are in
-        when controller by the controller.
+        when controlled by the controller.
         :return: None
         """
         if self.sequence < 3:

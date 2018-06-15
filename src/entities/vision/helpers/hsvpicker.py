@@ -1,46 +1,39 @@
+
+
 import datetime
-from tkinter import *
+import time
 import json
 import numpy as np
 import cv2
-import sys
-
+from tkinter import *
+from imutils.video import VideoStream
 from entities.vision.helpers.vision_helper import Color
-from entities.vision.helpers.range_handler import Range_Handler
-
-sys.path.insert(0, '../../../src')
+from entities.vision.helpers.json_handler import Json_Handler
 
 
 class Hsv_picker:
-
     def __init__(self, helpers, color_range, img):
         self.color_to_save = ""
         self.img = cv2.imread(img)
         self.helper = helpers.helper
         self.color_range = color_range
-        self.range_handler = Range_Handler()
+        self.range_handler = helpers.json_handler
 
     def run(self):
-        print("Starting hsv picker")
+        print("[RUN] HSV picker")
 
         for color in range(len(self.color_range)):
             c = self.color_range[color]
             self.createtrackbars(c)
 
-        name = "cam_props"
-        self.helper.create_cam_properties(name)
-
-        print("run hsvpicker")
-        cap = cv2.VideoCapture(0)
+        cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+        time.sleep(0.3)  # startup
 
         while True:
-            cap.set(10, cv2.getTrackbarPos('brightness', name)/100)
-            cap.set(11, cv2.getTrackbarPos('contrast', name)/100)
-            cap.set(12, cv2.getTrackbarPos('saturation', name)/100)
             if self.img is not None:
                 img = self.img
             else:
-                ret, img = cap.read()
+                img = cap.read()
 
             img = cv2.GaussianBlur(img, (9, 9), 0)
                         
@@ -95,7 +88,7 @@ class Hsv_picker:
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
-        cap.release()
+        cap.stop()
         cv2.destroyAllWindows()
 
     @staticmethod
@@ -131,16 +124,18 @@ class Hsv_picker:
         cv2.namedWindow(name)
         cv2.resizeWindow(name, 300, 300)
 
+        nothing = self.helper.nothing
+
         # create trackbars for lower
-        cv2.createTrackbar('Low H', name, c.lower[0], 180, self.nothing)
-        cv2.createTrackbar('Low S', name, c.lower[1], 255, self.nothing)
-        cv2.createTrackbar('Low V', name, c.lower[2], 255, self.nothing)
+        cv2.createTrackbar('Low H', name, c.lower[0], 180, nothing)
+        cv2.createTrackbar('Low S', name, c.lower[1], 255, nothing)
+        cv2.createTrackbar('Low V', name, c.lower[2], 255, nothing)
 
         # create trackbars for higher
-        cv2.createTrackbar('High H', name, c.upper[0], 180, self.nothing)
-        cv2.createTrackbar('High S', name, c.upper[1], 255, self.nothing)
-        cv2.createTrackbar('High V', name, c.upper[2], 255, self.nothing)
-        cv2.createTrackbar('off_on', name, 0, 1, self.nothing)
+        cv2.createTrackbar('High H', name, c.upper[0], 180, nothing)
+        cv2.createTrackbar('High S', name, c.upper[1], 255, nothing)
+        cv2.createTrackbar('High V', name, c.upper[2], 255, nothing)
+        cv2.createTrackbar('off_on', name, 0, 1, nothing)
 
     def savehigherlower(self, color_range):
         """
@@ -161,7 +156,7 @@ class Hsv_picker:
             correct_ranges.append((c.color, [lowh, lows, lowv], [highh, highs, highv]))
 
         self.range_handler.set_color_range(correct_ranges)
-        print("Saved settings")
+        print("[INFO] Saved settings")
 
     def nothing(self, x):
         pass

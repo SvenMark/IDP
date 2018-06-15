@@ -1,6 +1,8 @@
 import pyaudio
 import numpy as np
+import sys
 
+sys.path.insert(0, '../../../src')
 
 class BeatDetection(object):
     def __init__(self):
