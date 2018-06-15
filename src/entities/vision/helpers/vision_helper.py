@@ -12,7 +12,7 @@ class Color:
 class BuildingSide:
     def __init__(self, side, pick_up_vertical, number, side_number):
         self.side = side
-        self.pick_up_vertical = False
+        self.pick_up_vertical = True if pick_up_vertical == 1 else False
         self.number = number
         self.side_number = side_number
 
