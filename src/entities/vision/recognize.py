@@ -70,12 +70,11 @@ class Recognize(object):
             return False
 
         # For each building in the saved building list
-        for building in range(len(self.saved_buildings)):
-            b = self.saved_buildings[building]
-
+        for building in self.saved_buildings:
+            print(building.side)
             # For each block on the front side of the saved building
-            found = self.check_building_side(positions, b.side)
-            result = [b.number, b.side_number]
+            found = self.check_building_side(positions, building.side)
+            result = [building.number, building.side_number]
 
         # If recent settings are handled
         self.check_settings(center, image_width, result)
