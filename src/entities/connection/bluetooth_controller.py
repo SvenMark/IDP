@@ -157,7 +157,8 @@ class BluetoothController(object):
                 self.run_module(m, self.movement, s, v, h, speed_factor, d)
 
         except ValueError or IndexError:
-            print("Invalid value in package")
+            temp = 123
+            # print("Invalid value in package")
 
     def run_module(self, module, movement, s, v, h, speed_factor, d):
         """
