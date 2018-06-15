@@ -46,7 +46,7 @@ def run(name, movement, shared_object):
 
         # Default no argument
         else:
-            threading.Thread(target=vision.saving.run).start()
+            threading.Thread(target=vision.recognize.run).start()
     except AttributeError:
         print("[ERROR] Something went wrong..")
         run(name, movement, shared_object)
