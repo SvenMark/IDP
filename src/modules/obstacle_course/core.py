@@ -25,8 +25,8 @@ def run(name, movement, shared_object):
 
 def detect_cup():
     """
-    Detects the cup and calculates distance to cup with
-    :return: none
+    Detects the cup and calculates distance to cup
+    :return: None
     """
     # Set minimal points which he needs to detect the cup
     MIN_MATCH_COUNT = 20
@@ -114,8 +114,8 @@ def detect_cup():
 
 def detect_bridge():
     """
-    Detects the bridge in the parcour
-    :return: none
+    Detects the bridge in the obstacle course
+    :return: None
     """
     # Initialize color ranges for detection
     color_range = [Color("Brug", [0, 0, 0], [0, 255, 107]),
