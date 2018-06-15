@@ -49,7 +49,6 @@ class Saving(object):
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 self.show_input_fields()
 
-            print(len(valid_contours))
             if self.save and 3 < len(valid_contours) == self.save_length:
                 print("--------{}-------".format(datetime.datetime.now().time()))
                 for cnt in range(len(valid_contours)):
