@@ -25,8 +25,6 @@ class Servo(object):
         self.ax12 = Ax12()  # Create an instance of the Ax12 servo class from the Ax12 library.
         self.servo_id = servo_id  # Set the servo variables
 
-        # Is this used??
-        self.busy = False
         self.last_position = self.read_position()  # Set the last servo position as the current position
         self.goal = initial_position  # Set the initial position as the goal position
         self.current_speed = 200
