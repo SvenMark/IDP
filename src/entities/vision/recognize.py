@@ -17,7 +17,7 @@ class Recognize(object):
         self.saved_buildings = saved_buildings
         self.helper = helpers.helper
         self.settings = settings
-        self.recognize = True
+        self.recognized = False
 
     def run(self):
         print("[RUN] Starting recognize...")
@@ -34,17 +34,16 @@ class Recognize(object):
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
             # # Calculate the masks
-            mask, u = self.helper.calculate_mask(img, self.color_range)
+            mask, _ = self.helper.calculate_mask(img, self.color_range)
 
-            image_width, image_height = img.shape[:2]
-            img_crop, center = self.helper.crop_to_contours(mask, img)
+            img_crop, building_center, image_width, building_width = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
             mask_cropped, valid_contours = self.helper.calculate_mask(img_crop, self.color_range, set_contour=True)
 
             # Recognize building
             if self.saved_buildings:
-                self.recognize_building(valid_contours, image_width, center)
+                self.recognize_building(valid_contours, image_width, building_center, building_width)
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
@@ -56,9 +55,12 @@ class Recognize(object):
         cap.stop()
         cv2.destroyAllWindows()
 
-    def recognize_building(self, positions, image_width, center):
+    def recognize_building(self, positions, image_width, building_center, building_width):
         """
         Checks if the currents positions of the blocks matches any saved building
+        :param building_width: Width of the building
+        :param building_center: Center of the building
+        :param image_width: Width of the current image
         :param positions: Current reading of POSITIONS
         :return: True if a building is recognized
         """
@@ -78,24 +80,15 @@ class Recognize(object):
                 break
 
         # If recent settings are handled
-        self.check_settings(center, image_width, result)
+        self.check_settings(building_center, image_width, building_width, result)
 
         if found:
             # Use audio to state the recognized building
             print("[INFO] At time: " + str(datetime.datetime.now().time()) + " Found: ", result[0], result[1])
-            self.recognize = False
+            self.recognized = True
 
         # Return whether a building has been found
         return found
-
-    @staticmethod
-    def get_center(b):
-        total = 0
-
-        for block in range(len(b)):
-            total += b[block][0]
-
-        return total / len(b)
 
     def check_building_side(self, positions, side):
         for block in side:
@@ -104,11 +97,19 @@ class Recognize(object):
 
         return True
 
-    def check_settings(self, center, image_width, result):
+    def check_settings(self, building_center, image_width, building_width, result):
         if not self.settings.new:
-            cx = center
+            percentage_position = building_center / image_width * 100
+            if building_width > 80:
+                self.helper.min_block_size = 300
+                print(self.helper.min_block_size)
+            else:
+                self.helper.min_block_size = 0
 
-            percentage_position = cx / image_width * 100
+            if self.recognized and 50 > percentage_position > 49 and building_width > 183:
+                print("grab that ho")
+            else:
+                print(percentage_position)
 
             # Add to settings
             self.settings.current_building = result[0]
