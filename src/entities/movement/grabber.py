@@ -29,6 +29,7 @@ class Grabber(object):
         self.servos = [self.servo_0, self.servo_1, self.servo_2]
 
         self.reposition = False
+        self.grabbed = False
         self.move_grabber(initial_positions, [50, 50, 50])  # Set grabber to initial position
         self.type = 'grabber'
         print("Grabber setup")
@@ -53,6 +54,7 @@ class Grabber(object):
         """
         positions = [186, 528, 260]  # The servo positions for grabbing
         self.move_grabber(positions, speeds)
+        self.grabbed = True
 
     def loosen(self, speeds):
         """
@@ -62,6 +64,7 @@ class Grabber(object):
         """
         positions = [465, 198, 200]  # The servo positions for loosening
         self.move_grabber(positions, speeds)
+        self.grabbed = False
 
     def get_delta(self):
         """

@@ -7,7 +7,7 @@ from entities.movement.legs import Legs
 from entities.movement.tracks import Tracks
 from entities.movement.grabber import Grabber
 from entities.connection.bluetooth_controller import BluetoothController
-from helpers.servo_scanner import servo_scanner
+from helpers.servo_scanner import scan
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
 
@@ -24,7 +24,7 @@ def main():
     limbs = []
 
     # Check which servo`s are connected
-    servos = servo_scanner()
+    servos = scan()
 
     # If all servos are connected
     if 6 in servos and 1 in servos:
