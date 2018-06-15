@@ -127,7 +127,8 @@ class Helper:
         center = (x + extremes[1]) / 2
 
         percentage_left = center / image_width
-        print(w)
+        if w > 185 and 50.5 > percentage_left > 49.5:
+            print("grab that ho")
 
         # Resize to new size
         img = self.image_resize(img, height=400)
