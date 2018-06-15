@@ -234,15 +234,11 @@ class Legs(object):
         """
         if sequence is None:
             sequence = forward
-        elif sequence is dab and sequences is None:
-            sequences = [0]
-        elif sequence is wave and sequences is None or sequence is march and sequences is None:
-            sequences = [0, 1]
-        elif sequence is hood_handshake:
-            sequences = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
         if sequences is None:
-            sequences = [0, 1, 2, 3]
+            sequences = []
+            seq_len = len(sequence)
+            for i in range(seq_len):
+                sequences.append(i)
 
         for moves in sequences:
             self.move(leg_0_moves=sequence[moves][0],
