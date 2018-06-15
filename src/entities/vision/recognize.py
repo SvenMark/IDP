@@ -19,6 +19,7 @@ class Recognize(object):
         self.settings = settings
         self.recognized = False
         self.last_percentage = 50
+        self.start_recognize = False
 
     def run(self):
         print("[RUN] Starting recognize...")
@@ -43,7 +44,7 @@ class Recognize(object):
             mask_cropped, valid_contours = self.helper.calculate_mask(img_crop, self.color_range, set_contour=True)
 
             # Recognize building
-            if self.saved_buildings:
+            if self.saved_buildings and self.start_recognize:
                 self.recognize_building(valid_contours, image_width, building_center, building_width)
 
             # Show the created image
@@ -108,6 +109,7 @@ class Recognize(object):
         print("[INFO] building width:", building_width)
         if 250 > building_width > 130:
             self.helper.min_block_size = 300
+            self.start_recognize = True
         else:
             self.helper.min_block_size = 0
         print("[INFO] min blok sies:", self.helper.min_block_size)
