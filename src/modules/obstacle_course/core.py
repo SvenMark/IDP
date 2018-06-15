@@ -49,11 +49,10 @@ def detect_cup():
         for cnt in contours:
             area = cv2.contourArea(cnt)
             if area > 1000:
-                print(area)
-                cv2.drawContours(frame, [cnt], -1, (255, 255, 255), 50)
+                cv2.drawContours(mask, [cnt], -1, (255, 255, 255), 50)
 
         # cont = cv2.drawContours(mask, contours, -1, (255, 255, 255), 10)
-        cv2.imshow('mask', frame)
+        cv2.imshow('Masked cup', mask)
 
         queryKP, queryDesc = detector.detectAndCompute(frame_gray, mask=mask)
         matches = flann.knnMatch(queryDesc, trainDesc, k=2)
@@ -88,7 +87,7 @@ def detect_cup():
             print("[INFO] Cup detected at distance: " + str(distance) + "cm")
         else:
             print("[INFO] Not Enough match found- %d/%d" % (len(goodMatch), MIN_MATCH_COUNT))
-        cv2.imshow('result', frame)
+        cv2.imshow('Detected cup', frame)
         if cv2.waitKey(10) == ord('q'):
             break
     cam.stop()
