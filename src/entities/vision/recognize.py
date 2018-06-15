@@ -18,6 +18,7 @@ class Recognize(object):
         self.helper = helpers.helper
         self.settings = settings
         self.recognized = False
+        self.last_percentage = 50
 
     def run(self):
         print("[RUN] Starting recognize...")
@@ -98,17 +99,20 @@ class Recognize(object):
         return True
 
     def check_settings(self, building_center, image_width, building_width, result):
-
+        # Calculate and check percentage left
         print("---------------")
-        percentage_position = building_center / image_width * 100
+        calculation = building_center / image_width * 100
+        percentage_position = calculation if calculation < 100 else self.last_percentage
+        self.last_percentage = percentage_position
+        # Set min block size according to the distance of the building
         print("[INFO] building width:", building_width)
         if 250 > building_width > 130:
             self.helper.min_block_size = 300
         else:
             self.helper.min_block_size = 0
-
         print("[INFO] min blok sies:", self.helper.min_block_size)
 
+        # If all requirements are valid, grab that ho
         if self.recognized and 51 > percentage_position > 49 and building_width > 183:
             print("[WOO] building with:grab that ho")
         else:
