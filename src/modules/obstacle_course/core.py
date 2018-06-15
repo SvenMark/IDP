@@ -39,7 +39,7 @@ def detect_cup():
     flann = cv2.FlannBasedMatcher(flannParam, {})
 
     # Get training image of cup
-    trainImg = cv2.imread("ding.jpg", 0)
+    trainImg = cv2.imread("cup.jpg", 0)
     trainKP, trainDesc = detector.detectAndCompute(trainImg, None)
 
     # Get video of picamera
