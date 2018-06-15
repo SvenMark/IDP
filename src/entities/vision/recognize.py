@@ -1,4 +1,7 @@
 import sys
+
+from imutils.video import VideoStream
+
 sys.path.insert(0, '../../../src')
 
 import datetime
@@ -31,24 +34,21 @@ class Recognize(object):
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
             # # Calculate the masks
-            mask, dead_memes = self.helper.calculate_mask(img, self.color_range)
+            mask, u = self.helper.calculate_mask(img, self.color_range)
 
             image_width, image_height = img.shape[:2]
-            img, center = self.helper.crop_to_contours(mask, img)
+            img_crop, center = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
-            mask_cropped, valid_contours = self.helper.calculate_mask(img, self.color_range, set_contour=True)
-
-            # Append the valid contours to the positions array
-            # for cnt in range(len(valid_contours)):
-            #     self.positions = self.helper.append_to_positions(self.positions, valid_contours[cnt])
+            mask_cropped, valid_contours = self.helper.calculate_mask(img_crop, self.color_range, set_contour=True)
 
             # Recognize building
-            if self.saved_buildings and self.recognize:
+            if self.saved_buildings:
                 self.recognize_building(valid_contours, image_width, center)
 
             # Show the created image
             cv2.imshow('Spider Cam 3000', mask_cropped)
+            cv2.imshow('Spider Cam 2000', img)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -70,27 +70,12 @@ class Recognize(object):
             return False
 
         # For each building in the saved building list
-        for building in range(len(self.saved_buildings)):
-            b = self.saved_buildings[building]
-
+        for building in self.saved_buildings:
             # For each block on the front side of the saved building
-            found = self.check_building_side(positions, b.front)
-            result = [building, "front"]
-
-            # For each block on the back side of the saved building
-            if not found:
-                found = self.check_building_side(positions, b.back)
-                result = [building, "back"]
-            
-            # For each block on the left side of the saved building
-            if not found:
-                found = self.check_building_side(positions, b.left)
-                result = [building, "left"]
-
-            # For each block on the right side of the saved building
-            if not found:
-                found = self.check_building_side(positions, b.right)
-                result = [building, "right"]
+            found = self.check_building_side(positions, building.side)
+            result = [building.number, building.side_number]
+            if found:
+                break
 
         # If recent settings are handled
         self.check_settings(center, image_width, result)
@@ -113,12 +98,7 @@ class Recognize(object):
         return total / len(b)
 
     def check_building_side(self, positions, side):
-        print("--------{}-------".format(datetime.datetime.now().time()))
-        for bl in positions:
-            print(str(bl))
-        print("----- vs -----", len(side))
         for block in side:
-            print(str(block))
             if not self.helper.is_duplicate(block, positions, 20):
                 return False
 
