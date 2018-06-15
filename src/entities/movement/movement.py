@@ -16,16 +16,15 @@ class Movement(object):
         """
         Constructor for movement
         :param limbs: Array of limbs
-        :param lights: Array of lights
         """
         self.limbs = limbs
         for limb in limbs:
-            if type(limb) is Grabber:
-                self.grabber = limb
-            if type(limb) is Legs:
+            if limb.type == 'legs':
                 self.legs = Legs
-            if type(limb) is Tracks:
+            if limb.type == 'tracks':
                 self.tracks = limb
+            if limb.type == 'grabber':
+                self.grabber = limb
 
     def forward(self):
         self.tracks.forward(duty_cycle=20,
