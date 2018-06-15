@@ -1,4 +1,7 @@
 import sys
+
+from imutils.video import VideoStream
+
 sys.path.insert(0, '../../../src')
 
 import time
@@ -19,13 +22,13 @@ class Saving(object):
         self.save_length = 0
         self.save = False
         self.building_to_save = 0
-        self.side = Side.front
+        self.pickup_vertical = 0
 
     def run(self):
         print("[RUN] Starting saving...")
 
         # Initialize camera
-        cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+        cap = VideoStream(src=0, usePiCamera=False, resolution=(320, 240)).start()
         time.sleep(0.3)  # startup
         while True:
             # Read frame from the camera
@@ -72,7 +75,7 @@ class Saving(object):
             """
             self.save_length = int(e1.get())
             self.save = e2.get()
-            self.side = e3.get()
+            self.pickup_vertical = e3.get()
             master.quit()
             master.destroy()
 
@@ -82,7 +85,7 @@ class Saving(object):
         # Add labels
         Label(master, text="Amount of blocks").grid(row=0)
         Label(master, text="Building Number").grid(row=1)
-        Label(master, text="Building side").grid(row=2)
+        Label(master, text="Pickup vertical").grid(row=2)
         e1 = Entry(master)
         e2 = Entry(master)
         e3 = Entry(master)
@@ -90,7 +93,7 @@ class Saving(object):
         # Insert last length and building to save
         e1.insert(0, self.save_length)
         e2.insert(0, self.building_to_save)
-        e3.insert(0, self.side)
+        e3.insert(0, self.pickup_vertical)
 
         e1.grid(row=0, column=1)
         e2.grid(row=1, column=1)
@@ -114,7 +117,7 @@ class Saving(object):
             """
             self.save = False
             print("[INFO] saved ", self.building_to_save)
-            self.building_handler.set_save_building(valid_contours, self.building_to_save, self.side)
+            self.building_handler.set_save_building(valid_contours, self.building_to_save, self.pickup_vertical)
             master.destroy()
 
         # Create new forum
