@@ -10,13 +10,11 @@ from entities.movement.sequences.sequences import *
 
 
 class Legs(object):
+    """
+    Base class for legs which implements 4 instances of leg
+    """
 
-    def __init__(self,
-                 leg_0_servos,
-                 leg_1_servos,
-                 leg_2_servos,
-                 leg_3_servos
-                 ):
+    def __init__(self, leg_0_servos, leg_1_servos, leg_2_servos, leg_3_servos):
         """
         Constructor for the legs
         :param leg_0_servos: Array of servo id`s for leg 0
@@ -24,62 +22,50 @@ class Legs(object):
         :param leg_2_servos: Array of servo id`s for leg 2
         :param leg_3_servos: Array of servo id`s for leg 3
         """
-
-        # The time used for delta timing
-        self.previous = datetime.datetime.now()
+        self.previous = datetime.datetime.now()  # The time used for delta timing
 
         # Initialise a leg for each corner of the robot
-        # self.leg_front_left = Leg(leg_0_servos, [820, 385, 565])
-        # self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
-        # self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
+        self.leg_front_left = Leg(leg_0_servos, [820, 385, 565])
+        self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
+        self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
         self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
 
         self.legs = [
-                 # self.leg_front_left,
-                 # self.leg_front_right,
-                 # self.leg_rear_left,
+                 self.leg_front_left,
+                 self.leg_front_right,
+                 self.leg_rear_left,
                  self.leg_rear_right
             ]
 
-        # The current move sequence
-        self.sequence = 0
-
+        self.sequence = 0  # The current move sequence
         self.type = 'legs'
         self.deployed = False
-
-        # Retract on constructing
-        self.retract(120)
+        self.retract(120) # Retract on constructing
         self.updating = False
-
-        # The bluetooth packages used for legs
-        self.recent_package = [0, 0, 0]
-
-        # The thread which keeps running the leg updater
-        self.update_thread = Thread(target=self.leg_updater, args=(self, ))
+        self.recent_package = [0, 0, 0]  # The bluetooth packages used for legs
+        self.update_thread = Thread(target=self.leg_updater, args=(self, ))  # The thread which runs the leg updater
 
         print("Legs setup, retracting")
 
-    def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, delay, speeds, self_update):
+    def move(self, leg_0_moves, leg_1_moves, leg_2_moves, leg_3_moves, speeds, self_update):
         """
         Function to move the legs_not_ready together
         :param leg_0_moves: Array of positions for leg 0
         :param leg_1_moves: Array of positions for leg 1
         :param leg_2_moves: Array of positions for leg 2
         :param leg_3_moves: Array of positions for leg 3
-        :param delay: Time to wait after executing
         :param speeds: Array of speeds for each servo
         :param self_update: If True, it locks the thread while legs are not ready,
             else updates must be handled for movement
         :return: None
         """
 
-        # self.leg_front_left.move(leg_0_moves, delay, speeds)
-        # self.leg_front_right.move(leg_1_moves, delay, speeds)
-        # self.leg_rear_left.move(leg_2_moves, delay, speeds)
-        self.leg_rear_right.move(leg_3_moves, delay, speeds)
+        self.leg_front_left.move(leg_0_moves, speeds)
+        self.leg_front_right.move(leg_1_moves, speeds)
+        self.leg_rear_left.move(leg_2_moves, speeds)
+        self.leg_rear_right.move(leg_3_moves, speeds)
 
-        # setting previous time, because the delta time would be too big
-        self.previous = datetime.datetime.now()
+        self.previous = datetime.datetime.now()  # setting previous time, because the delta time would be too big
 
         # Run this for autonomous movement
         if self_update:
@@ -91,17 +77,13 @@ class Legs(object):
         :param speed: The speed at which the servo moves
         :return: None
         """
-        deploy_state = [530, 766, 850]
+        deploy_state = [530, 250, 850]
         speeds = [speed, speed, speed]
-        delay = 0.1
 
-        # self.leg_front_left.move(deploy_state, delay, speeds)
-        # self.leg_front_right.move(deploy_state, delay, speeds)
-        # self.leg_rear_left.move(deploy_state, delay, speeds)
-        self.leg_rear_right.move(deploy_state, delay, speeds)
+        for leg in self.legs:
+            leg.move(deploy_state, speeds)
 
         self.deployed = True
-
         self.update_legs()
 
     def retract(self, speed):
@@ -110,17 +92,13 @@ class Legs(object):
         :param speed: The speed at which the servo moves
         :return: None
         """
-        retract_state = [530, 200, 470]
+        retract_state = [530, 790, 470]
         speeds = [speed, speed, speed]
-        delay = 0.1
 
-        # self.leg_front_left.move(retract_state, delay, speeds)
-        # self.leg_front_right.move(retract_state, delay, speeds)
-        # self.leg_rear_left.move(retract_state, delay, speeds)
-        self.leg_rear_right.move(retract_state, delay, speeds)
+        for leg in self.legs:
+            leg.move(retract_state, speeds)
 
         self.deployed = False
-
         self.update_legs()
 
     def update_legs(self):
@@ -191,11 +169,9 @@ class Legs(object):
             if y_axis < 500:
                 speed = (512 - y_axis) * 0.4
 
-            # Get the delta time
-            delta = self.get_delta()
+            delta = self.get_delta()  # Get the delta time
 
-            # Retrieve unready legs
-            legs_not_ready = [elem for elem in self.legs if not elem.ready()]
+            legs_not_ready = [elem for elem in self.legs if not elem.ready()]  # Retrieve unready legs
 
             # If the controller is in the neutral position,
             # put the leg in the deploy position
@@ -218,28 +194,18 @@ class Legs(object):
                                       sequences=[self.sequence],
                                       sequence=backward)
                     self.update_sequence()
-                # Update the delta time
-                self.get_delta()
+                self.get_delta()  # Update the delta time
 
             # Run this if not all legs are ready
             if len(legs_not_ready) > 0:
                 for i in range(len(legs_not_ready)):
                     for y in range(len(legs_not_ready[i].servos)):
-                        # for each servo in leg set the speed to the speed sent by the controller
-                        legs_not_ready[i].servos[y].set_speed(speed)
-                    # Update the leg
-                    legs_not_ready[i].update(delta)
+                        legs_not_ready[i].servos[y].set_speed(speed)  # Update servo speeds
+                    legs_not_ready[i].update(delta)  # Update the leg
+                time.sleep(0.02)  # Add a little delay so the legs move smoothly
 
-                # Add a little delay so the legs move smoothly
-                time.sleep(0.02)
-
-        # Move according to joystick direction
-        # self.move([530 + round(x_axis / 10), 680, 760 + round(y_axis / 10)],
-        #           [650, 400, 400],
-        #           [400, 400, 400],
-        #           [600, 400, 400],
-        #           0,
-        #           [200, 200, 200])
+            global current_speed
+            current_speed = speed
 
     def update_sequence(self):
         """
@@ -247,10 +213,15 @@ class Legs(object):
         when controller by the controller.
         :return: None
         """
-        self.leg_front_right.update_sequence()
-        self.leg_front_left.update_sequence()
-        self.leg_rear_right.update_sequence()
-        self.leg_rear_left.update_sequence()
+        # self.leg_front_right.update_sequence()
+        # self.leg_front_left.update_sequence()
+        # self.leg_rear_right.update_sequence()
+        # self.leg_rear_left.update_sequence()
+
+        if self.sequence < 3:
+            self.sequence = self.sequence + 1
+        else:
+            self.sequence = 0
 
     def run_sequence(self, speeds, self_update=True, sequences=None, sequence=None):
         """
@@ -261,7 +232,6 @@ class Legs(object):
         :param sequence: The movement sequence you want to run
         :return: None
         """
-
         if sequence is None:
             sequence = forward
         elif sequence is dab and sequences is None:
@@ -279,6 +249,5 @@ class Legs(object):
                       leg_1_moves=sequence[moves][1],
                       leg_2_moves=sequence[moves][2],
                       leg_3_moves=sequence[moves][3],
-                      delay=0,
                       speeds=speeds,
                       self_update=self_update)

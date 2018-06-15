@@ -1,4 +1,7 @@
 import unittest
+import sys
+
+sys.path.insert(0, '../../../src')
 
 from entities.audio.audio import Audio
 from entities.audio.listen import Listen
