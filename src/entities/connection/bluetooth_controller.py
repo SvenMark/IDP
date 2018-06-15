@@ -160,12 +160,12 @@ class BluetoothController(object):
 
                 # Run and set selected module
                 self.current_module = m
-                self.run_module(m, self.movement, s, v, h, speed_factor)
+                self.run_module(m, self.movement, s, v, h, speed_factor, d)
 
         except ValueError or IndexError:
             print("Invalid value in package")
 
-    def run_module(self, module, movement, s, v, h, speed_factor):
+    def run_module(self, module, movement, s, v, h, speed_factor, d):
         """
         Function that creates and runs a thread of pre-programmed modules,
         based on controller input
@@ -204,7 +204,8 @@ class BluetoothController(object):
 
         if module is 8:
             name = 'Capture the flag'
-            Thread(target=capture_flag.run, args=(name, movement, self.shared_object,)).start()
+            speed_factor = 1  # Set speed to max for maximum capture ability
+            Thread(target=capture_flag.run, args=(name, movement, s, v, h, speed_factor, d, self.shared_object,)).start()
 
 
 def main():
