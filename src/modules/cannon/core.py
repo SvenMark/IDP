@@ -16,14 +16,14 @@ last_position = -1000
 TORQUE = 1
 
 red_detected = False
-
+line_detected = False
 
 def run(name, movement, shared_object):
     print("[RUN] " + str(name))
     Thread(target=line_detection, args=(shared_object,)).start()
 
     while not shared_object.has_to_stop():
-        global last_position, red_detected, TORQUE
+        global last_position, red_detected, TORQUE, line_detected
         offset = 50 - last_position
         offset = offset * TORQUE
 
@@ -32,7 +32,7 @@ def run(name, movement, shared_object):
             while last_position == -1000:
                 time.sleep(0.1)
         print("[INFO] Doing shit with offset:" + str(offset))
-        if red_detected:
+        if red_detected and not line_detected:
             print("[INFO] Red detected")
             if movement is not None:
                 movement.tracks.stop()
@@ -101,6 +101,8 @@ def line_detection(shared_object):
         line_color = (255, 0, 0)
         img_clone = img.copy()
 
+        global line_detected
+
         if lines is not None:
             for line in lines:
                 for x1, y1, x2, y2 in line:
@@ -112,6 +114,9 @@ def line_detection(shared_object):
             # print("Percentage right: " + str(round(right)) + "%")
             global last_position
             last_position = round(left)
+            line_detected = True
+        else:
+            line_detected = False
 
         # cv2.imshow('camservice-lijn', img_clone)
         if cv2.waitKey(1) & 0xFF == ord('q'):

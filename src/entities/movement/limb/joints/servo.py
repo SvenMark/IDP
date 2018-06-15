@@ -25,16 +25,12 @@ class Servo(object):
         self.ax12 = Ax12()  # Create an instance of the Ax12 servo class from the Ax12 library.
         self.servo_id = servo_id  # Set the servo variables
 
-        # Is this used??
-        self.busy = False
         self.last_position = self.read_position()  # Set the last servo position as the current position
         self.goal = initial_position  # Set the initial position as the goal position
         self.current_speed = 200
         self.current_speed_multiplier = 0.02
         self.start_position = self.last_position  # Set the starting position of each move as the last pos
         self.sensitivity = sensitivity
-
-        Thread(target=self.update, args=(self,)).start()  # Start the thread that keeps updating the servo position
 
         print("Servo " + str(self.servo_id) + " setup")
         time.sleep(0.1)  # Add a little delay so data line doesnt overflow
@@ -48,10 +44,13 @@ class Servo(object):
         self.current_speed = speed * self.current_speed_multiplier
 
     def lock_thread(self):
-        while True:
-            if self.is_ready():
-                self.ax12.move(self.servo_id, round(self.last_position))
-                time.sleep(0.1)
+        """
+        Locks the servo while idle
+        :return: None
+        """
+        while self.is_ready():
+            self.ax12.move(self.servo_id, round(self.last_position))
+            time.sleep(0.1)
 
     def update(self, delta):
         """
@@ -59,6 +58,11 @@ class Servo(object):
         :param delta: Delta time
         :return: None
         """
+
+        # No update needed
+        if not self.is_ready():
+            print("Servo {} is ready, but update has been called".format(self.servo_id))
+
         step = (self.goal - self.start_position) * delta * self.current_speed  # move towards new position
 
         if step > 0 and self.last_position > self.goal:
@@ -76,6 +80,9 @@ class Servo(object):
             return
         self.last_position = self.last_position + step
         self.ax12.move(self.servo_id, round(self.last_position))
+
+        if self.is_ready():
+            Thread(target=self.lock_thread, args=(self,)).start()  # Lock the servo if the move is finished
 
     def move(self, degrees, speed):
         """

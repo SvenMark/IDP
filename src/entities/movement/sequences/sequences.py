@@ -2,6 +2,8 @@ import sys
 
 sys.path.insert(0, '../../../../src')
 
+current_speed = 90
+
 forward = [
     # omhoog
     [
@@ -12,17 +14,17 @@ forward = [
     ],
     # vooruit hoog
     [
-        [430, 200, 850],
+        [530 - current_speed, 200, 850],
         [530, 266, 850],
-        [430, 200, 850],
+        [530 - current_speed, 200, 850],
         [530, 266, 850],
     ],
     # vooruit laag
     [
-        [430, 266, 850],
-        [430, 200, 850],
-        [430, 266, 850],
-        [430, 200, 850],
+        [530 - current_speed, 266, 850],
+        [530 - current_speed, 200, 850],
+        [530 - current_speed, 266, 850],
+        [530 - current_speed, 200, 850],
     ],
     # deployed position
     [

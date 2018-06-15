@@ -204,6 +204,9 @@ class Legs(object):
                     legs_not_ready[i].update(delta)  # Update the leg
                 time.sleep(0.02)  # Add a little delay so the legs move smoothly
 
+            global current_speed
+            current_speed = speed
+
     def update_sequence(self):
         """
         Function that updates on which part of the movement sequence the legs are in
