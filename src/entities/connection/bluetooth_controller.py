@@ -31,12 +31,8 @@ class BluetoothController(object):
         self.name = name
         self.limbs = limbs
         self.movement = Movement(limbs)
-        self.vision = Vision(color_range=[1, 2],
-                             saved_buildings=None,
-                             img=None,
-                             min_block_size=1000,
-                             max_block_size=10000,
-                             settings=None)
+
+        self.vision = None
         self.audio = Audio()
         self.emotion = Emotion()
         self.shared_object = SharedObject()  # Create instance of thread sharer
