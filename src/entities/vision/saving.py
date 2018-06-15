@@ -23,6 +23,7 @@ class Saving(object):
         self.save = False
         self.building_to_save = 0
         self.pickup_vertical = 0
+        self.side = 0
 
     def run(self):
         print("[RUN] Starting saving...")
@@ -38,9 +39,9 @@ class Saving(object):
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
             # Calculate the masks
-            mask, dead_memes = self.helper.calculate_mask(img, self.color_range)
+            mask, u = self.helper.calculate_mask(img, self.color_range)
 
-            img4, dead_memes = self.helper.crop_to_contours(mask, img)
+            img4, u = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
             mask_cropped, valid_contours = self.helper.calculate_mask(img4, self.color_range, set_contour=True)
@@ -74,8 +75,9 @@ class Saving(object):
             Saves the entry fields
             """
             self.save_length = int(e1.get())
-            self.save = e2.get()
+            self.building_to_save = e2.get()
             self.pickup_vertical = e3.get()
+            self.side = e4.get()
             master.quit()
             master.destroy()
 
@@ -86,21 +88,25 @@ class Saving(object):
         Label(master, text="Amount of blocks").grid(row=0)
         Label(master, text="Building Number").grid(row=1)
         Label(master, text="Pickup vertical").grid(row=2)
+        Label(master, text="Side").grid(row=2)
         e1 = Entry(master)
         e2 = Entry(master)
         e3 = Entry(master)
+        e4 = Entry(master)
 
         # Insert last length and building to save
         e1.insert(0, self.save_length)
         e2.insert(0, self.building_to_save)
         e3.insert(0, self.pickup_vertical)
+        e4.insert(0, self.side)
 
         e1.grid(row=0, column=1)
         e2.grid(row=1, column=1)
         e3.grid(row=2, column=1)
+        e4.grid(row=3, column=1)
 
         # Create save button
-        Button(master, text='Save', command=save_entry_fields).grid(row=3, column=1, sticky=W)
+        Button(master, text='Save', command=save_entry_fields).grid(row=4, column=1, sticky=W)
         mainloop()
         self.save = True
 
@@ -117,7 +123,7 @@ class Saving(object):
             """
             self.save = False
             print("[INFO] saved ", self.building_to_save)
-            self.building_handler.set_save_building(valid_contours, self.building_to_save, self.pickup_vertical)
+            self.building_handler.set_save_building(valid_contours, self.building_to_save, self.pickup_vertical, self.side)
             master.destroy()
 
         # Create new forum

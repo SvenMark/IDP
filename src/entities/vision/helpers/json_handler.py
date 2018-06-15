@@ -54,7 +54,7 @@ class Json_Handler:
 
         return color_range
 
-    def set_save_building(self, positions, building, pick_up_vertical):
+    def set_save_building(self, positions, building, pick_up_vertical, side_number):
         """
         Add the building side to the buildings save file
         :param pick_up_vertical: Pick up vertical of horizontal
@@ -71,15 +71,14 @@ class Json_Handler:
             for saved_building in current:
                 print(saved_building.number)
                 if saved_building.number == building:
-                    print("[ERROR] Building already exists!")
-                    return
+                    if saved_building.side_number == side_number:
+                        print("[ERROR] Side already exists!")
+                        return
 
         # If it is a new building, create it and add it to the array
         if not exist:
-            current.append(BuildingSide(positions, pick_up_vertical, building))
-            print("BuildingSide(", positions, ",", pick_up_vertical, ",", building, ")")
-            print(json.dumps(current, default=lambda o: o.__dict__,
-                  sort_keys=True))
+            current.append(BuildingSide(positions, pick_up_vertical, building, side_number))
+            print("[INFO] Saved building")
 
         saved_file = open(self.file_name_building, "w")
         json.dump(json.dumps(current, default=lambda o: o.__dict__,
@@ -98,7 +97,7 @@ class Json_Handler:
             try:
                 data = json.loads(json.load(saved_file))
                 for p in data:
-                    saved_building.append(BuildingSide(p.get("side"), p.get("pick_up_vertical"), p.get("number")))
+                    saved_building.append(BuildingSide(p.get("side"), p.get("pick_up_vertical"), p.get("number"), p.get("side_number")))
 
             except json.decoder.JSONDecodeError:
                 saved_building = []

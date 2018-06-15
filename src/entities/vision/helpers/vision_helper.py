@@ -10,10 +10,11 @@ class Color:
 
 
 class BuildingSide:
-    def __init__(self, side, pick_up_vertical, number):
+    def __init__(self, side, pick_up_vertical, number, side_number):
         self.side = side
         self.pick_up_vertical = False
         self.number = number
+        self.side_number = side_number
 
 
 class Block:
