@@ -34,8 +34,6 @@ class Servo(object):
         self.start_position = self.last_position  # Set the starting position of each move as the last pos
         self.sensitivity = sensitivity
 
-        Thread(target=self.update, args=(self,)).start()  # Start the thread that keeps updating the servo position
-
         print("Servo " + str(self.servo_id) + " setup")
         time.sleep(0.1)  # Add a little delay so data line doesnt overflow
 
@@ -48,10 +46,9 @@ class Servo(object):
         self.current_speed = speed * self.current_speed_multiplier
 
     def lock_thread(self):
-        while True:
-            if self.is_ready():
-                self.ax12.move(self.servo_id, round(self.last_position))
-                time.sleep(0.1)
+        while self.is_ready():
+            self.ax12.move(self.servo_id, round(self.last_position))
+            time.sleep(0.1)
 
     def update(self, delta):
         """
@@ -59,6 +56,10 @@ class Servo(object):
         :param delta: Delta time
         :return: None
         """
+
+        if not self.is_ready():
+            print("Servo {} is ready, but update has been called".format(self.servo_id))
+
         step = (self.goal - self.start_position) * delta * self.current_speed  # move towards new position
 
         if step > 0 and self.last_position > self.goal:
@@ -76,6 +77,9 @@ class Servo(object):
             return
         self.last_position = self.last_position + step
         self.ax12.move(self.servo_id, round(self.last_position))
+
+        if self.is_ready():
+            Thread(target=self.update, args=(self,)).start()  # Start the thread that keeps updating the servo position
 
     def move(self, degrees, speed):
         """
