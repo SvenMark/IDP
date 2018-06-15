@@ -43,7 +43,7 @@ class Servo(object):
         """
         self.current_speed = speed * self.current_speed_multiplier
 
-    def lock_thread(self):
+    def lock_thread(self, args):
         """
         Locks the servo while idle
         :return: None
@@ -96,14 +96,14 @@ class Servo(object):
         self.start_position = self.last_position  # Set the start position of the movement
         self.goal = degrees
         self.current_speed = speed * self.current_speed_multiplier
-        print("servo " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
+        # print("servo " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
 
     def is_ready(self):
         """
         Function that checks if a servo completed it`s last move
         :return: Whether or not the servo has completed it`s last move
         """
-        print("Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
+        # print("Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
         return abs(round(self.last_position) - round(self.goal)) <= self.sensitivity
 
     def read_position(self):
