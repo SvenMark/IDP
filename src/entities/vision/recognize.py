@@ -78,7 +78,7 @@ class Recognize(object):
 
             # For each block on the front side of the saved building
             found = self.check_building_side(positions, b.side)
-            result = [b.number, "some side"]
+            result = [b.number, b.side_number]
 
         # If recent settings are handled
         self.check_settings(center, image_width, result)
