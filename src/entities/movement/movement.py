@@ -2,10 +2,6 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
-from entities.movement.grabber import Grabber
-from entities.movement.legs import Legs
-from entities.movement.tracks import Tracks
-
 
 class Movement(object):
     """
@@ -20,7 +16,7 @@ class Movement(object):
         self.limbs = limbs
         for limb in limbs:
             if limb.type == 'legs':
-                self.legs = Legs
+                self.legs = limb
             if limb.type == 'tracks':
                 self.tracks = limb
             if limb.type == 'grabber':
