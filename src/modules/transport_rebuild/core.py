@@ -7,60 +7,46 @@ sys.path.insert(0, '../../../src')
 from entities.vision.vision import Vision
 from entities.vision.helpers.vision_helper import Color, Building, Side
 from entities.vision.recognize_settings import Recognize_settings
-from entities.vision.helpers.range_handler import Range_Handler
+from entities.vision.helpers.json_handler import Json_Handler
+
 # from entities.movement.tracks import Tracks
 
+print("[RUN] Transport and Rebuild")
 
-color_range = Range_Handler().get_color_range()
+json_handler = Json_Handler()
+color_range = json_handler.get_color_range()
 tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
 
-saved_buildings = [
-    Building(front=[
-            (124, 31),
-            (38, 367),
-            (63, 166),
-            (253, 364),
-            (154, 295),
-            (210, 156)
-        ],
-             back=[
-            (116, 236),
-            (111, 368),
-            (98, 98),
-            (196, 301),
-            (21, 306)
-             ],
-             left=[
-
-             ],
-             right=[
-
-             ],
-             pick_up_vertical=Side.left_right
-    )
-]
-
-img = "C:/Users/lars-/Downloads/test.jpeg"
+saved_buildings = json_handler.get_save_buildings()
 
 settings = Recognize_settings()
 vision = Vision(color_range=color_range,
                 saved_buildings=saved_buildings,
-                settings=settings, max_block_size=35000, min_block_size=1000)
+                settings=settings, max_block_size=35000, min_block_size=500)
 
 rotate_speed = 50
 
 
 def run(name, movement, shared_object):
     print("run " + str(name))
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "hsv_picker":
-            threading.Thread(target=vision.helpers.hsv_picker.run).start()
-        elif sys.argv[1] == "save":
-            threading.Thread(target=vision.saving.run).start()
+    try:
+        if len(sys.argv) > 1:
+            if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
+                threading.Thread(target=vision.helpers.hsv_picker.run).start()
+            elif sys.argv[1] == "saving":
+                threading.Thread(target=vision.saving.run).start()
+            elif sys.argv[1] == "recognize":
+                threading.Thread(target=vision.recognize.run).start()
+            else:
+                print("[ERROR] Wrong argument given..")
+                run(shared_object)
+
+        # Default no argument
         else:
-            threading.Thread(target=vision.recognize.run).start()
-    else:
-        threading.Thread(target=vision.saving.run).start()
+            threading.Thread(target=vision.helpers.hsv_picker.run).start()
+    except AttributeError:
+        print("[ERROR] Something went wrong..")
+        run(shared_object)
 
     while not shared_object.has_to_stop():
 
@@ -98,4 +84,3 @@ def run(name, movement, shared_object):
 #             # acceleration 0.5 seconds for 0.5 seconds, then wait again
 #             tracks.turn_left(rotate_speed, rotate_speed, 0.5, 0.5)
 #             tracks.stop()
-

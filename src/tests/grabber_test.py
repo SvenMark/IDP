@@ -8,7 +8,7 @@ from entities.movement.grabber import Grabber
 from entities.movement.limb.joints.servo import Servo
 from libs.ax12 import Ax12
 
-grabber = Grabber(id_servo=[
+grabber = Grabber(servos=[
             1,
             53,
             43

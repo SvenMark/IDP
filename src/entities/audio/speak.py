@@ -1,13 +1,15 @@
 import os
-
 from gtts import gTTS
+import sys
+
+sys.path.insert(0, '../../../src')
 
 from entities.audio.audio import Audio
 
 
 class Speak(Audio):
     """
-    Speak class
+    Speak class, implements play and text to speech
     """
 
     def __init__(self):
