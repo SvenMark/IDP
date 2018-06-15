@@ -4,7 +4,7 @@ import sys
 import math
 import time
 import numpy as np
-
+from threading import Thread
 sys.path.insert(0, '../../../../../src')
 
 from libs.ax12 import Ax12
@@ -15,32 +15,25 @@ class Servo(object):
     Base class for servo
     """
 
-    def __init__(self, servo_id, initial_position):
+    def __init__(self, servo_id, initial_position, sensitivity):
         """
         Constructor for servo class
         :param servo_id: ID of the servo
         :param initial_position: The position you want to set the servo at on initialising
+        :param sensitivity: The amount of play there is in the servo position
         """
+        self.ax12 = Ax12()  # Create an instance of the Ax12 servo class from the Ax12 library.
+        self.servo_id = servo_id  # Set the servo variables
 
-        # Create an instance of the Ax12 servo class from the Ax12 library.
-        self.ax12 = Ax12()
-
-        print("Setting servo " + str(servo_id) + " to " + str(initial_position))
-        # Set the servo variables and move servo to initial position.
-        self.servo_id = servo_id
-        self.busy = False
-        self.last_position = self.read_position()
-        self.goal = initial_position
+        self.last_position = self.read_position()  # Set the last servo position as the current position
+        self.goal = initial_position  # Set the initial position as the goal position
         self.current_speed = 200
         self.current_speed_multiplier = 0.02
+        self.start_position = self.last_position  # Set the starting position of each move as the last pos
+        self.sensitivity = sensitivity
 
-        self.start_position = self.last_position
-
-        # self.move(servo_id, initial_position, 300)
-
-        self.sensitivity = 3
-
-        time.sleep(0.1)
+        print("Servo " + str(self.servo_id) + " setup")
+        time.sleep(0.1)  # Add a little delay so data line doesnt overflow
 
     def set_speed(self, speed):
         """
@@ -50,14 +43,27 @@ class Servo(object):
         """
         self.current_speed = speed * self.current_speed_multiplier
 
+    def lock_thread(self):
+        """
+        Locks the servo while idle
+        :return: None
+        """
+        while self.is_ready():
+            self.ax12.move(self.servo_id, round(self.last_position))
+            time.sleep(0.1)
+
     def update(self, delta):
         """
         Update the servo position according to delta time
         :param delta: Delta time
         :return: None
         """
-        # move towards new position
-        step = (self.goal - self.start_position) * delta * self.current_speed
+
+        # No update needed
+        if not self.is_ready():
+            print("Servo {} is ready, but update has been called".format(self.servo_id))
+
+        step = (self.goal - self.start_position) * delta * self.current_speed  # move towards new position
 
         if step > 0 and self.last_position > self.goal:
             self.start_position = self.last_position
@@ -67,7 +73,7 @@ class Servo(object):
             self.start_position = self.last_position
             step = (self.goal - self.start_position) * delta * self.current_speed
 
-        # print("Delta: " + str(delta) + " Step: " + str(step) + " Goal: " + str(self.goal) + " Last_pos: " + str(self.last_position) + " Start_pos: " + str(self.start_position))
+        print("Delta: " + str(delta) + " Step: " + str(step) + " Goal: " + str(self.goal) + " Last_pos: " + str(self.last_position) + " Start_pos: " + str(self.start_position))
         if self.last_position + step > 1024 or self.last_position + step < 0:
             print(str(self.last_position + step) + " not in range " + str(self.servo_id) + "speed "
                   + str(self.current_speed) + "delta " + str(delta))
@@ -75,33 +81,28 @@ class Servo(object):
         self.last_position = self.last_position + step
         self.ax12.move(self.servo_id, round(self.last_position))
 
-    def move(self, degrees, delay, speed):
+        if self.is_ready():
+            Thread(target=self.lock_thread, args=(self,)).start()  # Lock the servo if the move is finished
+
+    def move(self, degrees, speed):
         """
         Function that moves the servo using the ax12 library move function
         :param degrees: Position to move to
-        :param delay: Time to wait after executing
         :param speed: The speed at which the servo moves
         :return: None
         """
-        # Set the last_position as current position
-        self.last_position = self.read_position()
-
-        # Set the start position of the movement
-        self.start_position = self.last_position
+        self.last_position = self.read_position()  # Set the last_position as current position
+        self.start_position = self.last_position  # Set the start position of the movement
         self.goal = degrees
         self.current_speed = speed * self.current_speed_multiplier
         print("servo " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
-
-    def move_speed(self, position, speed):
-            self.goal = position
-            self.ax12.move_speed(self.servo_id, position, speed)
-            self.last_position = position
 
     def is_ready(self):
         """
         Function that checks if a servo completed it`s last move
         :return: Whether or not the servo has completed it`s last move
         """
+        print("Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
         return abs(round(self.last_position) - round(self.goal)) <= self.sensitivity
 
     def read_position(self):
@@ -127,8 +128,8 @@ class Servo(object):
 
 
 def main():
-    servo = Servo(13, 0)
-    servo.move(500, 0, 80)
+    servo = Servo(13, 0, 5)
+    servo.move(500, 80)
 
 
 if __name__ == "__main__":

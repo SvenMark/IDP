@@ -8,12 +8,12 @@ from entities.movement.grabber import Grabber
 from entities.movement.limb.joints.servo import Servo
 from libs.ax12 import Ax12
 
-grabber = Grabber(id_servo=[
+grabber = Grabber(servos=[
             1,
             53,
-            13
+            43
         ],
-        initial_positions=[465, 198, 15])
+        initial_positions=[465, 198, 200])
 
 grabber.grab([80, 80, 80])
 time.sleep(3)
