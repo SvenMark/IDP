@@ -59,7 +59,7 @@ class Emotion(object):
         for i in range(blink_times):
             # blink x times, then wait
             self.pixels.clear()
-            for k in range(self.pixels.count()):
+            for k in range(self.pixel_count):
                 self.pixels.set_pixel(k, Adafruit_WS2801.RGB_to_color(r, g, b))
             self.pixels.show()
             time.sleep(blinkdelay)
@@ -82,7 +82,7 @@ class Emotion(object):
             return Adafruit_WS2801.RGB_to_color(0, pos * 3, 255 - pos * 3)
 
     def set_brightness(self, brightnessoffset):
-        for i in range(self.pixels.count()):
+        for i in range(self.pixel_count):
             r, g, b = self.pixels.get_pixel_rgb(i)
             r = int(max(0, r + brightnessoffset))
             g = int(max(0, g + brightnessoffset))
@@ -98,7 +98,7 @@ class Emotion(object):
         :return:
         """
         for j in range(int(256 // step)):
-            for i in range(self.pixels.count()):
+            for i in range(self.pixel_count):
                 r, g, b = self.pixels.get_pixel_rgb(i)
                 r = int(max(0, r - step))
                 g = int(max(0, g - step))
@@ -115,8 +115,8 @@ class Emotion(object):
         :return: void
         """
         for j in range(256):  # one cycle of all 256 colors in the wheel
-            for i in range(self.pixels.count()):
-                self.pixels.set_pixel(i, self.wheel(((i * 256 // self.pixels.count()) + j) % 256))
+            for i in range(self.pixel_count):
+                self.pixels.set_pixel(i, self.wheel(((i * 256 // self.pixel_count) + j) % 256))
             self.pixels.show()
             if wait > 0:
                 time.sleep(wait)
@@ -128,8 +128,8 @@ class Emotion(object):
         :return:
         """
         for j in range(256):  # one cycle of all 256 colors in the wheel
-            for i in range(self.pixels.count()):
-                self.pixels.set_pixel(i, self.wheel((256 // self.pixels.count() + j) % 256))
+            for i in range(self.pixel_count):
+                self.pixels.set_pixel(i, self.wheel((256 // self.pixel_count + j) % 256))
             self.pixels.show()
             if wait > 0:
                 time.sleep(wait)
@@ -138,7 +138,7 @@ class Emotion(object):
 if __name__ == '__main__':
     emote = Emotion("TrashIdontNeed")
     emote.set_emotion("neutral")
-    time.sleep(5)
+    time.sleep(1)
     for i in range(0, 255):
         emote.set_brightness(-1)
-        time.sleep(0.5)
+        time.sleep(0.01)
