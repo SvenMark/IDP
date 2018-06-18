@@ -16,7 +16,6 @@ grabber = Grabber(servos=[
         initial_positions=[465, 198, 83])
 
 grabber.grab([80, 80, 80])
-time.sleep(3)
 grabber.loosen([80, 80, 80])
 
 # tracks = Tracks(track_0_pin=13,
