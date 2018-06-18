@@ -13,7 +13,7 @@ grabber = Grabber(servos=[
             53,
             43
         ],
-        initial_positions=[465, 198, 83])
+        initial_positions=[455, 185, 83])
 
 grabber.grab([80, 80, 80])
 grabber.loosen([80, 80, 80])
