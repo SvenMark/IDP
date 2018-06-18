@@ -87,7 +87,7 @@ class Recognize(object):
 
         if found:
             # Use audio to state the recognized building
-            print("[INFO] At time: " + str(datetime.datetime.now().time()) + " Found: ", result[0], result[1])
+            print("[INFO] At time: " + str(datetime.datetime.now().time()) + " Found: ", result.number)
             self.recognized = True
 
         # Return whether a building has been found
