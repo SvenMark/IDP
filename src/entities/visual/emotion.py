@@ -14,7 +14,7 @@ class Emotion(object):
     def __init__(self, speak):
         self.audio = speak
         # Configure the count of pixels:
-        self.pixel_count = 33
+        self.pixel_count = 50
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
         self.spi_port = 0
         self.spi_device = 0
@@ -59,7 +59,7 @@ class Emotion(object):
         for i in range(blink_times):
             # blink x times, then wait
             self.pixels.clear()
-            for k in range(self.pixel_count):
+            for k in range(self.pixels.count()):
                 self.pixels.set_pixel(k, Adafruit_WS2801.RGB_to_color(r, g, b))
             self.pixels.show()
             time.sleep(blinkdelay)
@@ -82,7 +82,7 @@ class Emotion(object):
             return Adafruit_WS2801.RGB_to_color(0, pos * 3, 255 - pos * 3)
 
     def set_brightness(self, brightnessoffset):
-        for i in range(self.pixel_count):
+        for i in range(self.pixels.count()):
             r, g, b = self.pixels.get_pixel_rgb(i)
             r = int(max(0, r + brightnessoffset))
             g = int(max(0, g + brightnessoffset))
@@ -98,7 +98,7 @@ class Emotion(object):
         :return:
         """
         for j in range(int(256 // step)):
-            for i in range(self.pixel_count):
+            for i in range(self.pixels.count()):
                 r, g, b = self.pixels.get_pixel_rgb(i)
                 r = int(max(0, r - step))
                 g = int(max(0, g - step))
@@ -115,8 +115,8 @@ class Emotion(object):
         :return: void
         """
         for j in range(256):  # one cycle of all 256 colors in the wheel
-            for i in range(self.pixel_count):
-                self.pixels.set_pixel(i, self.wheel(((i * 256 // self.pixel_count) + j) % 256))
+            for i in range(self.pixels.count()):
+                self.pixels.set_pixel(i, self.wheel(((i * 256 // self.pixels.count()) + j) % 256))
             self.pixels.show()
             if wait > 0:
                 time.sleep(wait)
@@ -128,8 +128,8 @@ class Emotion(object):
         :return:
         """
         for j in range(256):  # one cycle of all 256 colors in the wheel
-            for i in range(self.pixel_count):
-                self.pixels.set_pixel(i, self.wheel((256 // self.pixel_count + j) % 256))
+            for i in range(self.pixels.count()):
+                self.pixels.set_pixel(i, self.wheel((256 // self.pixels.count() + j) % 256))
             self.pixels.show()
             if wait > 0:
                 time.sleep(wait)
