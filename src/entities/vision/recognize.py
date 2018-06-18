@@ -132,8 +132,11 @@ class Recognize(object):
             # Notify settings that the current frame is handled
             self.settings.update = True
 
+
     def get_real_distance(self, building_width):
-        distance = 0.08928571428571429 * building_width ** 2 - 8.75 * building_width + 245
+        distance = -0.0006027224509476651 * building_width ** 2 - 0.227689996661844 * building_width + 53.74910055265013
         return distance
+
+
     def nothing(self, x):
         pass
