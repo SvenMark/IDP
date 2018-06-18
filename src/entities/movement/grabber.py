@@ -52,7 +52,7 @@ class Grabber(object):
         :param speeds: Array of speeds for each servo
         :return: None
         """
-        positions = [186, 528, 260]  # The servo positions for grabbing
+        positions = [216, 432, 83]  # The servo positions for grabbing
         self.move_grabber(positions, speeds)
         self.grabbed = True
 
@@ -62,7 +62,7 @@ class Grabber(object):
         :param speeds: Array of speeds for each servo
         :return: None
         """
-        positions = [465, 198, 200]  # The servo positions for loosening
+        positions = [460, 190, 83]  # The servo positions for loosening
         self.move_grabber(positions, speeds)
         self.grabbed = False
 
