@@ -86,6 +86,7 @@ class Grabber(object):
         :return: None
         """
         servos_not_ready = [elem for elem in self.servos if not elem.is_ready()]
+        print("Unready servos: " + str(len(servos_not_ready)))
         self.get_delta()
         # While not all servos are ready keep updating
         while len(servos_not_ready) != 0:
