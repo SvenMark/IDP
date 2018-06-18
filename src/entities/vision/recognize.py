@@ -122,7 +122,7 @@ class Recognize(object):
         else:
             print("[INFO] percentage left:", percentage_position)
 
-        if building:
+        if self.recognized:
             # Add to settings
             self.settings.pick_up_vertical = building.pick_up_vertical
             self.settings.current_position = percentage_position
