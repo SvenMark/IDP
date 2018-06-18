@@ -133,3 +133,12 @@ class Emotion(object):
             self.pixels.show()
             if wait > 0:
                 time.sleep(wait)
+
+
+if __name__ == '__main__':
+    emote = Emotion("TrashIdontNeed")
+    emote.set_emotion("neutral")
+    time.sleep(5)
+    for i in range(0, 255):
+        emote.set_brightness(-1)
+        time.sleep(0.5)
