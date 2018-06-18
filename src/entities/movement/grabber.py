@@ -31,10 +31,7 @@ class Grabber(object):
         self.reposition = False
         self.grabbed = False
 
-        self.servo_0.move(initial_positions[0], 50)
-        self.servo_1.move(initial_positions[1], 50)
-        self.servo_2.move(initial_positions[2], 50)
-        # self.move_grabber(initial_positions, [80, 80, 80])  # Set grabber to initial position
+        self.move_grabber(initial_positions, [80, 80, 80])  # Set grabber to initial position
 
         self.type = 'grabber'
         print("Grabber setup")
