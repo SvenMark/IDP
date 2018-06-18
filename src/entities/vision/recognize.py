@@ -133,7 +133,7 @@ class Recognize(object):
             self.settings.update = True
 
     def get_real_distance(self, building_width):
-        return 0.2789115646258503 * building_width ^ 2 - 19.523809523809526 * building_width + 369
+        return (0.2789115646258503 * building_width ** 2) - (19.523809523809526 * building_width) + 369
 
     def nothing(self, x):
         pass
