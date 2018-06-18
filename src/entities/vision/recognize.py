@@ -101,23 +101,19 @@ class Recognize(object):
         return True
 
     def check_settings(self, building_center, image_width, building_width, building):
-        grab = False
         # Calculate and check percentage left
-        print("---------------")
         calculation = building_center / image_width * 100
         percentage_position = calculation if calculation < 100 else self.last_percentage
         self.last_percentage = percentage_position
+
         # Set min block size according to the distance of the building
-        print("[INFO] building width:", building_width)
-        print("[INFO] Real distance: ", self.get_real_distance(building_width))
         if 250 > building_width > 130:
             self.helper.min_block_size = 300
             self.start_recognize = True
         else:
             self.helper.min_block_size = 0
-        print("[INFO] min blok sies:", self.helper.min_block_size)
 
-        # If all requirements are valid, grab that ho
+        # If all requirements are valid, grab
         if self.recognized and 51 > percentage_position > 49 and building_width > 183:
             grab = True
         else:
@@ -135,11 +131,7 @@ class Recognize(object):
             # Notify settings that the current frame is handled
             self.settings.update = True
 
-
-    def get_real_distance(self, building_width):
+    @staticmethod
+    def get_real_distance(building_width):
         distance = -0.0006027224509476651 * building_width ** 2 - 0.227689996661844 * building_width + 53.74910055265013
         return distance
-
-
-    def nothing(self, x):
-        pass
