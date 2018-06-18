@@ -14,7 +14,7 @@ class Emotion(object):
     def __init__(self, speak):
         self.audio = speak
         # Configure the count of pixels:
-        self.pixel_count = 50
+        self.pixel_count = 33
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
         self.spi_port = 0
         self.spi_device = 0
@@ -137,8 +137,8 @@ class Emotion(object):
 
 if __name__ == '__main__':
     emote = Emotion("TrashIdontNeed")
-    emote.set_emotion("neutral")
-    time.sleep(1)
-    for i in range(0, 255):
-        emote.set_brightness(-1)
-        time.sleep(0.01)
+    emote.rainbow_cycle()
+    #time.sleep(1)
+    #for i in range(0, 255):
+    #    emote.set_brightness(-1)
+    #    time.sleep(0.01)
