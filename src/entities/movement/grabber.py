@@ -94,14 +94,12 @@ class Grabber(object):
         Update all the unready servos
         :return: None
         """
-        servos_not_ready = [elem for elem in self.servos if not elem.is_ready()]
-        print("Unready servos: " + str(len(servos_not_ready)))
         self.get_delta()
-        # While not all servos are ready keep updating
-        while len(servos_not_ready) != 0:
+        while len([elem for elem in self.servos if not elem.is_ready()]) != 0:
+            print("Unready servos: " + str(len([elem for elem in self.servos if not elem.is_ready()])))
             delta = self.get_delta()
-            for i in range(len(servos_not_ready)):
-                self.servos[i].update(delta)
-            servos_not_ready = [elem for elem in self.servos if not elem.is_ready()]
+            for i in range(len(self.servos)):
+                if not self.servos[i].is_ready():
+                    self.servos[i].update(delta)
 
 
