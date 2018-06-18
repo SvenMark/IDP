@@ -40,7 +40,7 @@ class Legs(object):
         self.sequence = 0  # The current move sequence
         self.type = 'legs'
         self.deployed = False
-        self.retract(120) # Retract on constructing
+        self.retract(120)  # Retract on constructing
         self.updating = False
         self.recent_package = [0, 0, 0]  # The bluetooth packages used for legs
         self.update_thread = Thread(target=self.leg_updater, args=(self, ))  # The thread which runs the leg updater

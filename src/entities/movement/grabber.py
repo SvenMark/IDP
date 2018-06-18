@@ -22,16 +22,18 @@ class Grabber(object):
         """
         self.previous = datetime.datetime.now()  # The time used for delta timing
 
-        self.servo_0 = Servo(servos[0], initial_positions[0], 20)
-        self.servo_1 = Servo(servos[1], initial_positions[1], 20)
-        self.servo_2 = Servo(servos[2], initial_positions[2], 20)
+        self.servo_0 = Servo(servos[0], initial_positions[0], 5)
+        self.servo_1 = Servo(servos[1], initial_positions[1], 5)
+        self.servo_2 = Servo(servos[2], initial_positions[2], 5)
 
         self.servos = [self.servo_0, self.servo_1, self.servo_2]
 
         self.reposition = False
         self.grabbed = False
 
-        self.move_grabber(initial_positions, [80, 80, 80])  # Set grabber to initial position
+        for i in range(len(self.servos)):
+            self.servos[i].move(initial_positions[i], 80)
+        self.update()
 
         self.type = 'grabber'
         print("Grabber setup")
@@ -43,7 +45,12 @@ class Grabber(object):
         :return: None
         """
         positions = [215, 425, 83]  # The servo positions for grabbing
-        self.move_grabber(positions, speeds)
+
+        for i in range(len(self.servos)):
+            self.servos[i].move(positions[i], speeds[i])
+
+        # self.move_grabber(positions, speeds)
+        self.update()
         self.grabbed = True
 
     def loosen(self, speeds):
@@ -53,7 +60,12 @@ class Grabber(object):
         :return: None
         """
         positions = [455, 185, 83]  # The servo positions for loosening
-        self.move_grabber(positions, speeds)
+
+        for i in range(len(self.servos)):
+            self.servos[i].move(positions[i], speeds[i])
+
+        # self.move_grabber(positions, speeds)
+        self.update()
         self.grabbed = False
 
     def get_delta(self):
