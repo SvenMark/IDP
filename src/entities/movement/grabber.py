@@ -34,18 +34,6 @@ class Grabber(object):
         self.type = 'grabber'
         print("Grabber setup")
 
-    def ready(self):
-        """
-        Checks if all servos of this leg are ready
-        :return: If all the servos are ready or not
-        """
-        result = []
-        for elem in self.servos:
-            if not elem.is_ready():
-                result.append(elem)
-                # elem.last_position = elem.read_position()
-        return len(result) == 3
-
     def grab(self, speeds):
         """
         Function that contains commands to close grabber
