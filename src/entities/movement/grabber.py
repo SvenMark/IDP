@@ -22,9 +22,9 @@ class Grabber(object):
         """
         self.previous = datetime.datetime.now()  # The time used for delta timing
 
-        self.servo_0 = Servo(servos[0], initial_positions[0], 5)
-        self.servo_1 = Servo(servos[1], initial_positions[1], 5)
-        self.servo_2 = Servo(servos[2], initial_positions[2], 5)
+        self.servo_0 = Servo(servos[0], initial_positions[0], 20)
+        self.servo_1 = Servo(servos[1], initial_positions[1], 20)
+        self.servo_2 = Servo(servos[2], initial_positions[2], 20)
 
         self.servos = [self.servo_0, self.servo_1, self.servo_2]
 
