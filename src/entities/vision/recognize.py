@@ -106,11 +106,9 @@ class Recognize(object):
         percentage_position = calculation if calculation < 100 else self.last_percentage
         self.last_percentage = percentage_position
 
-        distance = (building_width ** -1) * 10
-        print("width: {}, dist: {}".format(building_width, distance))
-
         # Set min block size according to the distance of the building
-        if 250 > distance > 130:
+        if 250 > building_width > 130:
+            # Start recognizing
             self.helper.min_block_size = 300
             self.start_recognize = True
         else:
@@ -121,7 +119,6 @@ class Recognize(object):
             grab = True
         else:
             grab = False
-            print("[INFO] percentage left:", percentage_position)
 
         if self.recognized and building:
             # Add to settings
