@@ -108,7 +108,7 @@ class Recognize(object):
         self.last_percentage = percentage_position
         # Set min block size according to the distance of the building
         print("[INFO] building width:", building_width)
-        print("[INFO] real sitcancen ", self.get_real_distance(building_width))
+        print("[INFO] Real distance: ", self.get_real_distance(building_width))
         if 250 > building_width > 130:
             self.helper.min_block_size = 300
             self.start_recognize = True
@@ -133,7 +133,7 @@ class Recognize(object):
             self.settings.update = True
 
     def get_real_distance(self, building_width):
-        return (0.2789115646258503 * building_width ** 2) - (19.523809523809526 * building_width) + 369
-
+        distance = 0.08928571428571429 * building_width ** 2 - 8.75 * building_width + 245
+        return distance
     def nothing(self, x):
         pass
