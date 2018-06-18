@@ -66,7 +66,7 @@ class Recognize(object):
         :param positions: Current reading of POSITIONS
         :return: True if a building is recognized
         """
-        result = []
+        result = None
         found = True
 
         # If there are no blocks in view return false
@@ -78,8 +78,8 @@ class Recognize(object):
             for building in self.saved_buildings:
                 # For each block on the front side of the saved building
                 found = self.check_building_side(positions, building.side)
-                result = [building.number, building.side_number, building.pick_up_vertical]
                 if found:
+                    result = building
                     break
 
         # If recent settings are handled
@@ -100,7 +100,7 @@ class Recognize(object):
 
         return True
 
-    def check_settings(self, building_center, image_width, building_width, result):
+    def check_settings(self, building_center, image_width, building_width, building):
         # Calculate and check percentage left
         print("---------------")
         calculation = building_center / image_width * 100
@@ -117,19 +117,22 @@ class Recognize(object):
 
         # If all requirements are valid, grab that ho
         if self.recognized and 51 > percentage_position > 49 and building_width > 183:
-            print("[WOO] building with:grab that ho by the vertical way:", result[2])
+            print("[WOO] building with:grab that ho by the vertical way:", building.pick_up_vertical)
         else:
             print("[INFO] percentage left:", percentage_position)
 
-        # Add to settings
-        self.settings.current_building = result[0]
-        self.settings.current_side = result[1]
-        self.settings.current_position = percentage_position
+        if building:
+            # Add to settings
+            self.settings.pick_up_vertical = building.pick_up_vertical
+            self.settings.current_position = percentage_position
 
-        self.settings.new = True
+            self.settings.new = True
 
-        # Notify settings that the current frame is handled
-        self.settings.update = True
+            # Notify settings that the current frame is handled
+            self.settings.update = True
+
+    def get_real_distance(self, image_width, real_width, real_height, object_width):
+        pass
 
     def nothing(self, x):
         pass
