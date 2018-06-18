@@ -24,7 +24,7 @@ def run(name, movement, shared_object):
     settings = Recognize_settings()
     vision = Vision(color_range=color_range,
                     saved_buildings=saved_buildings,
-                    settings=settings, max_block_size=35000, min_block_size=300)
+                    settings=settings, min_block_size=0)
 
     rotate_speed = 50
     print("run " + str(name))
@@ -47,15 +47,19 @@ def run(name, movement, shared_object):
         print("[ERROR] Something went wrong..")
         run(name, movement, shared_object)
 
-    while not shared_object.has_to_stop():
+    # while not shared_object.has_to_stop():
+    #
+    #     movement.grabber.grab([80, 80, 80])
+    #     if movement.grabber.reposition is True:
+    #         movement.tracks.forward(30, 30, 2, 3)
+    #         movement.grabber.reposition = False
+    #
+    #     time.sleep(0.5)
+    #
+    # # Notify shared object that this thread has been stopped
+    # print("Stopped" + str(name))
+    # shared_object.has_been_stopped()
 
-        vision.recognize.run()
-        movement.grabber.grab([80, 80, 80])
-        if movement.grabber.reposition is True:
-            movement.tracks.forward(30, 30, 2, 3)
-            movement.grabber.reposition = False
-
-        time.sleep(0.5)
 
     # Notify shared object that this thread has been stopped
     print("Stopped" + str(name))
