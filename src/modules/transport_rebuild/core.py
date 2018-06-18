@@ -25,7 +25,7 @@ saved_buildings = json_handler.get_save_buildings()
 settings = Recognize_settings()
 vision = Vision(color_range=color_range,
                 saved_buildings=saved_buildings,
-                settings=settings, max_block_size=35000, min_block_size=300)
+                settings=settings, min_block_size=0)
 
 rotate_speed = 50
 

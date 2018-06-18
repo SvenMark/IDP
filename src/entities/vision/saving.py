@@ -39,17 +39,16 @@ class Saving(object):
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
             # Calculate the masks
-            mask, u = self.helper.calculate_mask(img, self.color_range)
+            mask, _ = self.helper.calculate_mask(img, self.color_range)
 
-            img4, u = self.helper.crop_to_contours(mask, img)
+            img_cropped, _, _, _ = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
-            mask_cropped, valid_contours = self.helper.calculate_mask(img4, self.color_range, set_contour=True)
+            mask_cropped, valid_contours = self.helper.calculate_mask(img_cropped, self.color_range, set_contour=True)
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 self.show_input_fields()
 
-            print(len(valid_contours))
             if self.save and 3 < len(valid_contours) == self.save_length:
                 print("--------{}-------".format(datetime.datetime.now().time()))
                 for cnt in range(len(valid_contours)):

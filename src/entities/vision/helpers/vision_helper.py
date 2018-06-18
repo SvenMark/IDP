@@ -31,9 +31,8 @@ class ColorRange:
 
 class Helper:
 
-    def __init__(self, min_block_size, max_block_size):
+    def __init__(self, min_block_size):
         self.min_block_size = min_block_size
-        self.max_block_size = max_block_size
 
     def nothing(self, x):
         pass
@@ -126,14 +125,11 @@ class Helper:
 
         center = (x + extremes[1]) / 2
 
-        percentage_left = center / image_width
-        print("[INFO] Percentage left: ", percentage_left)
-
         # Resize to new size
         img = self.image_resize(img, height=400)
 
         # Return the resized image
-        return img, center
+        return img, center, image_width, w
 
     @staticmethod
     def image_resize(img, width=None, height=None, inter=cv2.INTER_AREA):
