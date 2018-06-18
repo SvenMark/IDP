@@ -60,11 +60,12 @@ def run(name, movement, shared_object):
     # print("Stopped" + str(name))
     # shared_object.has_been_stopped()
 
-
     # Notify shared object that this thread has been stopped
     print("Stopped" + str(name))
     shared_object.has_been_stopped()
 
+
+run("", "", SharedObject)
 
 # TESTING
 # tracks = Tracks(track_0_pin=18,
