@@ -101,6 +101,7 @@ class Recognize(object):
         return True
 
     def check_settings(self, building_center, image_width, building_width, building):
+        grab = False
         # Calculate and check percentage left
         print("---------------")
         calculation = building_center / image_width * 100
@@ -118,14 +119,16 @@ class Recognize(object):
 
         # If all requirements are valid, grab that ho
         if self.recognized and 51 > percentage_position > 49 and building_width > 183:
-            print("[WOO] building with:grab that ho by the vertical way:", building.pick_up_vertical)
+            grab = True
         else:
+            grab = False
             print("[INFO] percentage left:", percentage_position)
 
         if self.recognized and building:
             # Add to settings
             self.settings.pick_up_vertical = building.pick_up_vertical
             self.settings.current_position = percentage_position
+            self.settings.grab = grab
 
             self.settings.new = True
 
