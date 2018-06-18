@@ -20,25 +20,19 @@ class BluetoothController(object):
     Base class for the bluetooth smart controller
     """
 
-    def __init__(self, name, limbs, lights, bluetooth_address):
+    def __init__(self, name, limbs, bluetooth_address):
         """
         Constructor for the bluetooth controller class
-        :param name:
-        :param limbs:
-        :param lights:
-        :param bluetooth_address:
+        :param name: Name of the robot
+        :param limbs: Array of robot limbs
+        :param bluetooth_address: Address of the bluetooth controller
         """
         self.bluetooth_address = bluetooth_address
         self.name = name
         self.limbs = limbs
-        self.lights = lights
-        self.movement = Movement(limbs, lights)
-        self.vision = Vision(color_range=[1, 2],
-                             saved_buildings=None,
-                             img=None,
-                             min_block_size=1000,
-                             max_block_size=10000,
-                             settings=None)
+        self.movement = Movement(limbs)
+
+        self.vision = None
         self.audio = Audio()
         self.emotion = Emotion()
         self.shared_object = SharedObject()  # Create instance of thread sharer
@@ -163,7 +157,8 @@ class BluetoothController(object):
                 self.run_module(m, self.movement, s, v, h, speed_factor, d)
 
         except ValueError or IndexError:
-            print("Invalid value in package")
+            temp = 123
+            # print("Invalid value in package")
 
     def run_module(self, module, movement, s, v, h, speed_factor, d):
         """

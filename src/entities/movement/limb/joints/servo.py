@@ -43,7 +43,7 @@ class Servo(object):
         """
         self.current_speed = speed * self.current_speed_multiplier
 
-    def lock_thread(self):
+    def lock_thread(self, args):
         """
         Locks the servo while idle
         :return: None
@@ -58,11 +58,6 @@ class Servo(object):
         :param delta: Delta time
         :return: None
         """
-
-        # No update needed
-        if not self.is_ready():
-            print("Servo {} is ready, but update has been called".format(self.servo_id))
-
         step = (self.goal - self.start_position) * delta * self.current_speed  # move towards new position
 
         if step > 0 and self.last_position > self.goal:
@@ -73,13 +68,15 @@ class Servo(object):
             self.start_position = self.last_position
             step = (self.goal - self.start_position) * delta * self.current_speed
 
-        print("Delta: " + str(delta) + " Step: " + str(step) + " Goal: " + str(self.goal) + " Last_pos: " + str(self.last_position) + " Start_pos: " + str(self.start_position))
         if self.last_position + step > 1024 or self.last_position + step < 0:
             print(str(self.last_position + step) + " not in range " + str(self.servo_id) + "speed "
                   + str(self.current_speed) + "delta " + str(delta))
             return
+
         self.last_position = self.last_position + step
         self.ax12.move(self.servo_id, round(self.last_position))
+
+        print("Updating servo: " + str(self.servo_id) + " Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
 
         if self.is_ready():
             Thread(target=self.lock_thread, args=(self,)).start()  # Lock the servo if the move is finished
@@ -95,14 +92,15 @@ class Servo(object):
         self.start_position = self.last_position  # Set the start position of the movement
         self.goal = degrees
         self.current_speed = speed * self.current_speed_multiplier
-        print("servo " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
+        print("Move servo: " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
 
     def is_ready(self):
         """
         Function that checks if a servo completed it`s last move
         :return: Whether or not the servo has completed it`s last move
         """
-        print("Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
+        if not abs(round(self.last_position) - round(self.goal)) <= self.sensitivity:
+            print("Servo not rdy: " + str(self.servo_id) + " Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
         return abs(round(self.last_position) - round(self.goal)) <= self.sensitivity
 
     def read_position(self):
@@ -114,7 +112,7 @@ class Servo(object):
 
         # In case servo position is not read the first time, keep trying
         while result is None:
-            print("Can't read position, trying again")
+            print("Can't read servo " + str(self.servo_id) + " position, trying again")
             result = self.ax12.read_position(self.servo_id)
 
         return result
@@ -125,6 +123,13 @@ class Servo(object):
         :return: The servo speed
         """
         return self.ax12.read_speed(self.servo_id)
+
+    def read_load(self):
+        """
+
+        :return:
+        """
+        return self.ax12.read_load(self.servo_id)
 
 
 def main():

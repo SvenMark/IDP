@@ -14,23 +14,19 @@ from entities.threading.utils import SharedObject
 
 # from entities.movement.tracks import Tracks
 
-print("[RUN] Transport and Rebuild")
-
-json_handler = Json_Handler()
-color_range = json_handler.get_color_range()
-tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
-
-saved_buildings = json_handler.get_save_buildings()
-
-settings = Recognize_settings()
-vision = Vision(color_range=color_range,
-                saved_buildings=saved_buildings,
-                settings=settings, min_block_size=0)
-
-rotate_speed = 50
-
-
 def run(name, movement, shared_object):
+    json_handler = Json_Handler()
+    color_range = json_handler.get_color_range()
+    tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
+
+    saved_buildings = json_handler.get_save_buildings()
+
+    settings = Recognize_settings()
+    vision = Vision(color_range=color_range,
+                    saved_buildings=saved_buildings,
+                    settings=settings, min_block_size=0)
+
+    rotate_speed = 50
     print("run " + str(name))
     try:
         if len(sys.argv) > 1:
@@ -65,7 +61,10 @@ def run(name, movement, shared_object):
     # shared_object.has_been_stopped()
 
 
-run(name="Visiontest", shared_object=SharedObject(), movement=None)
+    # Notify shared object that this thread has been stopped
+    print("Stopped" + str(name))
+    shared_object.has_been_stopped()
+
 
 # TESTING
 # tracks = Tracks(track_0_pin=18,

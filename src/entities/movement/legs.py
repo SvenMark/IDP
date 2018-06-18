@@ -40,7 +40,7 @@ class Legs(object):
         self.sequence = 0  # The current move sequence
         self.type = 'legs'
         self.deployed = False
-        self.retract(120) # Retract on constructing
+        self.retract(120)  # Retract on constructing
         self.updating = False
         self.recent_package = [0, 0, 0]  # The bluetooth packages used for legs
         self.update_thread = Thread(target=self.leg_updater, args=(self, ))  # The thread which runs the leg updater
@@ -234,15 +234,11 @@ class Legs(object):
         """
         if sequence is None:
             sequence = forward
-        elif sequence is dab and sequences is None:
-            sequences = [0]
-        elif sequence is wave and sequences is None or sequence is march and sequences is None:
-            sequences = [0, 1]
-        elif sequence is hood_handshake:
-            sequences = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
         if sequences is None:
-            sequences = [0, 1, 2, 3]
+            sequences = []
+            seq_len = len(sequence)
+            for i in range(seq_len):
+                sequences.append(i)
 
         for moves in sequences:
             self.move(leg_0_moves=sequence[moves][0],

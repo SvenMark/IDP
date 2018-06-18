@@ -4,22 +4,23 @@ sys.path.insert(0, '../../src')
 
 from libs.ax12 import Ax12
 
+tester = Ax12()
 
-def servo_scanner():
-    axscanner = Ax12()
+servos = []
 
-    servos = []
 
-    for i in range(0, 200):
+def scan():
+    for i in range(0, 255):
         try:
-            axscanner.ping(i)
-            pos = axscanner.read_position(i)
+            tester.ping(i)
+            pos = tester.read_position(i)
             if str(pos) != "None":
                 print("Servo found with id: " + str(i) + " and position: " + str(pos))
                 servos.append(i)
-        except axscanner.timeout_error:
+        except tester.timeout_error:
             pass
 
-    if len(servos) is 0:
-        print("No servo`s found")
-    return servos
+    if len(servos) is not 0:
+        return servos
+    else:
+        print("No servos found")
