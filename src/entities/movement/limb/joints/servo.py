@@ -82,6 +82,8 @@ class Servo(object):
         self.last_position = self.last_position + step
         self.ax12.move(self.servo_id, round(self.last_position))
 
+        print("Servo: " + str(self.servo_id) + " Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
+
         if self.is_ready():
             Thread(target=self.lock_thread, args=(self,)).start()  # Lock the servo if the move is finished
 
