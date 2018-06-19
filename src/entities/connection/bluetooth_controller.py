@@ -43,7 +43,7 @@ class BluetoothController(object):
         self.manual_control = True
         self.data = ""  # Initialise data string
 
-        if self.movement.legs:
+        if self.movement.legs is not None:
             self.movement.legs.update_thread.start()  # Start the leg update class
 
     def receive_data(self):
@@ -139,10 +139,11 @@ class BluetoothController(object):
                                                              horizontal_speed=v * speed_factor,
                                                              dead_zone=5)
 
-                # Send controller leg input to legs
-                self.movement.legs.handle_controller_input(deploy=d,
-                                                           x_axis=x,
-                                                           y_axis=y)
+                if self.movement.legs is not None:
+                    # Send controller leg input to legs
+                    self.movement.legs.handle_controller_input(deploy=d,
+                                                               x_axis=x,
+                                                               y_axis=y)
 
             # If the selected module is different than the last selected and not 0 and 2
             if m is not self.current_module and m is not 0 and m is not 2:
@@ -211,7 +212,7 @@ def main():
     limbs = [0, 1]
     lights = []
     name = 'Boris'
-    bluetooth = BluetoothController(name=name, limbs=limbs, lights=lights, bluetooth_address="98:D3:31:FD:15:C1")
+    bluetooth = BluetoothController(name=name, limbs=limbs, bluetooth_address="98:D3:31:FD:15:C1")
 
 
 if __name__ == '__main__':
