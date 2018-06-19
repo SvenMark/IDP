@@ -15,8 +15,8 @@ grabber = Grabber(servos=[
         ],
         initial_positions=[455, 185, 83])
 
-grabber.grab([80, 80, 80])
-grabber.loosen([80, 80, 80])
+grabber.grab(80)
+grabber.loosen(80)
 
 # tracks = Tracks(track_0_pin=13,
 #                 track_1_pin=18,

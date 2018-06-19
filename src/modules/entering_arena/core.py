@@ -9,7 +9,7 @@ from entities.audio.speak import Speak
 
 
 def run(name, movement, s, v, h, speed_factor, shared_object):
-    print("run " + str(name))
+    print("[RUN] " + str(name))
 
     emotion = Emotion()
     audio = Speak()
@@ -24,5 +24,5 @@ def run(name, movement, s, v, h, speed_factor, shared_object):
         movement.legs.run_sequence([150, 150, 150], True, None, march)
 
     # Notify shared object that this thread has been stopped
-    print("Stopped " + str(name))
+    print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
