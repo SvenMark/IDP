@@ -10,8 +10,6 @@ sys.path.insert(0, '../../../src')
 from entities.audio.speak import Speak
 
 
-
-
 class Emotion(object):
 
     def __init__(self, speak):
@@ -37,13 +35,10 @@ class Emotion(object):
             # Boston University Red
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
-            lights = Thread(target=self.blink_color(205, 0, 0, 5, 500))
-            yellowlights = Thread(target=self.blink_color(255, 255, 0, 5, 750))
+            lights = Thread(target=self.blink_color(205, 0, 0, 50, 0.1))
             lights.start()
-            yellowlights.start()
             self.audio.play('russiananthem.mp3')
             lights.join()
-            yellowlights.join()
         elif emotion == "success":
             self.set_color(0, 205, 0)
             self.audio.get_file_path('success.mp3')
@@ -59,7 +54,7 @@ class Emotion(object):
         elif emotion == "searching":  # Used for building detection
             self.set_color(255, 165, 0)
 
-    def set_color(self, r, g, b):
+    def set_color(self, r, b, g):
         """
         Function to set the color of the leds
         :param r: red color value
@@ -71,7 +66,7 @@ class Emotion(object):
             self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
         self.pixels.show()
 
-    def blink_color(self, r, g, b, blink_times, blinkdelay):
+    def blink_color(self, r, b, g, blink_times, blinkdelay):
         for i in range(blink_times):
             # blink x times, then wait
             self.pixels.clear()
@@ -137,3 +132,4 @@ if __name__ == '__main__':
     sp = Speak()
     emote = Emotion(sp)
     emote.set_emotion("anthem")
+    emote.set_color(255, 255, 255)

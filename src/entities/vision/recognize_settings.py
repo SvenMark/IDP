@@ -9,4 +9,6 @@ class Recognize_settings(object):
         self.grab = False
         self.new = False
         self.update = False
+        self.distance = -1
+        self.black_detected = False
 

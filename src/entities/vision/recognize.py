@@ -11,7 +11,7 @@ from entities.vision.helpers.vision_helper import *
 
 class Recognize(object):
 
-    def __init__(self, helpers, color_range, saved_buildings=None, settings=None):
+    def __init__(self, helpers, color_range, shared_object, saved_buildings=None, settings=None):
         self.color_range = color_range
         self.positions = []
         self.saved_buildings = saved_buildings
@@ -20,6 +20,7 @@ class Recognize(object):
         self.recognized = False
         self.last_percentage = 50
         self.start_recognize = False
+        self.shared_object = shared_object
 
     def run(self):
         print("[RUN] Starting recognize...")
@@ -28,7 +29,7 @@ class Recognize(object):
         cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
         time.sleep(0.3)  # startup
 
-        while True:
+        while not self.shared_object.has_to_stop():
             # Read frame from the camera
             img = cap.read()
 
@@ -101,20 +102,24 @@ class Recognize(object):
         return True
 
     def check_settings(self, building_center, image_width, building_width, building):
+        grab_distance = 183
+        recognize_distance_max = 250
+        recognize_distance_min = 130
+
         # Calculate and check percentage left
         calculation = building_center / image_width * 100
         percentage_position = calculation if calculation < 100 else self.last_percentage
         self.last_percentage = percentage_position
 
         # Set min block size according to the distance of the building
-        if 250 > building_width > 130:
+        if recognize_distance_max > building_width > recognize_distance_min:
             self.helper.min_block_size = 300
             self.start_recognize = True
         else:
-            self.helper.min_block_size = 0
+            self.helper.min_block_size = 5
 
         # If all requirements are valid, grab
-        if self.recognized and 51 > percentage_position > 49 and building_width > 183:
+        if self.recognized and 51 > percentage_position > 49 and building_width > grab_distance:
             grab = True
         else:
             grab = False
@@ -125,11 +130,12 @@ class Recognize(object):
             self.settings.pick_up_vertical = building.pick_up_vertical
             self.settings.current_position = percentage_position
             self.settings.grab = grab
+            self.settings.distance = recognize_distance_max - building_width
 
             self.settings.new = True
 
-            # Notify settings that the current frame is handled
-            self.settings.update = True
+        # Notify settings that the current frame is handled
+        self.settings.update = True
 
     @staticmethod
     def get_real_distance(building_width):
