@@ -94,12 +94,8 @@ class Grabber(object):
             for i in range(len(self.servos)):
                 if not self.servos[i].is_ready():
                     print("Servo " + str(self.servos[i].servo_id) + " Load: " + str(self.servos[i].read_load()))
-                    if self.servos[i].read_load() > 200 and self.servos[i].servo_id == 1 and self.grabbing:
-                        print("Load to high, loosening: " + str(self.servos[i].read_load()))
-                        self.loosen(100)
-                        self.reposition = True
-                        break
-                    if self.servos[i].read_load() > 1200 and self.servos[i].servo_id == 53 and self.grabbing:
+                    load = self.servo_1.ax12.read_load(1) + self.servo_2.ax12.read_load(53)
+                    if load > 1400 and self.grabbing:
                         print("Load to high, loosening: " + str(self.servos[i].read_load()))
                         self.loosen(100)
                         self.reposition = True
