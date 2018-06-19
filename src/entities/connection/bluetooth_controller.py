@@ -43,7 +43,7 @@ class BluetoothController(object):
         self.manual_control = True
         self.data = ""  # Initialise data string
 
-        if self.movement.legs is not None:
+        if hasattr(self.movement, 'legs'):
             self.movement.legs.update_thread.start()  # Start the leg update class
 
     def receive_data(self):
@@ -139,7 +139,7 @@ class BluetoothController(object):
                                                              horizontal_speed=v * speed_factor,
                                                              dead_zone=5)
 
-                if self.movement.legs is not None:
+                if hasattr(self.movement, 'legs'):
                     # Send controller leg input to legs
                     self.movement.legs.handle_controller_input(deploy=d,
                                                                x_axis=x,
