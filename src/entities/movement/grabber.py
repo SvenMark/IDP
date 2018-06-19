@@ -43,7 +43,7 @@ class Grabber(object):
         :param pick_up_vertical: To pick up vertical or not
         :return: None
         """
-        positions = [215, 425, 83]  # The servo positions for grabbing
+        positions = [210, 430, 83]  # The servo positions for grabbing
 
         # TODO: Implement vertical and horizontal
         if pick_up_vertical:
