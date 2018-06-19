@@ -66,6 +66,8 @@ class Grabber(object):
         :param speed: Speed to move with
         :return: None
         """
+        self.grabbing = False
+
         positions = [455, 185, 83]  # The servo positions for loosening
         for i in range(len(self.servos)):
             self.servos[i].move(positions[i], speed)
