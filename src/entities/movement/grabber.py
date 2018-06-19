@@ -31,7 +31,7 @@ class Grabber(object):
         self.reposition = False
         self.grabbed = False
 
-        self.move_grabber(initial_positions, 100)
+        self.loosen(100)
 
         self.type = 'grabber'
         print("Grabber setup")
@@ -40,11 +40,20 @@ class Grabber(object):
         """
         Function that contains commands to close grabber
         :param speed: Speed to move with
-        :param pick_up_vertical: If it has to grab vertical
+        :param pick_up_vertical: To pick up vertical or not
         :return: None
         """
         positions = [215, 425, 83]  # The servo positions for grabbing
-        self.move_grabber(positions, speed, pick_up_vertical)
+
+        # TODO: Implement vertical and horizontal
+        if pick_up_vertical:
+            for i in range(len(self.servos)):
+                self.servos[i].move(positions[i], speed)
+        else:
+            for i in range(len(self.servos)):
+                self.servos[i].move(positions[i], speed)
+        self.update()  # Update the servos
+
         self.grabbed = True
 
     def loosen(self, speed):
@@ -54,7 +63,9 @@ class Grabber(object):
         :return: None
         """
         positions = [455, 185, 83]  # The servo positions for loosening
-        self.move_grabber(positions, speed)
+        for i in range(len(self.servos)):
+            self.servos[i].move(positions[i], speed)
+        self.update()
         self.grabbed = False
 
     def get_delta(self):
@@ -66,23 +77,6 @@ class Grabber(object):
         elapsed_time = next_time - self.previous
         self.previous = next_time
         return elapsed_time.total_seconds()
-
-    def move_grabber(self, positions, speed, pick_up_vertical):
-        """
-        Move the grabber servo`s
-        :param positions: Array of servo positions
-        :param speed: Speed to move with
-        :return: None
-        """
-
-        # TODO: Implement vertical and horizontal
-        if pick_up_vertical:
-            for i in range(len(self.servos)):
-                self.servos[i].move(positions[i], speed)
-        else:
-            for i in range(len(self.servos)):
-                self.servos[i].move(positions[i], speed)
-        self.update()  # Update the servos
 
     def update(self):
         """
