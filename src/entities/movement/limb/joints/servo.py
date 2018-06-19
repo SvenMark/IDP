@@ -93,7 +93,7 @@ class Servo(object):
         self.start_position = self.last_position  # Set the start position of the movement
         self.goal = degrees
         self.current_speed = speed * self.current_speed_multiplier
-        print("Move servo: " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
+        # print("Move servo: " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
 
     def is_ready(self):
         """
