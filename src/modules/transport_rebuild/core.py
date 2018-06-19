@@ -34,7 +34,8 @@ def move_towards(movement, percentage):
     movement.tracks.forward(left_speed, right_speed, 0.3, 0.3)
 
 
-def run(name, movement, shared_object):
+def run(name, movement, s, v, h, speed_factor, shared_object, grab):
+    print("[RUN] " + str(name))
     json_handler = Json_Handler()
     color_range = json_handler.get_color_range()
     tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
@@ -49,7 +50,6 @@ def run(name, movement, shared_object):
                     )
 
     rotate_speed = 50
-    print("run " + str(name))
     try:
         if len(sys.argv) > 1:
             if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
@@ -60,16 +60,26 @@ def run(name, movement, shared_object):
                 threading.Thread(target=vision.recognize.run).start()
             else:
                 print("[ERROR] Wrong argument given..")
-                run(name, movement, shared_object)
+                run(name, movement, s, v, h, speed_factor, shared_object, grab)
 
         # Default no argument
         else:
             threading.Thread(target=vision.recognize.run).start()
     except AttributeError:
         print("[ERROR] Something went wrong..")
-        run(name, movement, shared_object)
+        run(name, movement, s, v, h, speed_factor, shared_object, grab)
 
     while not shared_object.has_to_stop():
+        # Backup controller input
+        movement.tracks.handle_controller_input(stop_motors=s,
+                                                vertical_speed=h * speed_factor,
+                                                horizontal_speed=v * speed_factor,
+                                                dead_zone=5)
+        if movement.grabber.grabbed and grab is 0:
+            movement.grabber.loosen([150, 150, 150])
+        if not movement.grabber.grabbed and grab is 1:
+            movement.grabber.grab([100, 100, 100])
+
         if settings.update:
             settings.update = False
             if settings.grab:
@@ -86,31 +96,10 @@ def run(name, movement, shared_object):
                 while not settings.grab:
                     # TODO: implement this
                     move_towards(movement, settings.current_position)
-                    pass
             else:
                 # TODO: implement this
                 movement.tracks.forward(20, 20, 0.5, 0.5)
-                pass
 
-
-    # Handle cleanup
     # Notify shared object that this thread has been stopped
-    print("Stopped" + str(name))
+    print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
-
-    # while True:
-    #     if settings.update:
-    #         settings.update = False
-    #         if settings.new:
-    #             tracks.stop()
-    #             print("Moving to building " + str(settings.current_building)
-    #                   + ", position: " + str(settings.current_position))
-    #
-    #             settings.new = False
-    #         else:
-    #             print("Rotating")
-    #             # acceleration 0.5 seconds for 0.5 seconds, then wait again
-    #             tracks.turn_left(rotate_speed, rotate_speed, 0.5, 0.5)
-    #             tracks.stop()
-
-

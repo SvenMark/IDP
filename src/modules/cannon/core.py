@@ -1,13 +1,14 @@
 import sys
+import time
+import numpy as np
+import cv2
+
 sys.path.insert(0, '../../../src')
 
 from imutils.video import VideoStream
 from modules.cannon.helpers import Point, Color
 from decimal import Decimal
 from threading import Thread
-import time
-import numpy as np
-import cv2
 
 # Last known position of the line with left percentage
 last_position = -1000
@@ -18,11 +19,19 @@ TORQUE = 1
 red_detected = False
 line_detected = False
 
-def run(name, movement, shared_object):
+
+def run(name, movement, s, v, h, speed_factor, shared_object):
     print("[RUN] " + str(name))
     Thread(target=line_detection, args=(shared_object,)).start()
 
     while not shared_object.has_to_stop():
+
+        # Backup controller input
+        movement.tracks.handle_controller_input(stop_motors=s,
+                                                vertical_speed=h * speed_factor,
+                                                horizontal_speed=v * speed_factor,
+                                                dead_zone=5)
+
         global last_position, red_detected, TORQUE, line_detected
         offset = 50 - last_position
         offset = offset * TORQUE
@@ -57,7 +66,7 @@ def run(name, movement, shared_object):
 
 def line_detection(shared_object):
     """
-    Detects the line in a special set reagion, calculates the avarge center of the line in the screen and detects red
+    Detects the line in a special set region, calculates the average center of the line in the screen and detects red
     :param shared_object: Thread notifier
     :return: None
     """
@@ -234,4 +243,4 @@ def detect_red(img, hsv):
 
 
 if __name__ == '__main__':
-    run(shared_object=None)  # disabled for travis
+    run(name=None, movement=None, shared_object=None)  # disabled for travis
