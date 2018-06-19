@@ -1,15 +1,15 @@
 import sys
-from threading import Thread
-
-from entities.audio.speak import Speak
-
-sys.path.insert(0, '../../../src')
-
-# Led imports
 import time
 import RPi.GPIO as GPIO
 import Adafruit_WS2801
 import Adafruit_GPIO.SPI as SPI
+from threading import Thread
+
+sys.path.insert(0, '../../../src')
+
+from entities.audio.speak import Speak
+
+
 
 
 class Emotion(object):
