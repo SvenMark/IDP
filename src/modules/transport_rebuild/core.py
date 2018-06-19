@@ -38,28 +38,28 @@ def run(name, movement, s, v, h, speed_factor, shared_object, grab):
                 threading.Thread(target=vision.recognize.run).start()
             else:
                 print("[ERROR] Wrong argument given..")
-                run(name, movement, shared_object)
+                run(name, movement, s, v, h, speed_factor, shared_object, grab)
 
         # Default no argument
         else:
             threading.Thread(target=vision.recognize.run).start()
     except AttributeError:
         print("[ERROR] Something went wrong..")
-        run(name, movement, shared_object)
+        run(name, movement, s, v, h, speed_factor, shared_object, grab)
 
-    while not shared_object.has_to_stop():
+    # while not shared_object.has_to_stop():
+    #
+    #     movement.grabber.grab([80, 80, 80])
+    #     if movement.grabber.reposition is True:
+    #         movement.tracks.forward(20, 20, 10, 0.5)
+    #         movement.grabber.reposition = False
+    #
+    # # Notify shared object that this thread has been stopped
+    # print("[STOPPED]" + str(name))
+    # shared_object.has_been_stopped()
 
-        movement.grabber.grab([80, 80, 80])
-        if movement.grabber.reposition is True:
-            movement.tracks.forward(20, 20, 10, 0.5)
-            movement.grabber.reposition = False
 
-    # Notify shared object that this thread has been stopped
-    print("[STOPPED]" + str(name))
-    shared_object.has_been_stopped()
-
-
-run("", "", SharedObject)
+run("", Movement, ",", "", "", "", SharedObject, "")
 
 # TESTING
 # tracks = Tracks(track_0_pin=18,

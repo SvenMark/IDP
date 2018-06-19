@@ -31,6 +31,7 @@ class Recognize(object):
         while True:
             # Read frame from the camera
             img = cap.read()
+            img = cv2.flip(img, 0)
 
             # Apply gaussian blue to the image
             img = cv2.GaussianBlur(img, (9, 9), 0)
