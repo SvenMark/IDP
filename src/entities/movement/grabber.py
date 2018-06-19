@@ -31,29 +31,29 @@ class Grabber(object):
         self.reposition = False
         self.grabbed = False
 
-        self.move_grabber(initial_positions, [80, 80, 80])  # Set grabber to initial position
+        self.move_grabber(initial_positions, 100)
 
         self.type = 'grabber'
         print("Grabber setup")
 
-    def grab(self, speeds):
+    def grab(self, speed):
         """
         Function that contains commands to close grabber
-        :param speeds: Array of speeds for each servo
+        :param speed: Speed to move with
         :return: None
         """
         positions = [215, 425, 83]  # The servo positions for grabbing
-        self.move_grabber(positions, speeds)
+        self.move_grabber(positions, speed)
         self.grabbed = True
 
-    def loosen(self, speeds):
+    def loosen(self, speed):
         """
         Function that contains commands top open grabber
-        :param speeds: Array of speeds for each servo
+        :param speed: Speed to move with
         :return: None
         """
         positions = [455, 185, 83]  # The servo positions for loosening
-        self.move_grabber(positions, speeds)
+        self.move_grabber(positions, speed)
         self.grabbed = False
 
     def get_delta(self):
@@ -66,15 +66,15 @@ class Grabber(object):
         self.previous = next_time
         return elapsed_time.total_seconds()
 
-    def move_grabber(self, positions, speeds):
+    def move_grabber(self, positions, speed):
         """
         Move the grabber servo`s
         :param positions: Array of servo positions
-        :param speeds: Array of speeds for each servo
+        :param speed: Speed to move with
         :return: None
         """
         for i in range(len(self.servos)):
-            self.servos[i].move(positions[i], speeds[i])
+            self.servos[i].move(positions[i], speed)
         self.update()  # Update the servos
 
     def update(self):
@@ -82,14 +82,18 @@ class Grabber(object):
         Update all the unready servos
         :return: None
         """
-        servos_not_ready = [elem for elem in self.servos if not elem.is_ready()]
-        print("Unready servos: " + str(len(servos_not_ready)))
         self.get_delta()
-        # While not all servos are ready keep updating
-        while len(servos_not_ready) != 0:
+        while len([elem for elem in self.servos if not elem.is_ready()]) != 0:
+            print("Unready servos: " + str(len([elem for elem in self.servos if not elem.is_ready()])))
             delta = self.get_delta()
-            for i in range(len(servos_not_ready)):
-                self.servos[i].update(delta)
-            servos_not_ready = [elem for elem in self.servos if not elem.is_ready()]
+            for i in range(len(self.servos)):
+                if not self.servos[i].is_ready():
+                    print("Servo " + str(self.servos[i].servo_id + " Load: " + str(self.servos[i].read_load())))
+                    if self.servos[i].read_load() > 10000:
+                        print("Load to high, loosening: " + str(self.servos[i].read_load()))
+                        # self.loosen(100)
+                        # self.reposition = True
+                        # break
+                    self.servos[i].update(delta)
 
 

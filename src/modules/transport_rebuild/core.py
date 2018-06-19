@@ -14,7 +14,8 @@ from entities.threading.utils import SharedObject
 
 # from entities.movement.tracks import Tracks
 
-def run(name, movement, shared_object):
+def run(name, movement, s, v, h, speed_factor, shared_object, grab):
+    print("[RUN] " + str(name))
     json_handler = Json_Handler()
     color_range = json_handler.get_color_range()
     tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
@@ -24,10 +25,9 @@ def run(name, movement, shared_object):
     settings = Recognize_settings()
     vision = Vision(color_range=color_range,
                     saved_buildings=saved_buildings,
-                    settings=settings, max_block_size=35000, min_block_size=300)
+                    settings=settings, min_block_size=0)
 
     rotate_speed = 50
-    print("run " + str(name))
     try:
         if len(sys.argv) > 1:
             if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
@@ -47,28 +47,29 @@ def run(name, movement, shared_object):
         print("[ERROR] Something went wrong..")
         run(name, movement, shared_object)
 
-    # while not shared_object.has_to_stop():
-    #
-    #     movement.grabber.grab([80, 80, 80])
-    #     if movement.grabber.reposition is True:
-    #         movement.tracks.forward(30, 30, 2, 3)
-    #         movement.grabber.reposition = False
-    #
-    #     time.sleep(0.5)
-    #
-    # # Notify shared object that this thread has been stopped
-    # print("Stopped" + str(name))
-    # shared_object.has_been_stopped()
+    while not shared_object.has_to_stop():
 
+        movement.grabber.grab([80, 80, 80])
+        if movement.grabber.reposition is True:
+            movement.tracks.forward(20, 20, 10, 0.5)
+            movement.grabber.reposition = False
 
-# TESTING
-# tracks = Tracks(track_0_pin=18,
-#                 track_1_pin=13,
-#                 track_0_forward=22,
-#                 track_0_backward=27,
-#                 track_1_forward=10,
-#                 track_1_backward=9)
-#
+        # Backup controller input
+        movement.tracks.handle_controller_input(stop_motors=s,
+                                                vertical_speed=h * speed_factor,
+                                                horizontal_speed=v * speed_factor,
+                                                dead_zone=5)
+        if movement.grabber.grabbed and grab is 0:
+            movement.grabber.loosen([150, 150, 150])
+        if not movement.grabber.grabbed and grab is 1:
+            movement.grabber.grab([100, 100, 100])
+
+        time.sleep(0.5)
+
+    # Notify shared object that this thread has been stopped
+    print("[STOPPED]" + str(name))
+    shared_object.has_been_stopped()
+
 # while True:
 #     if settings.update:
 #         settings.update = False

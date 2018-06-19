@@ -5,7 +5,7 @@ sys.path.insert(0, '../../../src')
 
 
 def run(name, movement, s, v, h, speed_factor, shared_object, grab):
-    print("run " + str(name))
+    print("[RUN] " + str(name))
 
     movement.legs.deploy()
 
@@ -27,5 +27,5 @@ def run(name, movement, s, v, h, speed_factor, shared_object, grab):
     movement.legs.retract()
 
     # Notify shared object that this thread has been stopped
-    print("Stopped" + str(name))
+    print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()

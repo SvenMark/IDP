@@ -9,7 +9,7 @@ sys.path.insert(0, '../../../src')
 
 
 def run(name, movement, shared_object):
-    print("run " + str(name))
+    print("[RUN] " + str(name))
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
@@ -37,9 +37,10 @@ def run(name, movement, shared_object):
 
     GPIO.output(pin_jurjen1, 0)
     GPIO.output(pin_jurjen2, 0)
+    GPIO.cleanup()
 
     # Notify shared object that this thread has been stopped
-    print("Stopped" + str(name))
+    print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
 
 

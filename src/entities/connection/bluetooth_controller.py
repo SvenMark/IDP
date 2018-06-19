@@ -187,15 +187,15 @@ class BluetoothController(object):
 
         if module is 5:
             name = 'Obstacle course'
-            Thread(target=obstacle_course.run, args=(name, movement, self.shared_object,)).start()
+            Thread(target=obstacle_course.run, args=(name, movement, s, v, h, speed_factor, self.shared_object,)).start()
 
         if module is 6:
             name = 'Cannon'
-            Thread(target=cannon.run, args=(name, movement, self.shared_object,)).start()
+            Thread(target=cannon.run, args=(name, movement, s, v, h, speed_factor, self.shared_object,)).start()
 
         if module is 7:
             name = 'Transport'
-            Thread(target=transport_rebuild.run, args=(name, movement, self.shared_object,)).start()
+            Thread(target=transport_rebuild.run, args=(name, movement, s, v, h, speed_factor, d, self.shared_object,)).start()
 
         if module is 8:
             name = 'Capture the flag'
