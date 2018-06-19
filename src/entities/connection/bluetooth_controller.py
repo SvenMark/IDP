@@ -42,7 +42,9 @@ class BluetoothController(object):
         self.current_module = 0  # Save the current module that is running, standard is 0
         self.manual_control = True
         self.data = ""  # Initialise data string
-        self.movement.legs.update_thread.start()  # Start the leg update class
+
+        if self.movement.legs:
+            self.movement.legs.update_thread.start()  # Start the leg update class
 
     def receive_data(self):
         """
