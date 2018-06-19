@@ -132,3 +132,4 @@ if __name__ == '__main__':
     sp = Speak()
     emote = Emotion(sp)
     emote.set_emotion("anthem")
+    emote.set_color(255, 255, 255)
