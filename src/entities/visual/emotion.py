@@ -1,4 +1,5 @@
 import sys
+from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
@@ -34,14 +35,23 @@ class Emotion(object):
             # Boston University Red
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
-            self.blink_color(205, 0, 0, 5, 500)
+            lights = Thread(target=self.blink_color(205, 0, 0, 5, 500))
+            yellowlights = Thread(target=self.blink_color(255, 255, 0, 5, 750))
+            lights.start()
+            yellowlights.start()
             self.audio.get_file_path('russiananthem.mp3')
+            lights.join()
+            yellowlights.join()
         elif emotion == "success":
-            pass
+            self.set_color(0, 205, 0)
+            self.audio.get_file_path('success.mp3')
         elif emotion == "sad":
-            self.brightness_off()
+            self.set_brightness(-255)
+            self.audio.get_file_path('sad.mp3')
         elif emotion == "happy":
             self.rainbow_colors()
+        elif emotion == "confused":
+            self.blink_color(255, 105, 180, 20, 500)
 
     def set_color(self, r, g, b):
         """
@@ -90,24 +100,6 @@ class Emotion(object):
             self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
         self.pixels.show()
 
-    def brightness_off(self, wait=0.01, step=1):
-        """
-        Function to decrease the brightness to 0
-        :param wait: Time to wait after a color change, lower is faster animation.
-        :param step: Amount to go down each loop, higher is faster animation but more choppy.
-        :return:
-        """
-        for j in range(int(256 // step)):
-            for i in range(self.pixels.count()):
-                r, g, b = self.pixels.get_pixel_rgb(i)
-                r = int(max(0, r - step))
-                g = int(max(0, g - step))
-                b = int(max(0, b - step))
-                self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
-            self.pixels.show()
-            if wait > 0:
-                time.sleep(wait)
-
     def rainbow_cycle(self, wait=0.005):
         """
         Function to make the leds display a rainbow cycling animation
@@ -137,7 +129,7 @@ class Emotion(object):
 
 if __name__ == '__main__':
     emote = Emotion("TrashIdontNeed")
-    emote.rainbow_cycle()
+    emote.set_emotion("anthem")
     #time.sleep(1)
     #for i in range(0, 255):
     #    emote.set_brightness(-1)
