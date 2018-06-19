@@ -36,14 +36,15 @@ class Grabber(object):
         self.type = 'grabber'
         print("Grabber setup")
 
-    def grab(self, speed):
+    def grab(self, speed, pick_up_vertical):
         """
         Function that contains commands to close grabber
         :param speed: Speed to move with
+        :param pick_up_vertical: If it has to grab vertical
         :return: None
         """
         positions = [215, 425, 83]  # The servo positions for grabbing
-        self.move_grabber(positions, speed)
+        self.move_grabber(positions, speed, pick_up_vertical)
         self.grabbed = True
 
     def loosen(self, speed):
@@ -66,15 +67,21 @@ class Grabber(object):
         self.previous = next_time
         return elapsed_time.total_seconds()
 
-    def move_grabber(self, positions, speed):
+    def move_grabber(self, positions, speed, pick_up_vertical):
         """
         Move the grabber servo`s
         :param positions: Array of servo positions
         :param speed: Speed to move with
         :return: None
         """
-        for i in range(len(self.servos)):
-            self.servos[i].move(positions[i], speed)
+
+        # TODO: Implement vertical and horizontal
+        if pick_up_vertical:
+            for i in range(len(self.servos)):
+                self.servos[i].move(positions[i], speed)
+        else:
+            for i in range(len(self.servos)):
+                self.servos[i].move(positions[i], speed)
         self.update()  # Update the servos
 
     def update(self):

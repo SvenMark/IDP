@@ -78,18 +78,23 @@ def run(name, movement, s, v, h, speed_factor, shared_object, grab):
         if movement.grabber.grabbed and grab is 0:
             movement.grabber.loosen([150, 150, 150])
         if not movement.grabber.grabbed and grab is 1:
-            movement.grabber.grab([100, 100, 100])
+            movement.grabber.grab([100, 100, 100], settings.pick_up_vertical)
 
         if settings.update:
             settings.update = False
             if settings.grab:
-                movement.grabber.grab([80, 80, 80])
-                if movement.grabber.reposition is True:
 
-                    # TODO: implement this
-                    transport_to_finish(movement, settings)
+                movement.grabber.grab([80, 80, 80], settings.pick_up_vertical)
 
-                    movement.grabber.reposition = False
+                while movement.grabber.reposition is True:
+                    if settings.distance < 50:
+                        movement.tracks.backward(20, 20, 0.5, 0.5)
+                        movement.grabber.grab([80, 80, 80], settings.pick_up_vertical)
+
+                # TODO: implement this
+                transport_to_finish(movement, settings)
+
+                movement.grabber.reposition = False
             # new building found
             elif settings.new:
                 settings.new = False
