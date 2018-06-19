@@ -1,6 +1,8 @@
 import sys
 from threading import Thread
 
+from entities.audio.speak import Speak
+
 sys.path.insert(0, '../../../src')
 
 # Led imports
@@ -39,7 +41,7 @@ class Emotion(object):
             yellowlights = Thread(target=self.blink_color(255, 255, 0, 5, 750))
             lights.start()
             yellowlights.start()
-            self.audio.get_file_path('russiananthem.mp3')
+            self.audio.play('russiananthem.mp3')
             lights.join()
             yellowlights.join()
         elif emotion == "success":
@@ -132,5 +134,6 @@ class Emotion(object):
 
 
 if __name__ == '__main__':
-    emote = Emotion("TrashIdontNeed")
+    sp = Speak()
+    emote = Emotion(sp)
     emote.set_emotion("anthem")
