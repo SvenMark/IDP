@@ -10,12 +10,16 @@ from entities.vision.recognize import Recognize
 from entities.vision.helpers.vision_helper import Color
 
 
-def run(name, movement, shared_object):
+def run(name, movement, s, v, h, speed_factor, shared_object):
     print("[RUN] " + str(name))
     detect_cup()
 
     while not shared_object.has_to_stop():
-        print("[INFO] Doing calculations and stuff")
+        # Backup controller input
+        movement.tracks.handle_controller_input(stop_motors=s,
+                                                vertical_speed=h * speed_factor,
+                                                horizontal_speed=v * speed_factor,
+                                                dead_zone=5)
         time.sleep(0.1)
 
     # Notify shared object that this thread has been stopped

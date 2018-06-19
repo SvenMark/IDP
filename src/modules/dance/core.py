@@ -5,7 +5,7 @@ sys.path.insert(0, '../../../src')
 
 
 def run(name, movement, shared_object):
-    print("run " + str(name))
+    print("[RUN] " + str(name))
 
     while not shared_object.has_to_stop():
         print("Doing calculations and stuff")
@@ -14,5 +14,5 @@ def run(name, movement, shared_object):
         time.sleep(0.2)
 
     # Notify shared object that this thread has been stopped
-    print("Stopped" + str(name))
+    print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()

@@ -14,7 +14,8 @@ from entities.threading.utils import SharedObject
 
 # from entities.movement.tracks import Tracks
 
-def run(name, movement, shared_object):
+def run(name, movement, s, v, h, speed_factor, shared_object, grab):
+    print("[RUN] " + str(name))
     json_handler = Json_Handler()
     color_range = json_handler.get_color_range()
     tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
@@ -27,7 +28,6 @@ def run(name, movement, shared_object):
                     settings=settings, min_block_size=0)
 
     rotate_speed = 50
-    print("run " + str(name))
     try:
         if len(sys.argv) > 1:
             if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
@@ -54,10 +54,20 @@ def run(name, movement, shared_object):
             movement.tracks.forward(20, 20, 10, 0.5)
             movement.grabber.reposition = False
 
+        # Backup controller input
+        movement.tracks.handle_controller_input(stop_motors=s,
+                                                vertical_speed=h * speed_factor,
+                                                horizontal_speed=v * speed_factor,
+                                                dead_zone=5)
+        if movement.grabber.grabbed and grab is 0:
+            movement.grabber.loosen([150, 150, 150])
+        if not movement.grabber.grabbed and grab is 1:
+            movement.grabber.grab([100, 100, 100])
+
         time.sleep(0.5)
 
     # Notify shared object that this thread has been stopped
-    print("Stopped" + str(name))
+    print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
 
 # while True:
