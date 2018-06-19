@@ -52,6 +52,10 @@ class Emotion(object):
             self.rainbow_colors()
         elif emotion == "confused":
             self.blink_color(255, 105, 180, 20, 500)
+        elif emotion == "confirmed":  # Used for building detection
+            self.set_color(0, 205, 0)
+        elif emotion == "searching":  # Used for building detection
+            self.set_color(255, 165, 0)
 
     def set_color(self, r, g, b):
         """
@@ -130,7 +134,3 @@ class Emotion(object):
 if __name__ == '__main__':
     emote = Emotion("TrashIdontNeed")
     emote.set_emotion("anthem")
-    #time.sleep(1)
-    #for i in range(0, 255):
-    #    emote.set_brightness(-1)
-    #    time.sleep(0.01)
