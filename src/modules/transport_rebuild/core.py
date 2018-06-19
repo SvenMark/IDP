@@ -14,7 +14,8 @@ from entities.threading.utils import SharedObject
 
 # from entities.movement.tracks import Tracks
 
-def run(name, movement, shared_object):
+def run(name, movement, s, v, h, speed_factor, shared_object, grab):
+    print("[RUN] " + str(name))
     json_handler = Json_Handler()
     color_range = json_handler.get_color_range()
     tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
@@ -27,7 +28,6 @@ def run(name, movement, shared_object):
                     settings=settings, min_block_size=0)
 
     rotate_speed = 50
-    print("run " + str(name))
     try:
         if len(sys.argv) > 1:
             if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
@@ -38,33 +38,28 @@ def run(name, movement, shared_object):
                 threading.Thread(target=vision.recognize.run).start()
             else:
                 print("[ERROR] Wrong argument given..")
-                run(name, movement, shared_object)
+                run(name, movement, s, v, h, speed_factor, shared_object, grab)
 
         # Default no argument
         else:
             threading.Thread(target=vision.recognize.run).start()
     except AttributeError:
         print("[ERROR] Something went wrong..")
-        run(name, movement, shared_object)
+        run(name, movement, s, v, h, speed_factor, shared_object, grab)
 
     # while not shared_object.has_to_stop():
     #
     #     movement.grabber.grab([80, 80, 80])
     #     if movement.grabber.reposition is True:
-    #         movement.tracks.forward(30, 30, 2, 3)
+    #         movement.tracks.forward(20, 20, 10, 0.5)
     #         movement.grabber.reposition = False
     #
-    #     time.sleep(0.5)
-    #
     # # Notify shared object that this thread has been stopped
-    # print("Stopped" + str(name))
+    # print("[STOPPED]" + str(name))
     # shared_object.has_been_stopped()
 
 
-    # Notify shared object that this thread has been stopped
-    print("Stopped" + str(name))
-    shared_object.has_been_stopped()
-
+run("", Movement, ",", "", "", "", SharedObject, "")
 
 # TESTING
 # tracks = Tracks(track_0_pin=18,

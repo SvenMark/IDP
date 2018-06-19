@@ -31,6 +31,7 @@ class Recognize(object):
         while True:
             # Read frame from the camera
             img = cap.read()
+            img = cv2.flip(img, 0)
 
             # Apply gaussian blue to the image
             img = cv2.GaussianBlur(img, (9, 9), 0)
@@ -108,6 +109,7 @@ class Recognize(object):
 
         # Set min block size according to the distance of the building
         if 250 > building_width > 130:
+            # Start recognizing
             self.helper.min_block_size = 300
             self.start_recognize = True
         else:
@@ -118,7 +120,6 @@ class Recognize(object):
             grab = True
         else:
             grab = False
-            print("[INFO] percentage left:", percentage_position)
 
         if self.recognized and building:
             # Add to settings
