@@ -48,6 +48,7 @@ class Servo(object):
         Locks the servo while idle
         :return: None
         """
+
         while self.is_ready():
             self.ax12.move(self.servo_id, round(self.last_position))
             time.sleep(0.1)
@@ -78,8 +79,8 @@ class Servo(object):
 
         print("Updating servo: " + str(self.servo_id) + " Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
 
-        if self.is_ready():
-            Thread(target=self.lock_thread, args=(self,)).start()  # Lock the servo if the move is finished
+        # if self.is_ready():
+        #     Thread(target=self.lock_thread, args=(self,)).start()  # Lock the servo if the move is finished
 
     def move(self, degrees, speed):
         """
