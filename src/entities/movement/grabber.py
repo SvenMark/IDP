@@ -30,6 +30,7 @@ class Grabber(object):
 
         self.reposition = False
         self.grabbed = False
+        self.grabbing = False
 
         self.loosen(100)
 
@@ -45,6 +46,8 @@ class Grabber(object):
         """
         positions = [210, 430, 83]  # The servo positions for grabbing
 
+        self.grabbing = True
+
         # TODO: Implement vertical and horizontal
         if pick_up_vertical:
             for i in range(len(self.servos)):
@@ -55,6 +58,7 @@ class Grabber(object):
         self.update()  # Update the servos
 
         self.grabbed = True
+        self.grabbing = False
 
     def loosen(self, speed):
         """
@@ -90,12 +94,12 @@ class Grabber(object):
             for i in range(len(self.servos)):
                 if not self.servos[i].is_ready():
                     print("Servo " + str(self.servos[i].servo_id) + " Load: " + str(self.servos[i].read_load()))
-                    if self.servos[i].read_load() > 200 and self.servos[i].servo_id == 1:
+                    if self.servos[i].read_load() > 200 and self.servos[i].servo_id == 1 and self.grabbing:
                         print("Load to high, loosening: " + str(self.servos[i].read_load()))
                         self.loosen(100)
                         self.reposition = True
                         break
-                    if self.servos[i].read_load() > 1200 and self.servos[i].servo_id == 53:
+                    if self.servos[i].read_load() > 1200 and self.servos[i].servo_id == 53 and self.grabbing:
                         print("Load to high, loosening: " + str(self.servos[i].read_load()))
                         self.loosen(100)
                         self.reposition = True
