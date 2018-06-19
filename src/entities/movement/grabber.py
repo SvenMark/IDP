@@ -89,11 +89,11 @@ class Grabber(object):
         """
         self.get_delta()
         while len([elem for elem in self.servos if not elem.is_ready()]) != 0:
-            print("Unready servos: " + str(len([elem for elem in self.servos if not elem.is_ready()])))
+            # print("Unready servos: " + str(len([elem for elem in self.servos if not elem.is_ready()])))
             delta = self.get_delta()
             for i in range(len(self.servos)):
                 if not self.servos[i].is_ready():
-                    print("Servo " + str(self.servos[i].servo_id) + " Load: " + str(self.servos[i].read_load()))
+                    # print("Servo " + str(self.servos[i].servo_id) + " Load: " + str(self.servos[i].read_load()))
                     if self.servos[0].read_load() > 1200 and self.grabbing:
                         print("Load to high, loosening: " + str(self.servos[i].read_load()))
                         self.loosen(100)
