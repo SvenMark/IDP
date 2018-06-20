@@ -5,19 +5,18 @@ from imutils.video import VideoStream
 
 
 class Hsv_picker:
-    def __init__(self, helpers, color_range):
+    def __init__(self, helpers):
         self.color_to_save = ""
         self.helper = helpers.helper
-        self.color_range = color_range
         self.range_handler = helpers.json_handler
         self.helper.min_block_size = 300
 
-    def run(self, img):
+    def run(self, color_range):
         print("[RUN] HSV picker")
 
         # Create a trackbar for each color range
-        for color in range(len(self.color_range)):
-            c = self.color_range[color]
+        for color in range(len(color_range)):
+            c = color_range[color]
             self.createtrackbars(c)
 
         # Create the camera stream
@@ -37,8 +36,8 @@ class Hsv_picker:
             mask = cv2.inRange(hsv, np.array([180, 255, 255]), np.array([180, 255, 255]))
 
             # Get the color from te trackbars
-            for color in range(len(self.color_range)):
-                c = self.color_range[color]
+            for color in range(len(color_range)):
+                c = color_range[color]
                 on_off = cv2.getTrackbarPos('off_on', c.color)
                 if on_off > 0:
                     lowh = cv2.getTrackbarPos('Low H', c.color)
@@ -84,7 +83,7 @@ class Hsv_picker:
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 # Save the building when you press KEY s
-                self.savehigherlower(self.color_range)
+                self.savehigherlower(color_range)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -146,7 +145,7 @@ class Hsv_picker:
         correct_ranges = []
 
         for color in range(len(color_range)):
-            c = self.color_range[color]
+            c = color_range[color]
             lowh = cv2.getTrackbarPos('Low H', c.color)
             lows = cv2.getTrackbarPos('Low S', c.color)
             lowv = cv2.getTrackbarPos('Low V', c.color)
