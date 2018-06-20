@@ -34,7 +34,12 @@ def move_towards(movement, percentage):
     movement.tracks.forward(left_speed, right_speed, 0.3, 0.3)
 
 
-def run(name, movement, speed_factor, shared_object, dead_zone, emotion):
+def run(name, control):
+    movement = control.movement
+    shared_object = control.shared_object
+    speed_factor = control.speed_factor
+    dead_zone = control.dead_zone
+
     print("[RUN] " + str(name))
     color_ranges = [Color("blue", [84, 44, 52], [153, 255, 255]),
                     Color("yellow", [21, 110, 89], [30, 255, 255]),
@@ -63,14 +68,14 @@ def run(name, movement, speed_factor, shared_object, dead_zone, emotion):
                 threading.Thread(target=vision.recognize.run).start()
             else:
                 print("[ERROR] Wrong argument given..")
-                run(name, movement, speed_factor, shared_object)
+                run(name, control)
 
         # Default no argument
         else:
             threading.Thread(target=vision.recognize.run).start()
     except AttributeError:
         print("[ERROR] Something went wrong..")
-        run(name, movement, speed_factor, shared_object)
+        run(name, control)
 
     while not shared_object.has_to_stop():
         grab = shared_object.bluetooth_settings.d

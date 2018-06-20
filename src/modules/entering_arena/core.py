@@ -6,7 +6,13 @@ sys.path.insert(0, '../../../src')
 from entities.movement.sequences.sequences import *
 
 
-def run(name, movement, speed_factor, shared_object, dead_zone, emotion):
+def run(name, control):
+    movement = control.movement
+    emotion = control.emotion
+    shared_object = control.shared_object
+    speed_factor = control.speed_factor
+    dead_zone = control.dead_zone
+
     print("[RUN] " + str(name))
 
     emotion.set_emotion('anthem')

@@ -6,8 +6,6 @@ from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
-from modules import base_module, capture_flag, dance, entering_arena, line_dance, race, \
-    transport_rebuild, cannon, obstacle_course
 from entities.audio.audio import Audio
 from entities.threading.utils import SharedObject
 from entities.movement.movement import Movement
@@ -20,7 +18,7 @@ class BluetoothController(object):
     Base class for the bluetooth smart controller
     """
 
-    def __init__(self, name, limbs, bluetooth_address):
+    def __init__(self, name, limbs, bluetooth_address, names, modules):
         """
         Constructor for the bluetooth controller class
         :param name: Name of the robot
@@ -31,6 +29,8 @@ class BluetoothController(object):
         self.name = name
         self.limbs = limbs
         self.movement = Movement(limbs)
+        self.names = names
+        self.modules = modules
 
         self.vision = None
         self.audio = Audio()
@@ -38,6 +38,8 @@ class BluetoothController(object):
         self.shared_object = SharedObject()  # Create instance of thread sharer
 
         self.current_module = -1  # Save the current module that is running
+        self.speed_factor = 0.75  # Set the amount of speed that can be used, 1 is max or 100%
+        self.dead_zone = 10
         self.manual_control = True
         self.data = ""  # Initialise data string
         self.emotion.set_emotion('neutral')  # Set led lights
@@ -114,11 +116,13 @@ class BluetoothController(object):
             # Set values in bluetooth settings
             self.shared_object.bluetooth_settings.handle_values(s, v, h, d, x, y, m)
 
-            speed_factor = 0.75  # Set the amount of speed that can be used, 1 is max or 100%
+            # Turn up speed for race mode and ctf
+            if m is 2 or m is 8:
+                self.speed_factor = 1
+            else:
+                self.speed_factor = 0.75
 
-            # Turn down speed in standard mode
-            if m is 2:
-                speed_factor = 1
+            args = [m, self]
 
             # If the selected module is different than the last selected and not 0 and 2
             if m is not self.current_module:
@@ -130,7 +134,7 @@ class BluetoothController(object):
                         self.manual_control = True
 
                     self.current_module = m  # Set the current module according to controller input
-                    self.run_module(m, self.movement, self.emotion, speed_factor, dead_zone=5)
+                    self.run_module(args)
                 else:
                     self.shared_object.stop = True  # Notify last module thread to stop
                     while not self.shared_object.has_stopped:
@@ -141,65 +145,29 @@ class BluetoothController(object):
 
                     # Run and set selected module
                     self.current_module = m
-                    self.run_module(m, self.movement, self.emotion, speed_factor, dead_zone=5)
+                    self.run_module(args)
 
         except ValueError or IndexError:
             temp = 123
             # print("Invalid value in package")
 
-    def run_module(self, module, movement, emotion, speed_factor, dead_zone):
+    def run_module(self, args):
         """
         Function that creates and runs a thread of pre-programmed modules,
         based on controller input
-        :param module: Which module to run
-        :param movement: An instance of the movement class
-        :param speed_factor: Amount of max speed to be used by dc motors
-                :param dead_zone:
+        :param args: Array of arguments for each module
         :return: None
         """
-        # Switch with all modules
-        if module is 0:
-            name = 'Base'  # Set name for module
-            Thread(target=base_module.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()  # Start module thread
-
-        if module is 1:
-            name = 'Entree'  # Set name for module
-            Thread(target=entering_arena.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()
-
-        if module is 2:
-            name = 'Race'  # Set name for module
-            Thread(target=race.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()
-
-        if module is 3:
-            name = 'Dance'
-            Thread(target=dance.run, args=(name, movement, self.shared_object, emotion)).start()
-
-        if module is 4:
-            name = 'Line Dance'
-            Thread(target=line_dance.run, args=(name, movement, self.shared_object, emotion)).start()
-
-        if module is 5:
-            name = 'Obstacle course'
-            Thread(target=obstacle_course.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()
-
-        if module is 6:
-            name = 'Cannon'
-            Thread(target=cannon.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()
-
-        if module is 7:
-            name = 'Transport'
-            Thread(target=transport_rebuild.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()
-
-        if module is 8:
-            name = 'Capture the flag'
-            speed_factor = 1  # Set speed to max for maximum capture ability
-            Thread(target=capture_flag.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()
+        selected_module = args[0]
+        current_module = self.modules[args[0]]
+        current_module.run(self.names[selected_module], args[1])
 
 
 def main():
     limbs = [0, 1]
     name = 'Boris'
-    bluetooth = BluetoothController(name=name, limbs=limbs, bluetooth_address="98:D3:31:FD:15:C1")
+    bt = BluetoothController(name=name, limbs=limbs, bluetooth_address="98:D3:31:FD:15:C1", names=[], modules=[])
+    bt.receive_data()
 
 
 if __name__ == '__main__':

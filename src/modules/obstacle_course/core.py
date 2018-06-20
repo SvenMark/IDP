@@ -10,7 +10,12 @@ from entities.vision.recognize import Recognize
 from entities.vision.helpers.vision_helper import Color
 
 
-def run(name, movement, speed_factor, shared_object, dead_zone, emotion):
+def run(name, control):
+    movement = control.movement
+    shared_object = control.shared_object
+    speed_factor = control.speed_factor
+    dead_zone = control.dead_zone
+
     print("[RUN] " + str(name))
     detect_cup()
 
