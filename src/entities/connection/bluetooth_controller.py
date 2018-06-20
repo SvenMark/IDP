@@ -9,7 +9,6 @@ sys.path.insert(0, '../../../src')
 from modules import base_module, capture_flag, dance, entering_arena, line_dance, race, \
     transport_rebuild, cannon, obstacle_course
 from entities.audio.audio import Audio
-from entities.audio.speak import Speak
 from entities.threading.utils import SharedObject
 from entities.movement.movement import Movement
 from entities.vision.vision import Vision
@@ -35,8 +34,7 @@ class BluetoothController(object):
 
         self.vision = None
         self.audio = Audio()
-        self.speak = Speak()
-        self.emotion = Emotion(self.speak)
+        self.emotion = Emotion(self.audio)
         self.shared_object = SharedObject()  # Create instance of thread sharer
 
         self.current_module = 0  # Save the current module that is running, standard is 0

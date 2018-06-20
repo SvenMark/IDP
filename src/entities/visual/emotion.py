@@ -12,8 +12,8 @@ from entities.audio.speak import Speak
 
 class Emotion(object):
 
-    def __init__(self, speak):
-        self.audio = speak
+    def __init__(self, audio):
+        self.audio = audio
         # Configure the count of pixels:
         self.pixel_count = 33
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
@@ -37,14 +37,14 @@ class Emotion(object):
         elif emotion == "anthem":
             lights = Thread(target=self.blink_color(205, 0, 0, 50, 0.1))
             lights.start()
-            self.audio.play('russiananthem.mp3')
+            self.audio.speak.play('russiananthem.mp3')
             lights.join()
         elif emotion == "success":
             self.set_color(0, 205, 0)
-            self.audio.get_file_path('success.mp3')
+            self.audio.speak.get_file_path('success.mp3')
         elif emotion == "sad":
             self.set_brightness(-255)
-            self.audio.get_file_path('sad.mp3')
+            self.audio.speak.get_file_path('sad.mp3')
         elif emotion == "happy":
             self.rainbow_colors()
         elif emotion == "confused":
