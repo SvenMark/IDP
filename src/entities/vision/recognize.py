@@ -11,10 +11,9 @@ from entities.vision.helpers.vision_helper import *
 
 class Recognize(object):
 
-    def __init__(self, helpers, color_range, shared_object, settings=None, saved_buildings=None):
-        self.color_range = color_range
+    def __init__(self, helpers, shared_object, settings=None):
         self.positions = []
-        self.saved_buildings = saved_buildings
+        self.saved_buildings = None
         self.helper = helpers.helper
         self.settings = settings
         self.recognized = False
@@ -22,7 +21,8 @@ class Recognize(object):
         self.start_recognize = False
         self.shared_object = shared_object
 
-    def run(self):
+    def run(self, color_range, saved_buildings):
+        self.saved_buildings = saved_buildings
         print("[RUN] Starting recognize...")
 
         # Initialize camera
@@ -38,12 +38,12 @@ class Recognize(object):
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
             # # Calculate the masks
-            mask, _ = self.helper.calculate_mask(img, self.color_range)
+            mask, _ = self.helper.calculate_mask(img, color_range)
 
             img_crop, building_center, image_width, building_width = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
-            mask_cropped, valid_contours = self.helper.calculate_mask(img_crop, self.color_range, set_contour=True)
+            mask_cropped, valid_contours = self.helper.calculate_mask(img_crop, color_range, set_contour=True)
 
             # Recognize building
             if self.saved_buildings:

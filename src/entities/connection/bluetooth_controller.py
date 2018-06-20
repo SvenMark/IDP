@@ -9,7 +9,11 @@ sys.path.insert(0, '../../../src')
 from entities.audio.audio import Audio
 from entities.threading.utils import SharedObject
 from entities.movement.movement import Movement
+
+from entities.vision.helpers.json_handler import Json_Handler
 from entities.vision.vision import Vision
+from entities.vision.helpers.vision_helper import Color, BuildingSide
+
 from entities.visual.emotion import Emotion
 
 
@@ -32,10 +36,18 @@ class BluetoothController(object):
         self.names = names
         self.modules = modules
 
-        self.vision = None
+        self.shared_object = SharedObject()  # Create instance of thread sharer
+
+        color_ranges = [Color("blue", [84, 44, 52], [153, 255, 255]),
+                        Color("yellow", [21, 110, 89], [30, 255, 255]),
+                        Color("orange", [0, 108, 104], [6, 255, 255]),
+                        Color("green", [28, 39, 0], [94, 255, 255]),
+                        Color("red", [167, 116, 89], [180, 255, 255])]
+        json_handler = Json_Handler(color_ranges, "color_ranges.txt", "buildings.txt")
+        self.vision = Vision(json_handler, self.shared_object)
+
         self.audio = Audio()
         self.emotion = Emotion(self.audio)
-        self.shared_object = SharedObject()  # Create instance of thread sharer
 
         self.current_module = -1  # Save the current module that is running
         self.speed_factor = 0.75  # Set the amount of speed that can be used, 1 is max or 100%
