@@ -1,9 +1,8 @@
 import sys
 
-from entities.vision.helpers.json_handler import Json_Handler
-
 sys.path.insert(0, '../../../src')
 
+from entities.vision.helpers.json_handler import Json_Handler
 from entities.vision.vision import Vision
 from entities.vision.helpers.vision_helper import Color
 from entities.vision.recognize_settings import Recognize_settings
