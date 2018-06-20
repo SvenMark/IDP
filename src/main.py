@@ -9,7 +9,7 @@ from entities.movement.grabber import Grabber
 from entities.connection.bluetooth_controller import BluetoothController
 from helpers.servo_scanner import scan
 from modules import base_module, capture_flag, dance, entering_arena, line_dance, race, \
-    transport_rebuild, cannon, obstacle_course
+    transport_rebuild, cannon, obstacle_course, companion
 from entities.vision.helpers.vision_helper import Color, BuildingSide
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
@@ -40,7 +40,8 @@ def main():
         'Obstacle course',
         'Cannon',
         'Transport',
-        'Capture the flag'
+        'Capture the flag',
+        'Companion'
     ]
 
     modules = {
@@ -52,7 +53,8 @@ def main():
         5: obstacle_course,
         6: cannon,
         7: transport_rebuild,
-        8: capture_flag
+        8: capture_flag,
+        9: companion
     }
     limbs = []
 

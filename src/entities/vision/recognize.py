@@ -21,7 +21,7 @@ class Recognize(object):
         self.start_recognize = False
         self.shared_object = shared_object
 
-    def run(self, color_range, saved_buildings):
+    def run(self, color_range, saved_buildings=None):
         self.saved_buildings = saved_buildings
         print("[RUN] Starting recognize...")
 
