@@ -1,77 +1,94 @@
 import os
 import sys
 
-from elements import element1, element2, element3, element4, element5, element6, element7, element8, element9, \
-    element10
+sys.path.insert(0, '../src')
+
 from entities.movement.legs import Legs
 from entities.movement.tracks import Tracks
-from entities.robot.robot import Robot
-from entities.movement.limb.leg import Leg
-from entities.movement.limb.tire import Tire
+from entities.movement.grabber import Grabber
+from entities.connection.bluetooth_controller import BluetoothController
+from helpers.servo_scanner import scan
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
 
-FUNC_MAP = {
-    "1": element1.core,
-    "2": element2.core,
-    "3": element3.core,
-    "4": element4.core,
-    "5": element5.core,
-    "6": element6.core,
-    "7": element7.core,
-    "8": element8.core,
-    "9": element9.core,
-    "10": element10.core
-}
-
 
 def main():
-    print(RESOURCES)
-    # print command line arguments
-    if len(sys.argv) < 2:
-        print("Please pass commandline args")
-        return sys.exit(2)
+    """
+    Function that initialises an instance of bluetooth controller which controls
+    the entire robot.
+    :return: None
+    """
 
-    lights = []
+    bluetooth_address = "98:D3:31:FD:15:C1"  # Set the bt address of the controller
+    name = 'Boris'  # Set the name of the robot
+    limbs = []
 
-    limbs = [
-        Tracks(track_0_pin=18, track_1_pin=13),
-        Legs(leg_0_servos=[
-                1,
-                61,
-                63
-            ],
-            leg_1_servos=[
-                21,
-                31,
-                53
-            ],
-            leg_2_servos=[
-                61,
-                63,
-                111
-            ],
-            leg_3_servos=[
-                111,
-                111,
-                111
-            ]
-        )
-    ]
+    # Check which servo`s are connected
+    servos = scan()
 
-    name = 'Boris'
-    boris = Robot(name, limbs, lights)
+    # If all servos are connected
+    if 6 in servos and 1 in servos:
+        print("Initialise limbs with Legs, Tracks and grabber")
+        limbs = [
+            Legs(
+                leg_0_servos=[21, 41, 52],
+                leg_1_servos=[16, 17, 18],
+                leg_2_servos=[61, 62, 63],
+                leg_3_servos=[6, 14, 15]
+            ),
+            Tracks(track_0_pin=13,
+                   track_1_pin=18,
+                   track_0_forward=22,
+                   track_0_backward=27,
+                   track_1_forward=19,
+                   track_1_backward=26),
+            Grabber(servos=[1, 53, 43],
+                    initial_positions=[465, 198, 200])
+        ]
+    # If only leg servos are connected
+    elif 6 in servos:
+        print("Initialise limbs with Legs and Tracks")
+        limbs = [
+            Legs(
+                leg_0_servos=[21, 41, 52],
+                leg_1_servos=[16, 17, 18],
+                leg_2_servos=[61, 62, 63],
+                leg_3_servos=[6, 14, 15]
+            ),
+            Tracks(track_0_pin=13,
+                   track_1_pin=18,
+                   track_0_forward=22,
+                   track_0_backward=27,
+                   track_1_forward=19,
+                   track_1_backward=26)
+        ]
+    elif 1 in servos:
+        print("Initialise limbs with Grabber and Tracks")
+        limbs = [
+            Tracks(track_0_pin=13,
+                   track_1_pin=18,
+                   track_0_forward=22,
+                   track_0_backward=27,
+                   track_1_forward=19,
+                   track_1_backward=26),
+            Grabber(servos=[1, 53, 43],
+                    initial_positions=[465, 198, 200])
+        ]
+    # If no servos are connected
+    else:
+        print("Initialise limbs with Tracks")
+        limbs = [
+            Tracks(track_0_pin=13,
+                   track_1_pin=18,
+                   track_0_forward=22,
+                   track_0_backward=27,
+                   track_1_forward=19,
+                   track_1_backward=26)
+        ]
 
-    boris.movement.tracks.forward(20, 0, 2)
+    bluetooth_controller = BluetoothController(name, limbs, bluetooth_address)  # Create bt controller
 
-    # print(boris.movement.tracks.turn_left())
-    #
-    # part = sys.argv[1]
-    #
-    # part_function = FUNC_MAP[part]
-    #
-    # # run element
-    # part_function.run()
+    bluetooth_controller.receive_data()  # Start the data receive loop
 
 
 if __name__ == "__main__":

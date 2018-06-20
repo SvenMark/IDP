@@ -6,9 +6,12 @@ and Josue Alejandro Savage's Arduino library:
 http://savageelectronics.blogspot.it/2011/01/arduino-y-dynamixel-ax-12.html
 '''
 
-from time import sleep
-
+import sys
 import RPi.GPIO as GPIO
+
+sys.path.insert(0, '../../src')
+
+from time import sleep
 from serial import Serial
 
 
@@ -26,7 +29,7 @@ class Ax12:
     AX_CCW_ANGLE_LIMIT_L = 8
     AX_CCW_ANGLE_LIMIT_H = 9
     AX_SYSTEM_DATA2 = 10
-    AX_LIMIT_TEMPERATURE = 11
+    AX_LIMIT_TEMPERATURE = 18
     AX_DOWN_LIMIT_VOLTAGE = 12
     AX_UP_LIMIT_VOLTAGE = 13
     AX_MAX_TORQUE_L = 14
@@ -179,7 +182,19 @@ class Ax12:
             assert reply[0] == 0xFF
         except:
             e = "Timeout on servo " + str(id)
-            raise Ax12.timeout_error(e)
+
+
+
+
+
+            # raise Ax12.timeout_error(e)
+
+
+
+
+
+
+
 
         try:
             # length = ord(reply[3]) - 2

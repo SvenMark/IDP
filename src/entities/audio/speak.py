@@ -1,17 +1,18 @@
 import os
-
 from gtts import gTTS
+import sys
 
-from entities.audio.audio import Audio
+sys.path.insert(0, '../../../src')
 
 
-class Speak(Audio):
+class Speak(object):
     """
-    Speak class
+    Speak class, implements play and text to speech
     """
 
-    def __init__(self):
+    def __init__(self, audio):
         super(Speak, self).__init__()
+        self.audio = audio
 
     def play(self, file_name):
         """
@@ -19,35 +20,22 @@ class Speak(Audio):
         :param file_name: Audio file
         :return: None
         """
-        path = self.get_file_path(file_name)
-        if self.windows:  # windows
-            os.system("vlc -I null -q --no-qt-system-tray --qt-start-minimized --play-and-exit " + path)
+        path = self.audio.get_file_path(self, file_name)
+        print(path)
+        if self.audio.windows:  # windows
+            os.system("\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" -I null -q --no-qt-system-tray --qt-start-minimized --play-and-exit " + path)
         else:  # linux
             os.system("mpg321 " + path)
 
-    def tts(self, text):
+    def tts(self, text, lan):
         """
         Speak using text to speech
         :param text: Input text
         :return: None
         """
         # using google text to speech api
-        tts = gTTS(text=text, lang='en')
+        tts = gTTS(text=text, lang=lan)
         filename = "tts.wav"
-        tts.save(self.get_file_path(filename))
+        tts.save(filename)
         self.play(filename)
-
-
-spoke = Speak()
-
-spoke.tts("Hello")
-
-
-def main():
-    sp = Speak()
-    sp.tts("Ik ben een robot. biep bliep")
-
-
-if __name__ == '__main__':
-    main()
 

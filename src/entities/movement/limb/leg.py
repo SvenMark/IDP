@@ -1,35 +1,69 @@
-from entities.movement.limb.limb import Limb
+import sys
+
+sys.path.insert(0, '../../../../src')
+
 from entities.movement.limb.joints.servo import Servo
 
 
 class Leg(object):
+    """
+    Base class for leg which directly implements servo
+    """
 
-    def __init__(self, servo_0_id, servo_1_id, servo_2_id, servo_0_position, servo_1_position, servo_2_position):
+    def __init__(self, id_servo, positions):
         """
-        Constructor of the leg class
-        :param servo_0_id: ID of the servo closest to the robot(shoulder or hip)
-        :param servo_1_id: ID of the middle leg servo(knee or elbow)
-        :param servo_2_id: ID of the last leg servo(toe or finger)
-        :param servo_0_position: The initial position for servo 0
-        :param servo_1_position: The initial position for servo 1
-        :param servo_2_position: The initial position for servo 2
+        Constructor for leg class
+        :param id_servo: Array of servo id`s
+        :param positions: Array of servo positions
         """
-
         # Create the servo instances with correct id and starting position.
-        self.servo_0 = Servo(servo_0_id, servo_0_position)
-        self.servo_1 = Servo(servo_1_id, servo_1_position)
-        self.servo_2 = Servo(servo_2_id, servo_2_position)
+        self.servo_0 = Servo(id_servo[0], positions[0], 3)
+        self.servo_1 = Servo(id_servo[1], positions[1], 3)
+        self.servo_2 = Servo(id_servo[2], positions[2], 3)
+
+        self.servos = [self.servo_0, self.servo_1, self.servo_2]
+
+        self.sequence = 0
+
+        self.type = 'leg'
 
         print("Leg setup")
 
-    def move(self, positions, delay, speeds):
+    def ready(self):
+        """
+        Checks if all servos of this leg are ready
+        :return: If all the servos are ready or not
+        """
+        return len([elem for elem in self.servos if elem.is_ready()]) == 3
+
+    def move(self, positions, speeds):
         """
         Function that moves the legs in the specified directions
-        :param positions: Positions to move to for each servo
-        :param delay: Time to wait after executing
-        :param speeds: Integer array with 3 speeds for each servo
+        :param positions: Array of positions for each servo
+        :param speeds: Array of speeds for each servo
         :return: None
         """
-        self.servo_0.move_speed(positions[0], delay, speeds[0])
-        self.servo_1.move_speed(positions[1], delay, speeds[1])
-        self.servo_2.move_speed(positions[2], delay, speeds[2])
+        self.servo_0.move(positions[0], speeds[0])
+        self.servo_1.move(positions[1], speeds[1])
+        self.servo_2.move(positions[2], speeds[2])
+
+    def update_sequence(self):
+        """
+        Function that updates on which part of the movement sequence the legs are in
+        when controlled by the controller.
+        :return: None
+        """
+        if self.sequence < 3:
+            self.sequence = self.sequence + 1
+        else:
+            self.sequence = 0
+
+    def update(self, delta):
+        """
+        Update all the unready servos
+        :param delta: The delta time
+        :return: None
+        """
+        for i in range(len(self.servos)):
+            if not self.servos[i].is_ready():
+                self.servos[i].update(delta)
