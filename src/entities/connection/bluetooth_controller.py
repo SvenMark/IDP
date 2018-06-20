@@ -114,75 +114,61 @@ class BluetoothController(object):
             # Set values in bluetooth settings
             self.shared_object.bluetooth_settings.handle_values(s, v, h, d, x, y, m)
 
-            speed_factor = 1  # Set the amount of speed that can be used, 1 is max or 100%
+            speed_factor = 0.75  # Set the amount of speed that can be used, 1 is max or 100%
 
             # Turn down speed in standard mode
-            if m is 0:
-                speed_factor = 0.75
-
-            # If the selected module is basic or race mode
-            # Race and basic mode are both just basic controller modes but with different speeds
-            if m is 0 or m is 2:
-                # If last ran module was not manual control
-                if not self.manual_control:
-                    self.shared_object.stop = True  # Notify last module thread to stop
-
-                    # Wait for the thread to stop
-                    while not self.shared_object.has_stopped:
-                        time.sleep(0.01)
-
-                    self.manual_control = True
-
-                self.current_module = m  # Set the current module according to controller input
-
-                # Send controller tracks input to tracks
-                self.movement.tracks.handle_controller_input(stop_motors=s,
-                                                             vertical_speed=h * speed_factor,
-                                                             horizontal_speed=v * speed_factor,
-                                                             dead_zone=5)
-
-                if hasattr(self.movement, 'legs'):
-                    # Send controller leg input to legs
-                    self.movement.legs.handle_controller_input(deploy=d,
-                                                               x_axis=x,
-                                                               y_axis=y)
+            if m is 2:
+                speed_factor = 1
 
             # If the selected module is different than the last selected and not 0 and 2
-            if m is not self.current_module and m is not 0 and m is not 2:
-                self.shared_object.stop = True  # Notify last module thread to stop
+            if m is not self.current_module:
+                if m is 0 or m is 2:
+                    if not self.manual_control:
+                        self.shared_object.stop = True  # Notify last module thread to stop
+                        while not self.shared_object.has_stopped:
+                            time.sleep(0.01)
+                        self.manual_control = True
 
-                # Wait for the thread to stop
-                while not self.shared_object.has_stopped:
-                    time.sleep(0.01)
+                    self.current_module = m  # Set the current module according to controller input
+                    self.run_module(m, self.movement, speed_factor, dead_zone=5)
+                else:
+                    self.shared_object.stop = True  # Notify last module thread to stop
+                    while not self.shared_object.has_stopped:
+                        time.sleep(0.01)
+                    self.shared_object.has_stopped = False  # Set to false because current module is now running
+                    self.shared_object.stop = False  # Set to false because current module does not have to stop
+                    self.manual_control = False  # Set manual control to false
 
-                self.shared_object.has_stopped = False  # Set to false because current module is now running
-                self.shared_object.stop = False  # Set to false because current module does not have to stop
-                self.manual_control = False  # Set manual control to false
-
-                # Run and set selected module
-                self.current_module = m
-                self.run_module(m, self.movement, s, v, h, speed_factor, d)
+                    # Run and set selected module
+                    self.current_module = m
+                    self.run_module(m, self.movement, speed_factor, dead_zone=5)
 
         except ValueError or IndexError:
             temp = 123
             # print("Invalid value in package")
 
-    def run_module(self, module, movement, s, v, h, speed_factor, d):
+    def run_module(self, module, movement, speed_factor, dead_zone):
         """
         Function that creates and runs a thread of pre-programmed modules,
         based on controller input
         :param module: Which module to run
         :param movement: An instance of the movement class
-        :param s: Boolean value for disabling dc motors
-        :param v: Vertical dc motor speed
-        :param h: Horizontal dc motor speed
         :param speed_factor: Amount of max speed to be used by dc motors
+                :param dead_zone:
         :return: None
         """
         # Switch with all modules
+        if module is 0:
+            name = 'Base'  # Set name for module
+            Thread(target=base_module.run, args=(name, movement, speed_factor, self.shared_object,)).start()  # Start module thread
+
         if module is 1:
             name = 'Entree'  # Set name for module
-            Thread(target=entering_arena.run, args=(name, movement, s, v, h, speed_factor, self.shared_object,)).start()  # Start module thread
+            Thread(target=entering_arena.run, args=(name, movement, speed_factor, self.shared_object,)).start()
+
+        if module is 2:
+            name = 'Race'  # Set name for module
+            Thread(target=race.run, args=(name, movement, speed_factor, dead_zone, self.shared_object,)).start()
 
         if module is 3:
             name = 'Dance'
@@ -194,20 +180,20 @@ class BluetoothController(object):
 
         if module is 5:
             name = 'Obstacle course'
-            Thread(target=obstacle_course.run, args=(name, movement, s, v, h, speed_factor, self.shared_object,)).start()
+            Thread(target=obstacle_course.run, args=(name, movement, speed_factor, self.shared_object,)).start()
 
         if module is 6:
             name = 'Cannon'
-            Thread(target=cannon.run, args=(name, movement, s, v, h, speed_factor, self.shared_object,)).start()
+            Thread(target=cannon.run, args=(name, movement, speed_factor, self.shared_object,)).start()
 
         if module is 7:
             name = 'Transport'
-            Thread(target=transport_rebuild.run, args=(name, movement, s, v, h, speed_factor, d, self.shared_object,)).start()
+            Thread(target=transport_rebuild.run, args=(name, movement, speed_factor, self.shared_object,)).start()
 
         if module is 8:
             name = 'Capture the flag'
             speed_factor = 1  # Set speed to max for maximum capture ability
-            Thread(target=capture_flag.run, args=(name, movement, s, v, h, speed_factor, d, self.shared_object,)).start()
+            Thread(target=capture_flag.run, args=(name, movement, speed_factor, self.shared_object,)).start()
 
 
 def main():

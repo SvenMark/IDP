@@ -7,6 +7,7 @@ class Recognize_settings(object):
                  recognize_distance_max=250,
                  recognize_distance_min=130):
 
+        self.black_detected = False
         self.current_position = 50
         self.pick_up_vertical = False
         self.grab = False

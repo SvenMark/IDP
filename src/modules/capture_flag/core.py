@@ -4,13 +4,18 @@ import time
 sys.path.insert(0, '../../../src')
 
 
-def run(name, movement, s, v, h, speed_factor, grab, shared_object):
+def run(name, movement, speed_factor, shared_object):
     print("[RUN] " + str(name))
 
     if hasattr(movement, 'legs'):
         movement.legs.deploy()
 
     while not shared_object.has_to_stop():
+
+        s = shared_object.bluetooth_settings.s
+        v = shared_object.bluetooth_settings.v
+        h = shared_object.bluetooth_settings.h
+        grab = shared_object.bluetooth_settings.d
 
         movement.tracks.handle_controller_input(stop_motors=s,
                                                 vertical_speed=h * speed_factor,

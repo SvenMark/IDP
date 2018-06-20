@@ -34,7 +34,7 @@ def move_towards(movement, percentage):
     movement.tracks.forward(left_speed, right_speed, 0.3, 0.3)
 
 
-def run(name, movement, s, v, h, speed_factor, shared_object, grab):
+def run(name, movement, speed_factor, shared_object):
     print("[RUN] " + str(name))
     color_ranges = [Color("blue", [84, 44, 52], [153, 255, 255]),
                     Color("yellow", [21, 110, 89], [30, 255, 255]),
@@ -63,16 +63,21 @@ def run(name, movement, s, v, h, speed_factor, shared_object, grab):
                 threading.Thread(target=vision.recognize.run).start()
             else:
                 print("[ERROR] Wrong argument given..")
-                run(name, movement, s, v, h, speed_factor, shared_object, grab)
+                run(name, movement, speed_factor, shared_object)
 
         # Default no argument
         else:
             threading.Thread(target=vision.recognize.run).start()
     except AttributeError:
         print("[ERROR] Something went wrong..")
-        run(name, movement, s, v, h, speed_factor, shared_object, grab)
+        run(name, movement, speed_factor, shared_object)
 
     while not shared_object.has_to_stop():
+        s = shared_object.bluetooth_settings.s
+        v = shared_object.bluetooth_settings.v
+        h = shared_object.bluetooth_settings.h
+        grab = shared_object.bluetooth_settings.d
+
         # Backup controller input
         movement.tracks.handle_controller_input(stop_motors=s,
                                                 vertical_speed=h * speed_factor,

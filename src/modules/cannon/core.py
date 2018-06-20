@@ -20,11 +20,15 @@ red_detected = False
 line_detected = False
 
 
-def run(name, movement, s, v, h, speed_factor, shared_object):
+def run(name, movement, speed_factor, shared_object):
     print("[RUN] " + str(name))
     Thread(target=line_detection, args=(shared_object,)).start()
 
     while not shared_object.has_to_stop():
+
+        s = shared_object.bluetooth_settings.s
+        v = shared_object.bluetooth_settings.v
+        h = shared_object.bluetooth_settings.h
 
         # Backup controller input
         movement.tracks.handle_controller_input(stop_motors=s,
