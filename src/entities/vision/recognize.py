@@ -11,16 +11,16 @@ from entities.vision.helpers.vision_helper import *
 
 class Recognize(object):
 
-    def __init__(self, helpers, color_range, shared_object, saved_buildings=None, settings=None):
+    def __init__(self, helpers, color_range, settings, shared_object, saved_buildings=None):
         self.color_range = color_range
         self.positions = []
         self.saved_buildings = saved_buildings
         self.helper = helpers.helper
-        self.settings = settings
         self.recognized = False
         self.last_percentage = 50
         self.start_recognize = False
         self.shared_object = shared_object
+        self.settings = settings
 
     def run(self):
         print("[RUN] Starting recognize...")
@@ -88,7 +88,6 @@ class Recognize(object):
         self.check_settings(building_center, image_width, building_width, result)
 
         if found:
-            # Use audio to state the recognized building
             print("[INFO] At time: " + str(datetime.datetime.now().time()) + " Found: ", result)
             self.recognized = True
 
@@ -102,18 +101,14 @@ class Recognize(object):
 
         return True
 
-    def check_settings(self, building_center, image_width, building_width, building):
-        grab_distance = 183
-        recognize_distance_max = 250
-        recognize_distance_min = 130
-
+    def check_settings(self, object_center, image_width, object_width, building):
         # Calculate and check percentage left
-        calculation = building_center / image_width * 100
+        calculation = object_center / image_width * 100
         percentage_position = calculation if calculation < 100 else self.last_percentage
         self.last_percentage = percentage_position
 
         # Set min block size according to the distance of the building
-        if recognize_distance_max > building_width > recognize_distance_min:
+        if self.settings.recognize_distance_max > object_width > self.settings.recognize_distance_min:
             # Start recognizing
             self.helper.min_block_size = 300
             self.start_recognize = True
@@ -121,18 +116,18 @@ class Recognize(object):
             self.helper.min_block_size = 5
 
         # If all requirements are valid, grab
-        if self.recognized and 51 > percentage_position > 49 and building_width > grab_distance:
+        if self.recognized and 51 > percentage_position > 49 and object_width > self.settings.grab_distance:
             grab = True
         else:
             grab = False
-            print("[INFO] percentage left:", percentage_position)
+        print("[INFO] percentage left:", percentage_position)
 
         if self.recognized and building:
             # Add to settings
             self.settings.pick_up_vertical = building.pick_up_vertical
             self.settings.current_position = percentage_position
             self.settings.grab = grab
-            self.settings.distance = recognize_distance_max - building_width
+            self.settings.distance = self.settings.recognize_distance_max - object_width
 
             self.settings.new = True
 

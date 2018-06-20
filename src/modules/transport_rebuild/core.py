@@ -45,11 +45,13 @@ def run(name, movement, s, v, h, speed_factor, shared_object, grab):
     json_handler = Json_Handler(color_ranges, "color_ranges.txt", "buildings.txt")
     color_range = json_handler.get_color_range()
     saved_buildings = json_handler.get_save_buildings()
+    settings = Recognize_settings(grab_distance=183, recognize_distance_max=250, recognize_distance_min=130)
 
-    settings = Recognize_settings()
     vision = Vision(color_range=color_range,
+                    settings=settings,
                     saved_buildings=saved_buildings,
-                    settings=settings, min_block_size=0, json=json_handler, shared_object=shared_object)
+                    min_block_size=0, json=json_handler,
+                    shared_object=shared_object)
 
     try:
         if len(sys.argv) > 1:

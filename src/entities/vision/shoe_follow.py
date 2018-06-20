@@ -15,7 +15,7 @@ def run(name):
     json_handler = Json_Handler(shoe, "shoe_ranges")
     color_range = json_handler.get_color_range()
 
-    settings = Recognize_settings()
+    settings = Recognize_settings(grab_distance=183, recognize_distance_max=250, recognize_distance_min=130)
 
     vision = Vision(color_range=color_range, settings=settings, min_block_size=300, json=json_handler)
 

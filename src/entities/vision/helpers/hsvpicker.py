@@ -5,9 +5,8 @@ from imutils.video import VideoStream
 
 
 class Hsv_picker:
-    def __init__(self, helpers, color_range, img):
+    def __init__(self, helpers, color_range):
         self.color_to_save = ""
-        self.img = cv2.imread(img)
         self.helper = helpers.helper
         self.color_range = color_range
         self.range_handler = helpers.json_handler
@@ -27,11 +26,8 @@ class Hsv_picker:
 
         while True:
             # Check if there is a given image, else use the camera
-            if self.img is not None:
-                img = self.img
-            else:
-                img = cap.read()
-                img = cv2.flip(img, 0)
+            img = cap.read()
+            img = cv2.flip(img, 0)
 
             # Apply gaussian blur
             img = cv2.GaussianBlur(img, (9, 9), 0)
