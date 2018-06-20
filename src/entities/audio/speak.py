@@ -11,7 +11,6 @@ class Speak(object):
     """
 
     def __init__(self, audio):
-        super(Speak, self).__init__()
         self.audio = audio
 
     def play(self, file_name):
