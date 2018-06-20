@@ -111,6 +111,9 @@ class BluetoothController(object):
             v = ((v * (1000 / 1024)) - 500) / 5
             h = ((h * (1000 / 1024)) - 500) / 5
 
+            # Set values in bluetooth settings
+            self.shared_object.bluetooth_settings.handle_values(s, v, h, d, x, y, m)
+
             speed_factor = 1  # Set the amount of speed that can be used, 1 is max or 100%
 
             # Turn down speed in standard mode
