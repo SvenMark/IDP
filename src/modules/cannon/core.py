@@ -40,7 +40,7 @@ def run(name, movement, s, v, h, speed_factor, shared_object):
             print("[INFO] Waiting")
             while last_position == -1000:
                 time.sleep(0.1)
-        print("[INFO] Driving etc. with offset:" + str(offset))
+        print("[INFO] Driving etc. with offset: {}".format(offset))
         if red_detected and not line_detected:
             print("[INFO] Red detected!")
             if movement is not None:
@@ -60,7 +60,7 @@ def run(name, movement, s, v, h, speed_factor, shared_object):
         time.sleep(0.1)
 
     # Notify shared object that this thread has been stopped
-    print("[STOPPED]" + str(name))
+    print("[STOPPED] {}".format(name))
     shared_object.has_been_stopped()
 
 
