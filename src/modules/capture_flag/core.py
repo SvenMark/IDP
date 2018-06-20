@@ -18,7 +18,8 @@ def run(name, movement, s, v, h, speed_factor, grab, shared_object):
                                                 dead_zone=5)
 
         # Extend legs to max
-        movement.legs.move()
+        if hasattr(movement, 'legs'):
+            movement.legs.move()
 
         if movement.grabber.grabbed and grab is 0:
             movement.grabber.loosen([150, 150, 150])
