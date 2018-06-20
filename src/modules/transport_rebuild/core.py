@@ -29,7 +29,7 @@ def run(name, movement, s, v, h, speed_factor, shared_object, grab):
     settings = Recognize_settings()
     vision = Vision(color_range=color_range,
                     saved_buildings=saved_buildings,
-                    settings=settings, min_block_size=0)
+                    settings=settings, min_block_size=0, json=json_handler)
 
     try:
         if len(sys.argv) > 1:
