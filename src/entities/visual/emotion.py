@@ -1,6 +1,5 @@
 import sys
 import time
-import alsaaudio
 import RPi.GPIO as GPIO
 import Adafruit_WS2801
 import Adafruit_GPIO.SPI as SPI
@@ -15,9 +14,6 @@ class Emotion(object):
 
     def __init__(self, audio):
         self.audio = audio
-
-        self.volume = alsaaudio.Mixer()
-        self.volume.setvolume(100)
 
         self.pixel_count = 33 # Configure the count of pixels:
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
@@ -139,4 +135,5 @@ if __name__ == '__main__':
     audio = Audio()
     emote = Emotion(audio)
     emote.set_emotion("confused")
-    emote.set_color(255, 255, 255)
+    emote.rainbow_colors()
+    emote.set_emotion("neutral")
