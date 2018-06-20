@@ -108,3 +108,18 @@ def run(name, movement, s, v, h, speed_factor, shared_object, grab):
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
+
+# while True:
+#     if settings.update:
+#         settings.update = False
+#         if settings.new:
+#             tracks.stop()
+#             print("Moving to building " + str(settings.current_building)
+#                   + ", position: " + str(settings.current_position))
+#
+#             settings.new = False
+#         else:
+#             print("Rotating")
+#             # acceleration 0.5 seconds for 0.5 seconds, then wait again
+#             tracks.turn_left(rotate_speed, rotate_speed, 0.5, 0.5)
+#             tracks.stop()

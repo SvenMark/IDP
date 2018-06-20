@@ -4,9 +4,6 @@ from chatterbot import ChatBot
 
 sys.path.insert(0, '../../../src')
 
-from entities.audio.speak import Speak
-
-
 chatbot = ChatBot(  
     'Ron Obvious',
     trainer='chatterbot.trainers.ChatterBotCorpusTrainer'
@@ -17,11 +14,11 @@ chatbot = ChatBot(
 # chatbot.train("chatterbot.corpus.english")
 
 
-class MicrophoneRecognition:
+class MicrophoneRecognition(object):
 
-    def __init__(self):
+    def __init__(self, audio):
         self.result = "Hello"
-        self.speak = Speak()
+        self.speak = audio.speak
         self.r = sr.Recognizer()
 
         self.lang = True

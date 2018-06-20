@@ -32,6 +32,7 @@ class Recognize(object):
         while not self.shared_object.has_to_stop():
             # Read frame from the camera
             img = cap.read()
+            img = cv2.flip(img, 0)
 
             # Apply gaussian blue to the image
             img = cv2.GaussianBlur(img, (9, 9), 0)
@@ -113,6 +114,7 @@ class Recognize(object):
 
         # Set min block size according to the distance of the building
         if recognize_distance_max > building_width > recognize_distance_min:
+            # Start recognizing
             self.helper.min_block_size = 300
             self.start_recognize = True
         else:
