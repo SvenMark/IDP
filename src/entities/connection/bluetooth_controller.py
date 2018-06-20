@@ -1,8 +1,6 @@
 import bluetooth
-import subprocess
 import time
 import sys
-from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
@@ -24,30 +22,33 @@ class BluetoothController(object):
         :param name: Name of the robot
         :param limbs: Array of robot limbs
         :param bluetooth_address: Address of the bluetooth controller
+        :param names: Array of module names
+        :param modules: Array of modules
         """
         self.bluetooth_address = bluetooth_address
         self.name = name
         self.limbs = limbs
-        self.movement = Movement(limbs)
         self.names = names
         self.modules = modules
 
-        self.shared_object = SharedObject()  # Create instance of thread sharer
-
+        # Create instances of classes needed for robot
+        self.movement = Movement(limbs)
+        self.shared_object = SharedObject()
         self.vision = Vision(self.shared_object)
-
         self.audio = Audio()
         self.emotion = Emotion(self.audio)
 
         self.current_module = -1  # Save the current module that is running
         self.speed_factor = 0.75  # Set the amount of speed that can be used, 1 is max or 100%
-        self.dead_zone = 10
-        self.manual_control = True
-        self.data = ""  # Initialise data string
-        self.emotion.set_emotion('neutral')  # Set led lights
+        self.dead_zone = 10  # Set the dead zone for track movement
 
+        self.emotion.set_emotion('neutral')  # Set led lights and audio
+
+        # Start the leg update class if legs are connected
         if hasattr(self.movement, 'legs'):
-            self.movement.legs.update_thread.start()  # Start the leg update class
+            self.movement.legs.update_thread.start()
+
+        self.data = ""  # Initialise data string
 
     def receive_data(self):
         """
@@ -115,7 +116,7 @@ class BluetoothController(object):
             v = ((v * (1000 / 1024)) - 500) / 5
             h = ((h * (1000 / 1024)) - 500) / 5
 
-            # Set values in bluetooth settings
+            # Set values in shared bluetooth settings
             self.shared_object.bluetooth_settings.handle_values(s, v, h, d, x, y, m)
 
             # Turn up speed for race mode and ctf
@@ -124,30 +125,20 @@ class BluetoothController(object):
             else:
                 self.speed_factor = 0.75
 
-            args = [m, self]
-
-            # If the selected module is different than the last selected and not 0 and 2
+            # Check if different module is selected
             if m is not self.current_module:
-                if m is 0 or m is 2:
-                    if not self.manual_control:
-                        self.shared_object.stop = True  # Notify last module thread to stop
-                        while not self.shared_object.has_stopped:
-                            time.sleep(0.01)
-                        self.manual_control = True
+                self.shared_object.stop = True  # Notify last module thread to stop
 
-                    self.current_module = m  # Set the current module according to controller input
-                    self.run_module(args)
-                else:
-                    self.shared_object.stop = True  # Notify last module thread to stop
-                    while not self.shared_object.has_stopped:
-                        time.sleep(0.01)
-                    self.shared_object.has_stopped = False  # Set to false because current module is now running
-                    self.shared_object.stop = False  # Set to false because current module does not have to stop
-                    self.manual_control = False  # Set manual control to false
+                # Wait for previous module to stop
+                while not self.shared_object.has_stopped:
+                    time.sleep(0.01)
 
-                    # Run and set selected module
-                    self.current_module = m
-                    self.run_module(args)
+                self.shared_object.has_stopped = False  # Set to false because current module is now running
+                self.shared_object.stop = False  # Set to false because current module does not have to stop
+
+                # Run and set selected module as current
+                self.current_module = m
+                self.run_module([m, self])
 
         except ValueError or IndexError:
             temp = 123
@@ -157,20 +148,13 @@ class BluetoothController(object):
         """
         Function that creates and runs a thread of pre-programmed modules,
         based on controller input
-        :param args: Array of arguments for each module
+        :param args: Array of args needed for modules containing name and self
         :return: None
         """
-        selected_module = args[0]
-        current_module = self.modules[args[0]]
-        current_module.run(self.names[selected_module], args[1])
+        selected_module = args[0]  # Get the module from args
+        current_module = self.modules[args[0]]  # Search for this module in all modules
+        if current_module is not None:
+            current_module.run(self.names[selected_module], args[1])  # Run this module
+        else:
+            print("Module: " + str(selected_module) + " not found.")
 
-
-def main():
-    limbs = [0, 1]
-    name = 'Boris'
-    bt = BluetoothController(name=name, limbs=limbs, bluetooth_address="98:D3:31:FD:15:C1", names=[], modules=[])
-    bt.receive_data()
-
-
-if __name__ == '__main__':
-    main()

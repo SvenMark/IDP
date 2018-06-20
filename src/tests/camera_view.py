@@ -12,4 +12,4 @@ time.sleep(0.3)
 
 while True:
     img = cap.read()
-    cv2.imshow('homo cam 5000', img)
+    cv2.imshow('cam', img)

@@ -49,6 +49,7 @@ def main():
         8: capture_flag,
         9: companion
     }
+
     limbs = []
 
     # Check which servo`s are connected

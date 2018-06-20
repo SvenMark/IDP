@@ -1,10 +1,7 @@
 from __future__ import division
-
 import sys
-import math
 import time
-import numpy as np
-from threading import Thread
+
 sys.path.insert(0, '../../../../../src')
 
 from libs.ax12 import Ax12
@@ -48,7 +45,6 @@ class Servo(object):
         Locks the servo while idle
         :return: None
         """
-
         while self.is_ready():
             self.ax12.move(self.servo_id, round(self.last_position))
             time.sleep(0.1)
@@ -125,16 +121,7 @@ class Servo(object):
 
     def read_load(self):
         """
-
+        Read the load of the servo
         :return:
         """
         return self.ax12.read_load(self.servo_id)
-
-
-def main():
-    servo = Servo(13, 0, 5)
-    servo.move(500, 80)
-
-
-if __name__ == "__main__":
-    main()
