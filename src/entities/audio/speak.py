@@ -14,7 +14,7 @@ class Speak(object):
     def __init__(self, audio):
         self.audio = audio
         pygame.init()
-        self.anthem = pygame.mixer.Sound(self.audio.get_file_path('russiananthem.mp3'))
+        # self.anthem = pygame.mixer.Sound(self.audio.get_file_path('russiananthem.mp3'))
 
     def play(self, file_name):
         """
@@ -23,11 +23,11 @@ class Speak(object):
         :return: None
         """
 
-        if file_name == 'russiananthem.mp3':
-            self.anthem.play()
-            while pygame.mixer.music.get_busy():
-                pygame.time.Clock().tick(10)
-            return
+        # if file_name == 'russiananthem.mp3':
+        #     self.anthem.play()
+        #     while pygame.mixer.music.get_busy():
+        #         pygame.time.Clock().tick(10)
+        #     return
 
         path = self.audio.get_file_path(file_name)
         print(path)
