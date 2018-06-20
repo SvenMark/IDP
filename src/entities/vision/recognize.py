@@ -22,7 +22,8 @@ class Recognize(object):
         self.shared_object = shared_object
 
     def run(self, color_range, saved_buildings=None):
-        self.saved_buildings = saved_buildings
+        if saved_buildings is not None:
+            self.saved_buildings = saved_buildings
         print("[RUN] Starting recognize...")
 
         # Initialize camera

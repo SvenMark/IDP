@@ -9,10 +9,7 @@ sys.path.insert(0, '../../../src')
 from entities.audio.audio import Audio
 from entities.threading.utils import SharedObject
 from entities.movement.movement import Movement
-
-from entities.vision.helpers.json_handler import Json_Handler
 from entities.vision.vision import Vision
-
 from entities.visual.emotion import Emotion
 
 
@@ -21,7 +18,7 @@ class BluetoothController(object):
     Base class for the bluetooth smart controller
     """
 
-    def __init__(self, name, limbs, bluetooth_address, names, modules, color_ranges):
+    def __init__(self, name, limbs, bluetooth_address, names, modules):
         """
         Constructor for the bluetooth controller class
         :param name: Name of the robot
@@ -37,8 +34,7 @@ class BluetoothController(object):
 
         self.shared_object = SharedObject()  # Create instance of thread sharer
 
-        json_handler = Json_Handler(color_ranges, "color_ranges.txt", "buildings.txt")
-        self.vision = Vision(json_handler, self.shared_object)
+        self.vision = Vision(self.shared_object)
 
         self.audio = Audio()
         self.emotion = Emotion(self.audio)

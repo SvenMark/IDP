@@ -1,21 +1,20 @@
 import sys
-
+import time
+import datetime
 from imutils.video import VideoStream
+from tkinter import *
+from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
-import time
-import datetime
 from entities.vision.helpers.vision_helper import *
-from tkinter import *
-from threading import Thread
 
 
 class Saving(object):
 
     def __init__(self, helpers):
         self.helper = helpers.helper
-        self.building_handler = helpers.json_handler
+        self.building_handler = None
 
         # Saving variables
         self.save_length = 0
@@ -24,7 +23,8 @@ class Saving(object):
         self.pickup_vertical = 0
         self.side = 0
 
-    def run(self, color_range):
+    def run(self, color_range, json):
+        self.building_handler = json
         print("[RUN] Starting saving...")
 
         # Initialize camera

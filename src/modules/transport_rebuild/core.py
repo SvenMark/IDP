@@ -4,6 +4,9 @@ import time
 
 sys.path.insert(0, '../../../src')
 
+from entities.vision.helpers.json_handler import JsonHandler
+from entities.vision.helpers.vision_helper import Color, BuildingSide
+
 
 def transport_to_finish(movement, settings):
     while not settings.black_detected:
@@ -33,10 +36,15 @@ def run(name, control):
     speed_factor = control.speed_factor
     dead_zone = control.dead_zone
     vision = control.vision
-    json_handler = control.json_handler
 
     print("[RUN] " + str(name))
 
+    color_ranges = [Color("blue", [84, 44, 52], [153, 255, 255]),
+                    Color("yellow", [21, 110, 89], [30, 255, 255]),
+                    Color("orange", [0, 108, 104], [6, 255, 255]),
+                    Color("green", [28, 39, 0], [94, 255, 255]),
+                    Color("red", [167, 116, 89], [180, 255, 255])]
+    json_handler = JsonHandler(color_ranges, "color_ranges.txt", "buildings.txt")
     color_range = json_handler.get_color_range()
     saved_buildings = json_handler.get_save_buildings()
 
@@ -45,7 +53,7 @@ def run(name, control):
             if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
                 threading.Thread(target=vision.helpers.hsv_picker.run, args=(color_range,)).start()
             elif sys.argv[1] == "saving":
-                threading.Thread(target=vision.saving.run, args=(color_range,)).start()
+                threading.Thread(target=vision.saving.run, args=(color_range, json_handler)).start()
             elif sys.argv[1] == "recognize":
                 threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings)).start()
             else:

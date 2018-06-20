@@ -12,11 +12,11 @@ class Vision(object):
     Base class for vision
     """
 
-    def __init__(self, json, shared_object):
+    def __init__(self, shared_object):
         """
         Constructor for vision class
         """
-        self.helpers = Helpers(json)
+        self.helpers = Helpers()
         self.settings = Recognize_settings()
         self.recognize = Recognize(helpers=self.helpers, settings=self.settings, shared_object=shared_object)
         self.saving = Saving(self.helpers)

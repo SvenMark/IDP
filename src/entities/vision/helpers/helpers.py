@@ -12,10 +12,10 @@ class Helpers(object):
     Base class for vision
     """
 
-    def __init__(self, json):
+    def __init__(self):
         """
         Constructor for vision class
         """
-        self.json_handler = json
+        # self.json_handler = json
         self.helper = Helper()
         self.hsv_picker = Hsv_picker(self)

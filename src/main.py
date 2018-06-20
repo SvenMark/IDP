@@ -10,7 +10,6 @@ from entities.connection.bluetooth_controller import BluetoothController
 from helpers.servo_scanner import scan
 from modules import base_module, capture_flag, dance, entering_arena, line_dance, race, \
     transport_rebuild, cannon, obstacle_course, companion
-from entities.vision.helpers.vision_helper import Color, BuildingSide
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
 
@@ -24,12 +23,6 @@ def main():
 
     bluetooth_address = "98:D3:31:FD:15:C1"  # Set the bt address of the controller
     name = 'Boris'  # Set the name of the robot
-
-    color_ranges = [Color("blue", [84, 44, 52], [153, 255, 255]),
-                    Color("yellow", [21, 110, 89], [30, 255, 255]),
-                    Color("orange", [0, 108, 104], [6, 255, 255]),
-                    Color("green", [28, 39, 0], [94, 255, 255]),
-                    Color("red", [167, 116, 89], [180, 255, 255])]
 
     module_names = [
         'Base',
@@ -125,8 +118,7 @@ def main():
                                                limbs,
                                                bluetooth_address,
                                                module_names,
-                                               modules,
-                                               color_ranges)  # Create bt controller
+                                               modules)  # Create bt controller
 
     bluetooth_controller.receive_data()  # Start the data receive loop
 
