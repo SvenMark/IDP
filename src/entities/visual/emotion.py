@@ -134,5 +134,6 @@ class Emotion(object):
 if __name__ == '__main__':
     audio = Audio()
     emote = Emotion(audio)
-    emote.set_emotion("confused")
-    emote.set_color(255, 255, 255)
+    emote.set_emotion("anthem")
+    emote.rainbow_colors()
+    emote.set_emotion("neutral")
