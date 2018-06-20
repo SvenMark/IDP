@@ -16,10 +16,14 @@ from entities.threading.utils import SharedObject
 
 def run(name, movement, s, v, h, speed_factor, shared_object, grab):
     print("[RUN] " + str(name))
-    json_handler = Json_Handler()
-    color_range = json_handler.get_color_range()
-    tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
+    color_ranges = [Color("blue", [84, 44, 52], [153, 255, 255]),
+                    Color("yellow", [21, 110, 89], [30, 255, 255]),
+                    Color("orange", [0, 108, 104], [6, 255, 255]),
+                    Color("green", [28, 39, 0], [94, 255, 255]),
+                    Color("red", [167, 116, 89], [180, 255, 255])]
 
+    json_handler = Json_Handler(color_ranges, "color_ranges.txt", "buildings.txt")
+    color_range = json_handler.get_color_range()
     saved_buildings = json_handler.get_save_buildings()
 
     settings = Recognize_settings()
@@ -27,7 +31,6 @@ def run(name, movement, s, v, h, speed_factor, shared_object, grab):
                     saved_buildings=saved_buildings,
                     settings=settings, min_block_size=0)
 
-    rotate_speed = 50
     try:
         if len(sys.argv) > 1:
             if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
