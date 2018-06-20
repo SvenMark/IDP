@@ -209,7 +209,6 @@ class BluetoothController(object):
 
 def main():
     limbs = [0, 1]
-    lights = []
     name = 'Boris'
     bluetooth = BluetoothController(name=name, limbs=limbs, bluetooth_address="98:D3:31:FD:15:C1")
 
