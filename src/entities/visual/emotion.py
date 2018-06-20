@@ -41,10 +41,10 @@ class Emotion(object):
             lights.join()
         elif emotion == "success":
             self.set_color(0, 205, 0)
-            self.audio.play('success.mp3')
+            self.audio.get_file_path('success.mp3')
         elif emotion == "sad":
             self.set_brightness(-255)
-            self.audio.play('sad.mp3')
+            self.audio.get_file_path('sad.mp3')
         elif emotion == "happy":
             self.rainbow_colors()
         elif emotion == "confused":
@@ -96,8 +96,8 @@ class Emotion(object):
         for i in range(self.pixels.count()):
             r, g, b = self.pixels.get_pixel_rgb(i)
             r = int(max(0, r + brightnessoffset))
-            g = int(max(0, b + brightnessoffset))
-            b = int(max(0, g + brightnessoffset))
+            g = int(max(0, g + brightnessoffset))
+            b = int(max(0, b + brightnessoffset))
             self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
         self.pixels.show()
 
