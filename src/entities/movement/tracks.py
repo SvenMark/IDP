@@ -173,8 +173,6 @@ class Tracks(object):
                                   acceleration=0)
                 # Backward left
                 if horizontal_speed < -dead_zone:
-                    if horizontal_speed < 150 and vertical_speed < 150:
-                        vertical_speed = 150
                     horizontal_speed = horizontal_speed / 2
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
                                   duty_cycle_track_right=abs(vertical_speed) - horizontal_speed,
@@ -182,8 +180,6 @@ class Tracks(object):
                                   acceleration=0)
                 # Backward right
                 if horizontal_speed > dead_zone:
-                    if horizontal_speed > 850 and vertical_speed < 150:
-                        vertical_speed = 150
                     horizontal_speed = abs(horizontal_speed / 2)
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
                                   duty_cycle_track_right=abs(vertical_speed) - horizontal_speed,
@@ -199,8 +195,6 @@ class Tracks(object):
                                  acceleration=0)
                 # Forward left
                 if horizontal_speed < -dead_zone:
-                    if horizontal_speed < 150 and vertical_speed > 850:
-                        vertical_speed = 850
                     horizontal_speed = horizontal_speed / 2
                     self.forward(duty_cycle_track_left=vertical_speed,
                                  duty_cycle_track_right=vertical_speed - horizontal_speed,
@@ -208,8 +202,6 @@ class Tracks(object):
                                  acceleration=0)
                 # Forward right
                 if horizontal_speed > dead_zone:
-                    if horizontal_speed > 850 and vertical_speed > 850:
-                        vertical_speed = 850
                     horizontal_speed = abs(horizontal_speed / 2)
                     self.forward(duty_cycle_track_left=vertical_speed,
                                  duty_cycle_track_right=vertical_speed - horizontal_speed,
