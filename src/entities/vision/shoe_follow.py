@@ -1,5 +1,7 @@
 import sys
 
+from entities.threading.utils import SharedObject
+
 sys.path.insert(0, '../../../src')
 
 from entities.vision.helpers.json_handler import Json_Handler
@@ -17,7 +19,7 @@ def run(name):
 
     settings = Recognize_settings(grab_distance=183, recognize_distance_max=250, recognize_distance_min=130)
 
-    vision = Vision(color_range=color_range, settings=settings, min_block_size=300, json=json_handler)
+    vision = Vision(shared_object=SharedObject(), color_range=color_range, settings=settings, min_block_size=300, json=json_handler)
 
     vision.recognize.run()
 

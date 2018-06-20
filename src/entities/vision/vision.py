@@ -11,8 +11,7 @@ class Vision(object):
     Base class for vision
     """
 
-    def __init__(self, color_range, json, settings, saved_buildings=None,  min_block_size=300,
-                 shared_object=None):
+    def __init__(self, color_range, json, settings, shared_object, saved_buildings=None,  min_block_size=300):
         """
         Constructor for vision class
         """
