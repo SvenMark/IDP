@@ -34,7 +34,7 @@ def move_towards(movement, percentage):
     movement.tracks.forward(left_speed, right_speed, 0.3, 0.3)
 
 
-def run(name, movement, speed_factor, shared_object):
+def run(name, movement, speed_factor, shared_object, dead_zone, emotion):
     print("[RUN] " + str(name))
     color_ranges = [Color("blue", [84, 44, 52], [153, 255, 255]),
                     Color("yellow", [21, 110, 89], [30, 255, 255]),
@@ -73,16 +73,13 @@ def run(name, movement, speed_factor, shared_object):
         run(name, movement, speed_factor, shared_object)
 
     while not shared_object.has_to_stop():
-        s = shared_object.bluetooth_settings.s
-        v = shared_object.bluetooth_settings.v
-        h = shared_object.bluetooth_settings.h
         grab = shared_object.bluetooth_settings.d
 
-        # Backup controller input
-        movement.tracks.handle_controller_input(stop_motors=s,
-                                                vertical_speed=h * speed_factor,
-                                                horizontal_speed=v * speed_factor,
-                                                dead_zone=5)
+        movement.tracks.handle_controller_input(stop_motors=shared_object.bluetooth_settings.s,
+                                                vertical_speed=shared_object.bluetooth_settings.h * speed_factor,
+                                                horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,
+                                                dead_zone=dead_zone)
+
         if movement.grabber.grabbed and grab is 0:
             movement.grabber.loosen([150, 150, 150])
         if not movement.grabber.grabbed and grab is 1:

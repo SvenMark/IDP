@@ -9,7 +9,7 @@ sys.path.insert(0, '../../../src')
 from entities.audio.beat_detection import BeatDetection
 
 
-def run(name, movement, shared_object):
+def run(name, movement, shared_object, emotion):
     print("[RUN] " + str(name))
 
     GPIO.setmode(GPIO.BCM)

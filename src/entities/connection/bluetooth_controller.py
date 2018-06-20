@@ -141,13 +141,13 @@ class BluetoothController(object):
 
                     # Run and set selected module
                     self.current_module = m
-                    self.run_module(m, self.movement, speed_factor, dead_zone=5)
+                    self.run_module(m, self.movement, self.emotion, speed_factor, dead_zone=5)
 
         except ValueError or IndexError:
             temp = 123
             # print("Invalid value in package")
 
-    def run_module(self, module, movement, speed_factor, dead_zone):
+    def run_module(self, module, movement, emotion, speed_factor, dead_zone):
         """
         Function that creates and runs a thread of pre-programmed modules,
         based on controller input
@@ -160,40 +160,40 @@ class BluetoothController(object):
         # Switch with all modules
         if module is 0:
             name = 'Base'  # Set name for module
-            Thread(target=base_module.run, args=(name, movement, speed_factor, self.shared_object,)).start()  # Start module thread
+            Thread(target=base_module.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()  # Start module thread
 
         if module is 1:
             name = 'Entree'  # Set name for module
-            Thread(target=entering_arena.run, args=(name, movement, speed_factor, self.shared_object,)).start()
+            Thread(target=entering_arena.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()
 
         if module is 2:
             name = 'Race'  # Set name for module
-            Thread(target=race.run, args=(name, movement, speed_factor, dead_zone, self.shared_object,)).start()
+            Thread(target=race.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()
 
         if module is 3:
             name = 'Dance'
-            Thread(target=dance.run, args=(name, movement, self.shared_object,)).start()
+            Thread(target=dance.run, args=(name, movement, self.shared_object, emotion)).start()
 
         if module is 4:
             name = 'Line Dance'
-            Thread(target=line_dance.run, args=(name, movement, self.shared_object,)).start()
+            Thread(target=line_dance.run, args=(name, movement, self.shared_object, emotion)).start()
 
         if module is 5:
             name = 'Obstacle course'
-            Thread(target=obstacle_course.run, args=(name, movement, speed_factor, self.shared_object,)).start()
+            Thread(target=obstacle_course.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()
 
         if module is 6:
             name = 'Cannon'
-            Thread(target=cannon.run, args=(name, movement, speed_factor, self.shared_object,)).start()
+            Thread(target=cannon.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()
 
         if module is 7:
             name = 'Transport'
-            Thread(target=transport_rebuild.run, args=(name, movement, speed_factor, self.shared_object,)).start()
+            Thread(target=transport_rebuild.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()
 
         if module is 8:
             name = 'Capture the flag'
             speed_factor = 1  # Set speed to max for maximum capture ability
-            Thread(target=capture_flag.run, args=(name, movement, speed_factor, self.shared_object,)).start()
+            Thread(target=capture_flag.run, args=(name, movement, speed_factor, self.shared_object, dead_zone, emotion)).start()
 
 
 def main():

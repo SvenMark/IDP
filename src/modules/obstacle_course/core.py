@@ -10,20 +10,15 @@ from entities.vision.recognize import Recognize
 from entities.vision.helpers.vision_helper import Color
 
 
-def run(name, movement, speed_factor, shared_object):
+def run(name, movement, speed_factor, shared_object, dead_zone, emotion):
     print("[RUN] " + str(name))
     detect_cup()
 
     while not shared_object.has_to_stop():
-        s = shared_object.bluetooth_settings.s
-        v = shared_object.bluetooth_settings.v
-        h = shared_object.bluetooth_settings.h
-
-        # Backup controller input
-        movement.tracks.handle_controller_input(stop_motors=s,
-                                                vertical_speed=h * speed_factor,
-                                                horizontal_speed=v * speed_factor,
-                                                dead_zone=5)
+        movement.tracks.handle_controller_input(stop_motors=shared_object.bluetooth_settings.s,
+                                                vertical_speed=shared_object.bluetooth_settings.h * speed_factor,
+                                                horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,
+                                                dead_zone=dead_zone)
         time.sleep(0.1)
 
     # Notify shared object that this thread has been stopped

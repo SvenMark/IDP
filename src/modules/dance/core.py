@@ -4,7 +4,7 @@ import time
 sys.path.insert(0, '../../../src')
 
 
-def run(name, movement, shared_object):
+def run(name, movement, shared_object, emotion):
     print("[RUN] " + str(name))
 
     while not shared_object.has_to_stop():
