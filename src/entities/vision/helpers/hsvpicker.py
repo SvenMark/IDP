@@ -11,6 +11,7 @@ class Hsv_picker:
         self.helper = helpers.helper
         self.color_range = color_range
         self.range_handler = helpers.json_handler
+        self.helper.min_block_size = 300
 
     def run(self):
         print("[RUN] HSV picker")
