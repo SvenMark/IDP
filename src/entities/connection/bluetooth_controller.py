@@ -130,7 +130,7 @@ class BluetoothController(object):
                         self.manual_control = True
 
                     self.current_module = m  # Set the current module according to controller input
-                    self.run_module(m, self.movement, speed_factor, dead_zone=5)
+                    self.run_module(m, self.movement, self.emotion, speed_factor, dead_zone=5)
                 else:
                     self.shared_object.stop = True  # Notify last module thread to stop
                     while not self.shared_object.has_stopped:
