@@ -7,7 +7,7 @@ from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
-from entities.audio.speak import Speak
+from entities.audio.audio import Audio
 
 
 class Emotion(object):
@@ -129,7 +129,7 @@ class Emotion(object):
 
 
 if __name__ == '__main__':
-    sp = Speak()
-    emote = Emotion(sp)
+    audio = Audio()
+    emote = Emotion(audio)
     emote.set_emotion("anthem")
     emote.set_color(255, 255, 255)
