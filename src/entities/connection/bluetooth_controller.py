@@ -37,7 +37,7 @@ class BluetoothController(object):
         self.emotion = Emotion(self.audio)
         self.shared_object = SharedObject()  # Create instance of thread sharer
 
-        self.current_module = 0  # Save the current module that is running, standard is 0
+        self.current_module = -1  # Save the current module that is running
         self.manual_control = True
         self.data = ""  # Initialise data string
         self.emotion.set_emotion('neutral')  # Set led lights
