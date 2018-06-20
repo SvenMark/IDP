@@ -37,25 +37,29 @@ class Emotion(object):
         elif emotion == "anthem":
             lights = Thread(target=self.blink_color(205, 0, 0, 50, 0.1))
             lights.start()
-            self.audio.speak.play('russiananthem.mp3')
+            self.play_sound('russiananthem.mp3')
             lights.join()
         elif emotion == "success":
             self.set_color(0, 205, 0)
-            self.audio.speak.play('success.mp3')
+            self.play_sound('success.mp3')
         elif emotion == "sad":
             self.set_brightness(-255)
-            self.audio.speak.play('sad.mp3')
+            self.play_sound('sad.mp3')
         elif emotion == "happy":
             self.rainbow_colors()
         elif emotion == "confused":
             lights = Thread(target=self.blink_color(255, 105, 180, 500, 0.2))
             lights.start()
-            self.audio.speak.play('heya.mp3')
+            self.play_sound('heya.mp3')
             lights.join()
         elif emotion == "confirmed":  # Used for building detection
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
             self.set_color(255, 165, 0)
+
+    def play_sound(self, file):
+        Thread(target=self.audio.speak.play,
+               args=(file,)).start()  # Start module thread
 
     def set_color(self, r, b, g):
         """
