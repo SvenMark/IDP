@@ -7,7 +7,8 @@ sys.path.insert(0, '../../../src')
 def run(name, movement, s, v, h, speed_factor, shared_object, grab):
     print("[RUN] " + str(name))
 
-    movement.legs.deploy()
+    if hasattr(movement, 'legs'):
+        movement.legs.deploy()
 
     while not shared_object.has_to_stop():
 
@@ -24,7 +25,8 @@ def run(name, movement, s, v, h, speed_factor, shared_object, grab):
         if not movement.grabber.grabbed and grab is 1:
             movement.grabber.grab([100, 100, 100])
 
-    movement.legs.retract()
+    if hasattr(movement, 'legs'):
+        movement.legs.retract()
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))
