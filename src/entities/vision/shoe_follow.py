@@ -17,7 +17,7 @@ def run(name):
 
     settings = Recognize_settings()
 
-    vision = Vision(color_range=color_range, settings=settings, min_block_size=0)
+    vision = Vision(color_range=color_range, settings=settings, min_block_size=0, json=json_handler)
 
     vision.helpers.hsv_picker.run()
     vision.recognize.run()
