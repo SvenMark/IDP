@@ -48,7 +48,8 @@ class Emotion(object):
         elif emotion == "happy":
             self.rainbow_colors()
         elif emotion == "confused":
-            self.blink_color(255, 105, 180, 20, 500)
+            self.blink_color(255, 105, 180, 2000, 0.2)
+            self.audio.speak.play('heya.mp3')
         elif emotion == "confirmed":  # Used for building detection
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
