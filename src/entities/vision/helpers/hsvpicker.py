@@ -12,7 +12,7 @@ class Hsv_picker:
         self.color_range = color_range
         self.range_handler = helpers.json_handler
 
-    def run(self):
+    def run(self, img):
         print("[RUN] HSV picker")
 
         # Create a trackbar for each color range

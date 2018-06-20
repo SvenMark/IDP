@@ -55,7 +55,7 @@ def run(name, movement, s, v, h, speed_factor, shared_object, grab):
             if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
                 threading.Thread(target=vision.helpers.hsv_picker.run).start()
             elif sys.argv[1] == "saving":
-                threading.Thread(target=vision.saving.run).start()
+                threading.Thread(target=vision.saving.run, args=(color_range,)).start()
             elif sys.argv[1] == "recognize":
                 threading.Thread(target=vision.recognize.run).start()
             else:
