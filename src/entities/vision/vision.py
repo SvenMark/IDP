@@ -16,5 +16,5 @@ class Vision(object):
         Constructor for vision class
         """
         self.helpers = Helpers(json)
-        self.recognize = Recognize(self.helpers, color_range, settings, shared_object, saved_buildings)
+        self.recognize = Recognize(helpers=self.helpers, color_range=color_range, settings=settings, shared_object=shared_object, saved_buildings=saved_buildings)
         self.saving = Saving(self.helpers)

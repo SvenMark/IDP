@@ -11,7 +11,7 @@ from entities.vision.helpers.vision_helper import *
 
 class Recognize(object):
 
-    def __init__(self, helpers, color_range, shared_object, saved_buildings=None, settings=None):
+    def __init__(self, helpers, color_range, shared_object, settings=None, saved_buildings=None):
         self.color_range = color_range
         self.positions = []
         self.saved_buildings = saved_buildings
