@@ -41,10 +41,10 @@ class Emotion(object):
             lights.join()
         elif emotion == "success":
             self.set_color(0, 205, 0)
-            self.audio.speak.get_file_path('success.mp3')
+            self.audio.speak.play('success.mp3')
         elif emotion == "sad":
             self.set_brightness(-255)
-            self.audio.speak.get_file_path('sad.mp3')
+            self.audio.speak.play('sad.mp3')
         elif emotion == "happy":
             self.rainbow_colors()
         elif emotion == "confused":
