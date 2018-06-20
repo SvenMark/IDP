@@ -12,10 +12,10 @@ class Helpers(object):
     Base class for vision
     """
 
-    def __init__(self, color_range, img, min_block_size):
+    def __init__(self, json):
         """
         Constructor for vision class
         """
-        self.json_handler = Json_Handler()
-        self.helper = Helper(min_block_size)
-        self.hsv_picker = Hsv_picker(self, color_range, img)
+        self.json_handler = json
+        self.helper = Helper()
+        self.hsv_picker = Hsv_picker(self)

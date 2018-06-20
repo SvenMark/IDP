@@ -13,8 +13,7 @@ from threading import Thread
 
 class Saving(object):
 
-    def __init__(self, helpers, color_range):
-        self.color_range = color_range
+    def __init__(self, helpers):
         self.helper = helpers.helper
         self.building_handler = helpers.json_handler
 
@@ -25,7 +24,7 @@ class Saving(object):
         self.pickup_vertical = 0
         self.side = 0
 
-    def run(self):
+    def run(self, color_range):
         print("[RUN] Starting saving...")
 
         # Initialize camera
@@ -40,12 +39,12 @@ class Saving(object):
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
             # Calculate the masks
-            mask, _ = self.helper.calculate_mask(img, self.color_range)
+            mask, _ = self.helper.calculate_mask(img, color_range)
 
             img_cropped, _, _, _ = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
-            mask_cropped, valid_contours = self.helper.calculate_mask(img_cropped, self.color_range, set_contour=True)
+            mask_cropped, valid_contours = self.helper.calculate_mask(img_cropped, color_range, set_contour=True)
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 self.show_input_fields()

@@ -36,26 +36,29 @@ def move_towards(movement, percentage):
 
 def run(name, movement, s, v, h, speed_factor, shared_object, grab):
     print("[RUN] " + str(name))
-    json_handler = Json_Handler()
+    color_ranges = [Color("blue", [84, 44, 52], [153, 255, 255]),
+                    Color("yellow", [21, 110, 89], [30, 255, 255]),
+                    Color("orange", [0, 108, 104], [6, 255, 255]),
+                    Color("green", [28, 39, 0], [94, 255, 255]),
+                    Color("red", [167, 116, 89], [180, 255, 255])]
+
+    json_handler = Json_Handler(color_ranges, "color_ranges.txt", "buildings.txt")
     color_range = json_handler.get_color_range()
-    tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
-
     saved_buildings = json_handler.get_save_buildings()
+    settings = Recognize_settings(grab_distance=183, recognize_distance_max=250, recognize_distance_min=130)
 
-    settings = Recognize_settings()
     vision = Vision(color_range=color_range,
+                    settings=settings,
                     saved_buildings=saved_buildings,
-                    settings=settings, min_block_size=0,
-                    shared_object=shared_object
-                    )
+                    json=json_handler,
+                    shared_object=shared_object)
 
-    rotate_speed = 50
     try:
         if len(sys.argv) > 1:
             if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
-                threading.Thread(target=vision.helpers.hsv_picker.run).start()
+                threading.Thread(target=vision.helpers.hsv_picker.run, args=(color_range,)).start()
             elif sys.argv[1] == "saving":
-                threading.Thread(target=vision.saving.run).start()
+                threading.Thread(target=vision.saving.run, args=(color_range,)).start()
             elif sys.argv[1] == "recognize":
                 threading.Thread(target=vision.recognize.run).start()
             else:
