@@ -24,3 +24,4 @@ def scan():
         return servos
     else:
         print("No servos found")
+        return servos
