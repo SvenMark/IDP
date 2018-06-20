@@ -4,7 +4,7 @@ import time
 sys.path.insert(0, '../../../src')
 
 
-def run(name, movement, s, v, h, speed_factor, shared_object, grab):
+def run(name, movement, s, v, h, speed_factor, grab, shared_object):
     print("[RUN] " + str(name))
 
     if hasattr(movement, 'legs'):
