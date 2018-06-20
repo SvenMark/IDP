@@ -47,8 +47,8 @@ def run(name, movement, s, v, h, speed_factor, shared_object):
                 movement.tracks.stop()
         else:
             if movement is not None:
-                left = 20
-                right = 20
+                left = 60
+                right = 60
                 if offset < 0:
                     left += offset
                 else:
