@@ -1,20 +1,21 @@
 import sys
-
-sys.path.insert(0, '../../../src')
-
-# Led imports
 import time
 import RPi.GPIO as GPIO
 import Adafruit_WS2801
 import Adafruit_GPIO.SPI as SPI
+from threading import Thread
+
+sys.path.insert(0, '../../../src')
+
+from entities.audio.audio import Audio
 
 
 class Emotion(object):
 
-    def __init__(self, speak):
-        self.audio = speak
-        # Configure the count of pixels:
-        self.pixel_count = 33
+    def __init__(self, audio):
+        self.audio = audio
+
+        self.pixel_count = 33 # Configure the count of pixels:
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
         self.spi_port = 0
         self.spi_device = 0
@@ -34,16 +35,29 @@ class Emotion(object):
             # Boston University Red
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
-            self.blink_color(205, 0, 0, 5, 500)
-            self.audio.get_file_path('russiananthem.mp3')
+            lights = Thread(target=self.blink_color(205, 0, 0, 50, 0.1))
+            lights.start()
+            self.audio.speak.play('russiananthem.mp3')
+            lights.join()
         elif emotion == "success":
-            pass
+            self.set_color(0, 205, 0)
+            self.audio.speak.play('success.mp3')
         elif emotion == "sad":
-            self.brightness_off()
+            self.set_brightness(-255)
+            self.audio.speak.play('sad.mp3')
         elif emotion == "happy":
             self.rainbow_colors()
+        elif emotion == "confused":
+            lights = Thread(target=self.blink_color(255, 105, 180, 500, 0.2))
+            lights.start()
+            self.audio.speak.play('heya.mp3')
+            lights.join()
+        elif emotion == "confirmed":  # Used for building detection
+            self.set_color(0, 205, 0)
+        elif emotion == "searching":  # Used for building detection
+            self.set_color(255, 165, 0)
 
-    def set_color(self, r, g, b):
+    def set_color(self, r, b, g):
         """
         Function to set the color of the leds
         :param r: red color value
@@ -55,7 +69,7 @@ class Emotion(object):
             self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
         self.pixels.show()
 
-    def blink_color(self, r, g, b, blink_times, blinkdelay):
+    def blink_color(self, r, b, g, blink_times, blinkdelay):
         for i in range(blink_times):
             # blink x times, then wait
             self.pixels.clear()
@@ -90,24 +104,6 @@ class Emotion(object):
             self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
         self.pixels.show()
 
-    def brightness_off(self, wait=0.01, step=1):
-        """
-        Function to decrease the brightness to 0
-        :param wait: Time to wait after a color change, lower is faster animation.
-        :param step: Amount to go down each loop, higher is faster animation but more choppy.
-        :return:
-        """
-        for j in range(int(256 // step)):
-            for i in range(self.pixels.count()):
-                r, g, b = self.pixels.get_pixel_rgb(i)
-                r = int(max(0, r - step))
-                g = int(max(0, g - step))
-                b = int(max(0, b - step))
-                self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
-            self.pixels.show()
-            if wait > 0:
-                time.sleep(wait)
-
     def rainbow_cycle(self, wait=0.005):
         """
         Function to make the leds display a rainbow cycling animation
@@ -136,9 +132,8 @@ class Emotion(object):
 
 
 if __name__ == '__main__':
-    emote = Emotion("TrashIdontNeed")
-    emote.rainbow_cycle()
-    #time.sleep(1)
-    #for i in range(0, 255):
-    #    emote.set_brightness(-1)
-    #    time.sleep(0.01)
+    audio = Audio()
+    emote = Emotion(audio)
+    emote.set_emotion("anthem")
+    emote.rainbow_colors()
+    emote.set_emotion("neutral")

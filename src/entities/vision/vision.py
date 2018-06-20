@@ -11,11 +11,10 @@ class Vision(object):
     Base class for vision
     """
 
-    def __init__(self, color_range, saved_buildings=None, img=None, min_block_size=300,
-                 settings=None):
+    def __init__(self, color_range, json, settings, shared_object, saved_buildings=None,  min_block_size=300):
         """
         Constructor for vision class
         """
-        self.helpers = Helpers(color_range, img, min_block_size)
-        self.recognize = Recognize(self.helpers, color_range, saved_buildings, settings)
+        self.helpers = Helpers(color_range, min_block_size, json)
+        self.recognize = Recognize(self.helpers, color_range, settings, shared_object, saved_buildings)
         self.saving = Saving(self.helpers, color_range)

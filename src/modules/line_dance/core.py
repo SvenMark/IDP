@@ -2,10 +2,11 @@ import time
 import RPi.GPIO as GPIO
 import pyaudio
 import numpy as np
-from entities.audio.beat_detection import BeatDetection
-
 import sys
+
 sys.path.insert(0, '../../../src')
+
+from entities.audio.beat_detection import BeatDetection
 
 
 def run(name, movement, shared_object):

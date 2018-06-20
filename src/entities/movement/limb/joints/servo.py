@@ -48,6 +48,7 @@ class Servo(object):
         Locks the servo while idle
         :return: None
         """
+
         while self.is_ready():
             self.ax12.move(self.servo_id, round(self.last_position))
             time.sleep(0.1)
@@ -76,10 +77,10 @@ class Servo(object):
         self.last_position = self.last_position + step
         self.ax12.move(self.servo_id, round(self.last_position))
 
-        print("Updating servo: " + str(self.servo_id) + " Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
+        # print("Updating servo: " + str(self.servo_id) + " Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
 
-        if self.is_ready():
-            Thread(target=self.lock_thread, args=(self,)).start()  # Lock the servo if the move is finished
+        # if self.is_ready():
+        #     Thread(target=self.lock_thread, args=(self,)).start()  # Lock the servo if the move is finished
 
     def move(self, degrees, speed):
         """
@@ -92,15 +93,13 @@ class Servo(object):
         self.start_position = self.last_position  # Set the start position of the movement
         self.goal = degrees
         self.current_speed = speed * self.current_speed_multiplier
-        print("Move servo: " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
+        # print("Move servo: " + str(self.servo_id) + ", start: " + str(self.last_position) + ", goal: " + str(self.goal))
 
     def is_ready(self):
         """
         Function that checks if a servo completed it`s last move
         :return: Whether or not the servo has completed it`s last move
         """
-        if not abs(round(self.last_position) - round(self.goal)) <= self.sensitivity:
-            print("Servo not rdy: " + str(self.servo_id) + " Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
         return abs(round(self.last_position) - round(self.goal)) <= self.sensitivity
 
     def read_position(self):
