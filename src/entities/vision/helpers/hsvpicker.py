@@ -30,6 +30,7 @@ class Hsv_picker:
                 img = self.img
             else:
                 img = cap.read()
+                img = cv2.flip(img, 0)
 
             # Apply gaussian blur
             img = cv2.GaussianBlur(img, (9, 9), 0)

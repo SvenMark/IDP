@@ -34,13 +34,16 @@ class BluetoothController(object):
 
         self.vision = None
         self.audio = Audio()
-        self.emotion = Emotion()
+        self.emotion = Emotion(self.audio)
         self.shared_object = SharedObject()  # Create instance of thread sharer
 
         self.current_module = 0  # Save the current module that is running, standard is 0
         self.manual_control = True
         self.data = ""  # Initialise data string
-        self.movement.legs.update_thread.start()  # Start the leg update class
+        self.emotion.set_emotion('neutral')  # Set led lights
+
+        if hasattr(self.movement, 'legs'):
+            self.movement.legs.update_thread.start()  # Start the leg update class
 
     def receive_data(self):
         """
@@ -135,10 +138,11 @@ class BluetoothController(object):
                                                              horizontal_speed=v * speed_factor,
                                                              dead_zone=5)
 
-                # Send controller leg input to legs
-                self.movement.legs.handle_controller_input(deploy=d,
-                                                           x_axis=x,
-                                                           y_axis=y)
+                if hasattr(self.movement, 'legs'):
+                    # Send controller leg input to legs
+                    self.movement.legs.handle_controller_input(deploy=d,
+                                                               x_axis=x,
+                                                               y_axis=y)
 
             # If the selected module is different than the last selected and not 0 and 2
             if m is not self.current_module and m is not 0 and m is not 2:
@@ -207,7 +211,7 @@ def main():
     limbs = [0, 1]
     lights = []
     name = 'Boris'
-    bluetooth = BluetoothController(name=name, limbs=limbs, lights=lights, bluetooth_address="98:D3:31:FD:15:C1")
+    bluetooth = BluetoothController(name=name, limbs=limbs, bluetooth_address="98:D3:31:FD:15:C1")
 
 
 if __name__ == '__main__':
