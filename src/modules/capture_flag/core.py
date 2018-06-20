@@ -22,9 +22,9 @@ def run(name, movement, s, v, h, speed_factor, grab, shared_object):
             movement.legs.move()
 
         if movement.grabber.grabbed and grab is 0:
-            movement.grabber.loosen([150, 150, 150])
+            movement.grabber.loosen(150)
         if not movement.grabber.grabbed and grab is 1:
-            movement.grabber.grab([100, 100, 100])
+            movement.grabber.grab(100, True)
 
     if hasattr(movement, 'legs'):
         movement.legs.retract()
