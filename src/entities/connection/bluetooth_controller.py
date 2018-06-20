@@ -42,6 +42,7 @@ class BluetoothController(object):
         self.current_module = 0  # Save the current module that is running, standard is 0
         self.manual_control = True
         self.data = ""  # Initialise data string
+        self.emotion.set_emotion('neutral')  # Set led lights
 
         if hasattr(self.movement, 'legs'):
             self.movement.legs.update_thread.start()  # Start the leg update class
