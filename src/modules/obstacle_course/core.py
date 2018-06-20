@@ -1,10 +1,10 @@
 import sys
-
-sys.path.insert(0, '../../../src')
-
 import time
 import cv2
 import numpy as np
+
+sys.path.insert(0, '../../../src')
+
 from imutils.video import VideoStream
 from entities.vision.recognize import Recognize
 from entities.vision.helpers.vision_helper import Color

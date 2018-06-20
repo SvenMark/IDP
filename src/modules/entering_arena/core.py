@@ -11,10 +11,9 @@ from entities.audio.speak import Speak
 def run(name, movement, s, v, h, speed_factor, shared_object):
     print("[RUN] " + str(name))
 
-    emotion = Emotion()
     audio = Speak()
-
-    audio.play("russiananthem.mp3")
+    emotion = Emotion(audio)
+    emotion.set_emotion('anthem')
 
     while not shared_object.has_to_stop():
         movement.tracks.handle_controller_input(stop_motors=s,
