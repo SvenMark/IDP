@@ -50,7 +50,7 @@ def run(name, movement, s, v, h, speed_factor, shared_object, grab):
     vision = Vision(color_range=color_range,
                     settings=settings,
                     saved_buildings=saved_buildings,
-                    min_block_size=0, json=json_handler,
+                    json=json_handler,
                     shared_object=shared_object)
 
     try:
