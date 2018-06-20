@@ -20,7 +20,7 @@ class Speak(object):
         :param file_name: Audio file
         :return: None
         """
-        path = self.audio.get_file_path(self, file_name)
+        path = self.audio.get_file_path(file_name)
         print(path)
         if self.audio.windows:  # windows
             os.system("\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" -I null -q --no-qt-system-tray --qt-start-minimized --play-and-exit " + path)
