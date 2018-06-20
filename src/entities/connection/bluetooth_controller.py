@@ -12,7 +12,6 @@ from entities.movement.movement import Movement
 
 from entities.vision.helpers.json_handler import Json_Handler
 from entities.vision.vision import Vision
-from entities.vision.helpers.vision_helper import Color, BuildingSide
 
 from entities.visual.emotion import Emotion
 
@@ -22,7 +21,7 @@ class BluetoothController(object):
     Base class for the bluetooth smart controller
     """
 
-    def __init__(self, name, limbs, bluetooth_address, names, modules):
+    def __init__(self, name, limbs, bluetooth_address, names, modules, color_ranges):
         """
         Constructor for the bluetooth controller class
         :param name: Name of the robot
@@ -38,11 +37,6 @@ class BluetoothController(object):
 
         self.shared_object = SharedObject()  # Create instance of thread sharer
 
-        color_ranges = [Color("blue", [84, 44, 52], [153, 255, 255]),
-                        Color("yellow", [21, 110, 89], [30, 255, 255]),
-                        Color("orange", [0, 108, 104], [6, 255, 255]),
-                        Color("green", [28, 39, 0], [94, 255, 255]),
-                        Color("red", [167, 116, 89], [180, 255, 255])]
         json_handler = Json_Handler(color_ranges, "color_ranges.txt", "buildings.txt")
         self.vision = Vision(json_handler, self.shared_object)
 
