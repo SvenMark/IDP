@@ -1,4 +1,5 @@
 import sys
+import threading
 
 sys.path.insert(0, '../../../src')
 
@@ -21,7 +22,7 @@ def run(name, control):
     json_handler = JsonHandler(shoe, "shoe_ranges")
     color_range = json_handler.get_color_range()
 
-    vision.recognize.run(color_range)
+    threading.Thread(target=vision.recognize.run, args=(color_range,)).start()
 
     while not shared_object.has_to_stop():
         if vision_settings.update:
