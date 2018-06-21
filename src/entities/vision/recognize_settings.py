@@ -2,12 +2,7 @@ import sys
 sys.path.insert(0, '../../../src')
 
 
-class Recognize_settings(object):
-    """
-    Shared object among different threads.
-    A vision thread updates the settings each time a frame has been handled
-     so the movement thread can do things based on these settings.
-    """
+class RecognizeSettings(object):
     def __init__(self, grab_distance=183,
                  recognize_distance_max=250,
                  recognize_distance_min=130):

@@ -35,7 +35,7 @@ class Emotion(object):
             # Boston University Red
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
-            lights = Thread(target=self.blink_color(205, 0, 0, 50, 0.1))
+            lights = Thread(target=self.blink_color(205, 0, 0, 500, 0.3))
             lights.start()
             self.play_sound('russiananthem.mp3')
             lights.join()
@@ -134,10 +134,27 @@ class Emotion(object):
             if wait > 0:
                 time.sleep(wait)
 
+    def appear_from_back(self, color=(0, 255, 0)):
+        pos = 0
+        for i in range(self.pixels.count()):
+
+            for j in reversed(range(i, self.pixels.count())):
+                self.pixels.clear()
+                # first set all pixels at the begin
+                for k in range(i):
+                    self.pixels.set_pixel(k, Adafruit_WS2801.RGB_to_color(color[0], color[1], color[2]))
+                # set then the pixel at position j
+                self.pixels.set_pixel(j, Adafruit_WS2801.RGB_to_color(color[0], color[1], color[2]))
+                self.pixels.show()
+                time.sleep(0.02)
+
 
 if __name__ == '__main__':
     audio = Audio()
     emote = Emotion(audio)
-    emote.set_emotion("anthem")
-    emote.rainbow_colors()
-    emote.set_emotion("neutral")
+    emote.appear_from_back()
+    emote.blink_color(0, 0, 255, 5, 0.2)
+
+    # emote.set_emotion("anthem")
+    # emote.rainbow_colors()
+    # emote.set_emotion("neutral")
