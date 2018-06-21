@@ -153,6 +153,8 @@ if __name__ == '__main__':
     audio = Audio()
     emote = Emotion(audio)
     emote.appear_from_back()
+    emote.blink_color(0, 0, 255, 5, 0.2)
+
     # emote.set_emotion("anthem")
     # emote.rainbow_colors()
     # emote.set_emotion("neutral")
