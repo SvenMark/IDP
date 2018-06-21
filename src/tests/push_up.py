@@ -13,6 +13,13 @@ legs = Legs(
     leg_3_servos=[6, 14, 15]
 )
 
+legs.move(leg_0_moves=[354, 166, 853],
+          leg_1_moves=[682, 166, 853],
+          leg_2_moves=[354, 384, 660],
+          leg_3_moves=[682, 384, 660],
+          speeds=[150, 150, 150],
+          self_update=True)
+
 while True:
     legs.move(leg_0_moves=[354, 166, 853],
               leg_1_moves=[682, 166, 853],
