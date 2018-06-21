@@ -82,12 +82,3 @@ class DCMotor(object):
         self.stop_motor()
         self.current_speed = 0
         GPIO.cleanup()
-
-
-def main():
-    motor = DCMotor(18, 9, 10)
-    motor.clean_up()
-
-
-if __name__ == "__main__":
-    main()

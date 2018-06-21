@@ -5,6 +5,7 @@ from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
+from helpers.servo_scanner import scan
 from entities.movement.limb.leg import Leg
 from entities.movement.sequences.sequences import *
 
@@ -23,18 +24,32 @@ class Legs(object):
         :param leg_3_servos: Array of servo id`s for leg 3
         """
         self.previous = datetime.datetime.now()  # The time used for delta timing
+        self.all_Legs = True
+
+        # Check if only 2 legs are connected for stair module
+        servos = scan()
+        if 61 in servos and 6 in servos and 21 not in servos:
+            print("Initialise legs with only rear legs")
+            self.all_Legs = False
 
         # Initialise a leg for each corner of the robot
-        self.leg_front_left = Leg(leg_0_servos, [820, 385, 565])
-        self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
+        if self.all_Legs:
+            self.leg_front_left = Leg(leg_0_servos, [820, 385, 565])
+            self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
         self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
         self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
 
-        self.legs = [
-                 self.leg_front_left,
-                 self.leg_front_right,
-                 self.leg_rear_left,
-                 self.leg_rear_right
+        if self.all_Legs:
+            self.legs = [
+                     self.leg_front_left,
+                     self.leg_front_right,
+                     self.leg_rear_left,
+                     self.leg_rear_right
+                ]
+        else:
+            self.legs = [
+                self.leg_rear_left,
+                self.leg_rear_right
             ]
 
         self.sequence = 0  # The current move sequence
@@ -60,8 +75,9 @@ class Legs(object):
         :return: None
         """
 
-        self.leg_front_left.move(leg_0_moves, speeds)
-        self.leg_front_right.move(leg_1_moves, speeds)
+        if self.all_Legs:
+            self.leg_front_left.move(leg_0_moves, speeds)
+            self.leg_front_right.move(leg_1_moves, speeds)
         self.leg_rear_left.move(leg_2_moves, speeds)
         self.leg_rear_right.move(leg_3_moves, speeds)
 
@@ -213,11 +229,6 @@ class Legs(object):
         when controller by the controller.
         :return: None
         """
-        # self.leg_front_right.update_sequence()
-        # self.leg_front_left.update_sequence()
-        # self.leg_rear_right.update_sequence()
-        # self.leg_rear_left.update_sequence()
-
         if self.sequence < 3:
             self.sequence = self.sequence + 1
         else:

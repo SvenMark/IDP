@@ -8,6 +8,8 @@ from entities.movement.tracks import Tracks
 from entities.movement.grabber import Grabber
 from entities.connection.bluetooth_controller import BluetoothController
 from helpers.servo_scanner import scan
+from modules import base_module, capture_flag, dance, entering_arena, line_dance, race, \
+    transport_rebuild, cannon, obstacle_course, companion
 
 RESOURCES = os.path.dirname(os.path.abspath(__file__)) + '\\resources\\'
 
@@ -21,6 +23,33 @@ def main():
 
     bluetooth_address = "98:D3:31:FD:15:C1"  # Set the bt address of the controller
     name = 'Boris'  # Set the name of the robot
+
+    module_names = [
+        'Base',
+        'Entree',
+        'Race',
+        'Dance',
+        'Line Dance',
+        'Obstacle course',
+        'Cannon',
+        'Transport',
+        'Capture the flag',
+        'Companion'
+    ]
+
+    modules = {
+        0: base_module,
+        1: entering_arena,
+        2: race,
+        3: dance,
+        4: line_dance,
+        5: obstacle_course,
+        6: cannon,
+        7: transport_rebuild,
+        8: capture_flag,
+        9: companion
+    }
+
     limbs = []
 
     # Check which servo`s are connected
@@ -86,7 +115,11 @@ def main():
                    track_1_backward=26)
         ]
 
-    bluetooth_controller = BluetoothController(name, limbs, bluetooth_address)  # Create bt controller
+    bluetooth_controller = BluetoothController(name,
+                                               limbs,
+                                               bluetooth_address,
+                                               module_names,
+                                               modules)  # Create bt controller
 
     bluetooth_controller.receive_data()  # Start the data receive loop
 

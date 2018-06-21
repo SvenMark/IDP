@@ -31,8 +31,8 @@ class ColorRange:
 
 class Helper:
 
-    def __init__(self, min_block_size):
-        self.min_block_size = min_block_size
+    def __init__(self):
+        self.min_block_size = 0
 
     def nothing(self, x):
         pass

@@ -4,12 +4,8 @@ import time
 
 sys.path.insert(0, '../../../src')
 
-from entities.vision.vision import Vision
+from entities.vision.helpers.json_handler import JsonHandler
 from entities.vision.helpers.vision_helper import Color, BuildingSide
-from entities.vision.recognize_settings import Recognize_settings
-from entities.vision.helpers.json_handler import Json_Handler
-from entities.movement.movement import Movement
-from entities.threading.utils import SharedObject
 
 
 def transport_to_finish(movement, settings):
@@ -24,8 +20,8 @@ def transport_to_finish(movement, settings):
 
 def move_towards(movement, percentage):
     torque = 0.8
-    left_speed = 20
-    right_speed = 20
+    left_speed = 60
+    right_speed = 60
     if percentage < 50:
         left_speed = left_speed - percentage * torque
     else:
@@ -34,73 +30,77 @@ def move_towards(movement, percentage):
     movement.tracks.forward(left_speed, right_speed, 0.3, 0.3)
 
 
-def run(name, movement, s, v, h, speed_factor, shared_object, grab):
-    print("[RUN] " + str(name))
-    json_handler = Json_Handler()
-    color_range = json_handler.get_color_range()
-    tape = [Color("zwarte_tape", [0, 0, 0], [15, 35, 90])]
+def run(name, control):
+    movement = control.movement
+    shared_object = control.shared_object
+    speed_factor = control.speed_factor
+    dead_zone = control.dead_zone
+    vision = control.vision
 
+    print("[RUN] " + str(name))
+
+    color_ranges = [Color("blue", [84, 44, 52], [153, 255, 255]),
+                    Color("yellow", [21, 110, 89], [30, 255, 255]),
+                    Color("orange", [0, 108, 104], [6, 255, 255]),
+                    Color("green", [28, 39, 0], [94, 255, 255]),
+                    Color("red", [167, 116, 89], [180, 255, 255])]
+    json_handler = JsonHandler(color_ranges, "color_ranges.txt", "buildings.txt")
+    color_range = json_handler.get_color_range()
     saved_buildings = json_handler.get_save_buildings()
 
-    settings = Recognize_settings()
-    vision = Vision(color_range=color_range,
-                    saved_buildings=saved_buildings,
-                    settings=settings, min_block_size=0,
-                    shared_object=shared_object
-                    )
-
-    rotate_speed = 50
     try:
         if len(sys.argv) > 1:
             if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
-                threading.Thread(target=vision.helpers.hsv_picker.run).start()
+                threading.Thread(target=vision.helpers.hsv_picker.run, args=(color_range,)).start()
             elif sys.argv[1] == "saving":
-                threading.Thread(target=vision.saving.run).start()
+                threading.Thread(target=vision.saving.run, args=(color_range, json_handler)).start()
             elif sys.argv[1] == "recognize":
-                threading.Thread(target=vision.recognize.run).start()
+                threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings)).start()
             else:
                 print("[ERROR] Wrong argument given..")
-                run(name, movement, s, v, h, speed_factor, shared_object, grab)
+                run(name, control)
 
         # Default no argument
         else:
             threading.Thread(target=vision.recognize.run).start()
     except AttributeError:
         print("[ERROR] Something went wrong..")
-        run(name, movement, s, v, h, speed_factor, shared_object, grab)
+        run(name, control)
 
     while not shared_object.has_to_stop():
-        # Backup controller input
-        movement.tracks.handle_controller_input(stop_motors=s,
-                                                vertical_speed=h * speed_factor,
-                                                horizontal_speed=v * speed_factor,
-                                                dead_zone=5)
+        grab = shared_object.bluetooth_settings.d
+
+        movement.tracks.handle_controller_input(stop_motors=shared_object.bluetooth_settings.s,
+                                                vertical_speed=shared_object.bluetooth_settings.h * speed_factor,
+                                                horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,
+                                                dead_zone=dead_zone)
+
         if movement.grabber.grabbed and grab is 0:
             movement.grabber.loosen([150, 150, 150])
         if not movement.grabber.grabbed and grab is 1:
-            movement.grabber.grab([100, 100, 100], settings.pick_up_vertical)
+            movement.grabber.grab([100, 100, 100], vision.settings.pick_up_vertical)
 
-        if settings.update:
-            settings.update = False
-            if settings.grab:
+        if vision.settings.update:
+            vision.settings.update = False
+            if vision.settings.grab:
 
-                movement.grabber.grab([80, 80, 80], settings.pick_up_vertical)
+                movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
 
                 while movement.grabber.reposition is True:
-                    if settings.distance < 50:
+                    if vision.settings.distance < 50:
                         movement.tracks.backward(20, 20, 0.5, 0.5)
-                        movement.grabber.grab([80, 80, 80], settings.pick_up_vertical)
+                        movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
 
                 # TODO: implement this
-                transport_to_finish(movement, settings)
+                transport_to_finish(movement, vision.settings)
 
                 movement.grabber.reposition = False
             # new building found
-            elif settings.new:
-                settings.new = False
-                while not settings.grab:
+            elif vision.settings.new:
+                vision.settings.new = False
+                while not vision.settings.grab:
                     # TODO: implement this
-                    move_towards(movement, settings.current_position)
+                    move_towards(movement, vision.settings.current_position)
             else:
                 # TODO: implement this
                 movement.tracks.forward(20, 20, 0.5, 0.5)

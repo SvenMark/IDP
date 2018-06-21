@@ -3,6 +3,7 @@ sys.path.insert(0, '../../../src')
 
 from entities.vision.helpers.helpers import Helpers
 from entities.vision.recognize import Recognize
+from entities.vision.recognize_settings import RecognizeSettings
 from entities.vision.saving import Saving
 
 
@@ -11,11 +12,11 @@ class Vision(object):
     Base class for vision
     """
 
-    def __init__(self, color_range, saved_buildings=None, img=None, min_block_size=300,
-                 settings=None, shared_object=None,):
+    def __init__(self, shared_object):
         """
         Constructor for vision class
         """
-        self.helpers = Helpers(color_range, img, min_block_size)
-        self.recognize = Recognize(self.helpers, color_range, shared_object, saved_buildings, settings)
-        self.saving = Saving(self.helpers, color_range)
+        self.helpers = Helpers()
+        self.settings = RecognizeSettings()
+        self.recognize = Recognize(helpers=self.helpers, settings=self.settings, shared_object=shared_object)
+        self.saving = Saving(self.helpers)

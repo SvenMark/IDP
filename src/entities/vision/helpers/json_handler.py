@@ -9,15 +9,11 @@ import json
 from entities.vision.helpers.vision_helper import Color, BuildingSide
 
 
-class Json_Handler:
-    def __init__(self):
-        self.file_name_color = "output.txt"
-        self.file_name_building = "save.txt"
-        self.back_up_color_range = [Color("blue", [84, 44, 52], [153, 255, 255]),
-                                    Color("yellow", [21, 110, 89], [30, 255, 255]),
-                                    Color("orange", [0, 108, 104], [6, 255, 255]),
-                                    Color("green", [28, 39, 0], [94, 255, 255]),
-                                    Color("red", [167, 116, 89], [180, 255, 255])]
+class JsonHandler:
+    def __init__(self, std_color_range, file_name_color="output.txt", file_name_building="save.txt"):
+        self.file_name_color = "/saved_files/{}".format(file_name_color)
+        self.file_name_building = "/saved_files/{}".format(file_name_building)
+        self.back_up_color_range = std_color_range
 
     def set_color_range(self, color_range):
         """
