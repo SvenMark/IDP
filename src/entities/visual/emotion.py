@@ -146,14 +146,26 @@ class Emotion(object):
                 # set then the pixel at position j
                 self.pixels.set_pixel(j, Adafruit_WS2801.RGB_to_color(color[0], color[1], color[2]))
                 self.pixels.show()
-                time.sleep(0.02)
+                time.sleep(0.01)
+
+    def rotate_color(self, r, g, b):
+        self.pixels.clear()
+        for i in range(self.pixels.count()):
+            self.pixels.set_pixel(i-1, Adafruit_WS2801.RGB_to_color(0, 0, 0))
+            self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, b, g))
+            time.sleep(0.01)
+            self.pixels.show()
 
 
 if __name__ == '__main__':
     audio = Audio()
     emote = Emotion(audio)
-    emote.appear_from_back()
-    emote.blink_color(0, 0, 255, 5, 0.2)
+
+    while True:
+        emote.rotate_color(0, 0, 255)
+
+    # emote.appear_from_back()
+    # emote.blink_color(0, 0, 255, 5, 0.2)
 
     # emote.set_emotion("anthem")
     # emote.rainbow_colors()
