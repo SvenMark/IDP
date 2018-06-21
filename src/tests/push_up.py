@@ -22,18 +22,20 @@ tracks = Tracks(track_0_pin=13,
                 track_1_forward=19,
                 track_1_backward=26)
 
-legs.move(leg_0_moves=[354, 166, 853],
-          leg_1_moves=[682, 166, 853],
-          leg_2_moves=[354, 384, 660],
-          leg_3_moves=[682, 384, 660],
-          speeds=[150, 150, 150],
-          self_update=True)
+tracks.forward(100, 100, 3, 0)
 
-while True:
-    tracks.forward(100, 100, 0, 0)
-    legs.move(leg_0_moves=[354, 166, 853],
-              leg_1_moves=[682, 166, 853],
-              leg_2_moves=[352, 170, 840],
-              leg_3_moves=[682, 170, 840],
-              speeds=[150, 150, 150],
-              self_update=True)
+# legs.move(leg_0_moves=[354, 166, 853],
+#           leg_1_moves=[682, 166, 853],
+#           leg_2_moves=[354, 384, 660],
+#           leg_3_moves=[682, 384, 660],
+#           speeds=[150, 150, 150],
+#           self_update=True)
+#
+# while True:
+#     tracks.forward(100, 100, 0, 0)
+#     legs.move(leg_0_moves=[354, 166, 853],
+#               leg_1_moves=[682, 166, 853],
+#               leg_2_moves=[352, 170, 840],
+#               leg_3_moves=[682, 170, 840],
+#               speeds=[150, 150, 150],
+#               self_update=True)
