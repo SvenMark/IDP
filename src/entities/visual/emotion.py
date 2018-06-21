@@ -62,8 +62,10 @@ class Emotion(object):
             Thread(target=self.rotate_color(255, 165, 0, 0, self.shared)).start()
 
     def play_sound(self, file):
+        print("Starting audio file")
         self.audio.speak.play(file)
         self.set_emotion("neutral")
+        print("Audio file finished.")
 
     def set_color(self, r, b, g):
         """
@@ -195,7 +197,9 @@ if __name__ == '__main__':
     # emote.blink_color(0, 0, 255, 5, 0.2)
 
     emote.set_emotion("anthem")
+    time.sleep(20)
     emote.set_emotion("mad")
-    emote.set_emotion("neutral")
+    # emote.set_emotion("mad")
+    # emote.set_emotion("neutral")
     # emote.rainbow_colors()
     # emote.set_emotion("neutral")
