@@ -14,6 +14,7 @@ legs = Legs(
 )
 
 for i in range(5):
+    time.sleep(2)
     legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=stair)
     time.sleep(2)
 
