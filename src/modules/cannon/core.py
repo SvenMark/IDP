@@ -6,7 +6,7 @@ import cv2
 sys.path.insert(0, '../../../src')
 
 from imutils.video import VideoStream
-from modules.cannon.helpers import Point, Color
+from entities.vision.helpers.vision_helper import *
 from decimal import Decimal
 from threading import Thread
 
@@ -94,7 +94,7 @@ def line_detection(shared_object):
 
         # Generate and set a mask for a range of black (color of the line) to the cropped image
         hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-        black = Color([0, 0, 40], [157, 118, 120])
+        black = Color("Black", [0, 0, 40], [157, 118, 120])
         mask = cv2.inRange(hsv, black.lower, black.upper)
 
         # Checks if the color red is detected and calls function detect_red with the img
@@ -220,7 +220,7 @@ def detect_red(img, hsv):
     :return: Returns true if there is a red area larger then 100. Else it returns false
     """
     # Create red mask to hsv
-    red = Color([170, 100, 100], [190, 255, 255])
+    red = Color("Red", [170, 100, 100], [190, 255, 255])
     mask = cv2.inRange(hsv, red.lower, red.upper)
     red = cv2.bitwise_and(img, img, mask=mask)
 

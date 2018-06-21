@@ -7,7 +7,7 @@ sys.path.insert(0, '../../../src')
 
 from imutils.video import VideoStream
 from entities.vision.recognize import Recognize
-from entities.vision.helpers.vision_helper import Color
+from entities.vision.helpers.vision_helper import *
 
 
 def run(name, movement, s, v, h, speed_factor, shared_object):
@@ -27,8 +27,8 @@ def run(name, movement, s, v, h, speed_factor, shared_object):
     shared_object.has_been_stopped()
 
 
-def stairwalker():
-    frame = VideoStream(src=0, usePiCamera=False, resolution=(320, 240)).start()
+def stairdetector(shared_object):
+    frame = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
     time.sleep(0.3)  # startup
 
     sample = frame.read()
@@ -40,6 +40,49 @@ def stairwalker():
         (width, (height / 2 + 20)),
         (0, (height / 2) + 20),
     ]
+
+    while not shared_object.has_to_stop():
+        # Get current frame from picamera and make a cropped image with the vertices above with set_region
+        img = frame.read()
+        img_cropped = set_region(img, np.array([vertices], np.int32))
+
+        # Add blur to the cropped image
+        blur = cv2.GaussianBlur(img_cropped, (9, 9), 0)
+
+        # Generate and set a mask for a range of black (color of the line) to the cropped image
+        hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
+        black = Color("Black", [0, 0, 40], [157, 118, 120])
+        mask = cv2.inRange(hsv, black.lower, black.upper)
+
+        # Set line color to blue and clone the image to draw the lines on
+        line_color = (255, 0, 0)
+        img_clone = img.copy()
+
+        # Set variables and get lines with Houghlines function on the mask of black
+        theta = np.pi / 180
+        threshold = 150
+        min_line_length = 40
+        max_line_gap = 25
+
+        lines = cv2.HoughLinesP(mask, 2, theta, threshold, np.array([]),
+                                min_line_length, max_line_gap)
+
+        if lines is not None:
+            for line in lines:
+                for x1, y1, x2, y2 in line:
+                    # Make two points with the pixels of the line and draw the line on the cloned image
+                    p1 = Point(x1, y1)
+                    p2 = Point(x2, y2)
+                    cv2.line(img_clone, (p1.x, p1.y), (p2.x, p2.y), line_color, 5)
+
+        cv2.imshow('camservice-lijn', img_clone)
+
+        # If q is pressed, break while loop
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    frame.stop()
+    cv2.destroyAllWindows()
 
 
 def detect_cup():
@@ -144,6 +187,29 @@ def detect_bridge():
 
     cam = Recognize(color_range)
     cam.run()
+
+
+# Set the triangle region with the vertices on the img
+def set_region(img, vertices):
+    """
+    Sets a region with the points of vertices on the image
+    :param img: The current frame of the picamera
+    :param vertices: Points on the screen
+    :return: A masked image with only the region
+    """
+    mask = np.zeros_like(img)
+    channel_count = img.shape[2]
+    match_mask_color = (255,) * channel_count
+    cv2.fillPoly(mask, vertices, match_mask_color)
+
+    masked_img = cv2.bitwise_and(img, mask)
+
+    new_mask = np.zeros(masked_img.shape[:2], np.uint8)
+
+    bg = np.ones_like(masked_img, np.uint8) * 255
+    cv2.bitwise_not(bg, bg, mask=new_mask)
+
+    return masked_img
 
 
 if __name__ == '__main__':

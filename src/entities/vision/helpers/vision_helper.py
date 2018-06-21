@@ -9,6 +9,12 @@ class Color:
         self.upper = np.array(upper)
 
 
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+
 class BuildingSide:
     def __init__(self, side, pick_up_vertical, number, side_number):
         self.side = side
