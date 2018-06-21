@@ -40,10 +40,9 @@ class Emotion(object):
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
             self.shared.stop = False
-            test = Thread(target=self.play_sound('russiananthem.mp3'))
-            test2 = Thread(target=self.blink_color(205, 0, 0, 0, 0.3, self.shared))
-            test2.start()
-            test.start()
+            Thread(target=self.blink_color(205, 0, 0, 0, 0.3, self.shared)).start()
+            time.sleep(1)
+            Thread(target=self.play_sound('russiananthem.mp3')).start()
         elif emotion == "success":
             self.set_color(0, 205, 0)
             self.play_sound('success.mp3')
@@ -173,7 +172,7 @@ class Emotion(object):
                     if i > 0:
                         self.pixels.set_pixel(i - 1, Adafruit_WS2801.RGB_to_color(0, 0, 0))
                     self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, b, g))
-                    time.sleep(0.1)
+                    time.sleep(0.05)
                     self.pixels.show()
         else:
             for j in range(rotate_times):
@@ -182,7 +181,7 @@ class Emotion(object):
                     if i > 1:
                         self.pixels.set_pixel(i - 2, Adafruit_WS2801.RGB_to_color(0, 0, 0))
                     self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, b, g))
-                    time.sleep(0.1)
+                    time.sleep(0.05)
                     self.pixels.show()
 
 
@@ -190,12 +189,13 @@ if __name__ == '__main__':
     audio = Audio()
     emote = Emotion(audio)
 
-    emote.rotate_color(0, 0, 255, 5)
+    # emote.rotate_color(0, 0, 255, 5)
 
     # emote.appear_from_back()
     # emote.blink_color(0, 0, 255, 5, 0.2)
 
     emote.set_emotion("anthem")
+    emote.set_emotion("mad")
     emote.set_emotion("neutral")
     # emote.rainbow_colors()
     # emote.set_emotion("neutral")
