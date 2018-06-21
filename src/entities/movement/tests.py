@@ -14,13 +14,14 @@ class CommonTestClass(unittest.TestCase):
     """
     Setup joints for robot, also register leds and audio if required
     """
+
     def setUp(self):
         limbs = [
             Legs(
-                leg_0_servos=[6, 14, 15],
+                leg_0_servos=[21, 41, 52],
                 leg_1_servos=[16, 17, 18],
-                leg_2_servos=[21, 41, 52],
-                leg_3_servos=[61, 62, 63]
+                leg_2_servos=[61, 62, 63],
+                leg_3_servos=[6, 14, 15]
             ),
             Tracks(track_0_pin=13,
                    track_1_pin=18,
@@ -31,9 +32,8 @@ class CommonTestClass(unittest.TestCase):
             Grabber(servos=[1, 53, 43],
                     initial_positions=[465, 198, 200])
         ]
-        lights = []
 
-        self.movement = Movement(limbs, lights)
+        self.movement = Movement(limbs)
 
     def test_forward(self):
         # test if implemented

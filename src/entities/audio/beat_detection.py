@@ -4,6 +4,7 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
+
 class BeatDetection(object):
     def __init__(self):
         self.CHUNK = 10000  # speed of data point reading, smaller == less datapoints == faster updates

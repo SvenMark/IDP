@@ -20,17 +20,22 @@ red_detected = False
 line_detected = False
 
 
-def run(name, movement, s, v, h, speed_factor, shared_object):
+def run(name, control):
+    movement = control.movement
+    emotion = control.emotion
+    shared_object = control.shared_object
+    speed_factor = control.speed_factor
+    dead_zone = control.dead_zone
+
     print("[RUN] " + str(name))
     Thread(target=line_detection, args=(shared_object,)).start()
 
     while not shared_object.has_to_stop():
 
-        # Backup controller input
-        movement.tracks.handle_controller_input(stop_motors=s,
-                                                vertical_speed=h * speed_factor,
-                                                horizontal_speed=v * speed_factor,
-                                                dead_zone=5)
+        movement.tracks.handle_controller_input(stop_motors=shared_object.bluetooth_settings.s,
+                                                vertical_speed=shared_object.bluetooth_settings.h * speed_factor,
+                                                horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,
+                                                dead_zone=dead_zone)
 
         global last_position, red_detected, TORQUE, line_detected
         offset = 50 - last_position
@@ -40,15 +45,15 @@ def run(name, movement, s, v, h, speed_factor, shared_object):
             print("[INFO] Waiting")
             while last_position == -1000:
                 time.sleep(0.1)
-        print("[INFO] Driving etc. with offset:" + str(offset))
+        print("[INFO] Driving etc. with offset: {}".format(offset))
         if red_detected and not line_detected:
             print("[INFO] Red detected!")
             if movement is not None:
                 movement.tracks.stop()
         else:
             if movement is not None:
-                left = 20
-                right = 20
+                left = 60
+                right = 60
                 if offset < 0:
                     left += offset
                 else:
@@ -60,7 +65,7 @@ def run(name, movement, s, v, h, speed_factor, shared_object):
         time.sleep(0.1)
 
     # Notify shared object that this thread has been stopped
-    print("[STOPPED]" + str(name))
+    print("[STOPPED] {}".format(name))
     shared_object.has_been_stopped()
 
 

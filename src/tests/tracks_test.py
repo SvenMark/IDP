@@ -16,4 +16,3 @@ tracks.forward(20, 20, 4, 4)
 tracks.forward(0, 0, 1, 1)
 tracks.turn_right(70, 20, 8, 12)
 tracks.turn_right(10, 15, 8, 7)
-

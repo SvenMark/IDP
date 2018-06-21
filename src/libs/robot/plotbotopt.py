@@ -1,4 +1,4 @@
-#PLOTBOTOPT Define options for robot plotting
+# PLOTBOTOPT Define options for robot plotting
 #
 # Default options for robot/plot function.
 
@@ -10,5 +10,6 @@
 # $Revision: 1.1 $
 # Copyright (C) 2001-2002, by Peter I. Corke
 
-function o = plotbotopt
-	o = {'base' 'perspective' };
+function
+o = plotbotopt
+o = {'base' 'perspective'};

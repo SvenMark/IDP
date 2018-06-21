@@ -2,6 +2,8 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
+from entities.threading.BluetoothSettings import BluetoothSettings
+
 
 class SharedObject(object):
     """
@@ -14,6 +16,7 @@ class SharedObject(object):
         """
         self.stop = False
         self.has_stopped = True
+        self.bluetooth_settings = BluetoothSettings()
 
     def has_to_stop(self):
         """
@@ -30,4 +33,3 @@ class SharedObject(object):
         :return: Thread has stopped
         """
         self.has_stopped = True
-
