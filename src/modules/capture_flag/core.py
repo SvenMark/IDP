@@ -3,6 +3,8 @@ import time
 
 sys.path.insert(0, '../../../src')
 
+from entities.movement.sequences.sequences import *
+
 
 def run(name, control):
     movement = control.movement
@@ -26,7 +28,14 @@ def run(name, control):
 
         # Extend legs to max
         if hasattr(movement, 'legs'):
-            movement.legs.move()
+            # TODO: add correct positions for extending
+            movement.legs.move(
+                leg_0_moves=[],
+                leg_1_moves=[],
+                leg_2_moves=[],
+                leg_3_moves=[],
+                speeds=[200, 200, 200],
+                self_update=True)
 
         if movement.grabber.grabbed and grab is 0:
             movement.grabber.loosen(150)
