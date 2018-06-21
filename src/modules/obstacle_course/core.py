@@ -27,6 +27,21 @@ def run(name, movement, s, v, h, speed_factor, shared_object):
     shared_object.has_been_stopped()
 
 
+def stairwalker():
+    frame = VideoStream(src=0, usePiCamera=False, resolution=(320, 240)).start()
+    time.sleep(0.3)  # startup
+
+    sample = frame.read()
+    height, width, channel = sample.shape
+
+    vertices = [
+        (0, (height / 2) - 20),
+        (width, (height / 2 - 20)),
+        (width, (height / 2 + 20)),
+        (0, (height / 2) + 20),
+    ]
+
+
 def detect_cup():
     """
     Detects the cup and calculates distance to cup
