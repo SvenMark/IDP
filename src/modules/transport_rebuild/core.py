@@ -63,7 +63,7 @@ def run(name, control):
 
         # Default no argument
         else:
-            threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings)).start()
+            threading.Thread(target=vision.helpers.hsv_picker.run, args=(color_range, saved_buildings)).start()
     except AttributeError:
         print("[ERROR] Something went wrong..")
         run(name, control)
