@@ -18,9 +18,10 @@ def transport_to_finish(movement, settings):
 
 
 def move_towards(movement, percentage):
-    torque = 0.8
-    left_speed = 60
-    right_speed = 60
+    print("MOVING TO {}".format(percentage))
+    torque = 0.5
+    left_speed = 25
+    right_speed = 25
     if percentage < 50:
         left_speed = left_speed - percentage * torque
     else:
@@ -70,6 +71,10 @@ def run(name, control):
 
     # Movement based on vision settings
     while not shared_object.has_to_stop():
+
+        print("Update movement with vision")
+        time.sleep(0.2)
+
         grab = shared_object.bluetooth_settings.d
 
         # Input backup if automatic movement failed
@@ -90,7 +95,7 @@ def run(name, control):
 
             # If the robot is close enough to grab
             if vision.settings.grab:
-
+                print("GRABBING VISION")
                 # Try grab
                 movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
 
@@ -113,13 +118,15 @@ def run(name, control):
 
             # When a new building found
             elif vision.settings.new:
+                print("NEW BUILDING IN VISION")
                 vision.settings.new = False
                 while not vision.settings.grab:
                     # TODO: implement this
                     move_towards(movement, vision.settings.current_position)
             else:
                 # TODO: implement this
-                movement.tracks.forward(20, 20, 0.5, 0.5)
+                print("Move towards contours")
+                move_towards(movement, vision.settings.current_position)
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))

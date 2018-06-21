@@ -128,14 +128,13 @@ class Recognize(object):
             grab = False
         print("[INFO] percentage left:", percentage_position)
 
-        if self.recognized and building:
-            # Add to settings
+        # Add to settings
+        if building:
             self.settings.pick_up_vertical = building.pick_up_vertical
-            self.settings.current_position = percentage_position
-            self.settings.grab = grab
-            self.settings.distance = recognize_distance_max - building_width
-
             self.settings.new = True
+        self.settings.current_position = percentage_position
+        self.settings.grab = grab
+        self.settings.distance = recognize_distance_max - building_width
 
         # Notify settings that the current frame is handled
         self.settings.update = True
