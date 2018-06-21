@@ -35,7 +35,7 @@ class Emotion(object):
             # Boston University Red
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
-            lights = Thread(target=self.blink_color(205, 0, 0, 50, 0.3))
+            lights = Thread(target=self.blink_color(205, 0, 0, 500, 0.3))
             lights.start()
             self.play_sound('russiananthem.mp3')
             lights.join()
@@ -137,6 +137,7 @@ class Emotion(object):
     def appear_from_back(self, color=(0, 255, 0)):
         pos = 0
         for i in range(self.pixels.count()):
+
             for j in reversed(range(i, self.pixels.count())):
                 self.pixels.clear()
                 # first set all pixels at the begin
@@ -152,6 +153,6 @@ if __name__ == '__main__':
     audio = Audio()
     emote = Emotion(audio)
     emote.appear_from_back()
-    emote.set_emotion("anthem")
-    emote.rainbow_colors()
-    emote.set_emotion("neutral")
+    # emote.set_emotion("anthem")
+    # emote.rainbow_colors()
+    # emote.set_emotion("neutral")
