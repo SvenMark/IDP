@@ -40,8 +40,7 @@ class Emotion(object):
             self.shared.stop = False
             lights = Thread(target=self.blink_color(205, 0, 0, 0, 0.3, self.shared))
             lights.start()
-            self.play_sound('russiananthem.mp3')
-            self.shared.stop = True
+            Thread(target=self.play_sound('russiananthem.mp3')).start()
         elif emotion == "success":
             self.set_color(0, 205, 0)
             self.play_sound('success.mp3')
@@ -54,16 +53,15 @@ class Emotion(object):
             self.shared.stop = False
             lights = Thread(target=self.blink_color(255, 105, 180, 0, 0.2, self.shared))
             lights.start()
-            self.play_sound('heya.mp3')
-            self.shared.stop = True
+            Thread(target=self.play_sound('heya.mp3')).start()
         elif emotion == "confirmed":  # Used for building detection
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
             self.set_color(255, 165, 0)
 
     def play_sound(self, file):
-        Thread(target=self.audio.speak.play,
-               args=(file,)).start()  # Start module thread
+        self.audio.speak.play(file)
+        self.shared.stop = True
 
     def set_color(self, r, b, g):
         """
