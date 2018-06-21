@@ -41,8 +41,7 @@ class Emotion(object):
         elif emotion == "anthem":
             self.shared.stop = False
             Thread(target=self.blink_color(205, 0, 0, 0, 0.3, self.shared)).start()
-            time.sleep(1)
-            Thread(target=self.play_sound('russiananthem.mp3')).start()
+            self.play_sound('russiananthem.mp3')
         elif emotion == "success":
             self.set_color(0, 205, 0)
             self.play_sound('success.mp3')
@@ -196,7 +195,7 @@ if __name__ == '__main__':
     # emote.appear_from_back()
     # emote.blink_color(0, 0, 255, 5, 0.2)
 
-    emote.set_emotion("anthem")
+    Thread(target=emote.set_emotion("anthem"))
     time.sleep(20)
     emote.set_emotion("mad")
     # emote.set_emotion("mad")
