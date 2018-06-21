@@ -1,9 +1,11 @@
 import time
 import sys
 
+
 sys.path.insert(0, '../../src')
 
 from entities.movement.legs import Legs
+from entities.movement.tracks import Tracks
 from entities.movement.sequences.sequences import *
 
 legs = Legs(
@@ -13,6 +15,13 @@ legs = Legs(
     leg_3_servos=[6, 14, 15]
 )
 
+tracks = Tracks(track_0_pin=13,
+                track_1_pin=18,
+                track_0_forward=22,
+                track_0_backward=27,
+                track_1_forward=19,
+                track_1_backward=26)
+
 legs.move(leg_0_moves=[354, 166, 853],
           leg_1_moves=[682, 166, 853],
           leg_2_moves=[354, 384, 660],
@@ -21,10 +30,10 @@ legs.move(leg_0_moves=[354, 166, 853],
           self_update=True)
 
 while True:
+    tracks.forward(50, 50, 0, 0)
     legs.move(leg_0_moves=[354, 166, 853],
               leg_1_moves=[682, 166, 853],
               leg_2_moves=[352, 170, 840],
               leg_3_moves=[682, 170, 840],
               speeds=[150, 150, 150],
               self_update=True)
-
