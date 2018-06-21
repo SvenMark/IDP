@@ -38,8 +38,7 @@ class Emotion(object):
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
             self.shared.stop = False
-            lights = Thread(target=self.blink_color(205, 0, 0, 0, 0.3, self.shared))
-            lights.start()
+            Thread(target=self.blink_color(205, 0, 0, 0, 0.3, self.shared)).start()
             Thread(target=self.play_sound('russiananthem.mp3')).start()
         elif emotion == "success":
             self.set_color(0, 205, 0)
@@ -51,13 +50,14 @@ class Emotion(object):
             self.rainbow_colors()
         elif emotion == "confused":
             self.shared.stop = False
-            lights = Thread(target=self.blink_color(255, 105, 180, 0, 0.2, self.shared))
-            lights.start()
+            Thread(target=self.blink_color(255, 105, 180, 0, 0.2, self.shared)).start()
             Thread(target=self.play_sound('heya.mp3')).start()
         elif emotion == "confirmed":  # Used for building detection
+            self.shared.stop = True   # Stop the searching animation
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
-            self.set_color(255, 165, 0)
+            self.shared.stop = False
+            Thread(target=self.rotate_color(255, 165, 0, self.shared)).start()
 
     def play_sound(self, file):
         self.audio.speak.play(file)
@@ -87,16 +87,17 @@ class Emotion(object):
                 self.pixels.clear()
                 self.pixels.show()
                 time.sleep(blinkdelay)
-        for i in range(blink_times):
-            # blink x times, then wait
-            self.pixels.clear()
-            for k in range(self.pixels.count()):
-                self.pixels.set_pixel(k, Adafruit_WS2801.RGB_to_color(r, g, b))
-            self.pixels.show()
-            time.sleep(blinkdelay)
-            self.pixels.clear()
-            self.pixels.show()
-            time.sleep(blinkdelay)
+        else:
+            for i in range(blink_times):
+                # blink x times, then wait
+                self.pixels.clear()
+                for k in range(self.pixels.count()):
+                    self.pixels.set_pixel(k, Adafruit_WS2801.RGB_to_color(r, g, b))
+                self.pixels.show()
+                time.sleep(blinkdelay)
+                self.pixels.clear()
+                self.pixels.show()
+                time.sleep(blinkdelay)
 
     @staticmethod
     def wheel(pos):
@@ -161,14 +162,25 @@ class Emotion(object):
                 self.pixels.show()
                 time.sleep(0.01)
 
-    def rotate_color(self, r, g, b):
-        self.pixels.clear()
-        for i in range(self.pixels.count()):
-            if i > 0:
-                self.pixels.set_pixel(i - 1, Adafruit_WS2801.RGB_to_color(0, 0, 0))
-            self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, b, g))
-            time.sleep(0.01)
-            self.pixels.show()
+    def rotate_color(self, r, g, b, rotate_times, shared=SharedObject()):
+        if rotate_times == 0:
+            while not shared.has_to_stop():
+                self.pixels.clear()
+                for i in range(self.pixels.count()):
+                    if i > 0:
+                        self.pixels.set_pixel(i - 1, Adafruit_WS2801.RGB_to_color(0, 0, 0))
+                    self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, b, g))
+                    time.sleep(0.01)
+                    self.pixels.show()
+        else:
+            for j in range(rotate_times):
+                self.pixels.clear()
+                for i in range(self.pixels.count()):
+                    if i > 0:
+                        self.pixels.set_pixel(i - 1, Adafruit_WS2801.RGB_to_color(0, 0, 0))
+                    self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, b, g))
+                    time.sleep(0.01)
+                    self.pixels.show()
 
 
 if __name__ == '__main__':
