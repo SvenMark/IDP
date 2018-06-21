@@ -113,6 +113,10 @@ class BluetoothController(object):
             y = int(str(data[y_index + 2:m_index].replace(" ", "")))
             m = int(str(data[m_index + 2:].replace(" ", "")))
 
+
+            m = 9
+
+
             # Convert v and h to percentage to be used by dc motors
             v = ((v * (1000 / 1024)) - 500) / 5
             h = ((h * (1000 / 1024)) - 500) / 5
