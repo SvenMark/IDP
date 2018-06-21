@@ -1,6 +1,7 @@
 import bluetooth
 import time
 import sys
+from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
@@ -154,6 +155,6 @@ class BluetoothController(object):
         selected_module = args[0]  # Get the module from args
         current_module = self.modules[args[0]]  # Search for this module in all modules
         if current_module is not None:
-            current_module.run(self.names[selected_module], args[1])  # Run this module
+            Thread(target=current_module.run, args=(self.names[selected_module], args[1],)).start()  # Run this module
         else:
             print("Module: " + str(selected_module) + " not found.")

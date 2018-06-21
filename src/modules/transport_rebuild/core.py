@@ -9,13 +9,12 @@ from entities.vision.helpers.vision_helper import Color, BuildingSide
 
 
 def transport_to_finish(movement, settings):
+    # While not in finish part move backwards
     while not settings.black_detected:
-        movement.tracks.backward(20, 20, 0, 0.1)
-
-        # wait for update
-        while not settings.update:
+        if settings.update:
+            movement.tracks.backward(20, 20, 0, 0.1)
             time.sleep(0.1)
-        settings.update = False
+            settings.update = False
 
 
 def move_towards(movement, percentage):
@@ -47,11 +46,13 @@ def run(name, control):
     json_handler = JsonHandler(color_ranges, "color_ranges.txt", "buildings.txt")
     color_range = json_handler.get_color_range()
     saved_buildings = json_handler.get_save_buildings()
+    for building in saved_buildings:
+        print(building.number)
 
     try:
         if len(sys.argv) > 1:
             if sys.argv[1] == "hsv" and sys.argv[2] == "picker":
-                threading.Thread(target=vision.helpers.hsv_picker.run, args=(color_range,)).start()
+                threading.Thread(target=vision.helpers.hsv_picker.run, args=(color_range, json_handler)).start()
             elif sys.argv[1] == "saving":
                 threading.Thread(target=vision.saving.run, args=(color_range, json_handler)).start()
             elif sys.argv[1] == "recognize":
@@ -62,14 +63,16 @@ def run(name, control):
 
         # Default no argument
         else:
-            threading.Thread(target=vision.recognize.run).start()
+            threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings)).start()
     except AttributeError:
         print("[ERROR] Something went wrong..")
         run(name, control)
 
+    # Movement based on vision settings
     while not shared_object.has_to_stop():
         grab = shared_object.bluetooth_settings.d
 
+        # Input backup if automatic movement failed
         movement.tracks.handle_controller_input(stop_motors=shared_object.bluetooth_settings.s,
                                                 vertical_speed=shared_object.bluetooth_settings.h * speed_factor,
                                                 horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,
@@ -80,22 +83,35 @@ def run(name, control):
         if not movement.grabber.grabbed and grab is 1:
             movement.grabber.grab([100, 100, 100], vision.settings.pick_up_vertical)
 
+        # If a vision frame has been handled
         if vision.settings.update:
+            # Frame is now handled
             vision.settings.update = False
+
+            # If the robot is close enough to grab
             if vision.settings.grab:
 
+                # Try grab
                 movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
 
-                while movement.grabber.reposition is True:
+                # While grabbing failed, try again
+                max_attempts = 10
+                attempts = 0
+                while movement.grabber.reposition is True \
+                        and not shared_object.has_to_stop() and attempts < max_attempts:
                     if vision.settings.distance < 50:
                         movement.tracks.backward(20, 20, 0.5, 0.5)
                         movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
+                    attempts += 1
 
-                # TODO: implement this
-                transport_to_finish(movement, vision.settings)
+                # If all attempts failed
+                if attempts == max_attempts:
+                    print("[FAIL] GRABBING FAILED AFTER {} ATTEMPTS".format(attempts))
+                else:
+                    # TODO: implement this
+                    transport_to_finish(movement, vision.settings)
 
-                movement.grabber.reposition = False
-            # new building found
+            # When a new building found
             elif vision.settings.new:
                 vision.settings.new = False
                 while not vision.settings.grab:

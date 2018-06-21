@@ -100,4 +100,6 @@ class Grabber(object):
                         print("Load to high, loosening: " + str(self.servos[i].read_load()))
                         self.loosen(100)
                         self.reposition = True
+                    else:
+                        self.reposition = False
                     self.servos[i].update(delta)

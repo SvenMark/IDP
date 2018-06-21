@@ -13,6 +13,8 @@ class JsonHandler:
     def __init__(self, std_color_range, file_name_color="output.txt", file_name_building="save.txt"):
         self.file_name_color = "/saved_files/{}".format(file_name_color)
         self.file_name_building = "/saved_files/{}".format(file_name_building)
+        print(str(self.file_name_building))
+
         self.back_up_color_range = std_color_range
 
     def set_color_range(self, color_range):
