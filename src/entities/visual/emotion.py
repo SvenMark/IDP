@@ -8,6 +8,7 @@ from threading import Thread
 sys.path.insert(0, '../../../src')
 
 from entities.audio.audio import Audio
+from entities.threading.utils import SharedObject
 
 
 class Emotion(object):
@@ -23,6 +24,7 @@ class Emotion(object):
                                                    gpio=GPIO)
         self.pixels.clear()
         self.pixels.show()  # Make sure to call show() after changing any pixels!
+        self.shared = SharedObject()
 
     def set_emotion(self, emotion):
         """
@@ -35,10 +37,11 @@ class Emotion(object):
             # Boston University Red
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
-            lights = Thread(target=self.blink_color(205, 0, 0, 0, 0.3))
+            self.shared.stop = False
+            lights = Thread(target=self.blink_color(205, 0, 0, 0, 0.3, self.shared))
             lights.start()
             self.play_sound('russiananthem.mp3')
-            lights.join(1)
+            self.shared.stop = True
         elif emotion == "success":
             self.set_color(0, 205, 0)
             self.play_sound('success.mp3')
@@ -48,10 +51,11 @@ class Emotion(object):
         elif emotion == "happy":
             self.rainbow_colors()
         elif emotion == "confused":
-            lights = Thread(target=self.blink_color(255, 105, 180, 0, 0.2))
+            self.shared.stop = False
+            lights = Thread(target=self.blink_color(255, 105, 180, 0, 0.2, self.shared))
             lights.start()
             self.play_sound('heya.mp3')
-            lights.join(1)
+            self.shared.stop = True
         elif emotion == "confirmed":  # Used for building detection
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
@@ -73,9 +77,9 @@ class Emotion(object):
             self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
         self.pixels.show()
 
-    def blink_color(self, r, b, g, blink_times, blinkdelay):
+    def blink_color(self, r, b, g, blink_times, blinkdelay, shared = SharedObject()):
         if blink_times == 0:
-            while True:
+            while not shared.has_to_stop():
                 # infinite blink until thread gets shut down.
                 self.pixels.clear()
                 for k in range(self.pixels.count()):
