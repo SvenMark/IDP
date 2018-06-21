@@ -18,7 +18,7 @@ def transport_to_finish(movement, settings):
 
 
 def move_towards(movement, percentage):
-    torque = 0.8
+    torque = 1
     left_speed = 60
     right_speed = 60
     if percentage < 50:
