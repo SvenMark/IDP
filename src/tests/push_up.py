@@ -23,8 +23,8 @@ legs.move(leg_0_moves=[354, 166, 853],
 while True:
     legs.move(leg_0_moves=[354, 166, 853],
               leg_1_moves=[682, 166, 853],
-              leg_2_moves=[354, 166, 853],
-              leg_3_moves=[682, 166, 853],
+              leg_2_moves=[352, 170, 840],
+              leg_3_moves=[682, 170, 840],
               speeds=[150, 150, 150],
               self_update=True)
 
