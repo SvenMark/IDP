@@ -164,7 +164,8 @@ class Emotion(object):
     def rotate_color(self, r, g, b):
         self.pixels.clear()
         for i in range(self.pixels.count()):
-            self.pixels.set_pixel(i-1, Adafruit_WS2801.RGB_to_color(0, 0, 0))
+            if i > 0:
+                self.pixels.set_pixel(i-1, Adafruit_WS2801.RGB_to_color(0, 0, 0))
             self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, b, g))
             time.sleep(0.01)
             self.pixels.show()
