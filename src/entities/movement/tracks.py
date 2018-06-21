@@ -88,19 +88,19 @@ class Tracks(object):
             # Track direction 1 is forwards, direction 0 is backwards.
             if track_left_direction == 1 and track_right_direction == 1:
                 self.track_left.forward(speed_1, 0)
-                self.track_right.forward(speed_2, 0)
+                # self.track_right.forward(speed_2, 0)
 
             if track_left_direction == 0 and track_right_direction == 0:
                 self.track_left.backward(speed_1, 0)
-                self.track_right.backward(speed_2, 0)
+                # self.track_right.backward(speed_2, 0)
 
             if track_left_direction == 1 and track_right_direction == 0:
                 self.track_left.forward(speed_1, 0)
-                self.track_right.backward(speed_2, 0)
+                # self.track_right.backward(speed_2, 0)
 
             if track_left_direction == 0 and track_right_direction == 1:
                 self.track_left.backward(speed_1, 0)
-                self.track_right.forward(speed_2, 0)
+                # self.track_right.forward(speed_2, 0)
             time.sleep(0.01)  # Add a little delay so the motor accelerates smoothly
 
         time.sleep(delay)
