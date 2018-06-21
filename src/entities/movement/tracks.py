@@ -168,21 +168,21 @@ class Tracks(object):
             if vertical_speed < -dead_zone:
                 if -dead_zone < horizontal_speed < dead_zone:
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
-                                  duty_cycle_track_right=abs(vertical_speed) * 0.90,
+                                  duty_cycle_track_right=abs(vertical_speed) * 0.80,
                                   delay=0,
                                   acceleration=0)
                 # Backward left
                 if horizontal_speed < -dead_zone:
                     horizontal_speed = horizontal_speed / 2
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
-                                  duty_cycle_track_right=(abs(vertical_speed) - horizontal_speed) * 0.90,
+                                  duty_cycle_track_right=(abs(vertical_speed) - horizontal_speed) * 0.80,
                                   delay=0,
                                   acceleration=0)
                 # Backward right
                 if horizontal_speed > dead_zone:
                     horizontal_speed = abs(horizontal_speed / 2)
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
-                                  duty_cycle_track_right=(abs(vertical_speed) - horizontal_speed) * 0.90,
+                                  duty_cycle_track_right=(abs(vertical_speed) - horizontal_speed) * 0.80,
                                   delay=0,
                                   acceleration=0)
 
@@ -190,21 +190,21 @@ class Tracks(object):
             if vertical_speed > dead_zone:
                 if -dead_zone < horizontal_speed < dead_zone:
                     self.forward(duty_cycle_track_left=vertical_speed,
-                                 duty_cycle_track_right=vertical_speed * 0.90,
+                                 duty_cycle_track_right=vertical_speed * 0.80,
                                  delay=0,
                                  acceleration=0)
                 # Forward left
                 if horizontal_speed < -dead_zone:
                     horizontal_speed = horizontal_speed / 2
                     self.forward(duty_cycle_track_left=vertical_speed,
-                                 duty_cycle_track_right=vertical_speed - horizontal_speed * 0.90,
+                                 duty_cycle_track_right=vertical_speed - horizontal_speed * 0.80,
                                  delay=0,
                                  acceleration=0)
                 # Forward right
                 if horizontal_speed > dead_zone:
                     horizontal_speed = abs(horizontal_speed / 2)
                     self.forward(duty_cycle_track_left=vertical_speed,
-                                 duty_cycle_track_right=vertical_speed - horizontal_speed * 0.90,
+                                 duty_cycle_track_right=vertical_speed - horizontal_speed * 0.80,
                                  delay=0,
                                  acceleration=0)
 
