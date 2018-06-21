@@ -71,6 +71,9 @@ def run(name, control):
 
     # Movement based on vision settings
     while not shared_object.has_to_stop():
+
+        print("UPDATE MOVEMENY VIOOMY")
+
         grab = shared_object.bluetooth_settings.d
 
         # Input backup if automatic movement failed
