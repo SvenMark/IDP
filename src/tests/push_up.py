@@ -30,7 +30,7 @@ legs.move(leg_0_moves=[354, 166, 853],
           self_update=True)
 
 while True:
-    tracks.forward(50, 50, 0, 0)
+    tracks.forward(100, 100, 0, 0)
     legs.move(leg_0_moves=[354, 166, 853],
               leg_1_moves=[682, 166, 853],
               leg_2_moves=[352, 170, 840],
