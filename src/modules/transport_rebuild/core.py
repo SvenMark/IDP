@@ -26,7 +26,7 @@ def move_towards(movement, percentage):
     else:
         right_speed = right_speed - (percentage - 50) * torque
 
-    movement.tracks.forward(left_speed, right_speed, 0.3, 0.3)
+    movement.tracks.forward(left_speed, right_speed, 1, 0.3)
 
 
 def run(name, control):
