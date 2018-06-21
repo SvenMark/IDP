@@ -1,4 +1,4 @@
-#FTRANS Transform force/moment
+# FTRANS Transform force/moment
 #
 #	FT = FTRANS(T, F)
 #
@@ -21,18 +21,23 @@
 from numpy import *
 from crossp import *
 
-def ftrans(T,F):
+
+def ftrans(T, F):
     f = F[0:3]
     m = F[3:6]
-    k = crossp(f,transl(T)) + m
-    
+    k = crossp(f, transl(T)) + m
 
-function Ft = ftrans(T, F)
 
-	f = F(1:3); m = F(4:6);
-	k = cross(f, transl(T) ) + m;
+function
+Ft = ftrans(T, F)
 
-	mt = rot(T)' * k;
-	ft = rot(T)' * F(1:3);
+f = F(1:3); m = F(4:6);
+k = cross(f, transl(T)) + m;
 
-	Ft = [ft; mt];
+mt = rot(T)
+' * k;
+ft = rot(T)
+' * F(1:3);
+
+Ft = [ft;
+mt];

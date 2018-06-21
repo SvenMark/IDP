@@ -158,4 +158,3 @@ class BluetoothController(object):
             Thread(target=current_module.run, args=(self.names[selected_module], args[1],)).start()  # Run this module
         else:
             print("Module: " + str(selected_module) + " not found.")
-

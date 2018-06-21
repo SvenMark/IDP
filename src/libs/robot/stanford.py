@@ -32,11 +32,11 @@ from Link import *
 from Robot import *
 
 L = []
-L.append(Link(alpha=-pi/2, A=0, theta=0, D=0.412, sigma=0))
-L.append(Link(alpha=pi/2, A=0, theta=0, D=0.154, sigma=0))
-L.append(Link(alpha=0, A=0, theta=-pi/2, D=0, sigma=1))
-L.append(Link(alpha=-pi/2, A=0, theta=0, D=0, sigma=0))
-L.append(Link(alpha=pi/2, A=0, theta=0, D=0, sigma=0))
+L.append(Link(alpha=-pi / 2, A=0, theta=0, D=0.412, sigma=0))
+L.append(Link(alpha=pi / 2, A=0, theta=0, D=0.154, sigma=0))
+L.append(Link(alpha=0, A=0, theta=-pi / 2, D=0, sigma=1))
+L.append(Link(alpha=-pi / 2, A=0, theta=0, D=0, sigma=0))
+L.append(Link(alpha=pi / 2, A=0, theta=0, D=0, sigma=0))
 L.append(Link(alpha=0, A=0, theta=0, D=0.263, sigma=0))
 
 L[0].m = 9.29
@@ -46,19 +46,19 @@ L[3].m = 1.08
 L[4].m = 0.63
 L[5].m = 0.51
 
-L[0].r = mat([0,	.0175,	-0.1105])
-L[1].r = mat([0,	-1.054,	0])
-L[2].r = mat([0,	0,	-6.447])
-L[3].r = mat([0,	0.092,	-0.054])
-L[4].r = mat([0,	0,	0.566])
-L[5].r = mat([0,	0,	1.554])
+L[0].r = mat([0, .0175, -0.1105])
+L[1].r = mat([0, -1.054, 0])
+L[2].r = mat([0, 0, -6.447])
+L[3].r = mat([0, 0.092, -0.054])
+L[4].r = mat([0, 0, 0.566])
+L[5].r = mat([0, 0, 1.554])
 
-L[0].I = mat([0.276,	0.255,	0.071,	0,	0,	0])
-L[1].I = mat([0.108,	0.018,	0.100,	0,	0,	0])
-L[2].I = mat([2.51,	2.51,	0.006,	0,	0,	0])
-L[3].I = mat([0.002,	0.001,	0.001,	0,	0,	0])
-L[4].I = mat([0.003,	0.003,	0.0004,	0,	0,	0])
-L[5].I = mat([0.013,	0.013,	0.0003,	0,	0,	0])
+L[0].I = mat([0.276, 0.255, 0.071, 0, 0, 0])
+L[1].I = mat([0.108, 0.018, 0.100, 0, 0, 0])
+L[2].I = mat([2.51, 2.51, 0.006, 0, 0, 0])
+L[3].I = mat([0.002, 0.001, 0.001, 0, 0, 0])
+L[4].I = mat([0.003, 0.003, 0.0004, 0, 0, 0])
+L[5].I = mat([0.013, 0.013, 0.0003, 0, 0, 0])
 
 L[0].Jm = 0.953
 L[1].Jm = 2.193
@@ -74,6 +74,6 @@ L[3].G = 1
 L[4].G = 1
 L[5].G = 1
 
-qz = [0,0,0,0,0,0]
+qz = [0, 0, 0, 0, 0, 0]
 
 stanf = Robot(links=L, name='Stanford arm')

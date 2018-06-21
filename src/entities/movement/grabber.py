@@ -103,5 +103,3 @@ class Grabber(object):
                     else:
                         self.reposition = False
                     self.servos[i].update(delta)
-
-

@@ -18,7 +18,6 @@ def run(name, control):
     emotion.set_emotion('anthem')
 
     while not shared_object.has_to_stop():
-
         movement.tracks.handle_controller_input(stop_motors=shared_object.bluetooth_settings.s,
                                                 vertical_speed=shared_object.bluetooth_settings.h * speed_factor,
                                                 horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,

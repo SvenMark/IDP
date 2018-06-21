@@ -78,7 +78,7 @@ class JsonHandler:
 
         saved_file = open(self.file_name_building, "w")
         json.dump(json.dumps(current, default=lambda o: o.__dict__,
-                  sort_keys=True), saved_file)
+                             sort_keys=True), saved_file)
         saved_file.close()
 
     def get_save_buildings(self):
@@ -93,7 +93,8 @@ class JsonHandler:
             try:
                 data = json.loads(json.load(saved_file))
                 for p in data:
-                    saved_building.append(BuildingSide(p.get("side"), p.get("pick_up_vertical"), p.get("number"), p.get("side_number")))
+                    saved_building.append(
+                        BuildingSide(p.get("side"), p.get("pick_up_vertical"), p.get("number"), p.get("side_number")))
 
             except json.decoder.JSONDecodeError:
                 saved_building = []

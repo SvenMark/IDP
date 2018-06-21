@@ -41,11 +41,11 @@ class Legs(object):
 
         if self.all_Legs:
             self.legs = [
-                     self.leg_front_left,
-                     self.leg_front_right,
-                     self.leg_rear_left,
-                     self.leg_rear_right
-                ]
+                self.leg_front_left,
+                self.leg_front_right,
+                self.leg_rear_left,
+                self.leg_rear_right
+            ]
         else:
             self.legs = [
                 self.leg_rear_left,
@@ -58,7 +58,7 @@ class Legs(object):
         self.retract(120)  # Retract on constructing
         self.updating = False
         self.recent_package = [0, 0, 0]  # The bluetooth packages used for legs
-        self.update_thread = Thread(target=self.leg_updater, args=(self, ))  # The thread which runs the leg updater
+        self.update_thread = Thread(target=self.leg_updater, args=(self,))  # The thread which runs the leg updater
 
         print("Legs setup, retracting")
 

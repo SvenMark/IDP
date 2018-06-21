@@ -33,8 +33,3 @@ class SharedObject(object):
         :return: Thread has stopped
         """
         self.has_stopped = True
-
-
-
-
-

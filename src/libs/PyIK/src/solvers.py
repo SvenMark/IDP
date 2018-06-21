@@ -7,6 +7,7 @@ import numpy as np
 
 from util import *
 
+
 class Circle:
     def __init__(self, center, radius):
         self.c = np.array(center)
@@ -25,8 +26,8 @@ class Circle:
             return None
         else:
             # Two intersections
-            a = (self.r**2 - other.r**2 + dist**2) / (2 * dist)
-            h = np.sqrt(self.r**2 - a**2)
+            a = (self.r ** 2 - other.r ** 2 + dist ** 2) / (2 * dist)
+            h = np.sqrt(self.r ** 2 - a ** 2)
 
             p2 = self.c + (a * (other.c - self.c)) / dist
             i1 = np.array(p2)
@@ -36,6 +37,7 @@ class Circle:
             i2[0] -= h * (other.c[1] - self.c[1]) / dist
             i2[1] += h * (other.c[0] - self.c[0]) / dist
             return i1, i2
+
 
 class PhysicalSolver:
     def __init__(self, len_main, len_linkage, len_ac_lower, len_ac_upper):
@@ -53,11 +55,11 @@ class PhysicalSolver:
         # Repeated application of cosine rule yields the forearm angle
         # X is a diagonal across the irregular quatrilateral (opposite
         # base_angle)
-        Xsq = D**2 + C**2 - 2*D*C*np.cos(base_angle)
+        Xsq = D ** 2 + C ** 2 - 2 * D * C * np.cos(base_angle)
         X = np.sqrt(Xsq)
         # foo and bar are the two angles adjacent to X in the quat
-        cosFoo = np.clip((Xsq + C**2 - D**2) / (2*X*C), -1, 1)
-        cosBar = np.clip((Xsq + B**2 - A**2) / (2*X*B), -1, 1)
+        cosFoo = np.clip((Xsq + C ** 2 - D ** 2) / (2 * X * C), -1, 1)
+        cosBar = np.clip((Xsq + B ** 2 - A ** 2) / (2 * X * B), -1, 1)
         foo = np.arccos(cosFoo)
         bar = np.arccos(cosBar)
         # together they form the angle between the main arm and forearm
@@ -71,19 +73,20 @@ class PhysicalSolver:
         # Repeated application of cosine rule yields the forearm angle
         # Y is a diagonal across the irregular quatrilateral (opposite
         # desired)
-        Ysq = C**2 + B**2 - 2*C*B*np.cos(desired)
+        Ysq = C ** 2 + B ** 2 - 2 * C * B * np.cos(desired)
         Y = np.sqrt(Ysq)
         # foo and bar are the two angles adjacent to Y in the quat
-        cosFoo = np.clip((Ysq + D**2 - A**2) / (2*Y*D), -1, 1)
-        cosBar = np.clip((Ysq + C**2 - B**2) / (2*Y*C), -1, 1)
+        cosFoo = np.clip((Ysq + D ** 2 - A ** 2) / (2 * Y * D), -1, 1)
+        cosBar = np.clip((Ysq + C ** 2 - B ** 2) / (2 * Y * C), -1, 1)
         foo = np.arccos(cosFoo)
         bar = np.arccos(cosBar)
         # together they form the angle between the main arm and actuator
         base_angle = foo + bar
         return base_angle
 
+
 class IKSolver:
-    def __init__(self, len0, len1, wrist_len, base_offset, origin = [0, 0, 0]):
+    def __init__(self, len0, len1, wrist_len, base_offset, origin=[0, 0, 0]):
         self.origin = np.array(origin)
         self.elbow = np.array([0, 0])
         self.radial = 0
@@ -94,7 +97,7 @@ class IKSolver:
         self.base_offset = base_offset
         self.wrist_x = 0.0
         self.wrist_y = 0.0
-        self.wrist_normal = np.array([0,0,1])
+        self.wrist_normal = np.array([0, 0, 1])
 
     def setWristDir(self, normal):
         """Stores a 3D target normal vector - used to angle the wrist joint"""
@@ -106,8 +109,8 @@ class IKSolver:
         Calculate the yaw and pitch for the wrist joints to reach the desired
         wrist normal direction
         """
-        (x,y,z) = self.wrist_normal
-        self.wrist_x = np.pi/2 - np.arctan2(z, x) - self.swing
+        (x, y, z) = self.wrist_normal
+        self.wrist_x = np.pi / 2 - np.arctan2(z, x) - self.swing
         self.wrist_y = np.arctan2(-y, z)
 
     def setGoal(self, goal):
@@ -122,15 +125,15 @@ class IKSolver:
         """Shoulder position (top-down) given swing angle"""
         return np.array([
             # base offset is [x, z]
-            self.base_offset[1]*np.sin(theta) + self.base_offset[0]*np.cos(theta),
-            self.base_offset[1]*np.cos(theta) - self.base_offset[0]*np.sin(theta)
+            self.base_offset[1] * np.sin(theta) + self.base_offset[0] * np.cos(theta),
+            self.base_offset[1] * np.cos(theta) - self.base_offset[0] * np.sin(theta)
         ])
 
     def resolveIK(self):
         # Top-down IK - resolve swing angle and radial distance
         # NOTE 'td' here means "top-down", while 'pl' means "planar" or side-on
         self.origintd = np.array([self.origin[0], self.origin[2]])
-        self.goaltd = np.array([self.goal[0], self.goal[2]]) # X and Z position
+        self.goaltd = np.array([self.goal[0], self.goal[2]])  # X and Z position
         deltatd = self.goaltd - self.origintd
 
         # Resolve swing angle by bisection method: point straight at the
@@ -154,7 +157,7 @@ class IKSolver:
         while iters < 20:
             self.swing = (theta_high + theta_low) * 0.5
             f_mid = self.swing - sigangle(
-                self.goaltd-self.shoulder(self.swing),
+                self.goaltd - self.shoulder(self.swing),
                 vertical
             )
             # print (f_mid)

@@ -8,6 +8,7 @@ from threading import Thread
 sys.path.insert(0, '../../../src')
 
 from entities.audio.audio import Audio
+from entities.threading.utils import SharedObject
 
 
 class Emotion(object):
@@ -15,7 +16,7 @@ class Emotion(object):
     def __init__(self, audio):
         self.audio = audio
 
-        self.pixel_count = 33 # Configure the count of pixels:
+        self.pixel_count = 33  # Configure the count of pixels:
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
         self.spi_port = 0
         self.spi_device = 0
@@ -23,6 +24,7 @@ class Emotion(object):
                                                    gpio=GPIO)
         self.pixels.clear()
         self.pixels.show()  # Make sure to call show() after changing any pixels!
+        self.shared = SharedObject()
 
     def set_emotion(self, emotion):
         """
@@ -35,10 +37,10 @@ class Emotion(object):
             # Boston University Red
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
-            lights = Thread(target=self.blink_color(205, 0, 0, 500, 0.3))
+            self.shared.stop = False
+            lights = Thread(target=self.blink_color(205, 0, 0, 0, 0.3, self.shared))
             lights.start()
-            self.play_sound('russiananthem.mp3')
-            lights.join()
+            Thread(target=self.play_sound('russiananthem.mp3')).start()
         elif emotion == "success":
             self.set_color(0, 205, 0)
             self.play_sound('success.mp3')
@@ -48,18 +50,18 @@ class Emotion(object):
         elif emotion == "happy":
             self.rainbow_colors()
         elif emotion == "confused":
-            lights = Thread(target=self.blink_color(255, 105, 180, 500, 0.2))
+            self.shared.stop = False
+            lights = Thread(target=self.blink_color(255, 105, 180, 0, 0.2, self.shared))
             lights.start()
-            self.play_sound('heya.mp3')
-            lights.join()
+            Thread(target=self.play_sound('heya.mp3')).start()
         elif emotion == "confirmed":  # Used for building detection
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
             self.set_color(255, 165, 0)
 
     def play_sound(self, file):
-        Thread(target=self.audio.speak.play,
-               args=(file,)).start()  # Start module thread
+        self.audio.speak.play(file)
+        self.shared.stop = True
 
     def set_color(self, r, b, g):
         """
@@ -73,7 +75,18 @@ class Emotion(object):
             self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
         self.pixels.show()
 
-    def blink_color(self, r, b, g, blink_times, blinkdelay):
+    def blink_color(self, r, b, g, blink_times, blinkdelay, shared=SharedObject()):
+        if blink_times == 0:
+            while not shared.has_to_stop():
+                # infinite blink until thread gets shut down.
+                self.pixels.clear()
+                for k in range(self.pixels.count()):
+                    self.pixels.set_pixel(k, Adafruit_WS2801.RGB_to_color(r, g, b))
+                self.pixels.show()
+                time.sleep(blinkdelay)
+                self.pixels.clear()
+                self.pixels.show()
+                time.sleep(blinkdelay)
         for i in range(blink_times):
             # blink x times, then wait
             self.pixels.clear()
@@ -121,7 +134,7 @@ class Emotion(object):
             if wait > 0:
                 time.sleep(wait)
 
-    def rainbow_colors(self, wait=0.05):
+    def rainbow_colors(self, wait=0.1):
         """
         Function to make the entire strip cycle rainbow colors at once
         :param wait:
@@ -146,14 +159,27 @@ class Emotion(object):
                 # set then the pixel at position j
                 self.pixels.set_pixel(j, Adafruit_WS2801.RGB_to_color(color[0], color[1], color[2]))
                 self.pixels.show()
-                time.sleep(0.02)
+                time.sleep(0.01)
+
+    def rotate_color(self, r, g, b):
+        self.pixels.clear()
+        for i in range(self.pixels.count()):
+            if i > 0:
+                self.pixels.set_pixel(i - 1, Adafruit_WS2801.RGB_to_color(0, 0, 0))
+            self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, b, g))
+            time.sleep(0.01)
+            self.pixels.show()
 
 
 if __name__ == '__main__':
     audio = Audio()
     emote = Emotion(audio)
-    emote.appear_from_back()
-    emote.blink_color(0, 0, 255, 5, 0.2)
+
+    while True:
+        emote.rotate_color(0, 0, 255)
+
+    # emote.appear_from_back()
+    # emote.blink_color(0, 0, 255, 5, 0.2)
 
     # emote.set_emotion("anthem")
     # emote.rainbow_colors()
