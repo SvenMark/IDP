@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, '../../../src')
 
 
-class Recognize_settings(object):
+class RecognizeSettings(object):
     def __init__(self, grab_distance=183,
                  recognize_distance_max=250,
                  recognize_distance_min=130):
