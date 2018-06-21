@@ -108,7 +108,7 @@ class Legs(object):
         :param speed: The speed at which the servo moves
         :return: None
         """
-        retract_state = [530, 790, 470]
+        retract_state = [530, 790, 520]
         speeds = [speed, speed, speed]
 
         for leg in self.legs:
