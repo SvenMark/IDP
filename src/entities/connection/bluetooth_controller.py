@@ -39,7 +39,7 @@ class BluetoothController(object):
         self.audio = Audio()
         self.emotion = Emotion(self.audio)
 
-        self.current_module = 9  # Save the current module that is running
+        self.current_module = -1  # Save the current module that is running
         self.speed_factor = 0.75  # Set the amount of speed that can be used, 1 is max or 100%
         self.dead_zone = 10  # Set the dead zone for track movement
 
@@ -112,6 +112,10 @@ class BluetoothController(object):
             x = int(str(data[x_index + 2:y_index].replace(" ", "")))
             y = int(str(data[y_index + 2:m_index].replace(" ", "")))
             m = int(str(data[m_index + 2:].replace(" ", "")))
+
+
+            m = 9
+
 
             # Convert v and h to percentage to be used by dc motors
             v = ((v * (1000 / 1024)) - 500) / 5
