@@ -45,9 +45,9 @@ class Emotion(object):
         elif emotion == "success":
             self.set_color(0, 205, 0)
             self.play_sound('success.mp3')
-        elif emotion == "sad":
+        elif emotion == "mad":
             self.set_brightness(-255)
-            self.play_sound('sad.mp3')
+            Thread(target=self.play_sound('cyka.mp3')).start()
         elif emotion == "happy":
             self.rainbow_colors()
         elif emotion == "confused":
@@ -189,7 +189,7 @@ if __name__ == '__main__':
     emote = Emotion(audio)
 
     while True:
-        emote.rotate_color(0, 0, 255)
+        emote.rotate_color(0, 0, 255, 50)
 
     # emote.appear_from_back()
     # emote.blink_color(0, 0, 255, 5, 0.2)
