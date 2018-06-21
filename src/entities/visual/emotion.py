@@ -33,6 +33,8 @@ class Emotion(object):
         :param emotion: string with the kind of emotion you want
         :return:
         """
+        self.shared.stop = True  # Stop running animations
+        time.sleep(0.01)
         if emotion == "neutral":
             # Boston University Red
             self.set_color(205, 0, 0)
@@ -53,15 +55,14 @@ class Emotion(object):
             Thread(target=self.blink_color(255, 105, 180, 0, 0.2, self.shared)).start()
             Thread(target=self.play_sound('heya.mp3')).start()
         elif emotion == "confirmed":  # Used for building detection
-            self.shared.stop = True   # Stop the searching animation
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
             self.shared.stop = False
-            Thread(target=self.rotate_color(255, 165, 0, self.shared)).start()
+            Thread(target=self.rotate_color(255, 165, 0, 0, self.shared)).start()
 
     def play_sound(self, file):
         self.audio.speak.play(file)
-        self.shared.stop = True
+        self.set_emotion("neutral")
 
     def set_color(self, r, b, g):
         """
