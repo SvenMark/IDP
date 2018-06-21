@@ -158,7 +158,7 @@ class Tracks(object):
         :param dead_zone: Variable that determines the size of the dead zone
         :return: None
         """
-        multiplier = 0.83
+        multiplier = 1
         if stop_motors == 1:
             self.stop()
         elif stop_motors == 0:
@@ -213,13 +213,13 @@ class Tracks(object):
             if -dead_zone < vertical_speed < dead_zone:
                 if horizontal_speed > dead_zone:
                     self.turn_right(duty_cycle_track_left=horizontal_speed / 1.5,
-                                    duty_cycle_track_right=horizontal_speed / 1.6,
+                                    duty_cycle_track_right=horizontal_speed / 1.5,
                                     delay=0,
                                     acceleration=0)
 
                 if horizontal_speed < -dead_zone:
                     self.turn_left(duty_cycle_track_left=abs(horizontal_speed) / 1.5,
-                                   duty_cycle_track_right=abs(horizontal_speed) / 1.6,
+                                   duty_cycle_track_right=abs(horizontal_speed) / 1.5,
                                    delay=0,
                                    acceleration=0)
 
