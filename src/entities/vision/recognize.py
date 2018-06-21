@@ -126,7 +126,7 @@ class Recognize(object):
             grab = True
         else:
             grab = False
-            print("[INFO] percentage left:", percentage_position)
+        print("[INFO] percentage left:", percentage_position)
 
         if self.recognized and building:
             # Add to settings

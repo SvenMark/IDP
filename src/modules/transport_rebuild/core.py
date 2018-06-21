@@ -46,6 +46,8 @@ def run(name, control):
     json_handler = JsonHandler(color_ranges, "color_ranges.txt", "buildings.txt")
     color_range = json_handler.get_color_range()
     saved_buildings = json_handler.get_save_buildings()
+    for building in saved_buildings:
+        print(building.number)
 
     try:
         if len(sys.argv) > 1:
