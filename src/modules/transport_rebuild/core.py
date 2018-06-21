@@ -16,20 +16,6 @@ def transport_to_finish(movement, settings):
             time.sleep(0.1)
             settings.update = False
 
-
-def move_towards(movement, percentage):
-    print("MOVING TO {}".format(percentage))
-    torque = 0.5
-    left_speed = 25
-    right_speed = 25
-    if percentage < 50:
-        left_speed = left_speed - percentage * torque
-    else:
-        right_speed = right_speed - (percentage - 50) * torque
-
-    movement.tracks.forward(left_speed, right_speed, 0.3, 0.3)
-
-
 def run(name, control):
     movement = control.movement
     shared_object = control.shared_object
@@ -122,11 +108,11 @@ def run(name, control):
                 vision.settings.new = False
                 while not vision.settings.grab:
                     # TODO: implement this
-                    move_towards(movement, vision.settings.current_position)
+                    movement.move_towards(vision.settings.current_position)
             else:
                 # TODO: implement this
                 print("Move towards contours")
-                move_towards(movement, vision.settings.current_position)
+                movement.move_towards(vision.settings.current_position)
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))

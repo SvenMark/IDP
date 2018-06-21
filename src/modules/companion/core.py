@@ -12,6 +12,7 @@ def run(name, control):
     speed_factor = control.speed_factor
     dead_zone = control.dead_zone
     vision = control.vision
+    vision_settings = control.vision.settings
 
     print("[RUN] " + str(name))
 
@@ -20,8 +21,11 @@ def run(name, control):
     json_handler = JsonHandler(shoe, "shoe_ranges")
     color_range = json_handler.get_color_range()
 
+    vision.recognize.run(color_range)
+
     while not shared_object.has_to_stop():
-        vision.recognize.run(color_range)
+        if vision_settings.update:
+            movement.move_towards(vision_settings.current_position)
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED] {}".format(name))
