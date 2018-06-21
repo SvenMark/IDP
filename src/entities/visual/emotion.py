@@ -40,8 +40,10 @@ class Emotion(object):
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
             self.shared.stop = False
-            Thread(target=self.play_sound('russiananthem.mp3')).start()
-            Thread(target=self.blink_color(205, 0, 0, 0, 0.3, self.shared)).start()
+            test = Thread(target=self.play_sound('russiananthem.mp3'))
+            test2 = Thread(target=self.blink_color(205, 0, 0, 0, 0.3, self.shared))
+            test.start()
+            test2.start()
         elif emotion == "success":
             self.set_color(0, 205, 0)
             self.play_sound('success.mp3')
