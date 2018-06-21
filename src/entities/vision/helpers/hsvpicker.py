@@ -8,10 +8,11 @@ class Hsv_picker:
     def __init__(self, helpers):
         self.color_to_save = ""
         self.helper = helpers.helper
-        self.range_handler = helpers.json_handler
+        self.range_handler = None
         self.helper.min_block_size = 300
 
-    def run(self, color_range):
+    def run(self, color_range, json):
+        self.range_handler = json
         print("[RUN] HSV picker")
 
         # Create a trackbar for each color range
