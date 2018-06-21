@@ -19,12 +19,12 @@ def transport_to_finish(movement, settings):
 
 def move_towards(movement, percentage):
     print("MOVING TO {}".format(percentage))
-    torque = 1
-    left_speed = 60
-    right_speed = 60
-    if percentage < 49:
+    torque = 0.5
+    left_speed = 25
+    right_speed = 25
+    if percentage < 50:
         left_speed = left_speed - percentage * torque
-    elif percentage > 51:
+    else:
         right_speed = right_speed - (percentage - 50) * torque
 
     movement.tracks.forward(left_speed, right_speed, 0.3, 0.3)
