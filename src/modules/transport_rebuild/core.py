@@ -18,15 +18,16 @@ def transport_to_finish(movement, settings):
 
 
 def move_towards(movement, percentage):
+    print("MOVING TO {}".format(percentage))
     torque = 1
     left_speed = 60
     right_speed = 60
-    if percentage < 50:
+    if percentage < 49:
         left_speed = left_speed - percentage * torque
-    else:
+    elif percentage > 51:
         right_speed = right_speed - (percentage - 50) * torque
 
-    movement.tracks.forward(left_speed, right_speed, 1, 0.3)
+    movement.tracks.forward(left_speed, right_speed, 0.3, 0.3)
 
 
 def run(name, control):
@@ -90,7 +91,7 @@ def run(name, control):
 
             # If the robot is close enough to grab
             if vision.settings.grab:
-
+                print("GRABBING VISION")
                 # Try grab
                 movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
 
@@ -113,13 +114,15 @@ def run(name, control):
 
             # When a new building found
             elif vision.settings.new:
+                print("NEW BUILDING IN VISION")
                 vision.settings.new = False
                 while not vision.settings.grab:
                     # TODO: implement this
                     move_towards(movement, vision.settings.current_position)
             else:
                 # TODO: implement this
-                movement.tracks.forward(25, 25, 0.5, 0.5)
+                print("Move towards contours")
+                move_towards(movement, vision.settings.current_position)
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))
