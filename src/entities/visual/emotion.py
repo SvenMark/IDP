@@ -177,8 +177,8 @@ class Emotion(object):
             for j in range(rotate_times):
                 self.pixels.clear()
                 for i in range(self.pixels.count()):
-                    if i > 0:
-                        self.pixels.set_pixel(i - 1, Adafruit_WS2801.RGB_to_color(0, 0, 0))
+                    if i > 1:
+                        self.pixels.set_pixel(i - 2, Adafruit_WS2801.RGB_to_color(0, 0, 0))
                     self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, b, g))
                     time.sleep(0.1)
                     self.pixels.show()
@@ -188,7 +188,7 @@ if __name__ == '__main__':
     audio = Audio()
     emote = Emotion(audio)
 
-    emote.rotate_color(0, 0, 255, 50)
+    emote.rotate_color(0, 0, 255, 5)
 
     # emote.appear_from_back()
     # emote.blink_color(0, 0, 255, 5, 0.2)
