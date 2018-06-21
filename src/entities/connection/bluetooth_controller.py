@@ -39,7 +39,7 @@ class BluetoothController(object):
         self.audio = Audio()
         self.emotion = Emotion(self.audio)
 
-        self.current_module = -1  # Save the current module that is running
+        self.current_module = 9  # Save the current module that is running
         self.speed_factor = 0.75  # Set the amount of speed that can be used, 1 is max or 100%
         self.dead_zone = 10  # Set the dead zone for track movement
 
