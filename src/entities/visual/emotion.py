@@ -35,10 +35,10 @@ class Emotion(object):
             # Boston University Red
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
-            lights = Thread(target=self.blink_color(205, 0, 0, 500, 0.3))
+            lights = Thread(target=self.blink_color(205, 0, 0, 0, 0.3))
             lights.start()
             self.play_sound('russiananthem.mp3')
-            lights.join()
+            lights.join(1)
         elif emotion == "success":
             self.set_color(0, 205, 0)
             self.play_sound('success.mp3')
@@ -48,10 +48,10 @@ class Emotion(object):
         elif emotion == "happy":
             self.rainbow_colors()
         elif emotion == "confused":
-            lights = Thread(target=self.blink_color(255, 105, 180, 500, 0.2))
+            lights = Thread(target=self.blink_color(255, 105, 180, 0, 0.2))
             lights.start()
             self.play_sound('heya.mp3')
-            lights.join()
+            lights.join(1)
         elif emotion == "confirmed":  # Used for building detection
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
@@ -74,6 +74,17 @@ class Emotion(object):
         self.pixels.show()
 
     def blink_color(self, r, b, g, blink_times, blinkdelay):
+        if blink_times == 0:
+            while True:
+                # infinite blink until thread gets shut down.
+                self.pixels.clear()
+                for k in range(self.pixels.count()):
+                    self.pixels.set_pixel(k, Adafruit_WS2801.RGB_to_color(r, g, b))
+                self.pixels.show()
+                time.sleep(blinkdelay)
+                self.pixels.clear()
+                self.pixels.show()
+                time.sleep(blinkdelay)
         for i in range(blink_times):
             # blink x times, then wait
             self.pixels.clear()
@@ -121,7 +132,7 @@ class Emotion(object):
             if wait > 0:
                 time.sleep(wait)
 
-    def rainbow_colors(self, wait=0.05):
+    def rainbow_colors(self, wait=0.1):
         """
         Function to make the entire strip cycle rainbow colors at once
         :param wait:
