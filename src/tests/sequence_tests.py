@@ -14,8 +14,9 @@ legs = Legs(
 )
 
 for i in range(5):
+    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[0], sequence=stair)
     time.sleep(2)
-    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=stair)
+    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[1], sequence=stair)
     time.sleep(2)
 
 legs.retract(150)
