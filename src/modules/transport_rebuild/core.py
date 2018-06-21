@@ -119,7 +119,7 @@ def run(name, control):
                     move_towards(movement, vision.settings.current_position)
             else:
                 # TODO: implement this
-                movement.tracks.forward(20, 20, 0.5, 0.5)
+                movement.tracks.forward(25, 25, 0.5, 0.5)
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))
