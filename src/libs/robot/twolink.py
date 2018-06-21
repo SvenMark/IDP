@@ -37,11 +37,11 @@ L.append(Link(A=1))
 L[0].m = 1
 L[1].m = 1
 
-L[0].r = mat([1,0,0])
-L[1].r = mat([1,0,0])
+L[0].r = mat([1, 0, 0])
+L[1].r = mat([1, 0, 0])
 
-L[0].I = mat([0,0,0,0,0,0])
-L[1].I = mat([0,0,0,0,0,0])
+L[0].I = mat([0, 0, 0, 0, 0, 0])
+L[1].I = mat([0, 0, 0, 0, 0, 0])
 
 L[0].Jm = 0
 L[1].Jm = 0
@@ -49,7 +49,6 @@ L[1].Jm = 0
 L[0].G = 1
 L[1].G = 1
 
-qz = [0,0]
+qz = [0, 0]
 
-tl = Robot(links=L,name='Simple two link')
-
+tl = Robot(links=L, name='Simple two link')

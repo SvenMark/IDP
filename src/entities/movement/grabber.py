@@ -101,5 +101,3 @@ class Grabber(object):
                         self.loosen(100)
                         self.reposition = True
                     self.servos[i].update(delta)
-
-

@@ -157,4 +157,3 @@ class BluetoothController(object):
             current_module.run(self.names[selected_module], args[1])  # Run this module
         else:
             print("Module: " + str(selected_module) + " not found.")
-

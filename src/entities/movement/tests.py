@@ -14,6 +14,7 @@ class CommonTestClass(unittest.TestCase):
     """
     Setup joints for robot, also register leds and audio if required
     """
+
     def setUp(self):
         limbs = [
             Legs(

@@ -69,6 +69,7 @@ class Saving(object):
         """
         Shows the input fields for saving the building
         """
+
         def save_entry_fields():
             """
             Saves the entry fields
@@ -122,7 +123,8 @@ class Saving(object):
             """
             self.save = False
             print("[INFO] saved ", self.building_to_save)
-            self.building_handler.set_save_building(valid_contours, self.building_to_save, self.pickup_vertical, self.side)
+            self.building_handler.set_save_building(valid_contours, self.building_to_save, self.pickup_vertical,
+                                                    self.side)
             master.destroy()
 
         # Create new forum

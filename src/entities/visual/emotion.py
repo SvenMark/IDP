@@ -75,7 +75,7 @@ class Emotion(object):
             self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
         self.pixels.show()
 
-    def blink_color(self, r, b, g, blink_times, blinkdelay, shared = SharedObject()):
+    def blink_color(self, r, b, g, blink_times, blinkdelay, shared=SharedObject()):
         if blink_times == 0:
             while not shared.has_to_stop():
                 # infinite blink until thread gets shut down.
@@ -165,7 +165,7 @@ class Emotion(object):
         self.pixels.clear()
         for i in range(self.pixels.count()):
             if i > 0:
-                self.pixels.set_pixel(i-1, Adafruit_WS2801.RGB_to_color(0, 0, 0))
+                self.pixels.set_pixel(i - 1, Adafruit_WS2801.RGB_to_color(0, 0, 0))
             self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, b, g))
             time.sleep(0.01)
             self.pixels.show()

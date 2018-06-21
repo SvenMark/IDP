@@ -32,7 +32,8 @@ class Speak(object):
         path = self.audio.get_file_path(file_name)
         print(path)
         if self.audio.windows:  # windows
-            os.system("\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" -I null -q --no-qt-system-tray --qt-start-minimized --play-and-exit " + path)
+            os.system(
+                "\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" -I null -q --no-qt-system-tray --qt-start-minimized --play-and-exit " + path)
         else:  # linux
             os.system("mpg321 " + path)
 
@@ -47,4 +48,3 @@ class Speak(object):
         filename = "tts.wav"
         tts.save(filename)
         self.play(filename)
-

@@ -1,4 +1,5 @@
 import sys
+
 sys.path.insert(0, '../../../src')
 
 
@@ -6,7 +7,6 @@ class RecognizeSettings(object):
     def __init__(self, grab_distance=183,
                  recognize_distance_max=250,
                  recognize_distance_min=130):
-
         self.black_detected = False
         self.current_position = 50
         self.pick_up_vertical = False
@@ -17,4 +17,3 @@ class RecognizeSettings(object):
         self.grab_distance = grab_distance
         self.recognize_distance_max = recognize_distance_max
         self.recognize_distance_min = recognize_distance_min
-

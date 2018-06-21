@@ -49,7 +49,7 @@ class Link:
 
     @see: L{Robot}
     """
-    
+
     LINK_DH = 1
     LINK_MDH = 2
 
@@ -105,13 +105,13 @@ class Link:
 
         if self.D == None:
             return "alpha=%f, A=%f, theta=%f jtype: (%c) conv: (%s)" % (self.alpha,
-                 self.A, self.theta, jtype, conv)
+                                                                        self.A, self.theta, jtype, conv)
         elif self.theta == None:
             return "alpha=%f, A=%f, D=%f jtype: (%c) conv: (%s)" % (self.alpha,
-                 self.A, self.D, jtype, conv)
+                                                                    self.A, self.D, jtype, conv)
         else:
             return "alpha=%f, A=%f, theta=%f, D=%f jtype: (%c) conv: (%s)" % (self.alpha,
-                 self.A, self.theta, self.D, jtype, conv)
+                                                                              self.A, self.theta, self.D, jtype, conv)
 
     # invoked at print
     def __str__(self):
@@ -135,28 +135,36 @@ class Link:
             return "alpha = %f\tA = %f\ttheta = %f\tD=%f\tjtype: %c\tconv: (%s)" % (
                 self.alpha, self.A, self.theta, self.D, jtype, conv)
 
-
     def display(self):
 
-        print self;
+        print
+        self;
         print
 
         if self.m != None:
-            print "m:", self.m
+            print
+            "m:", self.m
         if self.r != None:
-            print "r:", self.r
+            print
+            "r:", self.r
         if self.I != None:
-            print "I:\n", self.I
+            print
+            "I:\n", self.I
         if self.Jm != None:
-            print "Jm:", self.Jm
+            print
+            "Jm:", self.Jm
         if self.B != None:
-            print "B:", self.B
+            print
+            "B:", self.B
         if self.Tc != None:
-            print "Tc:", self.Tc
+            print
+            "Tc:", self.Tc
         if self.G != None:
-            print "G:", self.G
+            print
+            "G:", self.G
         if self.qlim != None:
-            print "qlim:\n", self.qlim
+            print
+            "qlim:\n", self.qlim
 
     def copy(self):
         """
@@ -177,15 +185,15 @@ class Link:
         """
         tau = 0.0
         if isinstance(qd, (ndarray, matrix)):
-                qd = qd.flatten().T
+            qd = qd.flatten().T
         if self.B == None:
             self.B = 0
         tau = self.B * qd
         if self.Tc == None:
-            self.Tc = mat([0,0])
-        tau = tau + (qd > 0) * self.Tc[0,0] + (qd < 0) * self.Tc[0,1]
+            self.Tc = mat([0, 0])
+        tau = tau + (qd > 0) * self.Tc[0, 0] + (qd < 0) * self.Tc[0, 1]
         return tau
-        
+
     def nofriction(self, all=False):
         """
         Return a copy of the Link object with friction parameters set to zero.
@@ -196,7 +204,7 @@ class Link:
         @return: Copy of original Link object with zero friction
         @see: L{robot.nofriction}
         """
-        
+
         l2 = self.copy()
 
         l2.Tc = array([0, 0])
@@ -204,11 +212,10 @@ class Link:
             l2.B = 0
         return l2;
 
-
-# methods to set kinematic or dynamic parameters
+    # methods to set kinematic or dynamic parameters
 
     fields = ["alpha", "A", "theta", "D", "sigma", "offset", "m", "Jm", "G", "B", "convention"];
-    
+
     def __setattr__(self, name, value):
         """
         Set attributes of the Link object
@@ -240,16 +247,16 @@ class Link:
         Joint angle limits, qlim, is a 2-vector giving the lower and upper limits
         of motion.
         """
-    
+
         if value == None:
             self.__dict__[name] = value;
             return;
-            
+
         if name in self.fields:
             # scalar parameter
-            if isinstance(value, (ndarray,matrix)) and value.shape != (1,1):
+            if isinstance(value, (ndarray, matrix)) and value.shape != (1, 1):
                 raise ValueError, "Scalar required"
-            if not isinstance(value, (int,float,int32,float64)):
+            if not isinstance(value, (int, float, int32, float64)):
                 raise ValueError;
             self.__dict__[name] = value
 
@@ -259,9 +266,9 @@ class Link:
                 raise ValueError, "matrix required"
 
             self.__dict__[name] = mat(r)
-            
+
         elif name == "I":
-            if isinstance(value, matrix) and value.shape == (3,3):
+            if isinstance(value, matrix) and value.shape == (3, 3):
                 self.__dict__[name] = value;
             else:
                 v = arg2array(value);
@@ -269,17 +276,17 @@ class Link:
                     self.__dict__[name] = mat(diag(v))
                 elif len(v) == 6:
                     self.__dict__[name] = mat([
-                        [v[0],v[3],v[5]],
-                        [v[3],v[1],v[4]],
-                        [v[5],v[4],v[2]]])
+                        [v[0], v[3], v[5]],
+                        [v[3], v[1], v[4]],
+                        [v[5], v[4], v[2]]])
                 else:
                     raise ValueError, "matrix required";
 
         elif name == "Tc":
             v = arg2array(value)
-            
+
             if len(v) == 1:
-                self.__dict__[name] =  mat([-v[0], v[0]])
+                self.__dict__[name] = mat([-v[0], v[0]])
             elif len(v) == 2:
                 self.__dict__[name] = mat(v)
             else:
@@ -294,9 +301,8 @@ class Link:
         else:
             raise NameError, "Unknown attribute <%s> of link" % name
 
-
-#   LINK.islimit(q) return if limit is exceeded: -1, 0, +1
-    def islimit(self,q):
+    #   LINK.islimit(q) return if limit is exceeded: -1, 0, +1
+    def islimit(self, q):
         """
         Check if joint limits exceeded.  Returns
             - -1 if C{q} is less than the lower limit
@@ -311,7 +317,7 @@ class Link:
         if not self.qlim:
             return 0
 
-        return (q > self.qlim[1,0]) - (q < self.qlim[0,0])
+        return (q > self.qlim[1, 0]) - (q < self.qlim[0, 0])
 
     def tr(self, q):
         """
@@ -324,31 +330,33 @@ class Link:
         @rtype: homogeneous transformation
         @return: Link transform M{A(q)}
         """
-        
+
         an = self.A
         dn = self.D
         theta = self.theta
 
         if self.sigma == 0:
-            theta = q   # revolute
+            theta = q  # revolute
         else:
-            dn = q      # prismatic
+            dn = q  # prismatic
 
-        sa = sin(self.alpha); ca = cos(self.alpha);
-        st = sin(theta); ct = cos(theta);
+        sa = sin(self.alpha);
+        ca = cos(self.alpha);
+        st = sin(theta);
+        ct = cos(theta);
 
         if self.convention == Link.LINK_DH:
             # standard
-            t =   mat([[ ct,    -st*ca, st*sa,  an*ct],
-                    [st,    ct*ca,  -ct*sa, an*st],
-                    [0, sa, ca, dn],
-                    [0, 0,  0,  1]]);
+            t = mat([[ct, -st * ca, st * sa, an * ct],
+                     [st, ct * ca, -ct * sa, an * st],
+                     [0, sa, ca, dn],
+                     [0, 0, 0, 1]]);
 
         else:
             # modified
-            t =   mat([[ ct,    -st,    0,  an],
-                [st*ca, ct*ca,  -sa,    -sa*dn],
-                [st*sa, ct*sa,  ca, ca*dn],
-                [0, 0,  0,  1]]);
+            t = mat([[ct, -st, 0, an],
+                     [st * ca, ct * ca, -sa, -sa * dn],
+                     [st * sa, ct * sa, ca, ca * dn],
+                     [0, 0, 0, 1]]);
 
         return t;
