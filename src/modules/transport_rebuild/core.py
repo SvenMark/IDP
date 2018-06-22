@@ -77,6 +77,7 @@ def run(name, control):
 
         # If a vision frame has been handled
         if vision.settings.update:
+            print("grab {} distance {} percentage {}".format(vision.settings.grab, vision.settings.distance, vision.settings.current_position))
             # Frame is now handled
             vision.settings.update = False
 

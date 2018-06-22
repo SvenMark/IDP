@@ -132,7 +132,7 @@ class Recognize(object):
         # Add to settings
         if building:
             self.settings.pick_up_vertical = building.pick_up_vertical
-            self.settings.new = True
+        self.settings.new = True
         self.settings.current_position = percentage_position
         self.settings.grab = grab
         self.settings.distance = recognize_distance_max - building_width
