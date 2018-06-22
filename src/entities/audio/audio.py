@@ -20,7 +20,7 @@ class Audio(object):
         self.windows = True if "Windows" == platform.system() else False
         self.resources = "../../resources/"
         self.speak = Speak(self)
-        self.microphone_recognition = MicrophoneRecognition(self)
+        # self.microphone_recognition = MicrophoneRecognition(self)
         self.beat_detection = BeatDetection()
 
     def get_file_path(self, file_name):
