@@ -16,8 +16,9 @@ class Speak(object):
         file = self.audio.get_file_path('russiananthem.mp3')
         pygame.init()
         pygame.mixer.init()
-        pygame.mixer.music.load(file)
-        pygame.mixer.music.play()
+        print("loading")
+        gay = pygame.mixer.music.load(file)
+        gay.play()
         pygame.event.wait()
 
     def play(self, file_name):
