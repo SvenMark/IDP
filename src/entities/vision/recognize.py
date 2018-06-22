@@ -123,7 +123,7 @@ class Recognize(object):
 
         # If all requirements are valid, grab
         # if self.recognized and 51 > percentage_position > 49 and building_width > grab_distance:
-        if 51 > percentage_position > 49 and building_width > grab_distance:
+        if 51 > percentage_position > 49 and (recognize_distance_max - building_width) < 220:
             grab = True
         else:
             grab = False

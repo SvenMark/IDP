@@ -37,6 +37,7 @@ class BluetoothController(object):
         self.shared_object = SharedObject()
         self.vision = Vision(self.shared_object)
         self.audio = Audio()
+        self.audio.speak.play("startup.mp3")
         self.emotion = Emotion(self.audio)
 
         self.current_module = -1  # Save the current module that is running
