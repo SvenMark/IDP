@@ -25,7 +25,15 @@ tracks.forward(75, 75, 0, 3)
 
 while True:
     tracks.forward(75, 75, 0, 0)
-    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=stair)
+    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[0], sequence=stair)
+    time.sleep(0.1)
+    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[1], sequence=stair)
+    time.sleep(0.1)
+    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[2], sequence=stair)
+    time.sleep(0.1)
+    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[3], sequence=stair)
+    time.sleep(0.1)
+
 
 # for i in range(5):
 #     tracks.stop()
