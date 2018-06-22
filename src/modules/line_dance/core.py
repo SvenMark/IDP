@@ -19,12 +19,15 @@ def run(name, control):
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
-    pin_jurjen1 = 16
-    pin_jurjen2 = 20  # clean code
-    GPIO.setup(pin_jurjen1, GPIO.OUT)
-    GPIO.setup(pin_jurjen2, GPIO.OUT)
-    GPIO.output(pin_jurjen1, 1)
-    GPIO.output(pin_jurjen2, 1)
+    
+    beat_led_pin = 16
+    beat_detect_pin = 20  # clean code
+    beat_pin = 21
+
+    GPIO.setup(beat_led_pin, GPIO.OUT)
+    GPIO.setup(beat_detect_pin, GPIO.OUT)
+    GPIO.output(beat_led_pin, 1)
+    GPIO.output(beat_detect_pin, 1)
 
     p = pyaudio.PyAudio()  # start the PyAudio class
     stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True,
@@ -38,11 +41,14 @@ def run(name, control):
     p.terminate()
 
     while not shared_object.has_to_stop():
-        print("Doing calculations and stuff")
-        time.sleep(0.5)
+        if GPIO.input(beat_pin) is True:
+            if movement.legs.deployed:
+                movement.legs.retract()
+            else:
+                movement.legs.deploy()
 
-    GPIO.output(pin_jurjen1, 0)
-    GPIO.output(pin_jurjen2, 0)
+    GPIO.output(beat_led_pin, 0)
+    GPIO.output(beat_detect_pin, 0)
     GPIO.cleanup()
 
     # Notify shared object that this thread has been stopped
