@@ -84,6 +84,8 @@ class BluetoothController(object):
                     self.handle_data(data_line)  # Handle the data line
                     self.data = ""  # Empty data string
             except KeyboardInterrupt:
+                self.audio.speak.play("shutdown.mp3")
+                time.sleep(5)
                 break
 
         self.movement.tracks.clean_up()  # Clean up gpio
