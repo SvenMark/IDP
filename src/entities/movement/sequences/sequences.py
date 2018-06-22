@@ -19,34 +19,34 @@ stair_2 = [
 ]
 
 stair = [
+    # Laag begin
+    [
+        [310, 170, 890],  # L voor
+        [790, 170, 890],  # R voor
+        [310, 170, 890],  # L achter
+        [790, 170, 890]  # R achter
+    ],
+    # Laag eind
+    [
+        [360, 170, 890],  # L voor
+        [750, 170, 890],  # R voor
+        [360, 170, 890],  # L achter
+        [750, 170, 890]  # R achter
+    ],
     # Hoog begin
     [
-        [265, 350, 890],  # L voor
-        [745, 350, 890],  # R voor
-        [265, 350, 890],  # L achter
-        [745, 350, 890]  # R achter
+        [360, 350, 890],  # L voor
+        [750, 350, 890],  # R voor
+        [360, 350, 890],  # L achter
+        [750, 350, 890]  # R achter
     ],
     # Hoog eind
     [
         [310, 350, 890],  # L voor
-        [700, 350, 890],  # R voor
+        [790, 350, 890],  # R voor
         [310, 350, 890],  # L achter
-        [700, 350, 890]  # R achter
+        [790, 350, 890]  # R achter
     ],
-    # Laag begin
-    [
-        [310, 170, 890],  # L voor
-        [700, 170, 890],  # R voor
-        [310, 170, 890],  # L achter
-        [700, 170, 890]  # R achter
-    ],
-    # Laag eind
-    [
-        [265, 170, 890],  # L voor
-        [745, 170, 890],  # R voor
-        [265, 170, 890],  # L achter
-        [745, 170, 890]  # R achter
-    ]
 ]
 
 clap = [
