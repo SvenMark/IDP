@@ -4,6 +4,7 @@ import serial
 
 WINDOW_SIZE = 512
 
+
 class CapacitiveSensor:
     def __init__(self, port):
         self.serial = serial.Serial(port, 250000)
@@ -28,7 +29,7 @@ class CapacitiveSensor:
         else:
             return self.readings[-1]
 
-    def mean(self, n = WINDOW_SIZE):
+    def mean(self, n=WINDOW_SIZE):
         sum = 0.0
         count = min(len(self.readings), n)
         for i in xrange(count):

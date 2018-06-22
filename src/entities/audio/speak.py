@@ -1,19 +1,20 @@
 import os
 from gtts import gTTS
 import sys
+import pygame
 
 sys.path.insert(0, '../../../src')
 
-from entities.audio.audio import Audio
 
-
-class Speak(Audio):
+class Speak(object):
     """
     Speak class, implements play and text to speech
     """
 
-    def __init__(self):
-        super(Speak, self).__init__()
+    def __init__(self, audio):
+        self.audio = audio
+        pygame.init()
+        # self.anthem = pygame.mixer.Sound(self.audio.get_file_path('russiananthem.mp3'))
 
     def play(self, file_name):
         """
@@ -21,10 +22,18 @@ class Speak(Audio):
         :param file_name: Audio file
         :return: None
         """
-        path = Audio.get_file_path(self, file_name)
+
+        # if file_name == 'russiananthem.mp3':
+        #     self.anthem.play()
+        #     while pygame.mixer.music.get_busy():
+        #         pygame.time.Clock().tick(10)
+        #     return
+
+        path = self.audio.get_file_path(file_name)
         print(path)
-        if self.windows:  # windows
-            os.system("\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" -I null -q --no-qt-system-tray --qt-start-minimized --play-and-exit " + path)
+        if self.audio.windows:  # windows
+            os.system(
+                "\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" -I null -q --no-qt-system-tray --qt-start-minimized --play-and-exit " + path)
         else:  # linux
             os.system("mpg321 " + path)
 
@@ -39,13 +48,3 @@ class Speak(Audio):
         filename = "tts.wav"
         tts.save(filename)
         self.play(filename)
-
-
-def main():
-    sp = Speak()
-    sp.play("heya.mp3")
-
-
-if __name__ == '__main__':
-    main()
-

@@ -1,48 +1,44 @@
-
-
-import datetime
 import time
-import json
 import numpy as np
 import cv2
-from tkinter import *
 from imutils.video import VideoStream
-from entities.vision.helpers.vision_helper import Color
-from entities.vision.helpers.json_handler import Json_Handler
 
 
 class Hsv_picker:
-    def __init__(self, helpers, color_range, img):
+    def __init__(self, helpers):
         self.color_to_save = ""
-        self.img = cv2.imread(img)
         self.helper = helpers.helper
-        self.color_range = color_range
-        self.range_handler = helpers.json_handler
+        self.range_handler = None
+        self.helper.min_block_size = 300
 
-    def run(self):
+    def run(self, color_range, json):
+        self.range_handler = json
         print("[RUN] HSV picker")
 
-        for color in range(len(self.color_range)):
-            c = self.color_range[color]
+        # Create a trackbar for each color range
+        for color in range(len(color_range)):
+            c = color_range[color]
             self.createtrackbars(c)
 
+        # Create the camera stream
         cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
         time.sleep(0.3)  # startup
 
         while True:
-            if self.img is not None:
-                img = self.img
-            else:
-                img = cap.read()
+            # Check if there is a given image, else use the camera
+            img = cap.read()
+            img = cv2.flip(img, 0)
 
+            # Apply gaussian blur
             img = cv2.GaussianBlur(img, (9, 9), 0)
-                        
+
             # Hsv Mask
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             mask = cv2.inRange(hsv, np.array([180, 255, 255]), np.array([180, 255, 255]))
 
-            for color in range(len(self.color_range)):
-                c = self.color_range[color]
+            # Get the color from te trackbars
+            for color in range(len(color_range)):
+                c = color_range[color]
                 on_off = cv2.getTrackbarPos('off_on', c.color)
                 if on_off > 0:
                     lowh = cv2.getTrackbarPos('Low H', c.color)
@@ -57,11 +53,14 @@ class Hsv_picker:
                     higher = np.array([highh, highs, highv])
                     mask += cv2.inRange(hsv, lower, higher)
 
+            # Apply the color ranges
             output = cv2.bitwise_and(img, img, mask=mask)
 
+            # Get the contours
             ret, thresh = cv2.threshold(mask, 127, 255, 0)
             im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
+            # Draw the valid contours and data
             for cnt in range(len(contours)):
                 c = contours[cnt]
                 moment = cv2.moments(c)
@@ -77,13 +76,15 @@ class Hsv_picker:
                                 (255, 255, 255), 1)
                     cv2.putText(output, str(area), (cx - 30, cy + 45), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255),
                                 1)
-                    cv2.drawContours(output, [c], -1, (255, 255, 255), 5)
+                    cv2.drawContours(output, [c], -1, (255, 255, 255), 2)
 
+            # Show the contours and the original image
             cv2.imshow('hsv-picker', output)
             cv2.imshow('original', img)
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
-                self.savehigherlower(self.color_range)
+                # Save the building when you press KEY s
+                self.savehigherlower(color_range)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -99,6 +100,7 @@ class Hsv_picker:
         :param mask: Mask to apply to
         :param img: Image to apply mask to
         """
+        # Get all trackbar values
         lowh = cv2.getTrackbarPos('Low H', name)
         lows = cv2.getTrackbarPos('Low S', name)
         lowv = cv2.getTrackbarPos('Low V', name)
@@ -126,12 +128,12 @@ class Hsv_picker:
 
         nothing = self.helper.nothing
 
-        # create trackbars for lower
+        # Create trackbars for lower
         cv2.createTrackbar('Low H', name, c.lower[0], 180, nothing)
         cv2.createTrackbar('Low S', name, c.lower[1], 255, nothing)
         cv2.createTrackbar('Low V', name, c.lower[2], 255, nothing)
 
-        # create trackbars for higher
+        # Create trackbars for higher
         cv2.createTrackbar('High H', name, c.upper[0], 180, nothing)
         cv2.createTrackbar('High S', name, c.upper[1], 255, nothing)
         cv2.createTrackbar('High V', name, c.upper[2], 255, nothing)
@@ -144,7 +146,7 @@ class Hsv_picker:
         correct_ranges = []
 
         for color in range(len(color_range)):
-            c = self.color_range[color]
+            c = color_range[color]
             lowh = cv2.getTrackbarPos('Low H', c.color)
             lows = cv2.getTrackbarPos('Low S', c.color)
             lowv = cv2.getTrackbarPos('Low V', c.color)
@@ -155,17 +157,9 @@ class Hsv_picker:
 
             correct_ranges.append((c.color, [lowh, lows, lowv], [highh, highs, highv]))
 
+        # Save the ranges to JSON file
         self.range_handler.set_color_range(correct_ranges)
         print("[INFO] Saved settings")
 
     def nothing(self, x):
         pass
-
-
-def main():
-    hsv = Hsv_picker()
-    hsv.run()
-
-
-if __name__ == '__main__':
-    main()  # disabled for travis

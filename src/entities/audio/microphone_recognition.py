@@ -4,24 +4,22 @@ from chatterbot import ChatBot
 
 sys.path.insert(0, '../../../src')
 
-from entities.audio.speak import Speak
-
-
-chatbot = ChatBot(  
+chatbot = ChatBot(
     'Ron Obvious',
     trainer='chatterbot.trainers.ChatterBotCorpusTrainer'
 )
+
 
 # Train based on the english corpus
 # chatbot.train("chatterbot.corpus.english.conversations")
 # chatbot.train("chatterbot.corpus.english")
 
 
-class MicrophoneRecognition:
+class MicrophoneRecognition(object):
 
-    def __init__(self):
+    def __init__(self, audio):
         self.result = "Hello"
-        self.speak = Speak()
+        self.speak = audio.speak
         self.r = sr.Recognizer()
 
         self.lang = True
@@ -82,4 +80,3 @@ class MicrophoneRecognition:
             self.speak.tts('can you say that again please?', 'en-AU')
             print(sys.exc_info())
             self.recognition()
-

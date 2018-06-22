@@ -9,15 +9,16 @@ from entities.movement.limb.joints.servo import Servo
 from libs.ax12 import Ax12
 
 grabber = Grabber(servos=[
-            1,
-            53,
-            43
-        ],
-        initial_positions=[465, 198, 200])
+    1,
+    53,
+    43
+],
+    initial_positions=[455, 185, 83])
 
-grabber.grab([80, 80, 80])
-time.sleep(3)
-grabber.loosen([80, 80, 80])
+while True:
+    grabber.grab(20, True)
+# grabber.loosen(30)
+# grabber.loosen(80)
 
 # tracks = Tracks(track_0_pin=13,
 #                 track_1_pin=18,

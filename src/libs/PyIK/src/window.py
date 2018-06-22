@@ -1,8 +1,10 @@
 import pygame as pyg
 
+
 def InitRenderer():
     pyg.init()
     pyg.font.init()
+
 
 class Renderer:
     def __init__(self, surf):
@@ -31,7 +33,7 @@ class Renderer:
     def drawArc(self, color, center, dim, start_angle, end_angle, width):
         pyg.draw.arc(self.surf,
                      color,
-                     pyg.Rect(center[0]-dim/2, center[1]-dim/2, dim, dim),
+                     pyg.Rect(center[0] - dim / 2, center[1] - dim / 2, dim, dim),
                      start_angle,
                      end_angle,
                      width)

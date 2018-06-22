@@ -1,4 +1,4 @@
-#DRIVEBOT Drive a graphical robot
+# DRIVEBOT Drive a graphical robot
 #
 #	DRIVEBOT(ROBOT)
 #	DRIVEBOT(ROBOT, Q)
@@ -27,110 +27,144 @@
 
 # Copyright (C) 2001-2002, by Peter I. Corke
 
-function drivebot(a,b)
-	bgcol = [135 206 250]/255;
+function
+drivebot(a, b)
+bgcol = [135 206 250] / 255;
 
-	if isstr(a)
-		% drivebot(name, j), graphical callback function
-		name = a; j = b;
-		rh = findobj('Tag', name);
-		handles = get(gco, 'Userdata');
-		scale = handles{3};
-		for r=rh',
-			rr = get(r, 'UserData');
-			q = rr.q;
-			if isempty(q),
-				q = zeros(1,rr.n);
-			end
-			if gco == handles{1},
-				% get value from slider
-				q(j) = get(gco, 'Value') / scale(j);
-				set(handles{2}, 'String', num2str(scale(j)*q(j)));
-			else
-				% get value from text box
-				q(j) = str2num(get(gco, 'String')) / scale(j);
-				set(handles{1}, 'Value', q(j));
-			end
-			rr.q = q;
-			set(r, 'UserData', rr);
-		end
-		plot(rr, q)
-		t6 = fkine(rr, q);
-		h3 = get(findobj('Tag', 'T6'), 'UserData');
-		for i=1:3,
-			set(h3(i,1), 'String', sprintf('%.3f', t6(i,4)));
-			set(h3(i,2), 'String', sprintf('%.3f', t6(i,3)));
-		end
-	else
-		% drivebot(r, q)
-		r = a;
-		scale = ones(r.n,1);
+if isstr(a)
+    % drivebot(name, j), graphical
+    callback
+    function
+    name = a;
+    j = b;
+    rh = findobj('Tag', name);
+    handles = get(gco, 'Userdata');
+    scale = handles
+    {3};
+    for r=rh',
+    rr = get(r, 'UserData');
+    q = rr.q;
+    if isempty(q),
+    q = zeros(1, rr.n);
+end
+if gco == handles{1},
+% get
+value
+from slider
 
-		n = r.n;
-		width = 300;
-		height = 40;
-		minVal = -pi;
-		maxVal = pi;	
+q(j) = get(gco, 'Value') / scale(j);
+set(handles
+{2}, 'String', num2str(scale(j) * q(j)));
+else
+% get
+value
+from text box
 
-		qlim = r.qlim;
-		if isempty(qlim),
-			qlim = [minVal*ones(r.n,1) maxVal*ones(r.n,1)];
-		end
+q(j) = str2num(get(gco, 'String')) / scale(j);
+set(handles
+{1}, 'Value', q(j));
+end
+rr.q = q;
+set(r, 'UserData', rr);
+end
+plot(rr, q)
+t6 = fkine(rr, q);
+h3 = get(findobj('Tag', 'T6'), 'UserData');
+for i=1:3,
+set(h3(i, 1), 'String', sprintf('%.3f', t6(i, 4)));
+set(h3(i, 2), 'String', sprintf('%.3f', t6(i, 3)));
+end
+else
+% drivebot(r, q)
+r = a;
+scale = ones(r.n, 1);
 
-		if nargin < 2,
-		    q = zeros(1,n);
-		else
-			if isstr(b),
-				if strncmp(b, 'deg', 3),
-					disp('** in degree mode')
-					L = r.link;
-					for i=1:r.n,
-						if L{i}.sigma == 0,
-							scale(i) = 180/pi;
-						end
-					end
-				end
-			else
-				q = b;
-			end
-		end
-		t6 = fkine(r, q);
-		fig = figure('Units', 'pixels', ...
-		    'Position', [0 -height width height*(n+2)], ...
-		    'Color', bgcol);
-		set(fig,'MenuBar','none')
-		delete( get(fig, 'Children') )
+n = r.n;
+width = 300;
+height = 40;
+minVal = -pi;
+maxVal = pi;
 
-		% first we check to see if there are any graphical robots of
-		% this name, if so we use them, otherwise create a robot plot.
+qlim = r.qlim;
+if isempty(qlim),
+qlim = [minVal * ones(r.n, 1) maxVal * ones(r.n, 1)];
+end
 
-		rh = findobj('Tag', r.name);
+if nargin < 2,
+q = zeros(1, n);
+else
+if isstr(b),
+if strncmp(b, 'deg', 3),
+disp('** in degree mode')
+L = r.link;
+for i=1:r.n,
+if L{i}.sigma == 0,
+scale(i) = 180 / pi;
+end
+end
+end
+else
+q = b;
+end
+end
+t6 = fkine(r, q);
+fig = figure('Units', 'pixels', ...
+'Position', [0 - height width height * (n + 2)], ...
+'Color', bgcol);
+set(fig, 'MenuBar', 'none')
+delete(get(fig, 'Children'))
 
-		% attempt to get current joint config of graphical robot
-		if ~isempty(rh),
-			rr = get(rh(1), 'UserData');
-			if ~isempty(rr.q),
-				q = rr.q;
-			end
-		end
+% first
+we
+check
+to
+see if there
+are
+any
+graphical
+robots
+of
+% this
+name,
+if so we use them, otherwise create a robot plot.
 
+rh = findobj('Tag', r.name);
 
-		% now make the sliders
-		for i=1:n,
-			uicontrol(fig, 'Style', 'text', ...
-				'Units', 'pixels', ...
-				'BackgroundColor', bgcol, ...
-				'Position', [0 height*(n-i) width*0.1 height*0.4], ...
-				'String', sprintf('q%d', i));
+% attempt
+to
+get
+current
+joint
+config
+of
+graphical
+robot
+if ~isempty(rh),
+rr = get(rh(1), 'UserData');
+if ~isempty(rr.q),
+q = rr.q;
+end
+end
 
-			h(i) = uicontrol(fig, 'Style', 'slider', ...
-				'Units', 'pixels', ...
-				'Position', [width*0.1 height*(n-i) width*0.7 height*0.4], ...
-				'Min', scale(i)*qlim(i,1), ...
-				'Max', scale(i)*qlim(i,2), ...
-				'Value', scale(i)*q(i), ...
-				'Tag', sprintf('Slider%d', i), ...
-				'Callback', ['drivebot(''' r.name ''',' num2str(i) ')']);
+% now
+make
+the
+sliders
+for i=1:n,
+uicontrol(fig, 'Style', 'text', ...
+'Units', 'pixels', ...
+'BackgroundColor', bgcol, ...
+'Position', [0 height * (n - i) width * 0.1 height * 0.4], ...
+'String', sprintf('q%d', i));
+
+h(i) = uicontrol(fig, 'Style', 'slider', ...
+'Units', 'pixels', ...
+'Position', [width * 0.1 height * (n - i) width * 0.7 height * 0.4], ...
+'Min', scale(i) * qlim(i, 1), ...
+'Max', scale(i) * qlim(i, 2), ...
+'Value', scale(i) * q(i), ...
+'Tag', sprintf('Slider%d', i), ...
+'Callback', ['drivebot(''' r.name ''',' num2str(i) ')']);
 
 			h2(i) = uicontrol(fig, 'Style', 'edit', ...
 				'Units', 'pixels', ...

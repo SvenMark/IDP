@@ -103,6 +103,9 @@ class Tracks(object):
                 self.track_right.forward(speed_2, 0)
             time.sleep(0.01)  # Add a little delay so the motor accelerates smoothly
 
+        self.track_left.current_speed = speed_1
+        self.track_right.current_speed = speed_2
+
         time.sleep(delay)
 
     def forward(self, duty_cycle_track_left, duty_cycle_track_right, delay, acceleration):
@@ -158,6 +161,7 @@ class Tracks(object):
         :param dead_zone: Variable that determines the size of the dead zone
         :return: None
         """
+        multiplier = 1
         if stop_motors == 1:
             self.stop()
         elif stop_motors == 0:
@@ -168,25 +172,21 @@ class Tracks(object):
             if vertical_speed < -dead_zone:
                 if -dead_zone < horizontal_speed < dead_zone:
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
-                                  duty_cycle_track_right=abs(vertical_speed),
+                                  duty_cycle_track_right=abs(vertical_speed) * multiplier,
                                   delay=0,
                                   acceleration=0)
                 # Backward left
                 if horizontal_speed < -dead_zone:
-                    if horizontal_speed < 150:
-                        horizontal_speed = 150
                     horizontal_speed = horizontal_speed / 2
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
-                                  duty_cycle_track_right=abs(vertical_speed) - horizontal_speed,
+                                  duty_cycle_track_right=(abs(vertical_speed) - horizontal_speed) * multiplier,
                                   delay=0,
                                   acceleration=0)
                 # Backward right
                 if horizontal_speed > dead_zone:
-                    if horizontal_speed > 850:
-                        horizontal_speed = 850
                     horizontal_speed = abs(horizontal_speed / 2)
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
-                                  duty_cycle_track_right=abs(vertical_speed) - horizontal_speed,
+                                  duty_cycle_track_right=(abs(vertical_speed) - horizontal_speed) * multiplier,
                                   delay=0,
                                   acceleration=0)
 
@@ -194,25 +194,21 @@ class Tracks(object):
             if vertical_speed > dead_zone:
                 if -dead_zone < horizontal_speed < dead_zone:
                     self.forward(duty_cycle_track_left=vertical_speed,
-                                 duty_cycle_track_right=vertical_speed,
+                                 duty_cycle_track_right=vertical_speed * multiplier,
                                  delay=0,
                                  acceleration=0)
                 # Forward left
                 if horizontal_speed < -dead_zone:
-                    if horizontal_speed < 150:
-                        horizontal_speed = 150
                     horizontal_speed = horizontal_speed / 2
                     self.forward(duty_cycle_track_left=vertical_speed,
-                                 duty_cycle_track_right=vertical_speed - horizontal_speed,
+                                 duty_cycle_track_right=vertical_speed - horizontal_speed * multiplier,
                                  delay=0,
                                  acceleration=0)
                 # Forward right
                 if horizontal_speed > dead_zone:
-                    if horizontal_speed > 850:
-                        horizontal_speed = 850
                     horizontal_speed = abs(horizontal_speed / 2)
                     self.forward(duty_cycle_track_left=vertical_speed,
-                                 duty_cycle_track_right=vertical_speed - horizontal_speed,
+                                 duty_cycle_track_right=vertical_speed - horizontal_speed * multiplier,
                                  delay=0,
                                  acceleration=0)
 

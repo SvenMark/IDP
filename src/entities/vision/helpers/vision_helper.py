@@ -1,7 +1,5 @@
 import numpy as np
 import cv2
-from imutils.video import VideoStream
-from enum import Enum
 
 
 class Color:
@@ -11,21 +9,12 @@ class Color:
         self.upper = np.array(upper)
 
 
-class Side(Enum):
-    front = 0
-    left = 1
-    right = 2
-    back = 3
-
-
-class Building:
-    def __init__(self, front=(0, 0), back=(0, 0), left=(0, 0), right=(0, 0), pick_up_vertical=False, number=0):
-        self.front = front
-        self.back = back
-        self.left = left
-        self.right = right
-        self.pick_up_vertical = pick_up_vertical
+class BuildingSide:
+    def __init__(self, side, pick_up_vertical, number, side_number):
+        self.side = side
+        self.pick_up_vertical = True if pick_up_vertical == 1 else False
         self.number = number
+        self.side_number = side_number
 
 
 class Block:
@@ -42,9 +31,8 @@ class ColorRange:
 
 class Helper:
 
-    def __init__(self, min_block_size, max_block_size):
-        self.min_block_size = min_block_size
-        self.max_block_size = max_block_size
+    def __init__(self):
+        self.min_block_size = 0
 
     def nothing(self, x):
         pass
@@ -71,18 +59,11 @@ class Helper:
 
         return False
 
-    def check_valid_convex(self, c, sides):
+    def check_valid_convex(self, c):
         """
         Checks if a convex is a valid block
         :return: True if the contour is a block
         """
-
-        # Calculate the perimeter
-        peri = cv2.arcLength(c, True)
-
-        # Calculate the sides of the convexhull, 4 is a square/rectangle, 3 is a triangle etc.
-        approx = cv2.approxPolyDP(c, 0.02 * peri, True)
-
         # Calculate the area of the convexhull
         area = cv2.contourArea(c)
 
@@ -105,6 +86,16 @@ class Helper:
         # Find the contours for the threshold
         im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
+        sensitivity = 30
+        valid_contours = []
+        for cnt in range(len(contours)):
+            for cnt2 in range(len(contours)):
+                if cnt != cnt2:
+                    if np.linalg.norm(contours[cnt], contours[cnt2]) < sensitivity:
+                        valid_contours.append(contours[cnt])
+
+        contours = valid_contours
+
         # Define the extreme points
         extremes = [999999, -99999, 99999, -9999]  # min x, max x, min y, max y
 
@@ -115,7 +106,7 @@ class Helper:
             c = cv2.convexHull(cnt)
 
             # Check if the convex is a valid block
-            if self.check_valid_convex(c, 4):
+            if self.check_valid_convex(c):
                 # Calculate extremes of the hull
                 min_x = tuple(cnt[cnt[:, :, 0].argmin()][0])
                 max_x = tuple(cnt[cnt[:, :, 0].argmax()][0])
@@ -144,13 +135,11 @@ class Helper:
 
         center = (x + extremes[1]) / 2
 
-        print("[INFO] Percentage left: " + str(center / image_width * 100))
-
         # Resize to new size
         img = self.image_resize(img, height=400)
 
         # Return the resized image
-        return img, center
+        return img, center, image_width, w
 
     @staticmethod
     def image_resize(img, width=None, height=None, inter=cv2.INTER_AREA):
@@ -252,7 +241,7 @@ class Helper:
             c = cv2.convexHull(contours[contour])
 
             # Check if the contour is a vlid block
-            if self.check_valid_convex(c, 4):
+            if self.check_valid_convex(c):
                 # Image moments help you to calculate some features like center of mass of the object
                 moment = cv2.moments(c)
                 area = cv2.contourArea(c)
@@ -283,7 +272,7 @@ class Helper:
                 cv2.putText(img_mask, str(area), (cx - 30, cy + 45), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
 
                 # Append the new block to the global POSITIONS array
-                valid_contours.append((cx, cy))
+                valid_contours.append([cx, cy])
 
         # Return the new mask
         return img_mask, valid_contours

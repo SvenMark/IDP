@@ -4,32 +4,28 @@ import sys
 sys.path.insert(0, '../../src')
 
 from entities.movement.legs import Legs
+from entities.movement.tracks import Tracks
 from entities.movement.sequences.sequences import *
 
 legs = Legs(
-    leg_0_servos=[6, 14, 15],
+    leg_0_servos=[21, 41, 52],
     leg_1_servos=[16, 17, 18],
-    leg_2_servos=[21, 41, 52],
-    leg_3_servos=[61, 62, 63]
-    )
+    leg_2_servos=[61, 62, 63],
+    leg_3_servos=[6, 14, 15]
+)
+tracks = Tracks(track_0_pin=13,
+                track_1_pin=18,
+                track_0_forward=22,
+                track_0_backward=27,
+                track_1_forward=19,
+                track_1_backward=26)
 
 for i in range(5):
-    legs.run_sequence([250, 250, 250], self_update=True, sequences=None, sequence=forward)
+    tracks.stop()
+    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[0], sequence=stair)
+    time.sleep(2)
+    tracks.forward(80, 80, 0.5, 8)
+    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[1], sequence=stair)
+    time.sleep(0.5)
 
-for i in range(5):
-    legs.run_sequence([250, 250, 250], True, None, backward)
-for i in range(5):
-    legs.run_sequence([200, 200, 200], True, None, pull)
-
-for i in range(5):
-    legs.run_sequence([200, 200, 200], True, None, push)
-
-for i in range(5):
-    legs.run_sequence([150, 150, 150], True, None, wave)
-
-for i in range(5):
-    legs.run_sequence([150, 150, 150], True, None, march)
-
-for i in range(5):
-    legs.run_sequence([150, 150, 150], True, None, dab)
-    legs.deploy(200)
+legs.retract(150)

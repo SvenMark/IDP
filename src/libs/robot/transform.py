@@ -14,6 +14,7 @@ from robot.utility import *
 from numpy.linalg import norm
 import robot.Quaternion as Q
 
+
 def rotx(theta):
     """
     Rotation about X-axis
@@ -25,12 +26,13 @@ def rotx(theta):
 
     @see: L{roty}, L{rotz}, L{rotvec}
     """
-    
+
     ct = cos(theta)
     st = sin(theta)
-    return mat([[1,  0,    0],
-            [0,  ct, -st],
-            [0,  st,  ct]])
+    return mat([[1, 0, 0],
+                [0, ct, -st],
+                [0, st, ct]])
+
 
 def roty(theta):
     """
@@ -43,13 +45,14 @@ def roty(theta):
 
     @see: L{rotx}, L{rotz}, L{rotvec}
     """
-    
+
     ct = cos(theta)
     st = sin(theta)
 
-    return mat([[ct,   0,   st],
-            [0,    1,    0],
-            [-st,  0,   ct]])
+    return mat([[ct, 0, st],
+                [0, 1, 0],
+                [-st, 0, ct]])
+
 
 def rotz(theta):
     """
@@ -62,13 +65,14 @@ def rotz(theta):
 
     @see: L{rotx}, L{roty}, L{rotvec}
     """
-    
+
     ct = cos(theta)
     st = sin(theta)
 
-    return mat([[ct,      -st,  0],
-            [st,       ct,  0],
-            [ 0,    0,  1]])
+    return mat([[ct, -st, 0],
+                [st, ct, 0],
+                [0, 0, 1]])
+
 
 def trotx(theta):
     """
@@ -83,6 +87,7 @@ def trotx(theta):
     """
     return r2t(rotx(theta))
 
+
 def troty(theta):
     """
     Rotation about Y-axis
@@ -95,6 +100,7 @@ def troty(theta):
     @see: L{troty}, L{trotz}, L{roty}
     """
     return r2t(roty(theta))
+
 
 def trotz(theta):
     """
@@ -126,33 +132,33 @@ def tr2eul(m):
     
     @see:  L{eul2tr}, L{tr2rpy}
     """
-    
+
     try:
         m = mat(m)
         if ishomog(m):
-            euler = mat(zeros((1,3)))
-            if norm(m[0,2])<finfo(float).eps and norm(m[1,2])<finfo(float).eps:
+            euler = mat(zeros((1, 3)))
+            if norm(m[0, 2]) < finfo(float).eps and norm(m[1, 2]) < finfo(float).eps:
                 # singularity
-                euler[0,0] = 0
+                euler[0, 0] = 0
                 sp = 0
                 cp = 1
-                euler[0,1] = arctan2(cp*m[0,2] + sp*m[1,2], m[2,2])
-                euler[0,2] = arctan2(-sp*m[0,0] + cp*m[1,0], -sp*m[0,1] + cp*m[1,1])
+                euler[0, 1] = arctan2(cp * m[0, 2] + sp * m[1, 2], m[2, 2])
+                euler[0, 2] = arctan2(-sp * m[0, 0] + cp * m[1, 0], -sp * m[0, 1] + cp * m[1, 1])
                 return euler
             else:
-                euler[0,0] = arctan2(m[1,2],m[0,2])
-                sp = sin(euler[0,0])
-                cp = cos(euler[0,0])
-                euler[0,1] = arctan2(cp*m[0,2] + sp*m[1,2], m[2,2])
-                euler[0,2] = arctan2(-sp*m[0,0] + cp*m[1,0], -sp*m[0,1] + cp*m[1,1])
+                euler[0, 0] = arctan2(m[1, 2], m[0, 2])
+                sp = sin(euler[0, 0])
+                cp = cos(euler[0, 0])
+                euler[0, 1] = arctan2(cp * m[0, 2] + sp * m[1, 2], m[2, 2])
+                euler[0, 2] = arctan2(-sp * m[0, 0] + cp * m[1, 0], -sp * m[0, 1] + cp * m[1, 1])
                 return euler
-            
+
     except ValueError:
         euler = []
-        for i in range(0,len(m)):
+        for i in range(0, len(m)):
             euler.append(tr2eul(m[i]))
         return euler
-        
+
 
 def eul2r(phi, theta=None, psi=None):
     """
@@ -177,39 +183,40 @@ def eul2r(phi, theta=None, psi=None):
     """
 
     n = 1
-    if theta == None and psi==None:
+    if theta == None and psi == None:
         # list/array/matrix argument
         phi = mat(phi)
         if numcols(phi) != 3:
             error('bad arguments')
         else:
             n = numrows(phi)
-            psi = phi[:,2]
-            theta = phi[:,1]
-            phi = phi[:,0]
-    elif (theta!=None and psi==None) or (theta==None and psi!=None):
+            psi = phi[:, 2]
+            theta = phi[:, 1]
+            phi = phi[:, 0]
+    elif (theta != None and psi == None) or (theta == None and psi != None):
         error('bad arguments')
-    elif not isinstance(phi,(int,int32,float,float64)):
+    elif not isinstance(phi, (int, int32, float, float64)):
         # all args are vectors
         phi = mat(phi)
         n = numrows(phi)
         theta = mat(theta)
         psi = mat(psi)
 
-    if n>1:
+    if n > 1:
         R = []
-        for i in range(0,n):
-                r = rotz(phi[i,0]) * roty(theta[i,0]) * rotz(psi[i,0])
-                R.append(r)
+        for i in range(0, n):
+            r = rotz(phi[i, 0]) * roty(theta[i, 0]) * rotz(psi[i, 0])
+            R.append(r)
         return R
     try:
-        r = rotz(phi[0,0]) * roty(theta[0,0]) * rotz(psi[0,0])
+        r = rotz(phi[0, 0]) * roty(theta[0, 0]) * rotz(psi[0, 0])
         return r
     except:
         r = rotz(phi) * roty(theta) * rotz(psi)
         return r
 
-def eul2tr(phi,theta=None,psi=None):
+
+def eul2tr(phi, theta=None, psi=None):
     """
     Rotation from Euler angles.
     
@@ -230,7 +237,7 @@ def eul2tr(phi,theta=None,psi=None):
     @see:  L{tr2eul}, L{eul2r}, L{tr2rpy}
 
     """
-    return r2t( eul2r(phi, theta, psi) )
+    return r2t(eul2r(phi, theta, psi))
 
 
 ################################## RPY angles
@@ -253,28 +260,29 @@ def tr2rpy(m):
     try:
         m = mat(m)
         if ishomog(m):
-            rpy = mat(zeros((1,3)))
-            if norm(m[0,0])<finfo(float).eps and norm(m[1,0])<finfo(float).eps:
+            rpy = mat(zeros((1, 3)))
+            if norm(m[0, 0]) < finfo(float).eps and norm(m[1, 0]) < finfo(float).eps:
                 # singularity
-                rpy[0,0] = 0
-                rpy[0,1] = arctan2(-m[2,0], m[0,0])
-                rpy[0,2] = arctan2(-m[1,2], m[1,1])
+                rpy[0, 0] = 0
+                rpy[0, 1] = arctan2(-m[2, 0], m[0, 0])
+                rpy[0, 2] = arctan2(-m[1, 2], m[1, 1])
                 return rpy
             else:
-                rpy[0,0] = arctan2(m[1,0],m[0,0])
-                sp = sin(rpy[0,0])
-                cp = cos(rpy[0,0])
-                rpy[0,1] = arctan2(-m[2,0], cp*m[0,0] + sp*m[1,0])
-                rpy[0,2] = arctan2(sp*m[0,2] - cp*m[1,2], cp*m[1,1] - sp*m[0,1])
+                rpy[0, 0] = arctan2(m[1, 0], m[0, 0])
+                sp = sin(rpy[0, 0])
+                cp = cos(rpy[0, 0])
+                rpy[0, 1] = arctan2(-m[2, 0], cp * m[0, 0] + sp * m[1, 0])
+                rpy[0, 2] = arctan2(sp * m[0, 2] - cp * m[1, 2], cp * m[1, 1] - sp * m[0, 1])
                 return rpy
-            
+
     except ValueError:
         rpy = []
-        for i in range(0,len(m)):
+        for i in range(0, len(m)):
             rpy.append(tr2rpy(m[i]))
         return rpy
-        
-def rpy2r(roll, pitch=None,yaw=None):
+
+
+def rpy2r(roll, pitch=None, yaw=None):
     """
     Rotation from RPY angles.
     
@@ -295,23 +303,23 @@ def rpy2r(roll, pitch=None,yaw=None):
     @see:  L{tr2rpy}, L{rpy2r}, L{tr2eul}
 
     """
-    n=1
-    if pitch==None and yaw==None:
-        roll= mat(roll)
+    n = 1
+    if pitch == None and yaw == None:
+        roll = mat(roll)
         if numcols(roll) != 3:
             error('bad arguments')
         n = numrows(roll)
-        pitch = roll[:,1]
-        yaw = roll[:,2]
-        roll = roll[:,0]
-    if n>1:
+        pitch = roll[:, 1]
+        yaw = roll[:, 2]
+        roll = roll[:, 0]
+    if n > 1:
         R = []
-        for i in range(0,n):
-            r = rotz(roll[i,0]) * roty(pitch[i,0]) * rotx(yaw[i,0])
+        for i in range(0, n):
+            r = rotz(roll[i, 0]) * roty(pitch[i, 0]) * rotx(yaw[i, 0])
             R.append(r)
         return R
     try:
-        r = rotz(roll[0,0]) * roty(pitch[0,0]) * rotx(yaw[0,0])
+        r = rotz(roll[0, 0]) * roty(pitch[0, 0]) * rotx(yaw[0, 0])
         return r
     except:
         r = rotz(roll) * roty(pitch) * rotx(yaw)
@@ -339,12 +347,13 @@ def rpy2tr(roll, pitch=None, yaw=None):
     @see:  L{tr2rpy}, L{rpy2r}, L{tr2eul}
 
     """
-    return r2t( rpy2r(roll, pitch, yaw) )
+    return r2t(rpy2r(roll, pitch, yaw))
+
 
 ###################################### OA vector form
 
 
-def oa2r(o,a):
+def oa2r(o, a):
     """Rotation from 2 vectors.
     The matrix is formed from 3 vectors such that::
         R = [N O A] and N = O x A.  
@@ -368,12 +377,12 @@ def oa2r(o,a):
     n = crossp(o, a)
     n = unit(n)
     o = crossp(a, n);
-    o = unit(o).reshape(3,1)
-    a = unit(a).reshape(3,1)
+    o = unit(o).reshape(3, 1)
+    a = unit(a).reshape(3, 1)
     return bmat('n o a')
 
 
-def oa2tr(o,a):
+def oa2tr(o, a):
     """otation from 2 vectors.
     The rotation submatrix is formed from 3 vectors such that::
 
@@ -395,9 +404,9 @@ def oa2tr(o,a):
     
     @see: L{rpy2tr}, L{eul2tr}
     """
-    return r2t(oa2r(o,a))
-    
-    
+    return r2t(oa2r(o, a))
+
+
 ###################################### angle/vector form
 
 
@@ -418,11 +427,12 @@ def rotvec2r(theta, v):
     v = arg2array(v);
     ct = cos(theta)
     st = sin(theta)
-    vt = 1-ct
-    r = mat([[ct,         -v[2]*st,    v[1]*st],\
-             [v[2]*st,          ct,   -v[0]*st],\
-             [-v[1]*st,  v[0]*st,           ct]])
-    return v*v.T*vt+r
+    vt = 1 - ct
+    r = mat([[ct, -v[2] * st, v[1] * st], \
+             [v[2] * st, ct, -v[0] * st], \
+             [-v[1] * st, v[0] * st, ct]])
+    return v * v.T * vt + r
+
 
 def rotvec2tr(theta, v):
     """
@@ -466,22 +476,22 @@ def transl(x, y=None, z=None):
     
         Return the translation vector
     """
-           
-    if y==None and z==None:
-            x=mat(x)
-            try:
-                    if ishomog(x):
-                            return x[0:3,3].reshape(3,1)
-                    else:
-                            return concatenate((concatenate((eye(3),x.reshape(3,1)),1),mat([0,0,0,1])))
-            except AttributeError:
-                    n=len(x)
-                    r = [[],[],[]]
-                    for i in range(n):
-                            r = concatenate((r,x[i][0:3,3]),1)
-                    return r
-    elif y!=None and z!=None:
-            return concatenate((concatenate((eye(3),mat([x,y,z]).T),1),mat([0,0,0,1])))
+
+    if y == None and z == None:
+        x = mat(x)
+        try:
+            if ishomog(x):
+                return x[0:3, 3].reshape(3, 1)
+            else:
+                return concatenate((concatenate((eye(3), x.reshape(3, 1)), 1), mat([0, 0, 0, 1])))
+        except AttributeError:
+            n = len(x)
+            r = [[], [], []]
+            for i in range(n):
+                r = concatenate((r, x[i][0:3, 3]), 1)
+            return r
+    elif y != None and z != None:
+        return concatenate((concatenate((eye(3), mat([x, y, z]).T), 1), mat([0, 0, 0, 1])))
 
 
 ###################################### Skew symmetric transform
@@ -502,42 +512,40 @@ def skew(*args):
     elements that it contains.
     
     """
-    
+
     def ss(b):
-        return  matrix([
-            [0, -b[2],  b[1]],
-            [b[2],  0,  -b[0]],
-            [-b[1], b[0],   0]]);
+        return matrix([
+            [0, -b[2], b[1]],
+            [b[2], 0, -b[0]],
+            [-b[1], b[0], 0]]);
 
     if len(args) == 1:
         # convert matrix to skew vector
         b = args[0];
-        
-        if isrot(b):
-            return 0.5*matrix( [b[2,1]-b[1,2], b[0,2]-b[2,0], b[1,0]-b[0,1]] );
-        elif ishomog(b):
-            return vstack( (b[0:3,3], 0.5*matrix( [b[2,1]-b[1,2], b[0,2]-b[2,0], b[1,0]-b[0,1]] ).T) );
 
-    
-    # build skew-symmetric matrix
-          
+        if isrot(b):
+            return 0.5 * matrix([b[2, 1] - b[1, 2], b[0, 2] - b[2, 0], b[1, 0] - b[0, 1]]);
+        elif ishomog(b):
+            return vstack((b[0:3, 3], 0.5 * matrix([b[2, 1] - b[1, 2], b[0, 2] - b[2, 0], b[1, 0] - b[0, 1]]).T));
+
+        # build skew-symmetric matrix
+
         b = arg2array(b);
         if len(b) == 3:
             return ss(b);
         elif len(b) == 6:
-            r = hstack( (ss(b[3:6]), mat(b[0:3]).T) );
-            r = vstack( (r, mat([0, 0, 0, 1])) );
+            r = hstack((ss(b[3:6]), mat(b[0:3]).T));
+            r = vstack((r, mat([0, 0, 0, 1])));
             return r;
-            
+
     elif len(args) == 3:
-            return ss(args);    
+        return ss(args);
     elif len(args) == 6:
-            r = hstack( (ss(args[3:6]), mat(args[0:3]).T) );
-            r = vstack( (r, mat([0, 0, 0, 1])) );
-            return r;    
+        r = hstack((ss(args[3:6]), mat(args[0:3]).T));
+        r = vstack((r, mat([0, 0, 0, 1])));
+        return r;
     else:
         raise ValueError;
-
 
 
 def tr2diff(t1, t2):
@@ -554,17 +562,18 @@ def tr2diff(t1, t2):
     @return: Differential motion [dx dy dz drx dry drz]
     @see: L{skew}
     """
-    
+
     t1 = mat(t1)
     t2 = mat(t2)
-    
+
     d = concatenate(
-        (t2[0:3,3]-t1[0:3,3],
-        0.5*(   crossp(t1[0:3,0], t2[0:3,0]) +
-                crossp(t1[0:3,1], t2[0:3,1]) +
-                crossp(t1[0:3,2], t2[0:3,2]) )
-            ))
+        (t2[0:3, 3] - t1[0:3, 3],
+         0.5 * (crossp(t1[0:3, 0], t2[0:3, 0]) +
+                crossp(t1[0:3, 1], t2[0:3, 1]) +
+                crossp(t1[0:3, 2], t2[0:3, 2]))
+         ))
     return d
+
 
 ################################## Utility
 
@@ -590,16 +599,16 @@ def trinterp(T0, T1, r):
     @return: Interpolated value
     @see: L{quaternion}, L{ctraj}
     """
-    
+
     q0 = Q.quaternion(T0)
     q1 = Q.quaternion(T1)
     p0 = transl(T0)
     p1 = transl(T1)
 
     qr = q0.interp(q1, r)
-    pr = p0*(1-r) + r*p1
+    pr = p0 * (1 - r) + r * p1
 
-    return vstack( (concatenate((qr.r(),pr),1), mat([0,0,0,1])) )
+    return vstack((concatenate((qr.r(), pr), 1), mat([0, 0, 0, 1])))
 
 
 def trnorm(t):
@@ -622,11 +631,11 @@ def trnorm(t):
     @bug: Should work for 3x3 matrix as well.
     """
 
-    t = mat(t)      # N O A
-    n = crossp(t[0:3,1],t[0:3,2]) # N = O X A
-    o = crossp(t[0:3,2],t[0:3,0]) # O = A x N
-    return concatenate(( concatenate((unit(n),unit(t[0:3,1]),unit(t[0:3,2]),t[0:3,3]),1),
-         mat([0,0,0,1])))
+    t = mat(t)  # N O A
+    n = crossp(t[0:3, 1], t[0:3, 2])  # N = O X A
+    o = crossp(t[0:3, 2], t[0:3, 0])  # O = A x N
+    return concatenate((concatenate((unit(n), unit(t[0:3, 1]), unit(t[0:3, 2]), t[0:3, 3]), 1),
+                        mat([0, 0, 0, 1])))
 
 
 def t2r(T):
@@ -636,11 +645,11 @@ def t2r(T):
     @param T: the transform matrix to convert
     @rtype: 3x3 orthonormal rotation matrix
     @return: rotation submatrix
-    """    
-    
-    if ishomog(T)==False:
-        error( 'input must be a homogeneous transform')
-    return T[0:3,0:3]
+    """
+
+    if ishomog(T) == False:
+        error('input must be a homogeneous transform')
+    return T[0:3, 0:3]
 
 
 def r2t(R):
@@ -655,5 +664,5 @@ def r2t(R):
     @rtype: 4x4 homogeneous matrix
     @return: homogeneous equivalent
     """
-    
-    return concatenate( (concatenate( (R, zeros((3,1))),1), mat([0,0,0,1])) )
+
+    return concatenate((concatenate((R, zeros((3, 1))), 1), mat([0, 0, 0, 1])))
