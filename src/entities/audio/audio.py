@@ -1,14 +1,13 @@
+import os
 import platform
 import sys
+
+sys.path.insert(0, '../../../src')
 
 from entities.audio.beat_detection import BeatDetection
 from entities.audio.speak import Speak
 
-sys.path.insert(0, '../../../src')
-
-
 # from main import RESOURCES
-
 
 class Audio(object):
     """
@@ -17,7 +16,7 @@ class Audio(object):
 
     def __init__(self):
         self.windows = True if "Windows" == platform.system() else False
-        self.resources = "../../resources/"
+        self.resources = "/home/pi/Desktop/IDP/src/entities/audio" + os.path.dirname(sys.modules['__main__'].__file__) + "/resources/"
         self.speak = Speak(self)
         # self.microphone_recognition = MicrophoneRecognition(self)
         self.beat_detection = BeatDetection()
@@ -28,4 +27,9 @@ class Audio(object):
         :param file_name: The requested file
         :return: String
         """
+        print(self.resources)
         return self.resources + file_name
+
+
+audio = Audio()
+audio.speak.play("russiananthem.mp3")
