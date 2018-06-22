@@ -117,9 +117,6 @@ class BluetoothController(object):
             v = ((v * (1000 / 1024)) - 500) / 5
             h = ((h * (1000 / 1024)) - 500) / 5
 
-            if m is 8 and self.movement.grabber.reposition:
-                d = 0
-
             # Set values in shared bluetooth settings
             self.shared_object.bluetooth_settings.handle_values(s, v, h, d, x, y, m)
 
