@@ -114,7 +114,7 @@ class BluetoothController(object):
             m = int(str(data[m_index + 2:].replace(" ", "")))
 
 
-            m = 9
+            # m = 9
 
 
             # Convert v and h to percentage to be used by dc motors
