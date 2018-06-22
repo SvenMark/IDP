@@ -26,3 +26,4 @@ if raw_adc > 2047:
 
 # Output data to screen
 print("Digital value of Analog Input : {}".format(raw_adc))
+print(bus)
