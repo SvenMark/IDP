@@ -105,7 +105,7 @@ class Tracks(object):
 
         self.track_left.current_speed = speed_1
         self.track_right.current_speed = speed_2
-        
+
         time.sleep(delay)
 
     def forward(self, duty_cycle_track_left, duty_cycle_track_right, delay, acceleration):
