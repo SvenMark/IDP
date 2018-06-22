@@ -7,5 +7,5 @@ from modules.obstacle_course import stairdetector, detect_cup, detect_cup_old
 
 shared_object = SharedObject()
 
-# stairdetector(shared_object)
-detect_cup(shared_object)
+stairdetector(shared_object)
+# detect_cup(shared_object)

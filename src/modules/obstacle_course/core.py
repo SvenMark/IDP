@@ -32,13 +32,11 @@ def run(name, control):
 
 
 def stairdetector(shared_object):
-    frame = VideoStream(src=0, usePiCamera=False, resolution=(320, 240)).start()
+    frame = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
     time.sleep(0.3)  # startup
 
     sample = frame.read()
     height, width, channel = sample.shape
-    width = 320
-    height = 240
     print("[INFO] w:" + str(width) + ", h: " + str(height))
 
     vertices = [
@@ -50,7 +48,7 @@ def stairdetector(shared_object):
 
     while not shared_object.has_to_stop():
         # Get current frame from picamera and make a cropped image with the vertices above with set_region
-        img = cv2.imread("../../resources/trap-recht-320px.jpg")
+        img = frame.read()
         img_cropped = set_region(img, np.array([vertices], np.int32))
 
         # Add blur to the cropped image
