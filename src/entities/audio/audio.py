@@ -4,7 +4,6 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
-from entities.audio.beat_detection import BeatDetection
 from entities.audio.speak import Speak
 
 # from main import RESOURCES
@@ -19,7 +18,6 @@ class Audio(object):
         self.resources = "/home/pi/Desktop/IDP/src/entities/audio" + os.path.dirname(sys.modules['__main__'].__file__) + "/resources/"
         self.speak = Speak(self)
         # self.microphone_recognition = MicrophoneRecognition(self)
-        self.beat_detection = BeatDetection()
 
     def get_file_path(self, file_name):
         """
