@@ -29,7 +29,7 @@ def run(name, control):
     GPIO.output(beat_detect_pin, 1)
 
     while not shared_object.has_to_stop():
-        if GPIO.input(beat_pin) is True:
+        if GPIO.input(beat_pin):
             print("Beat detected")
             if movement.legs.deployed:
                 movement.legs.retract()

@@ -44,17 +44,19 @@ class Grabber(object):
         :param pick_up_vertical: To pick up vertical or not
         :return: None
         """
+        self.grabbing = True
         positions = [210, 430, 83]  # The servo positions for grabbing
 
-        self.grabbing = True
-
-        # TODO: Implement vertical and horizontal
         if pick_up_vertical:
-            for i in range(len(self.servos)):
-                self.servos[i].move(positions[i], speed)
+            self.servos[0].move(positions[0], speed)
+            self.servos[1].move(positions[1], speed)
+            self.update()
+            self.servos[2].move(positions[2], speed)
         else:
-            for i in range(len(self.servos)):
-                self.servos[i].move(positions[i], speed)
+            self.servos[2].move(positions[2], speed)
+            self.update()
+            self.servos[0].move(positions[0], speed)
+            self.servos[1].move(positions[1], speed)
         self.update()  # Update the servos
 
         self.grabbed = True
@@ -67,7 +69,6 @@ class Grabber(object):
         :return: None
         """
         self.grabbing = False
-
         positions = [400, 240, 83]  # The servo positions for loosening
         for i in range(len(self.servos)):
             self.servos[i].move(positions[i], speed)
