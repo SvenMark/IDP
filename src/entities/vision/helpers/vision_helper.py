@@ -91,9 +91,18 @@ class Helper:
             valid_contours = []
             for cnt in range(len(contours)):
                 for cnt2 in range(len(contours)):
+                    moment = cv2.moments(contours[cnt])
+                    moment2 = cv2.moments(contours[cnt2])
+
+                    # Calculate the centre of mass
+                    cx = int(moment['m10'] / moment['m00'])
+                    cy = int(moment['m01'] / moment['m00'])
+
+                    cx2 = int(moment2['m10'] / moment2['m00'])
+                    cy2 = int(moment2['m01'] / moment2['m00'])
                     if cnt != cnt2:
-                        a = np.array(contours[cnt])
-                        b = np.array(contours[cnt2])
+                        a = np.array((cx, cy))
+                        b = np.array((cx2, cy2))
                         if np.linalg.norm(a - b) < sensitivity:
                             valid_contours.append(contours[cnt])
 
