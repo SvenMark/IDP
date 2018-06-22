@@ -31,10 +31,11 @@ def run(name, control):
     while not shared_object.has_to_stop():
         if GPIO.input(beat_pin):
             print("Beat detected")
-            if movement.legs.deployed:
-                movement.legs.retract(100)
-            else:
-                movement.legs.deploy(100)
+            if hasattr(movement, 'legs'):
+                if movement.legs.deployed:
+                    movement.legs.retract(100)
+                else:
+                    movement.legs.deploy(100)
         else:
             print("No beat detected")
         time.sleep(0.1)
