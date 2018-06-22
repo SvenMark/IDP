@@ -16,7 +16,7 @@ class Emotion(object):
     def __init__(self, audio):
         self.audio = audio
 
-        self.pixel_count = 33  # Configure the count of pixels:
+        self.pixel_count = 18  # Configure the count of pixels:
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
         self.spi_port = 0
         self.spi_device = 0
@@ -38,12 +38,13 @@ class Emotion(object):
             # Boston University Red
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
-            Thread(target=self.play_sound('russiananthem.mp3')).start()
+            memes = Thread(target=self.play_sound('russiananthem.mp3')).start()
             time.sleep(1)
             print(self.playing)
             while self.playing:
                 print("Blink")
                 self.blink_color(205, 0, 0, 1, 0.3)
+            memes.join()
         elif emotion == "success":
             self.set_color(0, 205, 0)
             self.play_sound('success.mp3')
@@ -177,9 +178,11 @@ if __name__ == '__main__':
     # emote.appear_from_back()
     # emote.blink_color(0, 0, 255, 5, 0.2)
 
-    Thread(target=emote.set_emotion("anthem"))
-    time.sleep(20)
-    emote.set_emotion("mad")
+    #Thread(target=emote.set_emotion("anthem"))
+    #time.sleep(20)
+    #emote.set_emotion("mad")
+    while True:
+        emote.rainbow_colors()
     # emote.set_emotion("mad")
     # emote.set_emotion("neutral")
     # emote.rainbow_colors()

@@ -7,7 +7,7 @@
 import smbus
 
 # Get I2C bus
-bus = smbus.SMBus(2)
+bus = smbus.SMBus(1)
 
 # MCP3428 address, 0x68(104)
 # Send configuration command
@@ -25,4 +25,5 @@ if raw_adc > 2047:
     raw_adc -= 4095
 
 # Output data to screen
-print("Digital value of Analog Input : {}", raw_adc)
+print("Digital value of Analog Input : {}".format(raw_adc))
+print(bus)
