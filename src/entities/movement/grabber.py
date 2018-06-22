@@ -68,7 +68,7 @@ class Grabber(object):
         """
         self.grabbing = False
 
-        positions = [455, 185, 83]  # The servo positions for loosening
+        positions = [400, 240, 83]  # The servo positions for loosening
         for i in range(len(self.servos)):
             self.servos[i].move(positions[i], speed)
         self.update()
