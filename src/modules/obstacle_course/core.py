@@ -36,10 +36,10 @@ def stairdetector(shared_object):
     print("[INFO] w:" + str(width) + ", h: " + str(height))
 
     vertices = [
-        (0, (height / 2) - 20),
-        (width, (height / 2 - 20)),
-        (width, (height / 2 + 20)),
-        (0, (height / 2) + 20),
+        (0, (height / 2) + 28),
+        (width, (height / 2 + 28)),
+        (width, (height / 2 + 48)),
+        (0, (height / 2) + 48),
     ]
 
     while not shared_object.has_to_stop():
