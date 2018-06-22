@@ -24,6 +24,7 @@ for i in range(5):
     tracks.stop()
     legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[0], sequence=stair)
     time.sleep(2)
+    tracks.forward(50, 50, 0, 0)
     tracks.forward(80, 80, 0.5, 8)
     legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[1], sequence=stair)
     time.sleep(0.5)
