@@ -32,9 +32,9 @@ def run(name, control):
         if GPIO.input(beat_pin):
             print("Beat detected")
             if movement.legs.deployed:
-                movement.legs.retract()
+                movement.legs.retract(100)
             else:
-                movement.legs.deploy()
+                movement.legs.deploy(100)
         else:
             print("No beat detected")
         time.sleep(0.1)
