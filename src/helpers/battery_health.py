@@ -25,4 +25,4 @@ if raw_adc > 2047:
     raw_adc -= 4095
 
 # Output data to screen
-print("Digital value of Analog Input : {}", raw_adc)
+print("Digital value of Analog Input : {}".format(raw_adc))
