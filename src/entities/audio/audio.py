@@ -17,7 +17,7 @@ class Audio(object):
 
     def __init__(self):
         self.windows = True if "Windows" == platform.system() else False
-        self.resources = os.path.dirname(sys.modules['__main__'].__file__) + "/resources/"
+        self.resources = "/home/pi/Desktop/IDP/src/entities/audio" + os.path.dirname(sys.modules['__main__'].__file__) + "/resources/"
         self.speak = Speak(self)
         self.microphone_recognition = MicrophoneRecognition(self)
         self.beat_detection = BeatDetection()
