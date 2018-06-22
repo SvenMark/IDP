@@ -91,8 +91,12 @@ class Helper:
             valid_contours = []
             for cnt in range(len(contours)):
                 for cnt2 in range(len(contours)):
-                    moment = cv2.moments(contours[cnt])
-                    moment2 = cv2.moments(contours[cnt2])
+
+                    c = cv2.convexHull(contours[cnt])
+                    c2 = cv2.convexHull(contours[cnt2])
+
+                    moment = cv2.moments(c)
+                    moment2 = cv2.moments(c2)
 
                     # Calculate the centre of mass
                     cx = int(moment['m10'] / moment['m00'])
