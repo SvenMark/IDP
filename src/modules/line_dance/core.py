@@ -9,6 +9,8 @@ sys.path.insert(0, '../../../src')
 from entities.audio.beat_detection import BeatDetection
 
 
+
+
 def run(name, control):
     movement = control.movement
     shared_object = control.shared_object
@@ -26,6 +28,7 @@ def run(name, control):
 
     GPIO.setup(beat_led_pin, GPIO.OUT)
     GPIO.setup(beat_detect_pin, GPIO.OUT)
+    GPIO.setup(beat_pin, GPIO.IN)
     GPIO.output(beat_led_pin, 1)
     GPIO.output(beat_detect_pin, 1)
 
@@ -42,10 +45,12 @@ def run(name, control):
 
     while not shared_object.has_to_stop():
         if GPIO.input(beat_pin) is True:
+            print("Beat detected")
             if movement.legs.deployed:
                 movement.legs.retract()
             else:
                 movement.legs.deploy()
+        time.sleep(0.1)
 
     GPIO.output(beat_led_pin, 0)
     GPIO.output(beat_detect_pin, 0)
