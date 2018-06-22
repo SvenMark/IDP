@@ -15,7 +15,7 @@ class Speak(object):
         self.audio = audio
         pygame.init()
         pygame.mixer.init()
-        print("Py mixer init")
+        print("Initialised Audio Speak")
 
     def play(self, file_name):
         """
