@@ -40,6 +40,7 @@ class Emotion(object):
         elif emotion == "anthem":
             Thread(target=self.play_sound('russiananthem.mp3')).start()
             time.sleep(1)
+            print(self.playing)
             while self.playing:
                 print("Blink")
                 self.blink_color(205, 0, 0, 1, 0.3)
