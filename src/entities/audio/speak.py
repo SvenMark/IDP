@@ -13,13 +13,11 @@ class Speak(object):
 
     def __init__(self, audio):
         self.audio = audio
-        file = self.audio.get_file_path('russiananthem.mp3')
         pygame.init()
         pygame.mixer.init()
-        print("loading")
-        pygame.mixer.music.load(file)
-        pygame.mixer.music.play()
-        pygame.event.wait()
+        print("Py mixer init")
+        self.play('russiananthem.mp3')
+        self.play('wav.mp3')
 
     def play(self, file_name):
         """
@@ -27,8 +25,10 @@ class Speak(object):
         :param file_name: Audio file
         :return: None
         """
-
-
+        pygame.mixer.music.load(self.audio.get_file_path(file_name))
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+            pygame.time.Clock().tick(10)
 
     def tts(self, text, lan):
         """
