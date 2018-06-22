@@ -122,7 +122,8 @@ class Recognize(object):
             self.helper.min_block_size = 5
 
         # If all requirements are valid, grab
-        if self.recognized and 51 > percentage_position > 49 and building_width > grab_distance:
+        # if self.recognized and 51 > percentage_position > 49 and building_width > grab_distance:
+        if 51 > percentage_position > 49 and building_width > grab_distance:
             grab = True
         else:
             grab = False
