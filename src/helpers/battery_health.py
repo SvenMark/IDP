@@ -26,4 +26,4 @@ if raw_adc > 2047:
 
 # Output data to screen
 print("Digital value of Analog Input : {}".format(raw_adc))
-print(bus)
+print(bus.read_i2c_block_data(0x68, 0x00, 2))
