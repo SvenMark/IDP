@@ -50,6 +50,8 @@ def run(name, control):
                 movement.legs.retract()
             else:
                 movement.legs.deploy()
+        else:
+            print("No beat detected")
         time.sleep(0.1)
 
     GPIO.output(beat_led_pin, 0)
