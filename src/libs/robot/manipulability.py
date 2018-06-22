@@ -9,15 +9,14 @@ the authors is made.
 @author: Luis Fernando Lara Tobar and Peter Corke
 """
 
-
-
 from numpy import *
 from robot.jacobian import jacob0
 from robot.dynamics import inertia
-from numpy.linalg import inv,eig,det,svd
+from numpy.linalg import inv, eig, det, svd
 from robot.utility import *
 
-def manipulability(robot, q, which = 'yoshikawa'):
+
+def manipulability(robot, q, which='yoshikawa'):
     '''
     MANIPLTY Manipulability measure
 
@@ -49,31 +48,33 @@ def manipulability(robot, q, which = 'yoshikawa'):
     practice will be less than 1.
 
     @see: inertia, jacob0
-    '''        
+    '''
     n = robot.n
     q = mat(q)
     w = array([])
     if 'yoshikawa'.startswith(which):
-            if numrows(q)==1:
-                    return yoshi(robot,q)
-            for Q in q:
-                    w = concatenate((w,array([yoshi(robot,Q)])))
+        if numrows(q) == 1:
+            return yoshi(robot, q)
+        for Q in q:
+            w = concatenate((w, array([yoshi(robot, Q)])))
     elif 'asada'.startswith(which):
-            if numrows(q)==1:
-                    return asada(robot,q)
-            for Q in q:
-                    w = concatenate((w,array([asada(robot,Q)])))
+        if numrows(q) == 1:
+            return asada(robot, q)
+        for Q in q:
+            w = concatenate((w, array([asada(robot, Q)])))
     return mat(w)
 
-def yoshi(robot,q):
-        J = jacob0(robot,q)
-        return sqrt(det(J*J.T))
 
-def asada(robot,q):
-        J = jacob0(robot,q)
-        Ji = inv(J)
-        M = inertia(robot,q)
-        Mx = Ji.T*M*Ji
-        e = eig(Mx)[0]
+def yoshi(robot, q):
+    J = jacob0(robot, q)
+    return sqrt(det(J * J.T))
 
-        return real( e.min(0)/e.max(0) )
+
+def asada(robot, q):
+    J = jacob0(robot, q)
+    Ji = inv(J)
+    M = inertia(robot, q)
+    Mx = Ji.T * M * Ji
+    e = eig(Mx)[0]
+
+    return real(e.min(0) / e.max(0))

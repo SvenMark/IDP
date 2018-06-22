@@ -95,11 +95,11 @@ class Grabber(object):
             delta = self.get_delta()
             for i in range(len(self.servos)):
                 if not self.servos[i].is_ready():
-                    print("Servo " + str(self.servos[i].servo_id) + " Load: " + str(self.servos[i].read_load()))
+                    # print("Servo " + str(self.servos[i].servo_id) + " Load: " + str(self.servos[i].read_load()))
                     if self.servos[i].read_load() > 1150 and self.grabbing:
                         print("Load to high, loosening: " + str(self.servos[i].read_load()))
                         self.loosen(100)
                         self.reposition = True
+                    else:
+                        self.reposition = False
                     self.servos[i].update(delta)
-
-

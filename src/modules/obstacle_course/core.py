@@ -10,16 +10,20 @@ from entities.vision.recognize import Recognize
 from entities.vision.helpers.vision_helper import *
 
 
-def run(name, movement, s, v, h, speed_factor, shared_object):
+def run(name, control):
+    movement = control.movement
+    shared_object = control.shared_object
+    speed_factor = control.speed_factor
+    dead_zone = control.dead_zone
+
     print("[RUN] " + str(name))
     stairdetector(shared_object)
 
     while not shared_object.has_to_stop():
-        # Backup controller input
-        movement.tracks.handle_controller_input(stop_motors=s,
-                                                vertical_speed=h * speed_factor,
-                                                horizontal_speed=v * speed_factor,
-                                                dead_zone=5)
+        movement.tracks.handle_controller_input(stop_motors=shared_object.bluetooth_settings.s,
+                                                vertical_speed=shared_object.bluetooth_settings.h * speed_factor,
+                                                horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,
+                                                dead_zone=dead_zone)
         time.sleep(0.1)
 
     # Notify shared object that this thread has been stopped

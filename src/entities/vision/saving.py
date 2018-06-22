@@ -1,22 +1,20 @@
 import sys
-
+import time
+import datetime
 from imutils.video import VideoStream
+from tkinter import *
+from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
-import time
-import datetime
 from entities.vision.helpers.vision_helper import *
-from tkinter import *
-from threading import Thread
 
 
 class Saving(object):
 
-    def __init__(self, helpers, color_range):
-        self.color_range = color_range
+    def __init__(self, helpers):
         self.helper = helpers.helper
-        self.building_handler = helpers.json_handler
+        self.building_handler = None
 
         # Saving variables
         self.save_length = 0
@@ -25,7 +23,8 @@ class Saving(object):
         self.pickup_vertical = 0
         self.side = 0
 
-    def run(self):
+    def run(self, color_range, json):
+        self.building_handler = json
         print("[RUN] Starting saving...")
 
         # Initialize camera
@@ -40,12 +39,12 @@ class Saving(object):
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
             # Calculate the masks
-            mask, _ = self.helper.calculate_mask(img, self.color_range)
+            mask, _ = self.helper.calculate_mask(img, color_range)
 
             img_cropped, _, _, _ = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
-            mask_cropped, valid_contours = self.helper.calculate_mask(img_cropped, self.color_range, set_contour=True)
+            mask_cropped, valid_contours = self.helper.calculate_mask(img_cropped, color_range, set_contour=True)
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 self.show_input_fields()
@@ -70,6 +69,7 @@ class Saving(object):
         """
         Shows the input fields for saving the building
         """
+
         def save_entry_fields():
             """
             Saves the entry fields
@@ -123,7 +123,8 @@ class Saving(object):
             """
             self.save = False
             print("[INFO] saved ", self.building_to_save)
-            self.building_handler.set_save_building(valid_contours, self.building_to_save, self.pickup_vertical, self.side)
+            self.building_handler.set_save_building(valid_contours, self.building_to_save, self.pickup_vertical,
+                                                    self.side)
             master.destroy()
 
         # Create new forum

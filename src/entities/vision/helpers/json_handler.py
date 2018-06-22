@@ -9,10 +9,10 @@ import json
 from entities.vision.helpers.vision_helper import Color, BuildingSide
 
 
-class Json_Handler:
+class JsonHandler:
     def __init__(self, std_color_range, file_name_color="output.txt", file_name_building="save.txt"):
-        self.file_name_color = "/saved_files/{}".format(file_name_color)
-        self.file_name_building = "/saved_files/{}".format(file_name_building)
+        self.file_name_color = "/saved_files/" + str(file_name_color)
+        self.file_name_building = "/saved_files/" + str(file_name_building)
         self.back_up_color_range = std_color_range
 
     def set_color_range(self, color_range):
@@ -78,7 +78,7 @@ class Json_Handler:
 
         saved_file = open(self.file_name_building, "w")
         json.dump(json.dumps(current, default=lambda o: o.__dict__,
-                  sort_keys=True), saved_file)
+                             sort_keys=True), saved_file)
         saved_file.close()
 
     def get_save_buildings(self):
@@ -87,13 +87,14 @@ class Json_Handler:
         :return:
         """
         saved_building = []
-
+        print("Get saved buildings")
         try:
             saved_file = open(self.file_name_building)
             try:
                 data = json.loads(json.load(saved_file))
                 for p in data:
-                    saved_building.append(BuildingSide(p.get("side"), p.get("pick_up_vertical"), p.get("number"), p.get("side_number")))
+                    saved_building.append(
+                        BuildingSide(p.get("side"), p.get("pick_up_vertical"), p.get("number"), p.get("side_number")))
 
             except json.decoder.JSONDecodeError:
                 saved_building = []

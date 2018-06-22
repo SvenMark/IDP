@@ -4,10 +4,11 @@ from chatterbot import ChatBot
 
 sys.path.insert(0, '../../../src')
 
-chatbot = ChatBot(  
+chatbot = ChatBot(
     'Ron Obvious',
     trainer='chatterbot.trainers.ChatterBotCorpusTrainer'
 )
+
 
 # Train based on the english corpus
 # chatbot.train("chatterbot.corpus.english.conversations")
@@ -79,4 +80,3 @@ class MicrophoneRecognition(object):
             self.speak.tts('can you say that again please?', 'en-AU')
             print(sys.exc_info())
             self.recognition()
-

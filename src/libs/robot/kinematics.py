@@ -48,23 +48,22 @@ def fkine(robot, q):
 
     q = mat(q)
     n = robot.n
-    if numrows(q)==1 and numcols(q)==n:
+    if numrows(q) == 1 and numcols(q) == n:
         t = robot.base
-        for i in range(0,n):
-            t = t * robot.links[i].tr(q[0,i])
+        for i in range(0, n):
+            t = t * robot.links[i].tr(q[0, i])
         t = t * robot.tool
         return t
     else:
         if numcols(q) != n:
             raise 'bad data'
         t = []
-        for qv in q:        # for each trajectory point
+        for qv in q:  # for each trajectory point
             tt = robot.base
-            for i in range(0,n):
-                tt = tt * robot.links[i].tr(qv[0,i])
-            t.append(tt*robot.tool)
+            for i in range(0, n):
+                tt = tt * robot.links[i].tr(qv[0, i])
+            t.append(tt * robot.tool)
         return t
-
 
 
 def ikine(robot, tr, q0=None, m=None, **args):
@@ -128,57 +127,60 @@ def ikine(robot, tr, q0=None, m=None, **args):
     @return: joint coordinate
     @see: L{fkine}, L{tr2diff}, L{jacbo0}, L{ikine560}
     """
-     
-    #solution control parameters
 
-    #print 'args', args
-    
+    # solution control parameters
+
+    # print 'args', args
+
     n = robot.n
 
-    
     if q0 == None:
-        q0 = mat(zeros((n,1)))
+        q0 = mat(zeros((n, 1)))
     else:
         q0 = mat(q0).flatten().T
-        
+
     if q0 != None and m != None:
         m = mat(m).flatten().T
-        if len(m)!=6:
+        if len(m) != 6:
             error('Mask matrix should have 6 elements')
-        if len(m.nonzero()[0].T)!=robot.n:
+        if len(m.nonzero()[0].T) != robot.n:
             error('Mask matrix must have same number of 1s as robot DOF')
     else:
-        if n<6:
-            print 'For a manipulator with fewer than 6DOF a mask matrix argument should be specified'
-        m = mat(ones((6,1)))
+        if n < 6:
+            print
+            'For a manipulator with fewer than 6DOF a mask matrix argument should be specified'
+        m = mat(ones((6, 1)))
 
     def solve(robot, tr, q, mask, ilimit=1000, stol=1e-6, gamma=1):
-        print ilimit, stol, gamma
+        print
+        ilimit, stol, gamma
         nm = inf;
         count = 0
         while nm > stol:
-            e = multiply( tr2diff(fkine(robot, q.T),tr), mask )
-            #dq = pinv(Jac.jacob0(robot, q.T)) * e
+            e = multiply(tr2diff(fkine(robot, q.T), tr), mask)
+            # dq = pinv(Jac.jacob0(robot, q.T)) * e
             dq = Jac.jacob0(robot, q.T).T * e
-            q += gamma*dq;
+            q += gamma * dq;
             nm = norm(e)
             count += 1
             if count > ilimit:
                 error("Solution wouldn't converge")
-        print count, 'iterations'
+        print
+        count, 'iterations'
         return q;
 
     if isinstance(tr, list):
-        #trajectory case
-        qt = mat(zeros((0,n)))
+        # trajectory case
+        qt = mat(zeros((0, n)))
         for T in tr:
             q = solve(robot, T, q0, m, **args);
-            qt = vstack( (qt, q.T) )
+            qt = vstack((qt, q.T))
         return qt;
     elif ishomog(tr):
-        #single xform case
+        # single xform case
         q = solve(robot, tr, q0, m, **args);
-        print q
+        print
+        q
         qt = q.T
         return qt
     else:
@@ -222,18 +224,17 @@ def ikine560(robot, T, configuration=''):
     if robot.mdh:
         error('Solution only applicable for standard DH conventions');
 
-
     # recurse over a list of transforms
     if isinstance(T, list):
         theta = [];
         for t in T:
-            theta.append( ikine560(robot, t, configuration) );
+            theta.append(ikine560(robot, t, configuration));
 
         return theta;
 
     if not ishomog(T):
         error('T is not a homog xform');
-        
+
     L = robot.links;
     a1 = L[0].A;
     a2 = L[1].A;
@@ -248,33 +249,32 @@ def ikine560(robot, T, configuration=''):
     d3 = L[2].D;
     d4 = L[3].D;
 
-
     # undo base transformation
     T = linalg.inv(robot.base) * T;
 
     # The following parameters are extracted from the Homogeneous 
     # Transformation as defined in equation 1, p. 34
 
-    Ox = T[0,1];
-    Oy = T[1,1];
-    Oz = T[2,1];
+    Ox = T[0, 1];
+    Oy = T[1, 1];
+    Oz = T[2, 1];
 
-    Ax = T[0,2];
-    Ay = T[1,2];
-    Az = T[2,2];
+    Ax = T[0, 2];
+    Ay = T[1, 2];
+    Az = T[2, 2];
 
-    Px = T[0,3];
-    Py = T[1,3];
-    Pz = T[2,3];
+    Px = T[0, 3];
+    Py = T[1, 3];
+    Pz = T[2, 3];
 
     # The configuration parameter determines what n1,n2,n4 values are used
     # and how many solutions are determined which have values of -1 or +1.
 
     configuration = configuration.lower();
 
-    n1 = -1;    # L
-    n2 = -1;    # U
-    n4 = -1;    # N
+    n1 = -1;  # L
+    n2 = -1;  # U
+    n4 = -1;  # N
     if 'l' in configuration:
         n1 = -1;
 
@@ -299,9 +299,8 @@ def ikine560(robot, T, configuration=''):
     if 'f' in configuration:
         n4 = -1;
 
+    theta = zeros((6, 1));
 
-    theta = zeros( (6,1) );
-    
     #
     # Solve for theta(1)
     # 
@@ -310,12 +309,11 @@ def ikine560(robot, T, configuration=''):
     # based on the configuration parameter n1
     #
 
-    r = sqrt(Px**2 + Py**2);
+    r = sqrt(Px ** 2 + Py ** 2);
     if n1 == 1:
-        theta[0] = atan2(Py,Px) + asin(d3/r);
+        theta[0] = atan2(Py, Px) + asin(d3 / r);
     else:
-        theta[0] = atan2(Py,Px) + pi - asin(d3/r);
-
+        theta[0] = atan2(Py, Px) + pi - asin(d3 / r);
 
     #
     # Solve for theta(2)
@@ -327,15 +325,15 @@ def ikine560(robot, T, configuration=''):
     # parameter n2
     #
 
-    V114 = Px*cos(theta[0]) + Py*sin(theta[0]);
-    r = sqrt(V114**2 + Pz**2);
+    V114 = Px * cos(theta[0]) + Py * sin(theta[0]);
+    r = sqrt(V114 ** 2 + Pz ** 2);
 
-    x = (a2**2-d4**2-a3**2+V114**2+Pz**2) / (2.0*a2*r);
+    x = (a2 ** 2 - d4 ** 2 - a3 ** 2 + V114 ** 2 + Pz ** 2) / (2.0 * a2 * r);
     if abs(x) > 1:
         error('point not reachable');
     Psi = acos(x);
 
-    theta[1] = atan2(Pz,V114) + n2*Psi;
+    theta[1] = atan2(Pz, V114) + n2 * Psi;
 
     #
     # Solve for theta(3)
@@ -343,9 +341,9 @@ def ikine560(robot, T, configuration=''):
     # theta(3) uses equation 57, p. 40.
     #
 
-    num = cos(theta[1])*V114+sin(theta[1])*Pz-a2;
-    den = cos(theta[1])*Pz - sin(theta[1])*V114;
-    theta[2] = atan2(a3,d4) - atan2(num, den);
+    num = cos(theta[1]) * V114 + sin(theta[1]) * Pz - a2;
+    den = cos(theta[1]) * Pz - sin(theta[1]) * V114;
+    theta[2] = atan2(a3, d4) - atan2(num, den);
 
     #
     # Solve for theta(4)
@@ -357,11 +355,11 @@ def ikine560(robot, T, configuration=''):
     # parameter n4
     #
 
-    V113 = cos(theta[0])*Ax + sin(theta[0])*Ay;
-    V323 = cos(theta[0])*Ay - sin(theta[0])*Ax;
-    V313 = cos(theta[1]+theta[2])*V113 + sin(theta[1]+theta[2])*Az;
-    theta[3] = atan2((n4*V323),(n4*V313));
-    #[(n4*V323),(n4*V313)]
+    V113 = cos(theta[0]) * Ax + sin(theta[0]) * Ay;
+    V323 = cos(theta[0]) * Ay - sin(theta[0]) * Ax;
+    V313 = cos(theta[1] + theta[2]) * V113 + sin(theta[1] + theta[2]) * Az;
+    theta[3] = atan2((n4 * V323), (n4 * V313));
+    # [(n4*V323),(n4*V313)]
 
     #
     # Solve for theta(5)
@@ -370,11 +368,11 @@ def ikine560(robot, T, configuration=''):
     # den is defined in equation 65, p. 41.
     # theta(5) uses equation 66, p. 41.
     #
-     
-    num = -cos(theta[3])*V313 - V323*sin(theta[3]);
-    den = -V113*sin(theta[1]+theta[2]) + Az*cos(theta[1]+theta[2]);
-    theta[4] = atan2(num,den);
-    #[num den]
+
+    num = -cos(theta[3]) * V313 - V323 * sin(theta[3]);
+    den = -V113 * sin(theta[1] + theta[2]) + Az * cos(theta[1] + theta[2]);
+    theta[4] = atan2(num, den);
+    # [num den]
 
     #
     # Solve for theta(6)
@@ -390,15 +388,15 @@ def ikine560(robot, T, configuration=''):
     # theta(6) uses equation 70, p. 41.
     #
 
-    V112 = cos(theta[0])*Ox + sin(theta[0])*Oy;
-    V132 = sin(theta[0])*Ox - cos(theta[0])*Oy;
-    V312 = V112*cos(theta[1]+theta[2]) + Oz*sin(theta[1]+theta[2]);
-    V332 = -V112*sin(theta[1]+theta[2]) + Oz*cos(theta[1]+theta[2]);
-    V412 = V312*cos(theta[3]) - V132*sin(theta[3]);
-    V432 = V312*sin(theta[3]) + V132*cos(theta[3]);
-    num = -V412*cos(theta[4]) - V332*sin(theta[4]);
+    V112 = cos(theta[0]) * Ox + sin(theta[0]) * Oy;
+    V132 = sin(theta[0]) * Ox - cos(theta[0]) * Oy;
+    V312 = V112 * cos(theta[1] + theta[2]) + Oz * sin(theta[1] + theta[2]);
+    V332 = -V112 * sin(theta[1] + theta[2]) + Oz * cos(theta[1] + theta[2]);
+    V412 = V312 * cos(theta[3]) - V132 * sin(theta[3]);
+    V432 = V312 * sin(theta[3]) + V132 * cos(theta[3]);
+    num = -V412 * cos(theta[4]) - V332 * sin(theta[4]);
     den = - V432;
-    theta[5] = atan2(num,den);
-    #[num den]
-    
+    theta[5] = atan2(num, den);
+    # [num den]
+
     return mat(theta).T;

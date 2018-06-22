@@ -53,7 +53,7 @@ class DCMotor(object):
         :param delay: Time to wait after executing
         :return: None
         """
-        print("DC motor on pin " + str(self.pin_pwm) + " Forwards " + str(duty_cycle))
+        # print("DC motor on pin " + str(self.pin_pwm) + " Forwards " + str(duty_cycle))
         GPIO.output(self.pin_motor_forward, GPIO.HIGH)
         GPIO.output(self.pin_motor_backward, GPIO.LOW)
         self.pwm_motor.ChangeDutyCycle(duty_cycle)
@@ -67,7 +67,7 @@ class DCMotor(object):
         :param delay: Time to wait after executing
         :return: None
         """
-        print("DC motor on pin " + str(self.pin_pwm) + " Backwards " + str(duty_cycle))
+        # print("DC motor on pin " + str(self.pin_pwm) + " Backwards " + str(duty_cycle))
         GPIO.output(self.pin_motor_forward, GPIO.LOW)
         GPIO.output(self.pin_motor_backward, GPIO.HIGH)
         self.pwm_motor.ChangeDutyCycle(duty_cycle)
@@ -82,12 +82,3 @@ class DCMotor(object):
         self.stop_motor()
         self.current_speed = 0
         GPIO.cleanup()
-
-
-def main():
-    motor = DCMotor(18, 9, 10)
-    motor.clean_up()
-
-
-if __name__ == "__main__":
-    main()

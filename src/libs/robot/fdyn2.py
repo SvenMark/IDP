@@ -1,4 +1,4 @@
-#FDYN2  private function called by FDYN
+# FDYN2  private function called by FDYN
 #
 #	XDD = FDYN2(T, X, FLAG, ROBOT, TORQUEFUN)
 #
@@ -29,19 +29,24 @@
 # $Revision: 1.2 $
 # Copyright (C) 1999-2002, by Peter I. Corke
 
-function xd = fdyn2(t, x, flag, robot, torqfun, varargin)
+function
+xd = fdyn2(t, x, flag, robot, torqfun, varargin)
 
-	n = robot.n;
+n = robot.n;
 
-	q = x(1:n);
-	qd = x(n+1:2*n);
+q = x(1:n);
+qd = x(n + 1:2 * n);
 
-	% evaluate the torque function if one is given
-	if isstr(torqfun)
-		tau = feval(torqfun, t, q, qd, varargin{:});
-	else
-		tau = zeros(n,1);
-	end
-	
-	qdd = accel(robot, x(1:n,1), x(n+1:2*n,1), tau);
-	xd = [x(n+1:2*n,1); qdd];
+% evaluate
+the
+torque
+function if one is given
+if isstr(torqfun)
+    tau = feval(torqfun, t, q, qd, varargin
+    {:});
+    else
+    tau = zeros(n, 1);
+end
+
+qdd = accel(robot, x(1:n, 1), x(n + 1: 2 * n, 1), tau);
+xd = [x(n + 1:2 * n, 1); qdd];

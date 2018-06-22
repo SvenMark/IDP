@@ -22,9 +22,8 @@ def ishomog(tr):
     
     @rtype: boolean
     """
-    
-    return tr.shape == (4,4)
 
+    return tr.shape == (4, 4)
 
 
 def isrot(r):
@@ -36,7 +35,7 @@ def isrot(r):
     
     @rtype: boolean
     """
-    return r.shape == (3,3)
+    return r.shape == (3, 3)
 
 
 def isvec(v, l=3):
@@ -49,7 +48,7 @@ def isvec(v, l=3):
    
     @rtype: boolean
     """
-    return v.shape == (l,1) or v.shape == (1,l) or v.shape == (l,)
+    return v.shape == (l, 1) or v.shape == (1, l) or v.shape == (l,)
 
 
 def numcols(m):
@@ -61,7 +60,8 @@ def numcols(m):
     return m.shape[1];
     """
     return m.shape[1];
-    
+
+
 def numrows(m):
     """
     Number of rows in a matrix.
@@ -71,6 +71,7 @@ def numrows(m):
     return m.shape[1];
     """
     return m.shape[0];
+
 
 ################ vector operations
 
@@ -83,7 +84,8 @@ def unit(v):
     @return: unit-vector parallel to C{v}
     """
     return mat(v / linalg.norm(v))
-    
+
+
 def crossp(v1, v2):
     """
     Vector cross product.
@@ -96,15 +98,16 @@ def crossp(v1, v2):
     @rtype: 3-vector
     @return: Cross product M{v1 x v2}
     """
-    v1=mat(v1)
-    v2=mat(v2)
-    v1=v1.reshape(3,1)
-    v2=v2.reshape(3,1)
-    v = matrix(zeros( (3,1) ))
-    v[0] = v1[1]*v2[2] - v1[2]*v2[1]
-    v[1] = v1[2]*v2[0] - v1[0]*v2[2]
-    v[2] = v1[0]*v2[1] - v1[1]*v2[0]
+    v1 = mat(v1)
+    v2 = mat(v2)
+    v1 = v1.reshape(3, 1)
+    v2 = v2.reshape(3, 1)
+    v = matrix(zeros((3, 1)))
+    v[0] = v1[1] * v2[2] - v1[2] * v2[1]
+    v[1] = v1[2] * v2[0] - v1[0] * v2[2]
+    v[2] = v1[0] * v2[1] - v1[1] * v2[0]
     return v
+
 
 ################ misc support functions
 
@@ -141,31 +144,37 @@ def arg2array(arg):
 
     elif isinstance(arg, (int, float, float32, float64)):
         return array([arg]);
-        
+
     raise ValueError;
-        
 
 
 import traceback;
+
 
 def error(s):
     """
     Common error handler.  Display the error string, execute a traceback then raise
     an execption to return to the interactive prompt.
     """
-    print 'Robotics toolbox error:', s
+    print
+    'Robotics toolbox error:', s
 
-    #traceback.print_exc();
+    # traceback.print_exc();
     raise ValueError
-    
-    
-if __name__ == "__main__":
-    print arg2array(1)
-    print arg2array(1.0); 
-    print arg2array( mat([1,2,3,4]) )
-    print arg2array( mat([1,2,3,4]).T )
-    print arg2array( array([1,2,3]) );
-    print arg2array( array([1,2,3]).T );
-    print arg2array( [1,2,3]);
 
-    
+
+if __name__ == "__main__":
+    print
+    arg2array(1)
+    print
+    arg2array(1.0);
+    print
+    arg2array(mat([1, 2, 3, 4]))
+    print
+    arg2array(mat([1, 2, 3, 4]).T)
+    print
+    arg2array(array([1, 2, 3]));
+    print
+    arg2array(array([1, 2, 3]).T);
+    print
+    arg2array([1, 2, 3]);

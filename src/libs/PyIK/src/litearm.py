@@ -13,16 +13,18 @@ MOTORSLOPE = 30
 
 ERRORLIM = 5.0
 
+
 class ArmConfig:
     """Holds an arm's proportions, limits and other configuration data"""
+
     def __init__(self,
-                 main_length = 148.4,
-                 forearm_length = 160,
-                 linkage_length = 155,
-                 lower_actuator_length = 65,
-                 upper_actuator_length = 54.4,
-                 wrist_length = 90.52,
-                 shoulder_offset = [-9.7, 18.71]):
+                 main_length=148.4,
+                 forearm_length=160,
+                 linkage_length=155,
+                 lower_actuator_length=65,
+                 upper_actuator_length=54.4,
+                 wrist_length=90.52,
+                 shoulder_offset=[-9.7, 18.71]):
         self.main_length = main_length
         self.forearm_length = forearm_length
         self.linkage_length = linkage_length
@@ -94,9 +96,9 @@ class ArmPose:
         arm_vec = effector - self.shoulder
         arm_vec[1] = 0
         self.elbow2D = elbow2D
-        self.elbow = self.shoulder + normalize(arm_vec)*elbow2D[0]
+        self.elbow = self.shoulder + normalize(arm_vec) * elbow2D[0]
         self.elbow[1] = elbow2D[1]
-        self.wrist = self.effector - normalize(arm_vec)*arm_config.wrist_length
+        self.wrist = self.effector - normalize(arm_vec) * arm_config.wrist_length
         # Wrist pose
         self.wristXAngle = wrist_x
         self.wristYAngle = wrist_y
@@ -176,6 +178,7 @@ class ArmPose:
             self.wristYAngle
         )
 
+
 class ArmController:
     def __init__(self,
                  servo_swing,
@@ -184,7 +187,7 @@ class ArmController:
                  servo_wrist_x,
                  servo_wrist_y,
                  arm_config,
-                 motion_enable = False):
+                 motion_enable=False):
         # Solvers are responsible for calculating the target servo positions to
         # reach a given goal position
         self.ik = solvers.IKSolver(
@@ -206,7 +209,7 @@ class ArmController:
         self.servos["wrist_y"] = servo_wrist_y
         for key, servo in self.servos.iteritems():
             if servo is None:
-                print ("Warning: {0} servo not connected".format(key))
+                print("Warning: {0} servo not connected".format(key))
             else:
                 # Initialise a PID controller for the servo
                 if servo.protocol == 1:
@@ -238,7 +241,7 @@ class ArmController:
     def enableMovement(self, enable):
         changed = False
         if enable and not self.motion_enable:
-            print ("Warning: Arm enabled")
+            print("Warning: Arm enabled")
             self.motion_enable = True
             changed = True
         elif not enable:
@@ -279,18 +282,18 @@ class ArmController:
 
             self.ik_pose = ArmPose(
                 self.cfg,
-                swing_angle = self.ik.swing,
+                swing_angle=self.ik.swing,
                 # angles from vertical
-                shoulder_angle = arm_vert_angle,
-                actuator_angle = actuator_angle,
+                shoulder_angle=arm_vert_angle,
+                actuator_angle=actuator_angle,
                 # angle between the main arm and forearm
-                elbow_angle = elbow_angle,
-                elbow2D = self.ik.elbow,
-                wrist2D = self.ik.wristpl,
-                effector2D = self.ik.goalpl,
-                effector = self.ik.goal,
-                wrist_x = self.ik.wrist_x,
-                wrist_y = self.ik.wrist_y
+                elbow_angle=elbow_angle,
+                elbow2D=self.ik.elbow,
+                wrist2D=self.ik.wristpl,
+                effector2D=self.ik.goalpl,
+                effector=self.ik.goal,
+                wrist_x=self.ik.wrist_x,
+                wrist_y=self.ik.wrist_y
             )
         return self.ik_pose
 
@@ -336,8 +339,8 @@ class ArmController:
         # FK positions from config and angles
         offset = self.cfg.shoulder_offset
         shoulder2D = np.array([offset[1], 0])
-        elbow2D = shoulder2D + rotate(vertical, elevator_angle)*self.cfg.main_length
-        wrist2D = elbow2D + rotate(vertical, elevator_angle + elbow_angle)*self.cfg.forearm_length
+        elbow2D = shoulder2D + rotate(vertical, elevator_angle) * self.cfg.main_length
+        wrist2D = elbow2D + rotate(vertical, elevator_angle + elbow_angle) * self.cfg.forearm_length
         effector2D = wrist2D + [self.cfg.wrist_length, 0]
         # 3D Effector calculation is a little more involved
         td = rotate([offset[0], effector2D[0]], swing_angle)
@@ -370,16 +373,16 @@ class ArmController:
                     # cumulative error
                     pos = s.data['pos']
                     target = self.target_pose.getServoElevator()
-                    err = min(10, pos-target)
-                    s.data['error'] += err*gain
+                    err = min(10, pos - target)
+                    s.data['error'] += err * gain
                     s.data['error'] = np.clip(s.data['error'], -ERRORLIM, ERRORLIM)
                     s.setGoalPosition(target - s.data['error'])
                 if self.servos['elbow'] is not None:
                     s = self.servos['elbow']
                     pos = s.data['pos']
                     target = self.target_pose.getServoActuator()
-                    err = min(10, pos-target)
-                    s.data['error'] += err*gain
+                    err = min(10, pos - target)
+                    s.data['error'] += err * gain
                     s.data['error'] = np.clip(s.data['error'], -ERRORLIM, ERRORLIM)
                     s.setGoalPosition(target - s.data['error'])
 

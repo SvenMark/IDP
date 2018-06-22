@@ -35,9 +35,10 @@ WINDOW_H = 800
 
 import pdb;
 
+
 class Kinectics:
     def findSerial(self):
-        ports = ['COM{0}'.format(i+1) for i in range(256)]
+        ports = ['COM{0}'.format(i + 1) for i in range(256)]
         results = []
         for port in ports:
             try:
@@ -49,7 +50,7 @@ class Kinectics:
         if len(results) > 0:
             return results[0]
         else:
-            print ("No valid serial port found")
+            print("No valid serial port found")
             return None
 
     def connectController(self):
@@ -73,13 +74,13 @@ class Kinectics:
         }
         # Mapping of IDs->functions
         v1_IDs = {
-            0 : 'swing',
-            1 : 'actuator',
-            2 : 'shoulder'
+            0: 'swing',
+            1: 'actuator',
+            2: 'shoulder'
         }
         v2_IDs = {
-            1 : 'wrist_x',
-            0 : 'wrist_y'
+            1: 'wrist_x',
+            0: 'wrist_y'
         }
         # Servos retrieved from Arduino
         found = Protocol.findServos(comm)
@@ -118,20 +119,19 @@ class Kinectics:
         comm = self.connectController()
         self.servos = self.findServos(comm)
 
-
         window.InitRenderer()
-        self.r = window.Renderer(pyg.display.set_mode([WINDOW_W, WINDOW_H], pyg.DOUBLEBUF|pyg.HWSURFACE))
+        self.r = window.Renderer(pyg.display.set_mode([WINDOW_W, WINDOW_H], pyg.DOUBLEBUF | pyg.HWSURFACE))
         pyg.display.set_caption("IK Control Test")
 
         # The arm's controller - encapsulates IK and arm control
         self.arm = litearm.ArmController(
-            servo_swing = self.servos['swing'],
-            servo_shoulder = self.servos['shoulder'],
-            servo_elbow = self.servos['actuator'],
-            servo_wrist_x = self.servos['wrist_x'],
-            servo_wrist_y = self.servos['wrist_y'],
+            servo_swing=self.servos['swing'],
+            servo_shoulder=self.servos['shoulder'],
+            servo_elbow=self.servos['actuator'],
+            servo_wrist_x=self.servos['wrist_x'],
+            servo_wrist_y=self.servos['wrist_y'],
             # use the default config
-            arm_config = litearm.ArmConfig())
+            arm_config=litearm.ArmConfig())
 
         # Capacitive sensor on connected UNO
         try:
@@ -154,7 +154,7 @@ class Kinectics:
         self.lastValidGoal = np.array(self.curGoal)
         self.curDir = [0.0, 0.0]
         self.goalNormal = [0, 0, 1]
-        self.ikOffset = np.array([0.,0.,0.])
+        self.ikOffset = np.array([0., 0., 0.])
 
         self.lerpSpeed = 0
         self.lerpTimer = time.clock()
@@ -170,10 +170,10 @@ class Kinectics:
     def stop(self):
         self.arm.enableMovement(False)
         if self.perflog is not None:
-            self.perflog.write('ik_avg {0}\n'.format(self.ik_time_accum/self.ik_time_counter))
-            self.perflog.write('serial_avg {0}\n'.format(self.serial_time_accum/self.serial_time_counter))
-            self.perflog.write('render_avg {0}\n'.format(self.render_time_accum/self.render_time_counter))
-            self.perflog.write('runtime {0}\n'.format(time.clock()-self.time_start))
+            self.perflog.write('ik_avg {0}\n'.format(self.ik_time_accum / self.ik_time_counter))
+            self.perflog.write('serial_avg {0}\n'.format(self.serial_time_accum / self.serial_time_counter))
+            self.perflog.write('render_avg {0}\n'.format(self.render_time_accum / self.render_time_counter))
+            self.perflog.write('runtime {0}\n'.format(time.clock() - self.time_start))
             self.perflog.close()
         self.sockIn.close()
         self.sockOut.close()
@@ -190,7 +190,7 @@ class Kinectics:
 
     def tickComms(self):
         """(Socket comms) Check for incoming datagrams and send our updates"""
-        while len(select.select([self.sockIn],[],[],0)[0]) > 0:
+        while len(select.select([self.sockIn], [], [], 0)[0]) > 0:
             # Ready to receive
             try:
                 raw = self.sockIn.recv(4096)
@@ -201,12 +201,12 @@ class Kinectics:
                 if data[0]:
                     goalPos = np.array(data[1:4])
                     self.goalNormal = np.array(data[4:])
-                    #print(data)
-                    newGoal = goalPos*1000
+                    # print(data)
+                    newGoal = goalPos * 1000
                     self.curGoal = np.array(newGoal)
             except socket.error as err:
-                print ("Socket error: {0}".format(err))
-        #sensor = struct.pack('i', 0)
+                print("Socket error: {0}".format(err))
+        # sensor = struct.pack('i', 0)
         if self.capSense:
             self.capSense.updateReadings()
             val = self.capSense.latest()
@@ -241,19 +241,18 @@ class Kinectics:
         delta = np.subtract(self.curGoal, self.ikTarget)
         dist = np.linalg.norm(delta)
         if (dist < 1):
-            self.lerpSpeed = ACCEL*0.03
+            self.lerpSpeed = ACCEL * 0.03
             return
         else:
             # acceleration
-            self.lerpSpeed += ACCEL*dt
-            curMax = MAX_SPEED*(0.03 + 0.97*min(1, 0.01*DECEL*dist))
+            self.lerpSpeed += ACCEL * dt
+            curMax = MAX_SPEED * (0.03 + 0.97 * min(1, 0.01 * DECEL * dist))
             if self.lerpSpeed > curMax:
                 self.lerpSpeed = curMax
-            self.ikTarget = self.ikTarget + normalize(delta)*min(dist, dt*self.lerpSpeed)
+            self.ikTarget = self.ikTarget + normalize(delta) * min(dist, dt * self.lerpSpeed)
         # Disable motor error checks at high speeds
-        if self.lerpSpeed > 0.11*ACCEL:
+        if self.lerpSpeed > 0.11 * ACCEL:
             self.arm.clearPositionError()
-
 
     def getGoalOffset(self):
         """3D Offset between measured position and goal position"""
@@ -270,9 +269,9 @@ class Kinectics:
                 self.stop()
                 return
             elif (event.type == pyg.MOUSEBUTTONDOWN
-                    or event.type == pyg.MOUSEMOTION):
+                  or event.type == pyg.MOUSEMOTION):
                 if pyg.mouse.get_pressed()[0]:
-                    if event.pos[0] < (420 + views.ORIGIN_L[0]) and event.pos[1] < event.pos[0]*2:
+                    if event.pos[0] < (420 + views.ORIGIN_L[0]) and event.pos[1] < event.pos[0] * 2:
                         # lock direction on start of interaction
                         if event.type == pyg.MOUSEBUTTONDOWN:
                             goal_topdown = [self.curGoal[0], self.curGoal[2]]
@@ -314,7 +313,7 @@ class Kinectics:
         timer = time.clock()
         self.arm.setWristGoalPosition(self.ikTarget)
         self.arm.setWristGoalDirection(self.goalNormal)
-        self.ik_time_accum += time.clock()-timer
+        self.ik_time_accum += time.clock() - timer
         self.ik_time_counter += 1
 
         pose = self.arm.getIKPose()
@@ -325,11 +324,11 @@ class Kinectics:
         # Make sure we're good
         if pose is None or not pose.checkClearance():
             # Revert to last good goal position
-            #self.curGoal = np.array(self.lastValidGoal)
+            # self.curGoal = np.array(self.lastValidGoal)
             # Find an acceptible position
-            #pdb.set_trace()
+            # pdb.set_trace()
             self.ikTarget = self.reachableVolume.projectValid(self.arm, self.ikTarget)
-            #printVec(self.ikTarget)
+            # printVec(self.ikTarget)
             self.arm.setWristGoalPosition(self.ikTarget)
             pose = self.arm.getIKPose()
 
@@ -345,7 +344,7 @@ class Kinectics:
         self.arm.setTargetPose(pose)
         timer = time.clock()
         self.arm.tick()
-        self.serial_time_accum += time.clock()-timer
+        self.serial_time_accum += time.clock() - timer
         self.serial_time_counter += 1
         # Update the last known valid goal
         self.lastValidGoal = np.array(self.ikTarget)
@@ -362,14 +361,14 @@ class Kinectics:
 
     def displayServoPositions(self, col, pos):
         i = 0
-        for (name,servo) in self.servos.iteritems():
+        for (name, servo) in self.servos.iteritems():
             if servo is None:
                 continue
             text = "{name} [{id}]: {d:.3f} deg".format(
-                name = name,
-                d = servo.data['pos'],
-                id = servo.id)
-            self.r.drawText(text, col, [pos[0], pos[1]+i*20])
+                name=name,
+                d=servo.data['pos'],
+                id=servo.id)
+            self.r.drawText(text, col, [pos[0], pos[1] + i * 20])
             i += 1
 
     def drawViews(self, pose):

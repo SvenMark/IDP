@@ -13,15 +13,19 @@ blue = 180, 180, 255
 red = 255, 100, 100
 green = 100, 255, 100
 
+
 def degrees(rad):
-    return rad * 180/np.pi
+    return rad * 180 / np.pi
+
 
 def radians(deg):
-    return deg * np.pi/180
+    return deg * np.pi / 180
+
 
 def normalize(vector):
     """ Returns the unit vector of the vector.  """
     return vector / np.linalg.norm(vector)
+
 
 def angle_between(v1, v2):
     """ Returns the angle in radians between vectors 'v1' and 'v2'::
@@ -37,6 +41,7 @@ def angle_between(v1, v2):
     v2_u = normalize(v2)
     return np.arccos(np.clip(np.dot(v1_u, v2_u), -1.0, 1.0))
 
+
 def sigangle(v1, v2):
     """Signed angle between two vectors (-ve if v1 is CCW from v2)"""
     v1_u = normalize(v1)
@@ -50,16 +55,19 @@ def sigangle(v1, v2):
     else:
         return ang
 
+
 def rotate(v, angle):
     """Rotate a vector v; angle in radians"""
     mat = np.matrix([
         [np.cos(angle), -np.sin(angle)],
-        [np.sin(angle),  np.cos(angle)]])
+        [np.sin(angle), np.cos(angle)]])
     return np.array(v * mat).squeeze()
+
 
 def printVec(vec):
     """Pretty-print a floating point vector/np array"""
     print(prettyVec(vec))
+
 
 def prettyVec(vec):
     """Pretty-format a floating point vector/np array"""

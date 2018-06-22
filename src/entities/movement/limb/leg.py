@@ -47,17 +47,6 @@ class Leg(object):
         self.servo_1.move(positions[1], speeds[1])
         self.servo_2.move(positions[2], speeds[2])
 
-    def update_sequence(self):
-        """
-        Function that updates on which part of the movement sequence the legs are in
-        when controlled by the controller.
-        :return: None
-        """
-        if self.sequence < 3:
-            self.sequence = self.sequence + 1
-        else:
-            self.sequence = 0
-
     def update(self, delta):
         """
         Update all the unready servos
