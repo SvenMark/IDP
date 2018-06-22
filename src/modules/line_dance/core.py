@@ -45,10 +45,12 @@ def run(name, control):
 
     while not shared_object.has_to_stop():
         if GPIO.input(beat_pin) is True:
+            print("Beat detected")
             if movement.legs.deployed:
                 movement.legs.retract()
             else:
                 movement.legs.deploy()
+        time.sleep(0.1)
 
     GPIO.output(beat_led_pin, 0)
     GPIO.output(beat_detect_pin, 0)
