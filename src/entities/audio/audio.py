@@ -2,15 +2,13 @@ import os
 import platform
 import sys
 
+sys.path.insert(0, '../../../src')
+
 from entities.audio.beat_detection import BeatDetection
 from entities.audio.microphone_recognition import MicrophoneRecognition
 from entities.audio.speak import Speak
 
-sys.path.insert(0, '../../../src')
-
-
 # from main import RESOURCES
-
 
 class Audio(object):
     """
