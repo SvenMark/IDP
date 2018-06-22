@@ -91,13 +91,15 @@ class Grabber(object):
         :return: None
         """
         self.get_delta()
+        total_time = 0
         while len([elem for elem in self.servos if not elem.is_ready()]) != 0:
             # print("Unready servos: " + str(len([elem for elem in self.servos if not elem.is_ready()])))
             delta = self.get_delta()
+            total_time += delta
             for i in range(len(self.servos)):
                 if not self.servos[i].is_ready():
                     # print("Servo " + str(self.servos[i].servo_id) + " Load: " + str(self.servos[i].read_load()))
-                    if self.servos[i].read_load() > 1200 and self.grabbing:
+                    if total_time > 0.5 and self.servos[i].read_load() > 1200 and self.grabbing:
                         print("Load to high, loosening: " + str(self.servos[i].read_load()))
                         self.loosen(100)
                         self.reposition = True
