@@ -25,3 +25,8 @@ def scan():
     else:
         print("No servos found")
         return servos
+
+
+python
+import servo_scanner
+servo_scanner.scan()
