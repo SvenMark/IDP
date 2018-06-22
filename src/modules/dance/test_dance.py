@@ -7,18 +7,18 @@ print("[RUN] " + str("test dance"))
 
 update = False
 
-# beat detectie
-pin = 20
 
-#
-pin2 = 16
+def routine():
+    global update
+    update = True
+    t = Timer(60 / 153, routine)
+    t.start()
 
-beatPin = 21
+
+routine()
 
 
-def readBeatPin():
-    while True:
-        # if readpin(beatPin) == high
-        time.sleep(0.2)
-
-readBeatPin()
+while True:
+    if update:
+        print("beat")
+        update = False
