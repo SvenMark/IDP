@@ -12,7 +12,7 @@ from entities.vision.helpers.vision_helper import *
 
 def run(name, movement, s, v, h, speed_factor, shared_object):
     print("[RUN] " + str(name))
-    detect_cup()
+    stairdetector(shared_object)
 
     while not shared_object.has_to_stop():
         # Backup controller input
@@ -33,6 +33,7 @@ def stairdetector(shared_object):
 
     sample = frame.read()
     height, width, channel = sample.shape
+    print("[INFO] w:" + str(width) + ", h: " + str(height))
 
     vertices = [
         (0, (height / 2) - 20),
@@ -43,7 +44,7 @@ def stairdetector(shared_object):
 
     while not shared_object.has_to_stop():
         # Get current frame from picamera and make a cropped image with the vertices above with set_region
-        img = frame.read()
+        img = cv2.imread("../../resources/trap-recht-320px.jpg")
         img_cropped = set_region(img, np.array([vertices], np.int32))
 
         # Add blur to the cropped image
@@ -51,8 +52,8 @@ def stairdetector(shared_object):
 
         # Generate and set a mask for a range of black (color of the line) to the cropped image
         hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-        black = Color("Black", [0, 0, 40], [157, 118, 120])
-        mask = cv2.inRange(hsv, black.lower, black.upper)
+        white = Color("White", [0, 0, 40], [157, 118, 120])
+        mask = cv2.inRange(hsv, white.lower, white.upper)
 
         # Set line color to blue and clone the image to draw the lines on
         line_color = (255, 0, 0)
@@ -75,7 +76,7 @@ def stairdetector(shared_object):
                     p2 = Point(x2, y2)
                     cv2.line(img_clone, (p1.x, p1.y), (p2.x, p2.y), line_color, 5)
 
-        cv2.imshow('camservice-lijn', img_clone)
+        cv2.imshow('camservice-stair', img_clone)
 
         # If q is pressed, break while loop
         if cv2.waitKey(1) & 0xFF == ord('q'):
