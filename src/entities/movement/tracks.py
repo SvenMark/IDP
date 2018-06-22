@@ -103,6 +103,9 @@ class Tracks(object):
                 self.track_right.forward(speed_2, 0)
             time.sleep(0.01)  # Add a little delay so the motor accelerates smoothly
 
+        self.track_left.current_speed = speed_1
+        self.track_right.current_speed = speed_2
+        
         time.sleep(delay)
 
     def forward(self, duty_cycle_track_left, duty_cycle_track_right, delay, acceleration):
