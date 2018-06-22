@@ -59,7 +59,7 @@ def run(name, control):
     # Movement based on vision settings
     while not shared_object.has_to_stop():
 
-        print("Update movement with vision")
+        # print("Update movement with vision")
         time.sleep(0.2)
 
         grab = shared_object.bluetooth_settings.d
@@ -77,11 +77,13 @@ def run(name, control):
 
         # If a vision frame has been handled
         if vision.settings.update:
+            print("grab {} distance {} percentage {}".format(vision.settings.grab, vision.settings.distance, vision.settings.current_position))
             # Frame is now handled
             vision.settings.update = False
 
             # If the robot is close enough to grab
             if vision.settings.grab:
+                movement.tracks.stop()
                 print("GRABBING VISION")
                 # Try grab
                 movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)

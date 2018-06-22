@@ -122,7 +122,8 @@ class Recognize(object):
             self.helper.min_block_size = 5
 
         # If all requirements are valid, grab
-        if self.recognized and 51 > percentage_position > 49 and building_width > grab_distance:
+        # if self.recognized and 51 > percentage_position > 49 and building_width > grab_distance:
+        if 51 > percentage_position > 49 and building_width > grab_distance:
             grab = True
         else:
             grab = False
@@ -131,7 +132,7 @@ class Recognize(object):
         # Add to settings
         if building:
             self.settings.pick_up_vertical = building.pick_up_vertical
-            self.settings.new = True
+        self.settings.new = True
         self.settings.current_position = percentage_position
         self.settings.grab = grab
         self.settings.distance = recognize_distance_max - building_width

@@ -17,7 +17,7 @@ class CommonTestClass(unittest.TestCase):
         :return: None
         """
         self.audio = Audio()
-        self.speak = Speak()
+        self.speak = Speak(self.audio)
         self.listen = Listen(channels=2, duration=2)
 
     def test_directory(self):

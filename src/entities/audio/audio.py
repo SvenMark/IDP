@@ -1,15 +1,12 @@
+import os
 import platform
 import sys
 
-from entities.audio.beat_detection import BeatDetection
-from entities.audio.microphone_recognition import MicrophoneRecognition
-from entities.audio.speak import Speak
-
 sys.path.insert(0, '../../../src')
 
+from entities.audio.speak import Speak
 
 # from main import RESOURCES
-
 
 class Audio(object):
     """
@@ -18,10 +15,9 @@ class Audio(object):
 
     def __init__(self):
         self.windows = True if "Windows" == platform.system() else False
-        self.resources = "../../resources/"
+        self.resources = os.path.dirname(os.path.abspath(__file__)) + "/resources/"
         self.speak = Speak(self)
-        self.microphone_recognition = MicrophoneRecognition(self)
-        self.beat_detection = BeatDetection()
+        # self.microphone_recognition = MicrophoneRecognition(self)
 
     def get_file_path(self, file_name):
         """
