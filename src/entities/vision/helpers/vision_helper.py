@@ -102,8 +102,9 @@ class Helper:
                     cx = int(moment['m10'] / (moment['m00'] + 0.1))
                     cy = int(moment['m01'] / (moment['m00'] + 0.1))
 
-                    cx2 = int(moment2['m10'] / moment2['m00'])
-                    cy2 = int(moment2['m01'] / moment2['m00'])
+                    cx2 = int(moment2['m10'] / (moment2['m00'] + 0.1))
+                    cy2 = int(moment2['m01'] / (moment2['m00'] + 0.1))
+
                     if cnt != cnt2:
                         a = np.array((cx, cy))
                         b = np.array((cx2, cy2))
