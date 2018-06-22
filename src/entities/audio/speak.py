@@ -17,8 +17,8 @@ class Speak(object):
         pygame.init()
         pygame.mixer.init()
         print("loading")
-        gay = pygame.mixer.music.load(file)
-        gay.play()
+        pygame.mixer.music.load(file)
+        pygame.mixer.music.play()
         pygame.event.wait()
 
     def play(self, file_name):
