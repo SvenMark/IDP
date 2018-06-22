@@ -32,11 +32,13 @@ def run(name, control):
 
 
 def stairdetector(shared_object):
-    frame = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+    frame = VideoStream(src=0, usePiCamera=False, resolution=(320, 240)).start()
     time.sleep(0.3)  # startup
 
     sample = frame.read()
     height, width, channel = sample.shape
+    width = 320
+    height = 240
     print("[INFO] w:" + str(width) + ", h: " + str(height))
 
     vertices = [
@@ -56,7 +58,7 @@ def stairdetector(shared_object):
 
         # Generate and set a mask for a range of black (color of the line) to the cropped image
         hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-        white = Color("White", [0, 0, 40], [157, 118, 120])
+        white = Color("White", [95, 0, 140], [180, 35, 255])
         mask = cv2.inRange(hsv, white.lower, white.upper)
 
         # Set line color to blue and clone the image to draw the lines on
@@ -67,18 +69,19 @@ def stairdetector(shared_object):
         theta = np.pi / 180
         threshold = 150
         min_line_length = 319
-        max_line_gap = 25
+        max_line_gap = 50
 
         lines = cv2.HoughLinesP(mask, 2, theta, threshold, np.array([]),
                                 min_line_length, max_line_gap)
 
         if lines is not None:
+            print("[INFO] Stair Detected!")
             for line in lines:
                 for x1, y1, x2, y2 in line:
                     # Make two points with the pixels of the line and draw the line on the cloned image
                     p1 = Point(x1, y1)
                     p2 = Point(x2, y2)
-                    cv2.line(img_clone, (p1.x, p1.y), (p2.x, p2.y), line_color, 5)
+                    cv2.line(img_clone, (p1.x, p1.y), (p2.x, p2.y), line_color, 2)
 
         cv2.imshow('camservice-stair', img_clone)
 
@@ -90,7 +93,45 @@ def stairdetector(shared_object):
     cv2.destroyAllWindows()
 
 
-def detect_cup():
+def detect_cup(shared_object):
+    cam = VideoStream(src=0, usePiCamera=False, resolution=(320, 240)).start()
+    time.sleep(0.3)  # startup
+
+    sample = cam.read()
+    height, width, channel = sample.shape
+    print("[INFO] w:" + str(width) + ", h: " + str(height))
+
+    createtrackbars("canny low high")
+
+    while not shared_object.has_to_stop():
+        lowc = cv2.getTrackbarPos('Low Canny', 'canny low high')
+        highc = cv2.getTrackbarPos('High Canny', 'canny low high')
+
+        frame = cam.read()
+        frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        frame_canny = cv2.Canny(frame_gray, lowc, highc)
+        cv2.imshow("Canny", frame_canny)
+
+        if cv2.waitKey(10) == ord('q'):
+            break
+
+    cam.stop()
+    cv2.destroyAllWindows()
+
+
+def createtrackbars(name):
+    cv2.namedWindow(name)
+
+    # create trackbars for lower
+    cv2.createTrackbar('Low Canny', name, 100, 1000, nothing)
+    cv2.createTrackbar('High Canny', name, 200, 1000, nothing)
+
+
+def nothing(x):
+    pass
+
+
+def detect_cup_old():
     """
     Detects the cup and calculates distance to cup
     :return: None
