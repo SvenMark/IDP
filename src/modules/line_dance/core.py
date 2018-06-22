@@ -19,7 +19,7 @@ def run(name, control):
     GPIO.setwarnings(False)
     
     beat_led_pin = 16
-    beat_detect_pin = 20  # clean code
+    beat_detect_pin = 20
     beat_pin = 21
 
     GPIO.setup(beat_led_pin, GPIO.OUT)
