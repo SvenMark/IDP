@@ -99,8 +99,8 @@ class Helper:
                     moment2 = cv2.moments(c2)
 
                     # Calculate the centre of mass
-                    cx = int(moment['m10'] / moment['m00'])
-                    cy = int(moment['m01'] / moment['m00'])
+                    cx = int(moment['m10'] / (moment['m00'] + 0.1))
+                    cy = int(moment['m01'] / (moment['m00'] + 0.1))
 
                     cx2 = int(moment2['m10'] / moment2['m00'])
                     cy2 = int(moment2['m01'] / moment2['m00'])
