@@ -21,7 +21,7 @@ tracks = Tracks(track_0_pin=13,
                 track_1_backward=26)
 
 for i in range(5):
-    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[0], sequence=stair)
+    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=stair)
 
 # for i in range(5):
 #     tracks.stop()
