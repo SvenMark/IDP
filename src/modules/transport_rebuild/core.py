@@ -108,8 +108,7 @@ def run(name, control):
             # When a new building found
             elif vision.settings.new:
                 print("NEW BUILDING IN VISION")
-                vision.settings.new = False
-                while not vision.settings.grab:
+                if not vision.settings.grab:
                     # TODO: implement this
                     movement.move_towards(vision.settings.current_position)
             else:
