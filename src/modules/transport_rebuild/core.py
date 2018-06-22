@@ -83,6 +83,7 @@ def run(name, control):
 
             # If the robot is close enough to grab
             if vision.settings.grab:
+                movement.tracks.stop()
                 print("GRABBING VISION")
                 # Try grab
                 movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)

@@ -53,3 +53,4 @@ class Movement(object):
             right_speed = right_speed - (percentage - 50) * torque
 
         self.tracks.forward(left_speed, right_speed, 0.3, 0.3)
+        self.tracks.stop()
