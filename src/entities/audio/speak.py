@@ -16,8 +16,6 @@ class Speak(object):
         pygame.init()
         pygame.mixer.init()
         print("Py mixer init")
-        self.play('russiananthem.mp3')
-        self.play('heya.mp3')
 
     def play(self, file_name):
         """
