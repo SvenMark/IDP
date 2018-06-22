@@ -86,15 +86,16 @@ class Helper:
         # Find the contours for the threshold
         im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        # sensitivity = 30
-        # valid_contours = []
-        # for cnt in range(len(contours)):
-        #     for cnt2 in range(len(contours)):
-        #         if cnt != cnt2:
-        #             if np.linalg.norm(contours[cnt], contours[cnt2]) < sensitivity:
-        #                 valid_contours.append(contours[cnt])
-        #
-        # contours = valid_contours
+        if contours:
+            sensitivity = 30
+            valid_contours = []
+            for cnt in range(len(contours)):
+                for cnt2 in range(len(contours)):
+                    if cnt != cnt2:
+                        if np.linalg.norm(contours[cnt], contours[cnt2]) < sensitivity:
+                            valid_contours.append(contours[cnt])
+
+            contours = valid_contours
 
         # Define the extreme points
         extremes = [999999, -99999, 99999, -9999]  # min x, max x, min y, max y
