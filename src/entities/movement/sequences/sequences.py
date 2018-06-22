@@ -22,16 +22,16 @@ stair = [
     # Laag begin
     [
         [310, 170, 890],  # L voor
-        [790, 170, 890],  # R voor
+        [700, 170, 890],  # R voor
         [310, 170, 890],  # L achter
-        [790, 170, 890]  # R achter
+        [700, 170, 890]  # R achter
     ],
     # Laag eind
     [
         [360, 170, 890],  # L voor
-        [790, 350, 890],  # R voor
+        [700, 350, 890],  # R voor
         [360, 170, 890],  # L achter
-        [790, 350, 890]  # R achter
+        [700, 350, 890]  # R achter
     ],
     # Hoog begin
     [
