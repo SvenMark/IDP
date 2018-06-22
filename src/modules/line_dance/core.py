@@ -6,10 +6,6 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
-from entities.audio.beat_detection import BeatDetection
-
-
-
 
 def run(name, control):
     movement = control.movement
@@ -31,17 +27,6 @@ def run(name, control):
     GPIO.setup(beat_pin, GPIO.IN)
     GPIO.output(beat_led_pin, 1)
     GPIO.output(beat_detect_pin, 1)
-
-    p = pyaudio.PyAudio()  # start the PyAudio class
-    stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True,
-                    frames_per_buffer=10000)  # uses default input device
-
-    test = BeatDetection()
-    test.detect(stream, 10)
-
-    stream.stop_stream()
-    stream.close()
-    p.terminate()
 
     while not shared_object.has_to_stop():
         if GPIO.input(beat_pin) is True:
