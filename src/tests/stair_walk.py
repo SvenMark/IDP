@@ -21,12 +21,15 @@ tracks = Tracks(track_0_pin=13,
                 track_1_backward=26)
 
 for i in range(5):
-    tracks.stop()
-    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[0], sequence=stair_2)
-    time.sleep(2)
-    tracks.forward(30, 30, 0, 0)
-    tracks.forward(70, 70, 0.5, 4)
-    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[1], sequence=stair_2)
-    time.sleep(0.5)
+    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[0], sequence=stair)
 
-legs.retract(150)
+# for i in range(5):
+#     tracks.stop()
+#     legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[0], sequence=stair_2)
+#     time.sleep(2)
+#     tracks.forward(30, 30, 0, 0)
+#     tracks.forward(70, 70, 0.5, 4)
+#     legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[1], sequence=stair_2)
+#     time.sleep(0.5)
+#
+# legs.retract(150)
