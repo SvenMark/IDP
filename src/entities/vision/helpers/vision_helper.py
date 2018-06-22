@@ -92,7 +92,9 @@ class Helper:
             for cnt in range(len(contours)):
                 for cnt2 in range(len(contours)):
                     if cnt != cnt2:
-                        if np.linalg.norm(contours[cnt], contours[cnt2]) < sensitivity:
+                        a = np.array(contours[cnt])
+                        b = np.array(contours[cnt2])
+                        if np.linalg.norm(a, b) < sensitivity:
                             valid_contours.append(contours[cnt])
 
             contours = valid_contours
