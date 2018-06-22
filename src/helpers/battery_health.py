@@ -7,7 +7,7 @@
 import smbus
 
 # Get I2C bus
-bus = smbus.SMBus(1)
+bus = smbus.SMBus(0)
 
 # MCP3428 address, 0x68(104)
 # Send configuration command
