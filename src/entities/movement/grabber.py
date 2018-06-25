@@ -69,7 +69,7 @@ class Grabber(object):
         :return: None
         """
         self.grabbing = False
-        positions = [445, 270, 83]  # The servo positions for loosening
+        positions = [445, 270, 75]  # The servo positions for loosening
         for i in range(len(self.servos)):
             self.servos[i].move(positions[i], speed)
         self.update()
