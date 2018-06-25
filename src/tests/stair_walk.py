@@ -41,7 +41,7 @@ for i in range(5):
     tracks.forward(40, 40, 0, 0)
     tracks.forward(80, 80, 0.2, 4)
     legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=[1], sequence=stair_3)
-    tracks.forward(80, 80, 0.3, 4)
+    tracks.forward(80, 80, 0.2, 0)
     time.sleep(0.2)
 
 tracks.stop()
