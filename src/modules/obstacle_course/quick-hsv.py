@@ -17,7 +17,7 @@ def run():
     createtrackbars("1")
 
     while True:
-        img = cv2.imread("../../resources/trap-recht-320px.jpg")
+        img = cap.read()
         img = cv2.GaussianBlur(img, (9, 9), 0)
 
         lowh = cv2.getTrackbarPos('Low H', '1')

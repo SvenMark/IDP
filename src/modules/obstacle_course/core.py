@@ -106,9 +106,21 @@ def detect_cup(shared_object):
         highc = cv2.getTrackbarPos('High Canny', 'canny low high')
 
         frame = cam.read()
-        frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        frame = cv2.GaussianBlur(frame, (9, 9), 0)
+
+        # Generate and set a mask for a range of black (color of the line) to the cropped image
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        green = Color("Cup Color", [30, 10, 60], [80, 135, 160])
+        mask = cv2.inRange(hsv, green.lower, green.upper)
+
+        mask_green = cv2.bitwise_and(frame, frame, mask=mask)
+        frame_gray = cv2.cvtColor(mask_green, cv2.COLOR_BGR2GRAY)
+
         frame_canny = cv2.Canny(frame_gray, lowc, highc)
-        cv2.imshow("Canny", frame_canny)
+        kernel = np.ones((10, 10), np.uint8)
+        opening = cv2.dilate(frame_canny, kernel, iterations=1)
+
+        cv2.imshow("Canny", opening)
 
         if cv2.waitKey(10) == ord('q'):
             break
