@@ -6,8 +6,6 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
-from entities.audio.beat_detection import BeatDetection
-
 
 def run(name, control):
     movement = control.movement
@@ -19,30 +17,31 @@ def run(name, control):
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
-    pin_jurjen1 = 16
-    pin_jurjen2 = 20  # clean code
-    GPIO.setup(pin_jurjen1, GPIO.OUT)
-    GPIO.setup(pin_jurjen2, GPIO.OUT)
-    GPIO.output(pin_jurjen1, 1)
-    GPIO.output(pin_jurjen2, 1)
+    
+    beat_led_pin = 16
+    beat_detect_pin = 20
+    beat_pin = 21
 
-    p = pyaudio.PyAudio()  # start the PyAudio class
-    stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True,
-                    frames_per_buffer=10000)  # uses default input device
-
-    test = BeatDetection()
-    test.detect(stream, 10)
-
-    stream.stop_stream()
-    stream.close()
-    p.terminate()
+    GPIO.setup(beat_led_pin, GPIO.OUT)
+    GPIO.setup(beat_detect_pin, GPIO.OUT)
+    GPIO.setup(beat_pin, GPIO.IN)
+    GPIO.output(beat_led_pin, 1)
+    GPIO.output(beat_detect_pin, 1)
 
     while not shared_object.has_to_stop():
-        print("Doing calculations and stuff")
-        time.sleep(0.5)
+        if GPIO.input(beat_pin):
+            print("Beat detected")
+            if hasattr(movement, 'legs'):
+                if movement.legs.deployed:
+                    movement.legs.retract(100)
+                else:
+                    movement.legs.deploy(100)
+        else:
+            print("No beat detected")
+        time.sleep(0.1)
 
-    GPIO.output(pin_jurjen1, 0)
-    GPIO.output(pin_jurjen2, 0)
+    GPIO.output(beat_led_pin, 0)
+    GPIO.output(beat_detect_pin, 0)
     GPIO.cleanup()
 
     # Notify shared object that this thread has been stopped

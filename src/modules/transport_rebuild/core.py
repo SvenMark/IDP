@@ -17,19 +17,6 @@ def transport_to_finish(movement, settings):
             settings.update = False
 
 
-def move_towards(movement, percentage):
-    print("MOVING TO {}".format(percentage))
-    torque = 0.5
-    left_speed = 25
-    right_speed = 25
-    if percentage < 50:
-        left_speed = left_speed - percentage * torque
-    else:
-        right_speed = right_speed - (percentage - 50) * torque
-
-    movement.tracks.forward(left_speed, right_speed, 0.3, 0.3)
-
-
 def run(name, control):
     movement = control.movement
     shared_object = control.shared_object
@@ -44,7 +31,9 @@ def run(name, control):
                     Color("orange", [0, 108, 104], [6, 255, 255]),
                     Color("green", [28, 39, 0], [94, 255, 255]),
                     Color("red", [167, 116, 89], [180, 255, 255])]
-    json_handler = JsonHandler(color_ranges, "color_ranges.txt", "buildings.txt")
+    json_handler = JsonHandler(color_ranges,
+                               "color_ranges.txt",
+                               "buildings.txt")
     color_range = json_handler.get_color_range()
     saved_buildings = json_handler.get_save_buildings()
     for building in saved_buildings:
@@ -72,7 +61,7 @@ def run(name, control):
     # Movement based on vision settings
     while not shared_object.has_to_stop():
 
-        print("Update movement with vision")
+        # print("Update movement with vision")
         time.sleep(0.2)
 
         grab = shared_object.bluetooth_settings.d
@@ -90,11 +79,13 @@ def run(name, control):
 
         # If a vision frame has been handled
         if vision.settings.update:
+            print("grab {} distance {} percentage {}".format(vision.settings.grab, vision.settings.distance, vision.settings.current_position))
             # Frame is now handled
             vision.settings.update = False
 
             # If the robot is close enough to grab
             if vision.settings.grab:
+                movement.tracks.stop()
                 print("GRABBING VISION")
                 # Try grab
                 movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
@@ -119,30 +110,14 @@ def run(name, control):
             # When a new building found
             elif vision.settings.new:
                 print("NEW BUILDING IN VISION")
-                vision.settings.new = False
-                while not vision.settings.grab:
+                if not vision.settings.grab:
                     # TODO: implement this
-                    move_towards(movement, vision.settings.current_position)
+                    movement.move_towards(vision.settings.current_position)
             else:
                 # TODO: implement this
                 print("Move towards contours")
-                move_towards(movement, vision.settings.current_position)
+                movement.move_towards(vision.settings.current_position)
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
-
-# while True:
-#     if settings.update:
-#         settings.update = False
-#         if settings.new:
-#             tracks.stop()
-#             print("Moving to building " + str(settings.current_building)
-#                   + ", position: " + str(settings.current_position))
-#
-#             settings.new = False
-#         else:
-#             print("Rotating")
-#             # acceleration 0.5 seconds for 0.5 seconds, then wait again
-#             tracks.turn_left(rotate_speed, rotate_speed, 0.5, 0.5)
-#             tracks.stop()
