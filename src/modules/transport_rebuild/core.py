@@ -25,27 +25,14 @@ def transport_to_finish(movement, settings):
             settings.update = False
 
 
-# def run(name, control):
-def run():
-    name = "name"
-    limbs = [
-        Tracks(track_0_pin=13,
-               track_1_pin=18,
-               track_0_forward=22,
-               track_0_backward=27,
-               track_1_forward=19,
-               track_1_backward=26),
-        Grabber(servos=[1, 53, 43],
-                initial_positions=[465, 198, 200])
-    ]
-
-    movement = Movement(limbs)
-    shared_object = SharedObject()
-    vision = Vision(shared_object)
-    audio = Audio()
-    emotion = Emotion(audio)
-    speed_factor = 0.75
-    dead_zone = 5
+def run(name, control):
+    movement = control.movement
+    shared_object = control.shared_object
+    vision = control.vision
+    audio = control.audio
+    emotion = control.emotion
+    speed_factor = control.speed_factor
+    dead_zone = control.dead_zone
 
     print("[RUN] " + str(name))
 
@@ -147,5 +134,3 @@ def run():
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
-
-run()
