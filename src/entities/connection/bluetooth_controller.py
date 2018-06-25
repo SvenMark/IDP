@@ -37,7 +37,7 @@ class BluetoothController(object):
         self.shared_object = SharedObject()
         self.vision = Vision(self.shared_object)
         self.audio = Audio()
-        self.audio.speak.play("startup.mp3")
+        self.audio.play("startup.mp3")
         self.emotion = Emotion(self.audio)
 
         self.current_module = -1  # Save the current module that is running
@@ -84,7 +84,7 @@ class BluetoothController(object):
                     self.handle_data(data_line)  # Handle the data line
                     self.data = ""  # Empty data string
             except KeyboardInterrupt:
-                self.audio.speak.play("shutdown.mp3")
+                self.audio.play("shutdown.mp3")
                 break
 
         self.movement.tracks.clean_up()  # Clean up gpio

@@ -65,7 +65,7 @@ class Emotion(object):
     def play_sound(self, file):
         print("Starting audio file")
         self.playing = True
-        self.audio.speak.play(file)
+        self.audio.play(file)
         self.playing = False
         self.set_emotion("neutral")
         print("Audio file finished.")

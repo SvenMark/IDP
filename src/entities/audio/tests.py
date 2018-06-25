@@ -5,7 +5,6 @@ sys.path.insert(0, '../../../src')
 
 from entities.audio.audio import Audio
 from entities.audio.listen import Listen
-from entities.audio.speak import Speak
 from main import RESOURCES
 
 
@@ -33,5 +32,4 @@ class CommonTestClass(unittest.TestCase):
         :return: None
         """
         self.assertIsInstance(self.audio, Audio)
-        self.assertIsInstance(self.speak, Speak)
         self.assertIsInstance(self.listen, Listen)
