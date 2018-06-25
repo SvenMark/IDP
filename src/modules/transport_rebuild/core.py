@@ -31,7 +31,9 @@ def run(name, control):
                     Color("orange", [0, 108, 104], [6, 255, 255]),
                     Color("green", [28, 39, 0], [94, 255, 255]),
                     Color("red", [167, 116, 89], [180, 255, 255])]
-    json_handler = JsonHandler(color_ranges, "color_ranges.txt", "buildings.txt")
+    json_handler = JsonHandler(color_ranges,
+                               "color_ranges.txt",
+                               "buildings.txt")
     color_range = json_handler.get_color_range()
     saved_buildings = json_handler.get_save_buildings()
     for building in saved_buildings:
@@ -59,7 +61,7 @@ def run(name, control):
     # Movement based on vision settings
     while not shared_object.has_to_stop():
 
-        print("Update movement with vision")
+        # print("Update movement with vision")
         time.sleep(0.2)
 
         grab = shared_object.bluetooth_settings.d
@@ -77,11 +79,13 @@ def run(name, control):
 
         # If a vision frame has been handled
         if vision.settings.update:
+            print("grab {} distance {} percentage {}".format(vision.settings.grab, vision.settings.distance, vision.settings.current_position))
             # Frame is now handled
             vision.settings.update = False
 
             # If the robot is close enough to grab
             if vision.settings.grab:
+                movement.tracks.stop()
                 print("GRABBING VISION")
                 # Try grab
                 movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
@@ -106,8 +110,7 @@ def run(name, control):
             # When a new building found
             elif vision.settings.new:
                 print("NEW BUILDING IN VISION")
-                vision.settings.new = False
-                while not vision.settings.grab:
+                if not vision.settings.grab:
                     # TODO: implement this
                     movement.move_towards(vision.settings.current_position)
             else:

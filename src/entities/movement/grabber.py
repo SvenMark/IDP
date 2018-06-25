@@ -44,17 +44,19 @@ class Grabber(object):
         :param pick_up_vertical: To pick up vertical or not
         :return: None
         """
-        positions = [210, 430, 83]  # The servo positions for grabbing
-
         self.grabbing = True
+        positions = [160, 490, 83]  # The servo positions for grabbing
 
-        # TODO: Implement vertical and horizontal
         if pick_up_vertical:
-            for i in range(len(self.servos)):
-                self.servos[i].move(positions[i], speed)
+            self.servos[0].move(positions[0], speed)
+            self.servos[1].move(positions[1], speed)
+            self.update()
+            self.servos[2].move(positions[2], speed)
         else:
-            for i in range(len(self.servos)):
-                self.servos[i].move(positions[i], speed)
+            self.servos[2].move(positions[2], speed)
+            self.update()
+            self.servos[0].move(positions[0], speed)
+            self.servos[1].move(positions[1], speed)
         self.update()  # Update the servos
 
         self.grabbed = True
@@ -67,8 +69,7 @@ class Grabber(object):
         :return: None
         """
         self.grabbing = False
-
-        positions = [400, 240, 83]  # The servo positions for loosening
+        positions = [385, 305, 83]  # The servo positions for loosening
         for i in range(len(self.servos)):
             self.servos[i].move(positions[i], speed)
         self.update()
@@ -90,13 +91,15 @@ class Grabber(object):
         :return: None
         """
         self.get_delta()
+        total_time = 0
         while len([elem for elem in self.servos if not elem.is_ready()]) != 0:
             # print("Unready servos: " + str(len([elem for elem in self.servos if not elem.is_ready()])))
             delta = self.get_delta()
+            total_time += delta
             for i in range(len(self.servos)):
                 if not self.servos[i].is_ready():
                     # print("Servo " + str(self.servos[i].servo_id) + " Load: " + str(self.servos[i].read_load()))
-                    if self.servos[i].read_load() > 1500 and self.grabbing:
+                    if total_time > 0.4 and self.servos[i].read_load() > 1200 and self.grabbing:
                         print("Load to high, loosening: " + str(self.servos[i].read_load()))
                         self.loosen(100)
                         self.reposition = True
