@@ -1,8 +1,8 @@
 import sys
 import time
-import RPi.GPIO as GPIO
-import Adafruit_WS2801
-import Adafruit_GPIO.SPI as SPI
+#import RPi.GPIO as GPIO
+#import Adafruit_WS2801
+#import Adafruit_GPIO.SPI as SPI
 from threading import Thread
 
 sys.path.insert(0, '../../../src')
@@ -20,11 +20,10 @@ class Emotion(object):
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
         self.spi_port = 0
         self.spi_device = 0
-        self.pixels = Adafruit_WS2801.WS2801Pixels(self.pixel_count, spi=SPI.SpiDev(self.spi_port, self.spi_device),
-                                                   gpio=GPIO)
-        self.pixels.clear()
-        self.pixels.show()  # Make sure to call show() after changing any pixels!
-        self.playing = False
+        #self.pixels = Adafruit_WS2801.WS2801Pixels(self.pixel_count, spi=SPI.SpiDev(self.spi_port, self.spi_device),
+        #                                           gpio=GPIO)
+        #self.pixels.clear()
+        #self.pixels.show()  # Make sure to call show() after changing any pixels!
 
     def set_emotion(self, emotion):
         """
@@ -38,37 +37,29 @@ class Emotion(object):
             # Boston University Red
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
-            Thread(target=self.play_sound('russiananthem.mp3')).start()
+            self.audio.play('russiananthem.mp3')
             time.sleep(1)
-            print(self.playing)
-            while self.playing:
+            while self.audio.playing:
                 print("Blink")
                 self.blink_color(205, 0, 0, 1, 0.3)
+            self.set_emotion("neutral")
         elif emotion == "success":
             self.set_color(0, 205, 0)
-            self.play_sound('success.mp3')
+            self.audio.play('success.mp3')
         elif emotion == "mad":
             self.set_brightness(-255)
-            Thread(target=self.play_sound('cyka.mp3')).start()
+            self.audio.play('cyka.mp3')
         elif emotion == "happy":
             self.rainbow_colors()
         elif emotion == "confused":
-            Thread(target=self.play_sound('heya.mp3')).start()
+            self.audio.play('heya.mp3')
             time.sleep(1)
             while self.playing:
                 self.blink_color(255, 105, 180, 0, 0.2)
         elif emotion == "confirmed":  # Used for building detection
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
-            Thread(target=self.rotate_color(255, 165, 0, 0)).start()
-
-    def play_sound(self, file):
-        print("Starting audio file")
-        self.playing = True
-        self.audio.play(file)
-        self.playing = False
-        self.set_emotion("neutral")
-        print("Audio file finished.")
+            self.rotate_color(255, 165, 0, 0)
 
     def set_color(self, r, b, g):
         """
@@ -172,17 +163,6 @@ if __name__ == '__main__':
     audio = Audio()
     emote = Emotion(audio)
 
-    # emote.rotate_color(0, 0, 255, 5)
+    # Always start emotions in a thread.
+    Thread(target=emote.set_emotion("anthem"))
 
-    # emote.appear_from_back()
-    # emote.blink_color(0, 0, 255, 5, 0.2)
-
-    #Thread(target=emote.set_emotion("anthem"))
-    #time.sleep(20)
-    #emote.set_emotion("mad")
-    while True:
-        emote.rainbow_colors()
-    # emote.set_emotion("mad")
-    # emote.set_emotion("neutral")
-    # emote.rainbow_colors()
-    # emote.set_emotion("neutral")
