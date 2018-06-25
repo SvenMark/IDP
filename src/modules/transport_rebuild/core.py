@@ -4,6 +4,14 @@ import time
 
 sys.path.insert(0, '../../../src')
 
+from entities.audio.audio import Audio
+from entities.movement.grabber import Grabber
+from entities.movement.movement import Movement
+from entities.movement.tracks import Tracks
+from entities.threading.utils import SharedObject
+from entities.vision.vision import Vision
+from entities.visual.emotion import Emotion
+
 from entities.vision.helpers.json_handler import JsonHandler
 from entities.vision.helpers.vision_helper import Color, BuildingSide
 
@@ -17,12 +25,26 @@ def transport_to_finish(movement, settings):
             settings.update = False
 
 
-def run(name, control):
-    movement = control.movement
-    shared_object = control.shared_object
-    speed_factor = control.speed_factor
-    dead_zone = control.dead_zone
-    vision = control.vision
+# def run(name, control):
+def run():
+    limbs = [
+        Tracks(track_0_pin=13,
+               track_1_pin=18,
+               track_0_forward=22,
+               track_0_backward=27,
+               track_1_forward=19,
+               track_1_backward=26),
+        Grabber(servos=[1, 53, 43],
+                initial_positions=[465, 198, 200])
+    ]
+
+    movement = Movement(limbs)
+    shared_object = SharedObject()
+    vision = Vision(shared_object)
+    audio = Audio()
+    emotion = Emotion(audio)
+    speed_factor = 0.75
+    dead_zone = 5
 
     print("[RUN] " + str(name))
 
@@ -124,3 +146,5 @@ def run(name, control):
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
+
+run()
