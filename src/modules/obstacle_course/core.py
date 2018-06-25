@@ -98,7 +98,7 @@ def detect_cup(shared_object):
 
     sample = cam.read()
     height, width, channel = sample.shape
-    print("[INFO] w:" + str(width) + ", h: " + str(height))
+    print("[INFO] W: " + str(width) + "px , H: " + str(height) + "px")
 
     while not shared_object.has_to_stop():
         frame = cam.read()
@@ -108,9 +108,7 @@ def detect_cup(shared_object):
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         cupc = Color("Cup Color", [30, 10, 60], [80, 135, 160])
         mask = cv2.inRange(hsv, cupc.lower, cupc.upper)
-
         mask_green = cv2.bitwise_and(frame, frame, mask=mask)
-        frame_gray = cv2.cvtColor(mask_green, cv2.COLOR_BGR2GRAY)
 
         # Get contours and draw them when area of them is 1000 or higher
         ret, thresh = cv2.threshold(mask, 127, 255, 0)
@@ -128,26 +126,11 @@ def detect_cup(shared_object):
 
             distanceleft = cx / width * 100
             distanceright = (width - cx) / width * 100
-            print(distanceleft)
-            print(distanceright)
 
             cv2.drawContours(mask_green, [c], -1, (255, 255, 255), 5)
             cv2.circle(mask_green, (cx, cy), 7, (255, 255, 255), -1)
 
-        # for cnt in contours:
-        #     area = cv2.contourArea(cnt)
-        #
-        #     if area > 100:
-        #         m = cv2.moments(cnt)
-        #         cx = int(m["m10"] / m["m00"])
-        #         cy = int(m["m01"] / m["m00"])
-        #         distanceleft = cx / width * 100
-        #         print(distanceleft)
-        #
-        #         cv2.drawContours(mask_green, [cnt], -1, (255, 255, 255), 5)
-        #         cv2.circle(mask_green, (cx, cy), 7, (255, 255, 255), -1)
-
-        cv2.imshow("Canny", mask_green)
+        cv2.imshow("Cup center", mask_green)
 
         if cv2.waitKey(10) == ord('q'):
             break
