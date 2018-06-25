@@ -1,11 +1,10 @@
 import codecs
 import sys
-
+import json
 import numpy as np
 
 sys.path.insert(0, '../../../src')
 
-import json
 from entities.vision.helpers.vision_helper import Color, BuildingSide
 
 
@@ -56,6 +55,7 @@ class JsonHandler:
         :param pick_up_vertical: Pick up vertical of horizontal
         :param positions: Centres of the blocks of the building
         :param building: Building number
+        :param side_number: Side of the building
         """
         current = self.get_save_buildings()
         exist = False
