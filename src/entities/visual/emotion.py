@@ -16,7 +16,7 @@ class Emotion(object):
     def __init__(self, audio):
         self.audio = audio
 
-        self.pixel_count = 18  # Configure the count of pixels:
+        self.pixel_count = 14  # Configure the count of pixels:
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
         self.spi_port = 0
         self.spi_device = 0
@@ -54,7 +54,7 @@ class Emotion(object):
         elif emotion == "confused":
             self.audio.play('heya.mp3')
             time.sleep(1)
-            while self.playing:
+            while self.audio.playing:
                 self.blink_color(255, 105, 180, 0, 0.2)
         elif emotion == "confirmed":  # Used for building detection
             self.set_color(0, 205, 0)
@@ -163,6 +163,7 @@ if __name__ == '__main__':
     audio = Audio()
     emote = Emotion(audio)
 
-    # Always start emotions in a thread.
-    emote.set_emotion("anthem")
+    # Always start emotions in a thread. Unless you are testing this part.
+    while True:
+        emote.set_emotion("searching")
 
