@@ -84,7 +84,7 @@ class Tracks(object):
                 speed_2 = 100
 
             # Decrease speed according to deviation
-            # peed_2 = speed_2 * 0.8
+            # speed_2 = speed_2 * 0.8
 
             # Pass the new speed to each motor.
             # Track direction 1 is forwards, direction 0 is backwards.
