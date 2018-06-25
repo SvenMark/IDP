@@ -3,6 +3,7 @@ import platform
 import sys
 import pygame
 from gtts import gTTS
+import threading
 import time
 
 sys.path.insert(0, '../../../src')
@@ -17,7 +18,7 @@ class Audio(object):
         self.resources = os.path.dirname(os.path.abspath(__file__)) + "/resources/"
         pygame.init()
         pygame.mixer.init()
-        print("Initialised Audio Speak")
+        print("Initialised Audio")
 
     def get_file_path(self, file_name):
         """
@@ -33,6 +34,10 @@ class Audio(object):
         :param file_name: Audio file
         :return: None
         """
+        threading.Thread(target=self.play_threaded, args=(file_name, )).start()
+
+    def play_threaded(self, file_name):
+        print("Play")
         pygame.mixer.music.load(self.get_file_path(file_name))
         pygame.mixer.music.play()
         while pygame.mixer.music.get_busy():
