@@ -65,7 +65,13 @@ class BluetoothController(object):
         # Run this as long as the robot is running
         while True:
             try:
-                self.data += str(socket.recv(1024))[2:][:-1]  # Receive data from socket and convert to string
+                try:
+                    self.data += str(socket.recv(1024))[2:][:-1]  # Receive data from socket and convert to string
+                except bluetooth.btcommon.BluetoothError:
+                    print("Trying to reconnect bluetooth")
+                    socket.close()
+                    socket.connect((self.bluetooth_address, port))
+
                 data_end = self.data.find('\\n')  # Find the end of one data line
                 if data_end != -1:
                     data_line = self.data[:data_end]  # Cut the data to one data line
@@ -74,10 +80,6 @@ class BluetoothController(object):
             except KeyboardInterrupt:
                 self.audio.play("shutdown.mp3")
                 break
-            except bluetooth.btcommon.BluetoothError:
-                print("Trying to reconnect bluetooth")
-                socket.close()
-                socket.connect((self.bluetooth_address, port))
 
         self.movement.tracks.clean_up()  # Clean up gpio
         socket.close()
