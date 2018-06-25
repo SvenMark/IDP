@@ -1,20 +1,22 @@
 import sys
-sys.path.insert(0, '../../../src')
-
-from entities.audio.speak import Speak
-#Led imports
 import time
 import RPi.GPIO as GPIO
 import Adafruit_WS2801
 import Adafruit_GPIO.SPI as SPI
+from threading import Thread
+
+sys.path.insert(0, '../../../src')
+
+from entities.audio.audio import Audio
+from entities.threading.utils import SharedObject
 
 
 class Emotion(object):
 
-    def __init__(self):
-        self.audio = Speak()
-        # Configure the count of pixels:
-        self.pixel_count = 33
+    def __init__(self, audio):
+        self.audio = audio
+
+        self.pixel_count = 14  # Configure the count of pixels:
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
         self.spi_port = 0
         self.spi_device = 0
@@ -30,19 +32,36 @@ class Emotion(object):
         :param emotion: string with the kind of emotion you want
         :return:
         """
+        time.sleep(0.01)
         if emotion == "neutral":
             # Boston University Red
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
-            pass
+            self.audio.play('russiananthem.mp3')
+            time.sleep(1)
+            while self.audio.playing:
+                print("Blink")
+                self.blink_color(205, 0, 0, 1, 0.3)
+            self.set_emotion("neutral")
         elif emotion == "success":
-            pass
-        elif emotion == "sad":
-            self.brightness_off()
+            self.set_color(0, 205, 0)
+            self.audio.play('success.mp3')
+        elif emotion == "mad":
+            self.set_brightness(-255)
+            self.audio.play('cyka.mp3')
         elif emotion == "happy":
             self.rainbow_colors()
+        elif emotion == "confused":
+            self.audio.play('heya.mp3')
+            time.sleep(1)
+            while self.audio.playing:
+                self.blink_color(255, 105, 180, 0, 0.2)
+        elif emotion == "confirmed":  # Used for building detection
+            self.set_color(0, 205, 0)
+        elif emotion == "searching":  # Used for building detection
+            self.rotate_color(255, 165, 0, 0)
 
-    def set_color(self, r, g, b):
+    def set_color(self, r, b, g):
         """
         Function to set the color of the leds
         :param r: red color value
@@ -53,6 +72,18 @@ class Emotion(object):
         for i in range(self.pixels.count()):
             self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
         self.pixels.show()
+
+    def blink_color(self, r, b, g, blink_times, blinkdelay):
+        for i in range(blink_times):
+            # blink x times, then wait
+            self.pixels.clear()
+            for k in range(self.pixels.count()):
+                self.pixels.set_pixel(k, Adafruit_WS2801.RGB_to_color(r, g, b))
+            self.pixels.show()
+            time.sleep(blinkdelay)
+            self.pixels.clear()
+            self.pixels.show()
+            time.sleep(blinkdelay)
 
     @staticmethod
     def wheel(pos):
@@ -68,23 +99,14 @@ class Emotion(object):
             pos -= 170
             return Adafruit_WS2801.RGB_to_color(0, pos * 3, 255 - pos * 3)
 
-    def brightness_off(self, wait=0.01, step=1):
-        """
-        Function to decrease the brightness to 0
-        :param wait: Time to wait after a color change, lower is faster animation.
-        :param step: Amount to go down echt loop, higher is faster animation but more choppy.
-        :return:
-        """
-        for j in range(int(256 // step)):
-            for i in range(self.pixels.count()):
-                r, g, b = self.pixels.get_pixel_rgb(i)
-                r = int(max(0, r - step))
-                g = int(max(0, g - step))
-                b = int(max(0, b - step))
-                self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
-            self.pixels.show()
-            if wait > 0:
-                time.sleep(wait)
+    def set_brightness(self, brightnessoffset):
+        for i in range(self.pixels.count()):
+            r, g, b = self.pixels.get_pixel_rgb(i)
+            r = int(max(0, r + brightnessoffset))
+            g = int(max(0, g + brightnessoffset))
+            b = int(max(0, b + brightnessoffset))
+            self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, g, b))
+        self.pixels.show()
 
     def rainbow_cycle(self, wait=0.005):
         """
@@ -99,7 +121,7 @@ class Emotion(object):
             if wait > 0:
                 time.sleep(wait)
 
-    def rainbow_colors(self, wait=0.05):
+    def rainbow_colors(self, wait=0.1):
         """
         Function to make the entire strip cycle rainbow colors at once
         :param wait:
@@ -112,7 +134,37 @@ class Emotion(object):
             if wait > 0:
                 time.sleep(wait)
 
+    def appear_from_back(self, color=(0, 255, 0)):
+        pos = 0
+        for i in range(self.pixels.count()):
+
+            for j in reversed(range(i, self.pixels.count())):
+                self.pixels.clear()
+                # first set all pixels at the begin
+                for k in range(i):
+                    self.pixels.set_pixel(k, Adafruit_WS2801.RGB_to_color(color[0], color[1], color[2]))
+                # set then the pixel at position j
+                self.pixels.set_pixel(j, Adafruit_WS2801.RGB_to_color(color[0], color[1], color[2]))
+                self.pixels.show()
+                time.sleep(0.01)
+
+    def rotate_color(self, r, g, b, rotate_times):
+        for j in range(rotate_times):
+            self.pixels.clear()
+            for i in range(self.pixels.count()):
+                if i > 1:
+                    self.pixels.set_pixel(i - 2, Adafruit_WS2801.RGB_to_color(0, 0, 0))
+                self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(r, b, g))
+                time.sleep(0.05)
+                self.pixels.show()
+
 
 if __name__ == '__main__':
-    emotion = Emotion()
-    emotion.set_emotion("happy")
+    audio = Audio()
+    emote = Emotion(audio)
+
+    emote.appear_from_back()
+    # Always start emotions in a thread. Unless you are testing this part.
+    while True:
+        emote.set_emotion("searching")
+

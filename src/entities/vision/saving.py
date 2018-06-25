@@ -1,48 +1,50 @@
 import sys
-sys.path.insert(0, '../../../src')
-
 import time
 import datetime
-from entities.vision.helpers.vision_helper import *
+from imutils.video import VideoStream
 from tkinter import *
 from threading import Thread
+
+sys.path.insert(0, '../../../src')
+
+from entities.vision.helpers.vision_helper import *
 
 
 class Saving(object):
 
-    def __init__(self, helpers, color_range):
-        self.color_range = color_range
+    def __init__(self, helpers):
         self.helper = helpers.helper
-        self.building_handler = helpers.json_handler
+        self.building_handler = None
 
         # Saving variables
         self.save_length = 0
         self.save = False
         self.building_to_save = 0
-        self.side = Side.front
-        self.last_positions = []
+        self.pickup_vertical = 0
+        self.side = 0
 
-    def run(self):
+    def run(self, color_range, json):
+        self.building_handler = json
         print("[RUN] Starting saving...")
 
         # Initialize camera
         cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
         time.sleep(0.3)  # startup
         while True:
-
             # Read frame from the camera
             img = cap.read()
+            img = cv2.flip(img, 0)
 
             # Apply gaussian blue to the image
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
             # Calculate the masks
-            mask, dead_memes = self.helper.calculate_mask(img, self.color_range)
+            mask, _ = self.helper.calculate_mask(img, color_range)
 
-            img4, dead_memes = self.helper.crop_to_contours(mask, img)
+            img_cropped, _, _, _ = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
-            mask_cropped, valid_contours = self.helper.calculate_mask(img4, self.color_range, set_contour=True)
+            mask_cropped, valid_contours = self.helper.calculate_mask(img_cropped, color_range, set_contour=True)
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 self.show_input_fields()
@@ -67,12 +69,15 @@ class Saving(object):
         """
         Shows the input fields for saving the building
         """
+
         def save_entry_fields():
             """
             Saves the entry fields
             """
             self.save_length = int(e1.get())
-            self.save = e2.get()
+            self.building_to_save = e2.get()
+            self.pickup_vertical = e3.get()
+            self.side = e4.get()
             master.quit()
             master.destroy()
 
@@ -82,22 +87,26 @@ class Saving(object):
         # Add labels
         Label(master, text="Amount of blocks").grid(row=0)
         Label(master, text="Building Number").grid(row=1)
-        Label(master, text="Building side").grid(row=2)
+        Label(master, text="Pickup vertical").grid(row=2)
+        Label(master, text="Side").grid(row=3)
         e1 = Entry(master)
         e2 = Entry(master)
         e3 = Entry(master)
+        e4 = Entry(master)
 
         # Insert last length and building to save
         e1.insert(0, self.save_length)
         e2.insert(0, self.building_to_save)
-        e3.insert(0, self.side)
+        e3.insert(0, self.pickup_vertical)
+        e4.insert(0, self.side)
 
         e1.grid(row=0, column=1)
         e2.grid(row=1, column=1)
         e3.grid(row=2, column=1)
+        e4.grid(row=3, column=1)
 
         # Create save button
-        Button(master, text='Save', command=save_entry_fields).grid(row=3, column=1, sticky=W)
+        Button(master, text='Save', command=save_entry_fields).grid(row=4, column=1, sticky=W)
         mainloop()
         self.save = True
 
@@ -114,7 +123,8 @@ class Saving(object):
             """
             self.save = False
             print("[INFO] saved ", self.building_to_save)
-            self.building_handler.set_save_building(valid_contours, self.building_to_save, self.side)
+            self.building_handler.set_save_building(valid_contours, self.building_to_save, self.pickup_vertical,
+                                                    self.side)
             master.destroy()
 
         # Create new forum

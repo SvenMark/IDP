@@ -5,6 +5,7 @@ from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
+from helpers.servo_scanner import scan
 from entities.movement.limb.leg import Leg
 from entities.movement.sequences.sequences import *
 
@@ -23,27 +24,41 @@ class Legs(object):
         :param leg_3_servos: Array of servo id`s for leg 3
         """
         self.previous = datetime.datetime.now()  # The time used for delta timing
+        self.all_Legs = True
+
+        # Check if only 2 legs are connected for stair module
+        servos = scan()
+        if 61 in servos and 6 in servos and 21 not in servos:
+            print("Initialise legs with only rear legs")
+            self.all_Legs = False
 
         # Initialise a leg for each corner of the robot
-        self.leg_front_left = Leg(leg_0_servos, [820, 385, 565])
-        self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
+        if self.all_Legs:
+            self.leg_front_left = Leg(leg_0_servos, [820, 385, 565])
+            self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
         self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
         self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
 
-        self.legs = [
-                 self.leg_front_left,
-                 self.leg_front_right,
-                 self.leg_rear_left,
-                 self.leg_rear_right
+        if self.all_Legs:
+            self.legs = [
+                self.leg_front_left,
+                self.leg_front_right,
+                self.leg_rear_left,
+                self.leg_rear_right
+            ]
+        else:
+            self.legs = [
+                self.leg_rear_left,
+                self.leg_rear_right
             ]
 
         self.sequence = 0  # The current move sequence
         self.type = 'legs'
         self.deployed = False
-        self.retract(120) # Retract on constructing
+        self.retract(120)  # Retract on constructing
         self.updating = False
         self.recent_package = [0, 0, 0]  # The bluetooth packages used for legs
-        self.update_thread = Thread(target=self.leg_updater, args=(self, ))  # The thread which runs the leg updater
+        self.update_thread = Thread(target=self.leg_updater, args=(self,))  # The thread which runs the leg updater
 
         print("Legs setup, retracting")
 
@@ -60,8 +75,9 @@ class Legs(object):
         :return: None
         """
 
-        self.leg_front_left.move(leg_0_moves, speeds)
-        self.leg_front_right.move(leg_1_moves, speeds)
+        if self.all_Legs:
+            self.leg_front_left.move(leg_0_moves, speeds)
+            self.leg_front_right.move(leg_1_moves, speeds)
         self.leg_rear_left.move(leg_2_moves, speeds)
         self.leg_rear_right.move(leg_3_moves, speeds)
 
@@ -92,7 +108,7 @@ class Legs(object):
         :param speed: The speed at which the servo moves
         :return: None
         """
-        retract_state = [530, 790, 470]
+        retract_state = [530, 790, 520]
         speeds = [speed, speed, speed]
 
         for leg in self.legs:
@@ -213,11 +229,6 @@ class Legs(object):
         when controller by the controller.
         :return: None
         """
-        # self.leg_front_right.update_sequence()
-        # self.leg_front_left.update_sequence()
-        # self.leg_rear_right.update_sequence()
-        # self.leg_rear_left.update_sequence()
-
         if self.sequence < 3:
             self.sequence = self.sequence + 1
         else:
@@ -234,15 +245,11 @@ class Legs(object):
         """
         if sequence is None:
             sequence = forward
-        elif sequence is dab and sequences is None:
-            sequences = [0]
-        elif sequence is wave and sequences is None or sequence is march and sequences is None:
-            sequences = [0, 1]
-        elif sequence is hood_handshake:
-            sequences = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
         if sequences is None:
-            sequences = [0, 1, 2, 3]
+            sequences = []
+            seq_len = len(sequence)
+            for i in range(seq_len):
+                sequences.append(i)
 
         for moves in sequences:
             self.move(leg_0_moves=sequence[moves][0],

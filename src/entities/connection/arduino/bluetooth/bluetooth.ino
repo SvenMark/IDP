@@ -36,10 +36,14 @@ String Data;
 int page=0;
 unsigned int value_X,value_Y,value_V,value_H;
 
-const int button1 = 13;
-const int button2 = 3;
+const int button1 = 3;
+const int button2 = 12;
 int button_1_activated, button_2_activated;
 int deploy,stp;
+int mode=0;
+
+long previousMillis = 0; 
+long interval = 50;
  
 void setup() 
 {
@@ -53,100 +57,228 @@ void setup()
     
 }
  
+ 
 void loop()
 {
     String message = myNextion.listen(); //check for message
-      if (message == "65 0 1 0 ffff ffff ffff") {
-        page=1;
-      }
-      
-      value_V = 1023 - analogRead(A0);
-      myNextion.setComponentText("t0", String(value_V));
-      
-      
-      value_H = 1023 - analogRead(A1);
-      myNextion.setComponentText("t1", String(value_H));
-     
-
-      if ((digitalRead (button1) == true) && (button_1_activated ==0)){
-        if(stp == 1){
-          stp = 0;
-        }
-        else{
-          stp = 1;
-        }
-        button_1_activated = 1;
-      }
-
-      if (digitalRead (button1) == false){
-        button_1_activated = 0;
-      }
-
-      value_X = 1023 - analogRead(A2);
-      myNextion.setComponentText("t2", String(value_X));
-      
-      
-      value_Y = 1023 - analogRead(A3);
-      myNextion.setComponentText("t3", String(value_Y));
-       
-
-
-      if ((digitalRead (button2) == true) && (button_2_activated ==0)){
-        if(deploy == 1){
-          deploy = 0;
-        }
-        else{
-          deploy = 1;
-        }
-        button_2_activated = 1;
-      }
-
-      if (digitalRead (button2) == false){
-        button_2_activated = 0;
-      }
-      
-      
-      String finaldata = " s " + String(stp) + " v " + String(value_V) + " h " + String(value_H)+ " d " + String(deploy) + " x " + String(value_X) + " y " + String(value_Y);
-      Serial.print(finaldata);
-      Serial.print("\n");
-      delay(20);
-      
+    unsigned long currentMillis = millis();
     
-//    if (page==1){        
-      if (message == "65 1 1 0 ffff ffff ffff") {
-        myNextion.buttonToggle(button1State, "b0", 0, 2);     
-      }
+  if ((digitalRead (button1) == true) && (button_1_activated ==0)){
+    if(stp == 1){
+      stp = 0;
+    }
+    else{
+      stp = 1;
+    }
+    button_1_activated = 1;
+  }
+  
+  if (digitalRead (button1) == false){
+    button_1_activated = 0;
+  }
+
+  if ((digitalRead (button2) == true) && (button_2_activated ==0)){
+    if(deploy == 1){
+      deploy = 0;
+    }
+    else{
+      deploy = 1;
+    }
+    button_2_activated = 1;
+  }
       
-      if (message == "65 1 2 0 ffff ffff ffff") {
-        myNextion.buttonToggle(button2State, "b1", 0, 2);
-      }
+  if (digitalRead (button2) == false){
+    button_2_activated = 0;
+  }
+
+  if(currentMillis - previousMillis > interval){
+    value_V = 1023 - analogRead(8);
+    value_H = 1023 - analogRead(9);
+    value_X = 1023 - analogRead(0);
+    value_Y = 1023 - analogRead(1);
+
+    String finaldata = " s " + String(stp) + " v " + String(value_V) + " h " + String(value_H)+ " d " + String(deploy) + " x " + String(value_X) + " y " + String(value_Y)+ " e " + String(mode);
+    Serial.print(finaldata);
+    Serial.print("\n");
+    delay(20);
+  }
+            
+  if (message == "65 0 1 0 ff ff ff") {
+    mode=1;
+    myNextion.sendCommand("b0.picc=2"); //set "b0" image to 2
+    myNextion.sendCommand("ref b0"); //refresh
+    myNextion.sendCommand("b1.picc=0"); //set "b1" image to 0
+    myNextion.sendCommand("ref b1"); //refresh
+    myNextion.sendCommand("b2.picc=0"); //set "b2" image to 0
+    myNextion.sendCommand("ref b2"); //refresh
+    myNextion.sendCommand("b3.picc=0"); //set "b3" image to 0
+    myNextion.sendCommand("ref b3"); //refresh
+    myNextion.sendCommand("b4.picc=0"); //set "b4" image to 0
+    myNextion.sendCommand("ref b4"); //refresh
+    myNextion.sendCommand("b5.picc=0"); //set "b5" image to 0
+    myNextion.sendCommand("ref b5"); //refresh
+    myNextion.sendCommand("b6.picc=0"); //set "b6" image to 0
+    myNextion.sendCommand("ref b6"); //refresh
+    myNextion.sendCommand("b7.picc=0"); //set "b7" image to 0
+    myNextion.sendCommand("ref b7"); //refresh    
+  }
   
-      if (message == "65 1 3 0 ffff ffff ffff") {
-        myNextion.buttonToggle(button3State, "b2", 0, 2);
-      }
-  
-      if (message == "65 1 4 0 ffff ffff ffff") {
-        myNextion.buttonToggle(button4State, "b3", 0, 2);
-      }
-  
-      if (message == "65 1 5 0 ffff ffff ffff") {
-        myNextion.buttonToggle(button5State, "b4", 0, 2);
-      }
-  
-      if (message == "65 1 6 0 ffff ffff ffff") {
-        myNextion.buttonToggle(button6State, "b5", 0, 2);
-      }
-  
-      if (message == "65 1 7 0 ffff ffff ffff") {
-        myNextion.buttonToggle(button7State, "b6", 0, 2);
-      }
-  
-      if (message == "65 1 8 0 ffff ffff ffff") {
-        myNextion.buttonToggle(button8State, "b7", 0, 2);
-      }
-      if (message == "65 1 9 0 ffff ffff ffff") {
-        page=0;
-      }
-//    }
-    
+  if (message == "65 0 2 0 ff ff ff") {
+    mode=2;
+    myNextion.sendCommand("b0.picc=0"); //set "b0" image to 0
+    myNextion.sendCommand("ref b0"); //refresh
+    myNextion.sendCommand("b1.picc=2"); //set "b1" image to 2
+    myNextion.sendCommand("ref b1"); //refresh
+    myNextion.sendCommand("b2.picc=0"); //set "b2" image to 0
+    myNextion.sendCommand("ref b2"); //refresh
+    myNextion.sendCommand("b3.picc=0"); //set "b3" image to 0
+    myNextion.sendCommand("ref b3"); //refresh
+    myNextion.sendCommand("b4.picc=0"); //set "b4" image to 0
+    myNextion.sendCommand("ref b4"); //refresh
+    myNextion.sendCommand("b5.picc=0"); //set "b5" image to 0
+    myNextion.sendCommand("ref b5"); //refresh
+    myNextion.sendCommand("b6.picc=0"); //set "b6" image to 0
+    myNextion.sendCommand("ref b6"); //refresh
+    myNextion.sendCommand("b7.picc=0"); //set "b7" image to 0
+    myNextion.sendCommand("ref b7"); //refresh
+  }
+
+  if (message == "65 0 3 0 ff ff ff") {
+    mode=3;
+    myNextion.sendCommand("b0.picc=0"); //set "b0" image to 0
+    myNextion.sendCommand("ref b0"); //refresh
+    myNextion.sendCommand("b1.picc=0"); //set "b1" image to 0
+    myNextion.sendCommand("ref b1"); //refresh
+    myNextion.sendCommand("b2.picc=2"); //set "b2" image to 2
+    myNextion.sendCommand("ref b2"); //refresh
+    myNextion.sendCommand("b3.picc=0"); //set "b3" image to 0
+    myNextion.sendCommand("ref b3"); //refresh
+    myNextion.sendCommand("b4.picc=0"); //set "b4" image to 0
+    myNextion.sendCommand("ref b4"); //refresh
+    myNextion.sendCommand("b5.picc=0"); //set "b5" image to 0
+    myNextion.sendCommand("ref b5"); //refresh
+    myNextion.sendCommand("b6.picc=0"); //set "b6" image to 0
+    myNextion.sendCommand("ref b6"); //refresh
+    myNextion.sendCommand("b7.picc=0"); //set "b7" image to 0
+    myNextion.sendCommand("ref b7"); //refresh
+  }
+
+  if (message == "65 0 4 0 ff ff ff") {
+    mode=4;
+    myNextion.sendCommand("b0.picc=0"); //set "b0" image to 0
+    myNextion.sendCommand("ref b0"); //refresh
+    myNextion.sendCommand("b1.picc=0"); //set "b1" image to 0
+    myNextion.sendCommand("ref b1"); //refresh
+    myNextion.sendCommand("b2.picc=0"); //set "b2" image to 0
+    myNextion.sendCommand("ref b2"); //refresh
+    myNextion.sendCommand("b3.picc=2"); //set "b3" image to 2
+    myNextion.sendCommand("ref b3"); //refresh
+    myNextion.sendCommand("b4.picc=0"); //set "b4" image to 0
+    myNextion.sendCommand("ref b4"); //refresh
+    myNextion.sendCommand("b5.picc=0"); //set "b5" image to 0
+    myNextion.sendCommand("ref b5"); //refresh
+    myNextion.sendCommand("b6.picc=0"); //set "b6" image to 0
+    myNextion.sendCommand("ref b6"); //refresh
+    myNextion.sendCommand("b7.picc=0"); //set "b7" image to 0
+    myNextion.sendCommand("ref b7"); //refresh
+  }
+
+  if (message == "65 0 5 0 ff ff ff") {
+    mode=5;
+    myNextion.sendCommand("b0.picc=0"); //set "b0" image to 0
+    myNextion.sendCommand("ref b0"); //refresh
+    myNextion.sendCommand("b1.picc=0"); //set "b1" image to 0
+    myNextion.sendCommand("ref b1"); //refresh
+    myNextion.sendCommand("b2.picc=0"); //set "b2" image to 0
+    myNextion.sendCommand("ref b2"); //refresh
+    myNextion.sendCommand("b3.picc=0"); //set "b3" image to 0
+    myNextion.sendCommand("ref b3"); //refresh
+    myNextion.sendCommand("b4.picc=2"); //set "b4" image to 2
+    myNextion.sendCommand("ref b4"); //refresh
+    myNextion.sendCommand("b5.picc=0"); //set "b5" image to 0
+    myNextion.sendCommand("ref b5"); //refresh
+    myNextion.sendCommand("b6.picc=0"); //set "b6" image to 0
+    myNextion.sendCommand("ref b6"); //refresh
+    myNextion.sendCommand("b7.picc=0"); //set "b7" image to 0
+    myNextion.sendCommand("ref b7"); //refresh
+  }
+
+  if (message == "65 0 6 0 ff ff ff") {
+    mode=6;
+    myNextion.sendCommand("b0.picc=0"); //set "b0" image to 0
+    myNextion.sendCommand("ref b0"); //refresh
+    myNextion.sendCommand("b1.picc=0"); //set "b1" image to 0
+    myNextion.sendCommand("ref b1"); //refresh
+    myNextion.sendCommand("b2.picc=0"); //set "b2" image to 0
+    myNextion.sendCommand("ref b2"); //refresh
+    myNextion.sendCommand("b3.picc=0"); //set "b3" image to 0
+    myNextion.sendCommand("ref b3"); //refresh
+    myNextion.sendCommand("b4.picc=0"); //set "b4" image to 0
+    myNextion.sendCommand("ref b4"); //refresh
+    myNextion.sendCommand("b5.picc=2"); //set "b5" image to 2
+    myNextion.sendCommand("ref b5"); //refresh
+    myNextion.sendCommand("b6.picc=0"); //set "b6" image to 0
+    myNextion.sendCommand("ref b6"); //refresh
+    myNextion.sendCommand("b7.picc=0"); //set "b7" image to 0
+    myNextion.sendCommand("ref b7"); //refresh
+  }
+
+  if (message == "65 0 7 0 ff ff ff") {
+    mode=7;
+    myNextion.sendCommand("b0.picc=0"); //set "b0" image to 0
+    myNextion.sendCommand("ref b0"); //refresh
+    myNextion.sendCommand("b1.picc=0"); //set "b1" image to 0
+    myNextion.sendCommand("ref b1"); //refresh
+    myNextion.sendCommand("b2.picc=0"); //set "b2" image to 0
+    myNextion.sendCommand("ref b2"); //refresh
+    myNextion.sendCommand("b3.picc=0"); //set "b3" image to 0
+    myNextion.sendCommand("ref b3"); //refresh
+    myNextion.sendCommand("b4.picc=0"); //set "b4" image to 0
+    myNextion.sendCommand("ref b4"); //refresh
+    myNextion.sendCommand("b5.picc=0"); //set "b5" image to 0
+    myNextion.sendCommand("ref b5"); //refresh
+    myNextion.sendCommand("b6.picc=2"); //set "b6" image to 2
+    myNextion.sendCommand("ref b6"); //refresh
+    myNextion.sendCommand("b7.picc=0"); //set "b7" image to 0
+    myNextion.sendCommand("ref b7"); //refresh
+  }
+
+  if (message == "65 0 8 0 ff ff ff") {
+    mode=8;
+    myNextion.sendCommand("b0.picc=0"); //set "b0" image to 0
+    myNextion.sendCommand("ref b0"); //refresh
+    myNextion.sendCommand("b1.picc=0"); //set "b1" image to 0
+    myNextion.sendCommand("ref b1"); //refresh
+    myNextion.sendCommand("b2.picc=0"); //set "b2" image to 0
+    myNextion.sendCommand("ref b2"); //refresh
+    myNextion.sendCommand("b3.picc=0"); //set "b3" image to 0
+    myNextion.sendCommand("ref b3"); //refresh
+    myNextion.sendCommand("b4.picc=0"); //set "b4" image to 0
+    myNextion.sendCommand("ref b4"); //refresh
+    myNextion.sendCommand("b5.picc=0"); //set "b5" image to 0
+    myNextion.sendCommand("ref b5"); //refresh
+    myNextion.sendCommand("b6.picc=0"); //set "b6" image to 0
+    myNextion.sendCommand("ref b6"); //refresh
+    myNextion.sendCommand("b7.picc=2"); //set "b7" image to 2
+    myNextion.sendCommand("ref b7"); //refresh
+  }
+  if (message == "65 0 9 0 ff ff ff") {
+    mode=0;
+    myNextion.sendCommand("b0.picc=0"); //set "b0" image to 0
+    myNextion.sendCommand("ref b0"); //refresh
+    myNextion.sendCommand("b1.picc=0"); //set "b1" image to 0
+    myNextion.sendCommand("ref b1"); //refresh
+    myNextion.sendCommand("b2.picc=0"); //set "b2" image to 0
+    myNextion.sendCommand("ref b2"); //refresh
+    myNextion.sendCommand("b3.picc=0"); //set "b3" image to 0
+    myNextion.sendCommand("ref b3"); //refresh
+    myNextion.sendCommand("b4.picc=0"); //set "b4" image to 0
+    myNextion.sendCommand("ref b4"); //refresh
+    myNextion.sendCommand("b5.picc=0"); //set "b5" image to 0
+    myNextion.sendCommand("ref b5"); //refresh
+    myNextion.sendCommand("b6.picc=0"); //set "b6" image to 0
+    myNextion.sendCommand("ref b6"); //refresh
+    myNextion.sendCommand("b7.picc=0"); //set "b7" image to 0
+    myNextion.sendCommand("ref b7"); //refresh
+  }
 }

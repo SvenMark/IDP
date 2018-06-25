@@ -48,7 +48,6 @@ class Tracks(object):
 
         # If acceleration is smaller or equal to 0 set it to 0.01 to prevent sudden shocks in the power train.
         if acceleration <= 0:
-            # print("Warning, setting acceleration to 0.01")
             acceleration = 0.01
 
         # Calculate the difference between the required duty cycle and current duty cycle.
@@ -84,6 +83,9 @@ class Tracks(object):
             if speed_2 > 100:
                 speed_2 = 100
 
+            # Decrease speed according to deviation
+            # speed_2 = speed_2 * 0.8
+
             # Pass the new speed to each motor.
             # Track direction 1 is forwards, direction 0 is backwards.
             if track_left_direction == 1 and track_right_direction == 1:
@@ -102,6 +104,9 @@ class Tracks(object):
                 self.track_left.backward(speed_1, 0)
                 self.track_right.forward(speed_2, 0)
             time.sleep(0.01)  # Add a little delay so the motor accelerates smoothly
+
+        self.track_left.current_speed = speed_1
+        self.track_right.current_speed = speed_2
 
         time.sleep(delay)
 
@@ -173,20 +178,16 @@ class Tracks(object):
                                   acceleration=0)
                 # Backward left
                 if horizontal_speed < -dead_zone:
-                    if horizontal_speed < 150:
-                        horizontal_speed = 150
                     horizontal_speed = horizontal_speed / 2
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
-                                  duty_cycle_track_right=abs(vertical_speed) - horizontal_speed,
+                                  duty_cycle_track_right=(abs(vertical_speed) - horizontal_speed),
                                   delay=0,
                                   acceleration=0)
                 # Backward right
                 if horizontal_speed > dead_zone:
-                    if horizontal_speed > 850:
-                        horizontal_speed = 850
                     horizontal_speed = abs(horizontal_speed / 2)
                     self.backward(duty_cycle_track_left=abs(vertical_speed),
-                                  duty_cycle_track_right=abs(vertical_speed) - horizontal_speed,
+                                  duty_cycle_track_right=(abs(vertical_speed) - horizontal_speed),
                                   delay=0,
                                   acceleration=0)
 
@@ -199,8 +200,6 @@ class Tracks(object):
                                  acceleration=0)
                 # Forward left
                 if horizontal_speed < -dead_zone:
-                    if horizontal_speed < 150:
-                        horizontal_speed = 150
                     horizontal_speed = horizontal_speed / 2
                     self.forward(duty_cycle_track_left=vertical_speed,
                                  duty_cycle_track_right=vertical_speed - horizontal_speed,
@@ -208,8 +207,6 @@ class Tracks(object):
                                  acceleration=0)
                 # Forward right
                 if horizontal_speed > dead_zone:
-                    if horizontal_speed > 850:
-                        horizontal_speed = 850
                     horizontal_speed = abs(horizontal_speed / 2)
                     self.forward(duty_cycle_track_left=vertical_speed,
                                  duty_cycle_track_right=vertical_speed - horizontal_speed,

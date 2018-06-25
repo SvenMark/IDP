@@ -1,21 +1,29 @@
 import sys
-
-sys.path.insert(0, '../../../src')
-
 import time
 import cv2
 import numpy as np
+
+sys.path.insert(0, '../../../src')
+
 from imutils.video import VideoStream
 from entities.vision.recognize import Recognize
 from entities.vision.helpers.vision_helper import Color
 
 
-def run(name, movement, shared_object):
+def run(name, control):
+    movement = control.movement
+    shared_object = control.shared_object
+    speed_factor = control.speed_factor
+    dead_zone = control.dead_zone
+
     print("[RUN] " + str(name))
     detect_cup()
 
     while not shared_object.has_to_stop():
-        print("[INFO] Doing calculations and stuff")
+        movement.tracks.handle_controller_input(stop_motors=shared_object.bluetooth_settings.s,
+                                                vertical_speed=shared_object.bluetooth_settings.h * speed_factor,
+                                                horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,
+                                                dead_zone=dead_zone)
         time.sleep(0.1)
 
     # Notify shared object that this thread has been stopped
@@ -39,7 +47,7 @@ def detect_cup():
     flann = cv2.FlannBasedMatcher(flannParam, {})
 
     # Get training image of cup
-    trainImg = cv2.imread("ding.jpg", 0)
+    trainImg = cv2.imread("cup.jpg", 0)
     trainKP, trainDesc = detector.detectAndCompute(trainImg, None)
 
     # Get video of picamera

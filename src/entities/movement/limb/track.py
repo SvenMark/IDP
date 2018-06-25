@@ -17,7 +17,8 @@ class Track(object):
         :param pin_forward: The forward direction pin
         :param pin_backward: The backward direction pin
         """
-        self.motor = DCMotor(track_pin, pin_forward, pin_backward)  # Initialise both motors as tracks. Each track has 1 motor.
+        self.motor = DCMotor(track_pin, pin_forward,
+                             pin_backward)  # Initialise both motors as tracks. Each track has 1 motor.
         self.current_speed = 0
         self.type = 'track'
 
@@ -56,4 +57,3 @@ class Track(object):
         """
         self.motor.clean_up()
         self.current_speed = 0
-
