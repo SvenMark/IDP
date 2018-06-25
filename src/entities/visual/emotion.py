@@ -163,6 +163,7 @@ if __name__ == '__main__':
     audio = Audio()
     emote = Emotion(audio)
 
+    emote.appear_from_back()
     # Always start emotions in a thread. Unless you are testing this part.
     while True:
         emote.set_emotion("searching")
