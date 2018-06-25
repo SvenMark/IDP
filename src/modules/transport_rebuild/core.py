@@ -72,10 +72,11 @@ def run(name, control):
                                                 horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,
                                                 dead_zone=dead_zone)
 
-        if movement.grabber.grabbed and grab is 0:
-            movement.grabber.loosen([150, 150, 150])
-        if not movement.grabber.grabbed and grab is 1:
-            movement.grabber.grab([100, 100, 100], vision.settings.pick_up_vertical)
+        if hasattr(movement, 'grabber'):
+            if movement.grabber.grabbed and grab is 0:
+                movement.grabber.loosen([150, 150, 150])
+            if not movement.grabber.grabbed and grab is 1:
+                movement.grabber.grab([100, 100, 100], vision.settings.pick_up_vertical)
 
         # If a vision frame has been handled
         if vision.settings.update:
@@ -88,17 +89,19 @@ def run(name, control):
                 movement.tracks.stop()
                 print("GRABBING VISION")
                 # Try grab
-                movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
+                if hasattr(movement, 'grabber'):
+                    movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
 
                 # While grabbing failed, try again
                 max_attempts = 10
                 attempts = 0
-                while movement.grabber.reposition is True \
-                        and not shared_object.has_to_stop() and attempts < max_attempts:
-                    if vision.settings.distance < 50:
-                        movement.tracks.backward(20, 20, 0.5, 0.5)
-                        movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
-                    attempts += 1
+                if hasattr(movement, 'grabber'):
+                    while movement.grabber.reposition is True \
+                            and not shared_object.has_to_stop() and attempts < max_attempts:
+                        if vision.settings.distance < 50:
+                            movement.tracks.backward(20, 20, 0.5, 0.5)
+                            movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
+                        attempts += 1
 
                 # If all attempts failed
                 if attempts == max_attempts:

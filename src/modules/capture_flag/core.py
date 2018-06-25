@@ -37,10 +37,11 @@ def run(name, control):
                 speeds=[200, 200, 200],
                 self_update=True)
 
-        if movement.grabber.grabbed and grab is 0:
-            movement.grabber.loosen(150)
-        if not movement.grabber.grabbed and grab is 1:
-            movement.grabber.grab(100, True)
+        if hasattr(movement, 'grabber'):
+            if movement.grabber.grabbed and grab is 0:
+                movement.grabber.loosen(150)
+            if not movement.grabber.grabbed and grab is 1:
+                movement.grabber.grab(100, True)
 
     if hasattr(movement, 'legs'):
         movement.legs.retract()
