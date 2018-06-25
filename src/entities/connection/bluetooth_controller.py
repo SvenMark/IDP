@@ -37,7 +37,6 @@ class BluetoothController(object):
         self.shared_object = SharedObject()
         self.vision = Vision(self.shared_object)
         self.audio = Audio()
-        self.audio.play("startup.mp3")
         self.emotion = Emotion(self.audio)
 
         self.current_module = -1  # Save the current module that is running
@@ -67,17 +66,6 @@ class BluetoothController(object):
         while True:
             try:
                 self.data += str(socket.recv(1024))[2:][:-1]  # Receive data from socket and convert to string
-
-                if self.data is "":
-                    print("Closing socket")
-                    socket.close()
-                    while self.data is "":
-                        try:
-                            socket.connect((self.bluetooth_address, port))
-                            self.data += str(socket.recv(1024))[2:][:-1]
-                        except bluetooth.btcommon.BluetoothError:
-                            print("Cannot connect, attempting to reconnect")
-
                 data_end = self.data.find('\\n')  # Find the end of one data line
                 if data_end != -1:
                     data_line = self.data[:data_end]  # Cut the data to one data line
@@ -86,6 +74,10 @@ class BluetoothController(object):
             except KeyboardInterrupt:
                 self.audio.play("shutdown.mp3")
                 break
+            except bluetooth.btcommon.BluetoothError:
+                print("Trying to reconnect bluetooth")
+                socket.close()
+                socket.connect((self.bluetooth_address, port))
 
         self.movement.tracks.clean_up()  # Clean up gpio
         socket.close()
