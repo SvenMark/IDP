@@ -29,9 +29,19 @@ def routine():
     t.start()
 
 
-routine()
-
 audio = Audio()
+
+time.sleep(0.5)
+
+while audio.playing:
+    pass
+
+audio.play('Rasputin.mp3')
+
+while not audio.playing:
+    pass
+
+routine()
 
 while True:
     print(str(current_part))
