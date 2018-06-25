@@ -56,7 +56,7 @@ def stairdetector(shared_object):
 
         # Generate and set a mask for a range of black (color of the line) to the cropped image
         hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-        white = Color("White", [95, 0, 140], [180, 35, 255])
+        white = Color("Staircolor", [95, 0, 140], [180, 35, 255])
         mask = cv2.inRange(hsv, white.lower, white.upper)
 
         # Set line color to blue and clone the image to draw the lines on
@@ -66,7 +66,7 @@ def stairdetector(shared_object):
         # Set variables and get lines with Houghlines function on the mask of black
         theta = np.pi / 180
         threshold = 150
-        min_line_length = 319
+        min_line_length = 310
         max_line_gap = 50
 
         lines = cv2.HoughLinesP(mask, 2, theta, threshold, np.array([]),
