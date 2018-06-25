@@ -1,7 +1,9 @@
 import sys
+
 sys.path.insert(0, '../../../src')
 
 from entities.threading.utils import SharedObject
-from modules.cannon import core
+from modules.cannon import core, line_detection
 
-core.run(name="Linetest", shared_object=SharedObject(), movement=None)
+shared_object = SharedObject()
+line_detection(shared_object)

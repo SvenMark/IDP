@@ -3,7 +3,6 @@ sys.path.insert(0, '../../../src')
 
 from imutils.video import VideoStream
 from modules.cannon.helpers import Point, Color
-from decimal import Decimal
 from threading import Thread
 import time
 import numpy as np
@@ -17,6 +16,7 @@ TORQUE = 1
 
 red_detected = False
 line_detected = False
+
 
 def run(name, movement, shared_object):
     print("[RUN] " + str(name))
@@ -62,7 +62,7 @@ def line_detection(shared_object):
     :return: None
     """
     # Get view of picamera and do a small warmup of 0.3s
-    cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+    cap = VideoStream(src=0, usePiCamera=False, resolution=(320, 240)).start()
     time.sleep(0.3)
 
     # Get width and height of the frame and make vertices for a traingle shaped region
@@ -196,8 +196,8 @@ def average_distance(lines, width):
             count += 1
 
     # Calculate average to sides (x-as)
-    percentage_left = Decimal((Decimal(Decimal(totaldl) / Decimal(count)) / Decimal(width)) * Decimal(100))
-    percentage_right = Decimal((Decimal(Decimal(totaldr) / Decimal(count)) / Decimal(width)) * Decimal(100))
+    percentage_left = (totaldl / count) / width * 100
+    percentage_right = (totaldr / count) / width * 100
 
     return percentage_left, percentage_right
 
