@@ -48,7 +48,6 @@ class Tracks(object):
 
         # If acceleration is smaller or equal to 0 set it to 0.01 to prevent sudden shocks in the power train.
         if acceleration <= 0:
-            # print("Warning, setting acceleration to 0.01")
             acceleration = 0.01
 
         # Calculate the difference between the required duty cycle and current duty cycle.
@@ -83,6 +82,9 @@ class Tracks(object):
                 speed_1 = 100
             if speed_2 > 100:
                 speed_2 = 100
+
+            # Decrease speed according to deviation
+            # peed_2 = speed_2 * 0.8
 
             # Pass the new speed to each motor.
             # Track direction 1 is forwards, direction 0 is backwards.

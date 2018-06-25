@@ -68,15 +68,15 @@ class BluetoothController(object):
             try:
                 self.data += str(socket.recv(1024))[2:][:-1]  # Receive data from socket and convert to string
 
-                # if data is "":
-                #     print("Closing socket")
-                #     sock.close()
-                #     while data is "":
-                #         try:
-                #             sock.connect((self.bluetooth_address, port))
-                #             data += str(sock.recv(1024))[2:][:-1]
-                #         except bluetooth.btcommon.BluetoothError:
-                #             print("Cannot connect, attempting to reconnect")
+                if self.data is "":
+                    print("Closing socket")
+                    socket.close()
+                    while self.data is "":
+                        try:
+                            socket.connect((self.bluetooth_address, port))
+                            self.data += str(socket.recv(1024))[2:][:-1]
+                        except bluetooth.btcommon.BluetoothError:
+                            print("Cannot connect, attempting to reconnect")
 
                 data_end = self.data.find('\\n')  # Find the end of one data line
                 if data_end != -1:
@@ -85,7 +85,6 @@ class BluetoothController(object):
                     self.data = ""  # Empty data string
             except KeyboardInterrupt:
                 self.audio.speak.play("shutdown.mp3")
-                time.sleep(5)
                 break
 
         self.movement.tracks.clean_up()  # Clean up gpio
@@ -123,12 +122,6 @@ class BluetoothController(object):
             # Set values in shared bluetooth settings
             self.shared_object.bluetooth_settings.handle_values(s, v, h, d, x, y, m)
 
-            # Turn up speed for race mode and ctf
-            if m is 2 or m is 8:
-                self.speed_factor = 1
-            else:
-                self.speed_factor = 0.75
-
             # Check if different module is selected
             if m is not self.current_module:
                 self.shared_object.stop = True  # Notify last module thread to stop
@@ -143,10 +136,8 @@ class BluetoothController(object):
                 # Run and set selected module as current
                 self.current_module = m
                 self.run_module([m, self])
-
         except ValueError or IndexError:
-            temp = 123
-            # print("Invalid value in package")
+            pass
 
     def run_module(self, args):
         """
