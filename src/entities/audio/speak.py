@@ -1,6 +1,7 @@
 import os
 from gtts import gTTS
 import sys
+import threading
 import pygame
 
 sys.path.insert(0, '../../../src')
@@ -23,6 +24,11 @@ class Speak(object):
         :param file_name: Audio file
         :return: None
         """
+
+        threading.Thread(target=self.play_threaded, args=(file_name, )).start()
+
+    def play_threaded(self, file_name):
+        print("Play")
         pygame.mixer.music.load(self.audio.get_file_path(file_name))
         pygame.mixer.music.play()
         while pygame.mixer.music.get_busy():
@@ -39,4 +45,3 @@ class Speak(object):
         filename = "tts.wav"
         tts.save(filename)
         self.play(filename)
-

@@ -26,3 +26,9 @@ class Audio(object):
         :return: String
         """
         return self.resources + file_name
+
+
+audio = Audio()
+audio.speak.play('sad.mp3')
+while True:
+    pass
