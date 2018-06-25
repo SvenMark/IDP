@@ -1,6 +1,7 @@
 import os
 import platform
 import sys
+import time
 
 sys.path.insert(0, '../../../src')
 
@@ -27,8 +28,3 @@ class Audio(object):
         """
         return self.resources + file_name
 
-
-audio = Audio()
-audio.speak.play('sad.mp3')
-while True:
-    pass
