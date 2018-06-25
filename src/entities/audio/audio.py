@@ -3,6 +3,7 @@ import platform
 import sys
 import pygame
 from gtts import gTTS
+import time
 
 sys.path.insert(0, '../../../src')
 
@@ -48,3 +49,4 @@ class Audio(object):
         filename = "tts.wav"
         tts.save(filename)
         self.play(filename)
+
