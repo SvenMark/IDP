@@ -18,7 +18,7 @@ bus.write_byte(0x68, 0x10)
 # Read data back from 0x00(0), 2 bytes
 # raw_adc MSB, raw_adc LSB
 data = bus.read_i2c_block_data(0x68, 0x00, 2)
-
+print(data)
 # Convert the data to 12-bits
 raw_adc = (data[0] & 0x0F) * 256 + data[1]
 if raw_adc > 2047:
