@@ -1,4 +1,5 @@
 import codecs
+import os
 import sys
 import json
 import numpy as np
@@ -10,8 +11,8 @@ from entities.vision.helpers.vision_helper import Color, BuildingSide
 
 class JsonHandler:
     def __init__(self, std_color_range, file_name_color="output.txt", file_name_building="save.txt"):
-        self.file_name_color = file_name_color
-        self.file_name_building = file_name_building
+        self.file_name_color = os.path.dirname(os.path.abspath(__file__)) + "\\saved_files\\" + file_name_color
+        self.file_name_building = os.path.dirname(os.path.abspath(__file__)) + "\\saved_files\\" + file_name_building
         self.back_up_color_range = std_color_range
 
     def set_color_range(self, color_range):

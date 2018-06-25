@@ -1,3 +1,4 @@
+import os
 import sys
 import threading
 import time
@@ -12,8 +13,9 @@ color_ranges = [Color("blue", [84, 44, 52], [153, 255, 255]),
                 Color("orange", [0, 108, 104], [6, 255, 255]),
                 Color("green", [28, 39, 0], [94, 255, 255]),
                 Color("red", [167, 116, 89], [180, 255, 255])]
-json_handler = JsonHandler(color_ranges,
-                           "/modules/transport_rebuild/saved_files/color_ranges.txt",
-                           "/modules/transport_rebuild/saved_files/buildings.txt")
 
-print(json_handler.get_save_buildings())
+json_handler = JsonHandler(color_ranges,
+                           "color_ranges.txt",
+                           "buildings.txt")
+
+print(json_handler.get_save_buildings()[0].side)
