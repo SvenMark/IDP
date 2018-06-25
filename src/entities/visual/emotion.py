@@ -1,8 +1,8 @@
 import sys
 import time
-#import RPi.GPIO as GPIO
-#import Adafruit_WS2801
-#import Adafruit_GPIO.SPI as SPI
+import RPi.GPIO as GPIO
+import Adafruit_WS2801
+import Adafruit_GPIO.SPI as SPI
 from threading import Thread
 
 sys.path.insert(0, '../../../src')
@@ -20,10 +20,10 @@ class Emotion(object):
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
         self.spi_port = 0
         self.spi_device = 0
-        #self.pixels = Adafruit_WS2801.WS2801Pixels(self.pixel_count, spi=SPI.SpiDev(self.spi_port, self.spi_device),
-        #                                           gpio=GPIO)
-        #self.pixels.clear()
-        #self.pixels.show()  # Make sure to call show() after changing any pixels!
+        self.pixels = Adafruit_WS2801.WS2801Pixels(self.pixel_count, spi=SPI.SpiDev(self.spi_port, self.spi_device),
+                                                   gpio=GPIO)
+        self.pixels.clear()
+        self.pixels.show()  # Make sure to call show() after changing any pixels!
 
     def set_emotion(self, emotion):
         """
@@ -164,5 +164,5 @@ if __name__ == '__main__':
     emote = Emotion(audio)
 
     # Always start emotions in a thread.
-    Thread(target=emote.set_emotion("anthem"))
+    emote.set_emotion("anthem")
 
