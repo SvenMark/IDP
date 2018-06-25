@@ -27,6 +27,7 @@ def transport_to_finish(movement, settings):
 
 # def run(name, control):
 def run():
+    name = "name"
     limbs = [
         Tracks(track_0_pin=13,
                track_1_pin=18,
