@@ -4,6 +4,14 @@ import time
 
 sys.path.insert(0, '../../../src')
 
+from entities.audio.audio import Audio
+from entities.movement.grabber import Grabber
+from entities.movement.movement import Movement
+from entities.movement.tracks import Tracks
+from entities.threading.utils import SharedObject
+from entities.vision.vision import Vision
+from entities.visual.emotion import Emotion
+
 from entities.vision.helpers.json_handler import JsonHandler
 from entities.vision.helpers.vision_helper import Color, BuildingSide
 
@@ -20,9 +28,11 @@ def transport_to_finish(movement, settings):
 def run(name, control):
     movement = control.movement
     shared_object = control.shared_object
+    vision = control.vision
+    audio = control.audio
+    emotion = control.emotion
     speed_factor = control.speed_factor
     dead_zone = control.dead_zone
-    vision = control.vision
 
     print("[RUN] " + str(name))
 
@@ -72,10 +82,11 @@ def run(name, control):
                                                 horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,
                                                 dead_zone=dead_zone)
 
-        if movement.grabber.grabbed and grab is 0:
-            movement.grabber.loosen([150, 150, 150])
-        if not movement.grabber.grabbed and grab is 1:
-            movement.grabber.grab([100, 100, 100], vision.settings.pick_up_vertical)
+        if hasattr(movement, 'grabber'):
+            if movement.grabber.grabbed and grab is 0:
+                movement.grabber.loosen([150, 150, 150])
+            if not movement.grabber.grabbed and grab is 1:
+                movement.grabber.grab([100, 100, 100], vision.settings.pick_up_vertical)
 
         # If a vision frame has been handled
         if vision.settings.update:
@@ -88,17 +99,19 @@ def run(name, control):
                 movement.tracks.stop()
                 print("GRABBING VISION")
                 # Try grab
-                movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
+                if hasattr(movement, 'grabber'):
+                    movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
 
                 # While grabbing failed, try again
                 max_attempts = 10
                 attempts = 0
-                while movement.grabber.reposition is True \
-                        and not shared_object.has_to_stop() and attempts < max_attempts:
-                    if vision.settings.distance < 50:
-                        movement.tracks.backward(20, 20, 0.5, 0.5)
-                        movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
-                    attempts += 1
+                if hasattr(movement, 'grabber'):
+                    while movement.grabber.reposition is True \
+                            and not shared_object.has_to_stop() and attempts < max_attempts:
+                        if vision.settings.distance < 50:
+                            movement.tracks.backward(20, 20, 0.5, 0.5)
+                            movement.grabber.grab([80, 80, 80], vision.settings.pick_up_vertical)
+                        attempts += 1
 
                 # If all attempts failed
                 if attempts == max_attempts:
