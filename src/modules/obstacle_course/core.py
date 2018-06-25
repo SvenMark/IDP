@@ -101,9 +101,6 @@ def detect_cup(shared_object):
     print("[INFO] w:" + str(width) + ", h: " + str(height))
 
     while not shared_object.has_to_stop():
-        lowc = cv2.getTrackbarPos('Low Canny', 'canny low high')
-        highc = cv2.getTrackbarPos('High Canny', 'canny low high')
-
         frame = cam.read()
         frame = cv2.GaussianBlur(frame, (9, 9), 0)
 
@@ -119,7 +116,7 @@ def detect_cup(shared_object):
         ret, thresh = cv2.threshold(mask, 127, 255, 0)
         im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        if len(contours) is not 0:
+        if len(contours) != 0:
             c = max(contours, key=cv2.contourArea)
             m = cv2.moments(c)
             cx = int(m["m10"] / m["m00"])
