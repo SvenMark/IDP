@@ -119,10 +119,17 @@ def detect_cup(shared_object):
         if len(contours) != 0:
             c = max(contours, key=cv2.contourArea)
             m = cv2.moments(c)
-            cx = int(m["m10"] / m["m00"])
-            cy = int(m["m01"] / m["m00"])
+            try:
+                cx = int(m["m10"] / m["m00"])
+                cy = int(m["m01"] / m["m00"])
+            except ZeroDivisionError:
+                cx = 0
+                cy = 0
+
             distanceleft = cx / width * 100
+            distanceright = (width - cx) / width * 100
             print(distanceleft)
+            print(distanceright)
 
             cv2.drawContours(mask_green, [c], -1, (255, 255, 255), 5)
             cv2.circle(mask_green, (cx, cy), 7, (255, 255, 255), -1)
