@@ -62,9 +62,12 @@ class Emotion(object):
             while self.audio.playing:
                 self.blink_color(255, 105, 180, 0, 0.2)
         elif emotion == "confirmed":  # Used for building detection
+            self.blinking = False
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
-            self.rotate_color(255, 165, 0, 0)
+            self.blinking = True
+            while self.blinking:
+                self.rotate_color(255, 165, 0, 1)
         self.busy = False
 
     def set_color(self, r, b, g):
