@@ -90,7 +90,7 @@ def line_detection(shared_object):
 
     vertices = [
         (20, height),
-        (width / 2, height / 2),
+        (width / 2, height / 2 - 40),
         (width - 20, height - 20),
     ]
 
