@@ -200,14 +200,14 @@ class Legs(object):
                     self.run_sequence(speeds=[100, 100, 100],
                                       self_update=False,
                                       sequences=[self.sequence],
-                                      sequence=forward)
+                                      sequence=None)
                     # Update which part of the current movement sequence is being ran
                     self.update_sequence()
                 if y_axis < 500:
                     self.run_sequence(speeds=[100, 100, 100],
                                       self_update=False,
                                       sequences=[self.sequence],
-                                      sequence=backward)
+                                      sequence=None)
                     self.update_sequence()
                 self.get_delta()  # Update the delta time
 
@@ -243,7 +243,7 @@ class Legs(object):
         :return: None
         """
         if sequence is None:
-            sequence = forward
+            sequence = None
         if sequences is None:
             sequences = []
             seq_len = len(sequence)

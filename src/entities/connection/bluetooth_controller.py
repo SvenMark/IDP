@@ -44,10 +44,6 @@ class BluetoothController(object):
 
         self.emotion.set_emotion('neutral')  # Set led lights and audio
 
-        # Start the leg update class if legs are connected
-        # if hasattr(self.movement, 'legs'):
-            # self.movement.legs.update_thread.start()
-
         self.data = ""  # Initialise data string
 
     def receive_data(self):
