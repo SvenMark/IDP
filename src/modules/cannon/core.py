@@ -18,6 +18,7 @@ TORQUE = 1
 
 red_detected = False
 line_detected = False
+red = False
 
 
 def run(name, control):
@@ -37,7 +38,7 @@ def run(name, control):
                                                 horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,
                                                 dead_zone=dead_zone)
 
-        global last_position, red_detected, TORQUE, line_detected
+        global last_position, red, TORQUE, line_detected
         offset = 50 - last_position
         offset = offset * TORQUE
 
@@ -46,21 +47,21 @@ def run(name, control):
             while last_position == -1000:
                 time.sleep(0.1)
         print("[INFO] Driving etc. with offset: {}".format(offset))
-        if red_detected and not line_detected:
+        if red:
             print("[INFO] Red detected!")
-            if movement is not None:
-                movement.tracks.stop()
+            movement.tracks.stop()
+            time.sleep(30)
+            red = False
         else:
-            if movement is not None:
-                left = 60
-                right = 60
-                if offset < 0:
-                    left += offset
-                else:
-                    right -= offset
+            left = 60
+            right = 60
+            if offset < 0:
+                left += offset
+            else:
+                right -= offset
 
-                movement.tracks.forward(duty_cycle_track_left=left, duty_cycle_track_right=right,
-                                        delay=0, acceleration=0)
+            movement.tracks.forward(duty_cycle_track_left=left, duty_cycle_track_right=right,
+                                    delay=0, acceleration=0)
 
         time.sleep(0.1)
 
@@ -103,10 +104,12 @@ def line_detection(shared_object):
         mask = cv2.inRange(hsv, black.lower, black.upper)
 
         # Checks if the color red is detected and calls function detect_red with the img
-        global red_detected
+        global red_detected, red
         if detect_red(img, hsv):
             red_detected = True
         else:
+            if red_detected:
+                red = True
             red_detected = False
 
         # Set variables and get lines with Houghlines function on the mask of black
