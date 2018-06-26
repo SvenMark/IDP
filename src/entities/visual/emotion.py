@@ -24,6 +24,7 @@ class Emotion(object):
                                                    gpio=GPIO)
         self.pixels.clear()
         self.pixels.show()  # Make sure to call show() after changing any pixels!
+        self.busy = False
 
     def set_emotion(self, emotion):
         """
@@ -32,6 +33,11 @@ class Emotion(object):
         :param emotion: string with the kind of emotion you want
         :return:
         """
+        if not self.busy:
+            Thread(target=self.set_emotion_thread, args=(emotion,)).start()
+
+    def set_emotion_thread(self, emotion):
+        self.busy = True
         time.sleep(0.01)
         if emotion == "neutral":
             # Boston University Red
@@ -60,6 +66,7 @@ class Emotion(object):
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
             self.rotate_color(255, 165, 0, 0)
+        self.busy = False
 
     def set_color(self, r, b, g):
         """

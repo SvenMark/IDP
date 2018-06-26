@@ -2,42 +2,23 @@ import numpy as np
 import cv2
 
 
-class Color:
-    def __init__(self, color, lower, upper):
-        self.color = color
-        self.lower = np.array(lower)
-        self.upper = np.array(upper)
-
-
-class ColorRange:
-    def __init__(self, color, color_range):
-        self.color = color
-        self.range = color_range
-
-
-class Block:
-    def __init__(self, color, centre):
-        self.color = color
-        self.centre = np.array(centre)
-
-    def __str__(self):
-        return "Block({}, ({}, {}))".format(self.color, self.centre[0], self.centre[1])
-
-
-def check_valid_convex(c, sides, area_min):
+def set_region(img, vertices):
     """
-    Checks if a convex is a valid block
-    :return: True if the contour is a block
+    Sets a region with the points of vertices on the image
+    :param img: The current frame of the picamera
+    :param vertices: Points on the screen
+    :return: A masked image with only the region
     """
+    mask = np.zeros_like(img)
+    channel_count = img.shape[2]
+    match_mask_color = (255,) * channel_count
+    cv2.fillPoly(mask, vertices, match_mask_color)
 
-    # Calculate the perimeter
-    peri = cv2.arcLength(c, True)
+    masked_img = cv2.bitwise_and(img, mask)
 
-    # Calculate the sides of the convexhull, 4 is a square/rectangle, 3 is a triangle etc.
-    approx = cv2.approxPolyDP(c, 0.02 * peri, True)
+    new_mask = np.zeros(masked_img.shape[:2], np.uint8)
 
-    # Calculate the area of the convexhull
-    area = cv2.contourArea(c)
+    bg = np.ones_like(masked_img, np.uint8) * 255
+    cv2.bitwise_not(bg, bg, mask=new_mask)
 
-    # If the convexhull counts 4 sides and an area bigger than 4000
-    return len(approx) == sides and area_min < area
+    return masked_img
