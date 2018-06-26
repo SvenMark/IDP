@@ -45,13 +45,28 @@ def run(name, control):
         print("test")
         if GPIO.input(beat_pin):
             print(str(seconds))
-            if seconds < 10:
+            if seconds < 5:
                 movement.tracks.tracks.turn_left(50, 50, 0, 5)
-            elif seconds < 20:
+            elif seconds < 13:
                 pass
-            elif seconds < 30:
+            elif seconds < 21:
                 pass
-
+            elif seconds < 36:
+                pass
+            elif seconds < 48:
+                pass
+            elif seconds < 54:
+                pass
+            elif seconds < 61:
+                pass
+            elif seconds < 93:
+                pass
+            elif seconds < 102:
+                pass
+            elif seconds < 105:
+                pass
+            elif seconds < 120:
+                pass
             else:
                 print("DONE")
                 shared_object.stop = True
