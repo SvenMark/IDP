@@ -18,6 +18,7 @@ TORQUE = 1
 
 red_detected = False
 line_detected = False
+red = False
 
 
 def run(name, control):
@@ -37,29 +38,32 @@ def run(name, control):
                                                 horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,
                                                 dead_zone=dead_zone)
 
-        global last_position, red_detected, TORQUE, line_detected
+        global last_position, red, TORQUE, line_detected
         offset = 50 - last_position
         offset = offset * TORQUE
 
         if last_position == -1000:
+            emotion.set_emotion("searching")
             print("[INFO] Waiting")
             while last_position == -1000:
                 time.sleep(0.1)
         print("[INFO] Driving etc. with offset: {}".format(offset))
-        if red_detected and not line_detected:
+        if red:
+            emotion.set_emotion("confirmed")
             print("[INFO] Red detected!")
-            if movement is not None:
-                movement.tracks.stop()
+            movement.tracks.stop()
+            time.sleep(30)
+            red = False
         else:
-            if movement is not None:
-                left = 60
-                right = 60
-                if offset < 0:
-                    left += offset
-                else:
-                    right -= offset
-
-                movement.tracks.forward(duty_cycle_track_left=left, duty_cycle_track_right=right,
+            emotion.set_emotion("searching")
+            left = 60
+            right = 60
+            if offset < 0:
+                left += offset * 1.2
+            else:
+                right -= offset * 1.2
+            if line_detected:
+                movement.tracks.forward(duty_cycle_track_left=right, duty_cycle_track_right=left,
                                         delay=0, acceleration=0)
 
         time.sleep(0.1)
@@ -92,6 +96,7 @@ def line_detection(shared_object):
     while not shared_object.has_to_stop():
         # Get current frame from picamera and make a cropped image with the vertices above with set_region
         img = cap.read()
+        img = cv2.flip(img, -1)
         img_cropped = set_region(img, np.array([vertices], np.int32))
 
         # Add blur to the cropped image
@@ -99,20 +104,22 @@ def line_detection(shared_object):
 
         # Generate and set a mask for a range of black (color of the line) to the cropped image
         hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-        black = Color("Black", [0, 0, 40], [157, 118, 120])
+        black = Color("Black", [0, 0, 0], [43, 65, 80])
         mask = cv2.inRange(hsv, black.lower, black.upper)
 
         # Checks if the color red is detected and calls function detect_red with the img
-        global red_detected
+        global red_detected, red
         if detect_red(img, hsv):
             red_detected = True
         else:
+            if red_detected:
+                red = True
             red_detected = False
 
         # Set variables and get lines with Houghlines function on the mask of black
         theta = np.pi / 180
         threshold = 150
-        min_line_length = 40
+        min_line_length = 10
         max_line_gap = 25
 
         lines = cv2.HoughLinesP(mask, 2, theta, threshold, np.array([]),
@@ -139,7 +146,7 @@ def line_detection(shared_object):
         else:
             line_detected = False
 
-        # cv2.imshow('camservice-lijn', img_clone)
+        cv2.imshow('camservice-lijn', img_clone)
 
         # If q is pressed, break while loop
         if cv2.waitKey(1) & 0xFF == ord('q'):
