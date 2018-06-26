@@ -55,7 +55,9 @@ class Audio(object):
         """
         # using google text to speech api
         tts = gTTS(text=text, lang=lan)
-        filename = self.resources + "tts.wav"
+        filename = "tts.mp3"
         tts.save(filename)
         self.play(filename)
 
+
+Audio().tts('Gay shit', 'nl')
