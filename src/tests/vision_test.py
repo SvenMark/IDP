@@ -1,10 +1,10 @@
 import sys
 import threading
 
+sys.path.insert(0, '../../src')
+
 from entities.vision.helpers.json_handler import JsonHandler
 from entities.vision.helpers.vision_helper import Color
-
-sys.path.insert(0, '../../src')
 
 from entities.threading.utils import SharedObject
 from entities.vision.vision import Vision
