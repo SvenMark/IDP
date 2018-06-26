@@ -48,6 +48,9 @@ def run(name, control):
             while last_position == -1000:
                 time.sleep(0.1)
         print("[INFO] Driving etc. with offset: {}".format(offset))
+        if red_detected:
+            movement.tracks.forward(duty_cycle_track_left=50, duty_cycle_track_right=55,
+                                    delay=0, acceleration=0)
         if red:
             emotion.set_emotion("confirmed")
             print("[INFO] Red detected!")
