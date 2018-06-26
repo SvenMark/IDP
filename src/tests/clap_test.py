@@ -14,8 +14,19 @@ legs = Legs(
     leg_3_servos=[6, 14, 15]
 )
 
-for i in range(5):
-    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=dablinks)
+tracks = Tracks(
+    track_0_pin=13,
+    track_1_pin=18,
+    track_0_forward=22,
+    track_0_backward=27,
+    track_1_forward=19,
+    track_1_backward=26
+)
+
+legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=dablinks)
+tracks.turn_left(50, 50, 0, 5)
+time.sleep(5)
+tracks.stop()
 for i in range(5):
     legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=dabrechts)
 for i in range(5):
