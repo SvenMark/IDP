@@ -22,6 +22,7 @@ class Saving(object):
         self.building_to_save = 0
         self.pickup_vertical = 0
         self.side = 0
+        self.helper.min_block_size = 300
 
     def run(self, color_range, json):
         self.building_handler = json

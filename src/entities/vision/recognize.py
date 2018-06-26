@@ -113,7 +113,7 @@ class Recognize(object):
         # Set min block size according to the distance of the building
         if recognize_distance_max > building_width > recognize_distance_min:
             # Start recognizing
-            self.helper.min_block_size = 300
+            self.helper.min_block_size = 1000
             self.start_recognize = True
         else:
             self.helper.min_block_size = 5
