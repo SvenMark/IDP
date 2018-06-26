@@ -44,7 +44,7 @@ class Recognize(object):
             img_crop, building_center, image_width, building_width = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
-            mask_cropped, valid_contours = self.helper.calculate_mask(img_crop, color_range, set_contour=True)
+            mask_cropped, valid_contours = self.helper.calculate_mask(img, color_range, set_contour=True)
 
             # Recognize building
             if self.saved_buildings:
