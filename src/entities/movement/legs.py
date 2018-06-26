@@ -87,7 +87,7 @@ class Legs(object):
         if self_update:
             self.update_legs()
 
-    def deploy(self, speed):
+    def deploy(self, speed=100):
         """
         Deploys the legs so they can be used for walking
         :param speed: The speed at which the servo moves
@@ -102,7 +102,7 @@ class Legs(object):
         self.deployed = True
         self.update_legs()
 
-    def retract(self, speed):
+    def retract(self, speed=100):
         """
         Retracts the legs to they are not in the way
         :param speed: The speed at which the servo moves

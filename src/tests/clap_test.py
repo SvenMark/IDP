@@ -34,7 +34,7 @@ for i in range(5):
 for i in range(5):
     legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=ballerina)
 for i in range(5):
-    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=extendarms)
+    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=extend_arms)
 for i in range(5):
     legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=vagedraai)
 for i in range(5):

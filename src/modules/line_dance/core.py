@@ -30,7 +30,7 @@ def run(name, control):
     GPIO.output(beat_led_pin, 1)
     GPIO.output(beat_detect_pin, 1)
 
-    sequences = [clap, ballerina, extendarms, vagedraai, runningman, shakeass]
+    sequences = [clap, ballerina, extend_arms, vagedraai, runningman, shakeass]
     current = random.choice(sequences)
     step = 0
 
@@ -38,10 +38,6 @@ def run(name, control):
         if GPIO.input(beat_pin):
             print("Beat detected")
             if hasattr(movement, 'legs'):
-                movement.legs.run_sequence(speeds=[150, 150, 150],
-                                           self_update=True,
-                                           sequences=[step],
-                                           sequence=current)
                 movement.legs.move(current[step][0], current[step][1], current[step][2],
                                    current[step][3], [100, 100, 100], True)
                 step += 1
