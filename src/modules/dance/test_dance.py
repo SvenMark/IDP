@@ -4,6 +4,8 @@ from entities.threading.utils import *
 from threading import Timer
 from entities.audio.audio import Audio
 
+from datetime import datetime
+
 print("[RUN] " + str("test dance"))
 
 # 0 0:00.21       intro
@@ -17,17 +19,21 @@ print("[RUN] " + str("test dance"))
 # 8 1:59.43       last hit
 
 m = 60
+begin_time = datetime.now()
 
 parts = [0.21, 20.66, 36.04, 51.35, 58.17, m + 29.24, m + 42.91, m + 43.21, m + 59.43]
 current_part = -1
-time_elapsed = 0
 
 
 def routine():
-    global current_part, time_elapsed
-    current_part += 1
-    t = Timer(parts[current_part] - time_elapsed, routine)
-    time_elapsed += parts[current_part]
+    global current_part
+    delta = datetime.now() - begin_time
+    for i in range(len(parts)):
+        if delta.seconds > parts[i]:
+            current_part = i
+        else:
+            break
+    t = Timer(0.05, routine)
     t.start()
 
 
@@ -47,3 +53,4 @@ routine()
 
 while True:
     print(str(current_part))
+    time.sleep(0.1)

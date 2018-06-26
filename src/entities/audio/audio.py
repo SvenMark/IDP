@@ -40,10 +40,10 @@ class Audio(object):
 
     def play_threaded(self, file_name):
         print("Play " + file_name)
-        self.playing = True
         pygame.mixer.music.load(self.get_file_path(file_name))
         pygame.mixer.music.play()
         while pygame.mixer.music.get_busy():
+            self.playing = True
             pygame.time.Clock().tick(10)
         self.playing = False
 
