@@ -151,7 +151,7 @@ def line_detection(shared_object):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    cap.release()
+    cap.stop()
     cv2.destroyAllWindows()
 
 
@@ -252,6 +252,3 @@ def detect_red(img, hsv):
     else:
         return True
 
-
-if __name__ == '__main__':
-    run(name=None, movement=None, shared_object=None)  # disabled for travis
