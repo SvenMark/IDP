@@ -22,6 +22,9 @@ saved_buildings = json_handler.get_save_buildings()
 for building in saved_buildings:
     print(str(building.number))
 
+for gange in color_range:
+    print(gange.lower)
+
 vision = Vision(SharedObject())
 
 try:
