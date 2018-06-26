@@ -42,19 +42,27 @@ def run(name, control):
     GPIO.output(beat_detect_pin, 1)
 
     while not shared_object.has_to_stop():
+        forwards = True
         print("test")
         if GPIO.input(beat_pin):
             print(str(seconds))
             if seconds < 5:
-                movement.tracks.tracks.turn_left(50, 50, 0, 5)
+                movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=clap)
             elif seconds < 13:
-                pass
+                movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=clap)
+                if forwards:
+                    movement.tracks.tracks.forward(50, 50, 0.5, 5)
+                    forwards = False
+                else:
+                    movement.tracks.tracks.backward(50, 50, 0.5, 5)
+                    forwards = True
             elif seconds < 21:
-                pass
+                movement.tracks.tracks.turn_left(50, 50, 0, 5)
             elif seconds < 36:
-                pass
+                movement.tracks.tracks.turn_left(50, 50, 0, 5)
+                movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=vagedraai)
             elif seconds < 48:
-                pass
+                movement.tracks.stop()
             elif seconds < 54:
                 pass
             elif seconds < 61:
