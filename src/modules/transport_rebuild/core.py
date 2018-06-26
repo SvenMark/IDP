@@ -48,14 +48,14 @@ def run(name, control):
             elif sys.argv[1] == "saving":
                 threading.Thread(target=vision.saving.run, args=(color_range, json_handler)).start()
             elif sys.argv[1] == "recognize":
-                threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings)).start()
+                threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings, audio)).start()
             else:
                 print("[ERROR] Wrong argument given..")
                 run(name, control)
 
         # Default no argument
         else:
-            threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings)).start()
+            threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings, audio)).start()
     except AttributeError:
         print("[ERROR] Something went wrong..")
         run(name, control)

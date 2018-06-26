@@ -11,7 +11,7 @@ from entities.vision.helpers.vision_helper import *
 
 class Recognize(object):
 
-    def __init__(self, helpers, shared_object, settings=None):
+    def __init__(self, helpers, shared_object, audio, settings=None):
         self.positions = []
         self.saved_buildings = None
         self.helper = helpers.helper
@@ -20,6 +20,7 @@ class Recognize(object):
         self.last_percentage = 50
         self.start_recognize = False
         self.shared_object = shared_object
+        self.audio = audio
 
     def run(self, color_range, saved_buildings=None):
         if saved_buildings is not None:
@@ -86,8 +87,8 @@ class Recognize(object):
 
         if found:
             # Use audio to state the recognized building
-            print("[INFO] At time: " + str(datetime.datetime.now().time()) + " Found: ", result)
-
+            print("[INFO] At time: " + str(datetime.datetime.now().time()) + " Found: ", result.number)
+            self.audio.tts("building {} detected {} side".format(result.number, result.side_number))
             self.recognized = True
 
         # Return whether a building has been found

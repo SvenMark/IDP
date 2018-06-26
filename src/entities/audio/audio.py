@@ -55,7 +55,7 @@ class Audio(object):
         """
         # using google text to speech api
         tts = gTTS(text=text, lang=lan)
-        filename = "tts.wav"
+        filename = self.resources + "tts.wav"
         tts.save(filename)
         self.play(filename)
 
