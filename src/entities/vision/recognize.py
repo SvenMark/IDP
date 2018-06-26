@@ -48,7 +48,7 @@ class Recognize(object):
 
             # Recognize building
             if self.saved_buildings:
-                self.recognize_building(valid_contours, image_width, building_center, building_width)
+                print(self.recognize_building(valid_contours, image_width, building_center, building_width))
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
