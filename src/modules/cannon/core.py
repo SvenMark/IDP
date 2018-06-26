@@ -146,7 +146,7 @@ def line_detection(shared_object):
         else:
             line_detected = False
 
-        # cv2.imshow('camservice-lijn', img_clone)
+        cv2.imshow('camservice-lijn', img_clone)
 
         # If q is pressed, break while loop
         if cv2.waitKey(1) & 0xFF == ord('q'):
