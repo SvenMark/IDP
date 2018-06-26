@@ -17,4 +17,4 @@ legs = Legs(
 legs.retract()
 
 for i in range(5):
-    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=clap)
+    legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=clap)
