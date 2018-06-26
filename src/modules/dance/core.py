@@ -31,6 +31,19 @@ def run(name, control):
     step = 0
     current = 0
 
+    # Eerste 5 sec trommelen
+    # 5 tot 13 klappen
+    # 13 tot 20 klappen rijden
+    # 21 tot 36 piroute
+    # 36 tot 48 piroute armpjes raar
+    # 48 tot 54 stilstaan hey hey hey
+    # 54 tot 1:01 verward zijn
+    # 1:01 tot 1:31 snel alles opnieuw
+    # 1:31 tot 1:42 moker snel piroutte
+    # 1:42 tot 1:45 uitvallen
+    # 1:45 tot 2:00 langzaam vaarwel
+
+
     while not shared_object.has_to_stop():
         if GPIO.input(beat_pin):
             movement.legs.move(sequences[current][step][0], sequences[current][step][1],sequences[current][step][2],
