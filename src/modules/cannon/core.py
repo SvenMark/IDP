@@ -90,7 +90,7 @@ def line_detection(shared_object):
         (width - 20, height - 20),
     ]
 
-    while True:
+    while not shared_object.has_to_stop():
         # Get current frame from picamera and make a cropped image with the vertices above with set_region
         img = cap.read()
         img = cv2.flip(img, -1)
