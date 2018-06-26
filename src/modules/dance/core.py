@@ -46,10 +46,10 @@ def run(name, control):
             print("Part 3")
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=clap)
             if forwards:
-                movement.tracks.forward(50, 50, 0.1, 5)
+                movement.tracks.forward(50, 50, 0.1, 0)
                 forwards = False
             else:
-                movement.tracks.backward(50, 50, 0.1, 5)
+                movement.tracks.backward(50, 50, 0.1, 0)
                 forwards = True
         elif seconds < 36:
             print("Part 4")
