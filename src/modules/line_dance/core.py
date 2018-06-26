@@ -56,7 +56,7 @@ def run(name, control):
 
     GPIO.output(beat_led_pin, 0)
     GPIO.output(beat_detect_pin, 0)
-    GPIO.cleanup()
+    GPIO.cleanup(beat_detect_pin, beat_led_pin)
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))
