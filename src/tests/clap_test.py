@@ -14,7 +14,10 @@ legs = Legs(
     leg_3_servos=[6, 14, 15]
 )
 
-
+for i in range(5):
+    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=dablinks)
+for i in range(5):
+    legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=dabrechts)
 for i in range(5):
     legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=clap)
 for i in range(5):
