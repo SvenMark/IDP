@@ -1,8 +1,19 @@
 import sys
 import time
+from threading import Timer
+
 import RPi.GPIO as GPIO
 from entities.movement.sequences.sequences import *
 sys.path.insert(0, '../../../src')
+
+seconds = 0
+
+
+def routine():
+    global seconds
+    seconds += 1
+    t = Timer(1, routine)
+    t.start()
 
 
 def run(name, control):
@@ -12,45 +23,43 @@ def run(name, control):
     speed_factor = control.speed_factor
     dead_zone = control.dead_zone
 
+    routine()
+
     print("[RUN] " + str(name))
 
-    #GPIO.setmode(GPIO.BCM)
-    #GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
 
-    #beat_led_pin = 16
-    #beat_detect_pin = 20
-    #beat_pin = 21
-    #sequences = [clap, ballerina, extend_arms, vagedraai, runningman, shakeass,
-    #             dabrechts, dablinks, dabrechts, dablinks, dabrechts]
-    #GPIO.setup(beat_led_pin, GPIO.OUT)
-    #GPIO.setup(beat_detect_pin, GPIO.OUT)
-    #GPIO.setup(beat_pin, GPIO.IN)
-    #GPIO.output(beat_led_pin, 1)
-    #GPIO.output(beat_detect_pin, 1)
-
-    #step = 0
-    #current = 0
+    beat_led_pin = 16
+    beat_detect_pin = 20
+    beat_pin = 21
+    sequences = [clap, ballerina, extend_arms, vagedraai, runningman, shakeass,
+                dabrechts, dablinks, dabrechts, dablinks, dabrechts]
+    GPIO.setup(beat_led_pin, GPIO.OUT)
+    GPIO.setup(beat_detect_pin, GPIO.OUT)
+    GPIO.setup(beat_pin, GPIO.IN)
+    GPIO.output(beat_led_pin, 1)
+    GPIO.output(beat_detect_pin, 1)
 
     while not shared_object.has_to_stop():
         print("test")
+        if GPIO.input(beat_pin):
+            print(str(seconds))
+            if seconds < 10:
+                movement.tracks.tracks.turn_left(50, 50, 0, 5)
+            elif seconds < 20:
+                pass
+            elif seconds < 30:
+                pass
 
+            else:
+                print("DONE")
+                shared_object.stop = True
 
-
-        # Als hij een beat hoort
-        #if GPIO.input(beat_pin):
-        #    movement.legs.move(sequences[current][step][0], sequences[current][step][1],sequences[current][step][2],
-        #                       sequences[current][step][3], [100, 100, 100], True)
-        #    step += 1
-        #    if step >= len(sequences[current]):
-        #        step = 0
-        #        current += 1
-        #        if current >= len(sequences):
-        #            shared_object.stop = True
-
-    #GPIO.output(beat_led_pin, 0)
-    #GPIO.output(beat_detect_pin, 0)
-    #GPIO.cleanup(beat_led_pin)
-    #GPIO.cleanup(beat_detect_pin)
+    GPIO.output(beat_led_pin, 0)
+    GPIO.output(beat_detect_pin, 0)
+    GPIO.cleanup(beat_led_pin)
+    GPIO.cleanup(beat_detect_pin)
     # Notify shared object that this thread has been stopped
-    # print("[STOPPED]" + str(name))
-    # shared_object.has_been_stopped()
+    print("[STOPPED]" + str(name))
+    shared_object.has_been_stopped()

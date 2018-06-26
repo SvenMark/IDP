@@ -10,23 +10,12 @@ from entities.movement.sequences.sequences import *
 
 sys.path.insert(0, '../../../src')
 
-seconds = 0
-
-
-def routine():
-    global seconds
-    seconds += 1
-    t = Timer(1, routine)
-    t.start()
-
 
 def run(name, control):
     movement = control.movement
     shared_object = control.shared_object
     speed_factor = control.speed_factor
     dead_zone = control.dead_zone
-
-    routine()
 
     print("[RUN] " + str(name))
 
@@ -49,18 +38,14 @@ def run(name, control):
 
     while not shared_object.has_to_stop():
         if GPIO.input(beat_pin):
-            print(str(seconds))
             print("Beat detected")
             if hasattr(movement, 'legs'):
-                if seconds < 10:
-                    movement.tracks.turn_left(50, 50, 0, 0.5)
-                else:
-                    movement.legs.move(current[step][0], current[step][1], current[step][2],
-                                       current[step][3], [100, 100, 100], True)
-                    step += 1
-                    if step >= len(current):
-                        step = 0
-                        current = random.choice(sequences)
+                movement.legs.move(current[step][0], current[step][1], current[step][2],
+                                   current[step][3], [100, 100, 100], True)
+                step += 1
+                if step >= len(current):
+                    step = 0
+                    current = random.choice(sequences)
         else:
             print("No beat detected")
         time.sleep(0.1)
