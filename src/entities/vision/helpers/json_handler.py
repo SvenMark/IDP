@@ -1,18 +1,18 @@
 import codecs
+import os
 import sys
-
+import json
 import numpy as np
 
 sys.path.insert(0, '../../../src')
 
-import json
 from entities.vision.helpers.vision_helper import Color, BuildingSide
 
 
 class JsonHandler:
     def __init__(self, std_color_range, file_name_color="output.txt", file_name_building="save.txt"):
-        self.file_name_color = "/saved_files/" + str(file_name_color)
-        self.file_name_building = "/saved_files/" + str(file_name_building)
+        self.file_name_color = os.path.dirname(os.path.abspath(__file__)) + "\\saved_files\\" + file_name_color
+        self.file_name_building = os.path.dirname(os.path.abspath(__file__)) + "\\saved_files\\" + file_name_building
         self.back_up_color_range = std_color_range
 
     def set_color_range(self, color_range):
@@ -56,6 +56,7 @@ class JsonHandler:
         :param pick_up_vertical: Pick up vertical of horizontal
         :param positions: Centres of the blocks of the building
         :param building: Building number
+        :param side_number: Side of the building
         """
         current = self.get_save_buildings()
         exist = False

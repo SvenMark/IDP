@@ -43,3 +43,14 @@ class Movement(object):
                                duty_cycle_track_right=20,
                                delay=8,
                                acceleration=12)
+
+    def move_towards(self, percentage, torque=0.5):
+        left_speed = 25
+        right_speed = 25
+        if percentage < 50:
+            left_speed = left_speed - percentage * torque
+        else:
+            right_speed = right_speed - (percentage - 50) * torque
+
+        self.tracks.forward(left_speed, right_speed, 0.3, 0.3)
+        self.tracks.stop()

@@ -92,15 +92,32 @@ class Helper:
         # Find the contours for the threshold
         im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        sensitivity = 30
-        valid_contours = []
-        for cnt in range(len(contours)):
-            for cnt2 in range(len(contours)):
-                if cnt != cnt2:
-                    if np.linalg.norm(contours[cnt], contours[cnt2]) < sensitivity:
-                        valid_contours.append(contours[cnt])
+        if contours:
+            sensitivity = 30
+            valid_contours = []
+            for cnt in range(len(contours)):
+                for cnt2 in range(len(contours)):
 
-        contours = valid_contours
+                    c = cv2.convexHull(contours[cnt])
+                    c2 = cv2.convexHull(contours[cnt2])
+
+                    moment = cv2.moments(c)
+                    moment2 = cv2.moments(c2)
+
+                    # Calculate the centre of mass
+                    cx = int(moment['m10'] / (moment['m00'] + 0.1))
+                    cy = int(moment['m01'] / (moment['m00'] + 0.1))
+
+                    cx2 = int(moment2['m10'] / (moment2['m00'] + 0.1))
+                    cy2 = int(moment2['m01'] / (moment2['m00'] + 0.1))
+
+                    if cnt != cnt2:
+                        a = np.array((cx, cy))
+                        b = np.array((cx2, cy2))
+                        if np.linalg.norm(a - b) < sensitivity:
+                            valid_contours.append(contours[cnt])
+
+            contours = valid_contours
 
         # Define the extreme points
         extremes = [999999, -99999, 99999, -9999]  # min x, max x, min y, max y
