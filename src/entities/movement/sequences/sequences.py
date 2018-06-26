@@ -36,7 +36,7 @@ extend_arms = [
     ]
 ]
 
-vagedraai = [
+weird_turn = [
     [
         [511, 511, 600],
         [511, 815, 501],
