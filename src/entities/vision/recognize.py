@@ -27,7 +27,7 @@ class Recognize(object):
         print("[RUN] Starting recognize...")
 
         # Initialize camera
-        cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+        cap = VideoStream(src=0, usePiCamera=True, resolution=(640, 480)).start()
         time.sleep(0.3)  # startup
 
         while not self.shared_object.has_to_stop():
