@@ -38,18 +38,16 @@ def run(name, control):
         if GPIO.input(beat_pin):
             print("Beat detected")
             if hasattr(movement, 'legs'):
-                legs_not_ready = [elem for elem in movement.legs.legs if not elem.ready()]
-                if len(legs_not_ready) > 0:
-                    print("Not all legs ready so do nothing")
-                else:
-                    movement.legs.run_sequence(speeds=[150, 150, 150],
-                                               self_update=True,
-                                               sequences=[step],
-                                               sequence=current)
-                    step += 1
-                    if step >= len(current):
-                        step = 0
-                        current = random.choice(sequences)
+                movement.legs.run_sequence(speeds=[150, 150, 150],
+                                           self_update=True,
+                                           sequences=[step],
+                                           sequence=current)
+                movement.legs.move(current[step][0], current[step][1], current[step][2],
+                                   current[step][3], [100, 100, 100], True)
+                step += 1
+                if step >= len(current):
+                    step = 0
+                    current = random.choice(sequences)
         else:
             print("No beat detected")
         time.sleep(0.1)
