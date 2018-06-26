@@ -80,7 +80,7 @@ def line_detection(shared_object):
     :return: None
     """
     # Get view of picamera and do a small warmup of 0.3s
-    cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+    cap = VideoStream(src=0, usePiCamera=False, resolution=(320, 240)).start()
     time.sleep(0.3)
 
     # Get width and height of the frame and make vertices for a traingle shaped region
@@ -93,7 +93,7 @@ def line_detection(shared_object):
         (width, height),
     ]
 
-    while not shared_object.has_to_stop():
+    while True:
         # Get current frame from picamera and make a cropped image with the vertices above with set_region
         img = cap.read()
         img = cv2.flip(img, -1)
@@ -104,7 +104,7 @@ def line_detection(shared_object):
 
         # Generate and set a mask for a range of black (color of the line) to the cropped image
         hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-        black = Color("Black", [0, 0, 40], [157, 118, 120])
+        black = Color("Black", [0, 0, 0], [50, 65, 80])
         mask = cv2.inRange(hsv, black.lower, black.upper)
 
         # Checks if the color red is detected and calls function detect_red with the img
@@ -118,11 +118,11 @@ def line_detection(shared_object):
 
         # Set variables and get lines with Houghlines function on the mask of black
         theta = np.pi / 180
-        threshold = 150
-        min_line_length = 40
-        max_line_gap = 25
+        threshold = 30
+        min_line_length = 10
+        max_line_gap = 40
 
-        lines = cv2.HoughLinesP(mask, 2, theta, threshold, np.array([]),
+        lines = cv2.HoughLinesP(mask, 1, theta, threshold, np.array([]),
                                 min_line_length, max_line_gap)
 
         # Set line color to blue and clone the image to draw the lines on
@@ -176,7 +176,7 @@ def set_region(img, vertices):
     bg = np.ones_like(masked_img, np.uint8) * 255
     cv2.bitwise_not(bg, bg, mask=new_mask)
 
-    return masked_img
+    return masked_img + bg
 
 
 # Calculate midpoint of 2 points
