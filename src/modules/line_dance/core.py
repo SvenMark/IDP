@@ -32,10 +32,16 @@ def run(name, control):
         if GPIO.input(beat_pin):
             print("Beat detected")
             if hasattr(movement, 'legs'):
-                if movement.legs.deployed:
-                    movement.legs.retract(100)
+                legs_not_ready = [elem for elem in movement.legs if not elem.ready()]
+                if legs_not_ready > 0:
+                    print("Not all legs ready so do nothing")
                 else:
-                    movement.legs.deploy(100)
+                    if movement.legs.deployed:
+                        movement.tracks.turn_right(40, 40, 0.1, 0)
+                        movement.legs.retract(100)
+                    else:
+                        movement.tracks.turn_left(40, 40, 0.1, 0)
+                        movement.legs.deploy(100)
         else:
             print("No beat detected")
         time.sleep(0.1)
@@ -47,8 +53,3 @@ def run(name, control):
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
-
-
-# End of def run
-if __name__ == '__main__':
-    run()
