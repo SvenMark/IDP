@@ -105,7 +105,7 @@ def line_detection(shared_object):
 
         # Generate and set a mask for a range of black (color of the line) to the cropped image
         hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-        black = Color("Black", [0, 0, 0], [50, 65, 80])
+        black = Color("Black", [0, 0, 0], [180, 40, 110])
         mask = cv2.inRange(hsv, black.lower, black.upper)
 
         # Checks if the color red is detected and calls function detect_red with the img
