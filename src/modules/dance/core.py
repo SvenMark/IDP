@@ -9,7 +9,6 @@ sys.path.insert(0, '../../../src')
 from entities.vision.helpers.vision_helper import *
 from entities.vision.helpers.fucking_other_helper import *
 from entities.movement.sequences.dance_sequence import *
-from entities.movement.sequences.sequences import *
 
 seconds = 0
 
@@ -62,7 +61,11 @@ def run(name, control):
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=wave)
             movement.tracks.turn_right(50, 50, 0, 0)
         elif seconds < 54:
-            print("Hey hey hey")
+            print("Running man")
+            movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[0], sequence=running_man)
+            movement.tracks.forward(50, 50, 0.1, 0)
+            movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[1], sequence=wave)
+            movement.tracks.backward(50, 50, 0.1, 0)
             movement.tracks.stop()
         elif seconds < 61:
             print("Whats goin on?")
@@ -70,7 +73,8 @@ def run(name, control):
             movement.tracks.turn_right(35, 35, 0.2, 0)
             movement.tracks.turn_left(35, 35, 0.2, 0)
         elif seconds < 93:
-            pass
+            movement.tracks.stop()
+            movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=shake_ass)
         elif seconds < 98:
             print("Fast ballerina pirouette")
             movement.tracks.turn_left(80, 80, 0, 0)
@@ -83,6 +87,8 @@ def run(name, control):
             movement.tracks.stop()
             emotion.set_emotion("shutdown")
         elif seconds < 120:
+            movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=left_dab)
+            movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=right_dab)
             pass
         else:
             print("DONE")

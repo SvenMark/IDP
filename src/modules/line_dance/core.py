@@ -33,7 +33,7 @@ def run(name, control):
     GPIO.output(beat_led_pin, 1)
     GPIO.output(beat_detect_pin, 1)
 
-    sequences = [clap, ballerina, extend_arms, vagedraai, runningman, shakeass]
+    sequences = [clap, ballerina, extend_arms, vagedraai, running_man, shake_ass, left_dab, right_dab]
     current = random.choice(sequences)
     step = 0
 
