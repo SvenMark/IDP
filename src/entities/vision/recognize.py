@@ -11,7 +11,7 @@ from entities.vision.helpers.vision_helper import *
 
 class Recognize(object):
 
-    def __init__(self, helpers, shared_object, audio, settings=None):
+    def __init__(self, helpers, shared_object, settings=None):
         self.positions = []
         self.saved_buildings = None
         self.helper = helpers.helper
@@ -20,9 +20,8 @@ class Recognize(object):
         self.last_percentage = 50
         self.start_recognize = False
         self.shared_object = shared_object
-        self.audio = audio
 
-    def run(self, color_range, saved_buildings=None):
+    def run(self, color_range, audio, saved_buildings=None):
         if saved_buildings is not None:
             self.saved_buildings = saved_buildings
         print("[RUN] Starting recognize...")
@@ -49,7 +48,7 @@ class Recognize(object):
 
             # Recognize building
             if self.saved_buildings:
-                print(self.recognize_building(valid_contours, image_width, building_center, building_width))
+                print(self.recognize_building(valid_contours, image_width, building_center, building_width, audio))
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -57,7 +56,7 @@ class Recognize(object):
         cap.stop()
         cv2.destroyAllWindows()
 
-    def recognize_building(self, positions, image_width, building_center, building_width):
+    def recognize_building(self, positions, image_width, building_center, building_width, audio):
         """
         Checks if the currents positions of the blocks matches any saved building
         :param building_width: Width of the building
@@ -88,7 +87,7 @@ class Recognize(object):
         if found:
             # Use audio to state the recognized building
             print("[INFO] At time: " + str(datetime.datetime.now().time()) + " Found: ", result.number)
-            self.audio.tts("building {} detected {} side".format(result.number, result.side_number))
+            audio.tts("building {} detected {} side".format(result.number, result.side_number))
             self.recognized = True
 
         # Return whether a building has been found
