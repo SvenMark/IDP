@@ -49,7 +49,6 @@ def run(name, control):
 
     while not shared_object.has_to_stop():
         if GPIO.input(beat_pin):
-            global seconds
             print(str(seconds))
             print("Beat detected")
             if hasattr(movement, 'legs'):

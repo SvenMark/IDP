@@ -32,7 +32,7 @@ def run(name, control):
     #current = 0
 
     while not shared_object.has_to_stop():
-
+        print("test")
 
 
 
@@ -52,5 +52,5 @@ def run(name, control):
     #GPIO.cleanup(beat_led_pin)
     #GPIO.cleanup(beat_detect_pin)
     # Notify shared object that this thread has been stopped
-    print("[STOPPED]" + str(name))
-    shared_object.has_been_stopped()
+    # print("[STOPPED]" + str(name))
+    # shared_object.has_been_stopped()
