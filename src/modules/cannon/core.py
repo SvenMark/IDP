@@ -43,16 +43,19 @@ def run(name, control):
         offset = offset * TORQUE
 
         if last_position == -1000:
+            emotion.set_emotion("searching")
             print("[INFO] Waiting")
             while last_position == -1000:
                 time.sleep(0.1)
         print("[INFO] Driving etc. with offset: {}".format(offset))
         if red:
+            emotion.set_emotion("confirmed")
             print("[INFO] Red detected!")
             movement.tracks.stop()
             time.sleep(30)
             red = False
         else:
+            emotion.set_emotion("searching")
             left = 60
             right = 60
             if offset < 0:
