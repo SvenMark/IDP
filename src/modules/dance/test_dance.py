@@ -2,23 +2,36 @@ import time
 import threading
 from entities.threading.utils import *
 from threading import Timer
+from entities.audio.audio import Audio
 
 print("[RUN] " + str("test dance"))
 
-update = False
+# 0 0:00.21       intro
+# 1 0:20.66       next part intro
+# 2 0:36.04       next part intro
+# 3 0:51.35       pitch speedup
+# 4 0:58.17       swing start
+# 5 1:29.24       swing drop
+# 6 1:42.91       brake (tape stop)
+# 7 1:43.21       rasputin original
+# 8 1:59.43       last hit
+
+m = 60
+
+parts = [0.21, 20.66, 36.04, 51.35, 58.17, m + 29.24, m + 42.91, m + 43.21, m + 59.43]
+current_part = -1
 
 
 def routine():
-    global update
-    update = True
-    t = Timer(60 / 153, routine)
+    global current_part
+    current_part += 1
+    t = Timer(parts[current_part], routine)
     t.start()
 
 
 routine()
 
+audio = Audio()
 
 while True:
-    if update:
-        print("beat")
-        update = False
+    print(str(current_part))
