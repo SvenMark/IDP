@@ -1,6 +1,8 @@
 import sys
 import threading
 
+from entities.audio.audio import Audio
+
 sys.path.insert(0, '../../src')
 
 from entities.vision.helpers.json_handler import JsonHandler
@@ -8,6 +10,8 @@ from entities.vision.helpers.vision_helper import Color
 
 from entities.threading.utils import SharedObject
 from entities.vision.vision import Vision
+
+audio = Audio()
 
 color_ranges = [Color("blue", [84, 44, 52], [153, 255, 255]),
                 Color("yellow", [21, 110, 89], [30, 255, 255]),
@@ -34,13 +38,13 @@ try:
         elif sys.argv[1] == "saving":
             threading.Thread(target=vision.saving.run, args=(color_range, json_handler)).start()
         elif sys.argv[1] == "recognize":
-            threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings)).start()
+            threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings, audio)).start()
         else:
             print("[ERROR] Wrong argument given..")
 
     # Default no argument
     else:
-        threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings)).start()
+        threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings, audio)).start()
 except AttributeError:
     print("[ERROR] Something went wrong..")
 
