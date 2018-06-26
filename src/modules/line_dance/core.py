@@ -42,7 +42,10 @@ def run(name, control):
                 if len(legs_not_ready) > 0:
                     print("Not all legs ready so do nothing")
                 else:
-                    movement.legs.move(current[step])
+                    movement.legs.run_sequence(speeds=[150, 150, 150],
+                                               self_update=True,
+                                               sequences=[step],
+                                               sequence=current)
                     step += 1
                     if step >= len(current):
                         step = 0
