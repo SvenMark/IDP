@@ -42,6 +42,7 @@ def movement(shared_object, movement, settings):
             else:
                 print("boven")
 
+
 def stairdetector(shared_object, settings):
     frame = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
     time.sleep(0.3)  # startup
