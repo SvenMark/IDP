@@ -28,7 +28,7 @@ class Saving(object):
         print("[RUN] Starting saving...")
 
         # Initialize camera
-        cap = VideoStream(src=0, usePiCamera=True, resolution=(1088, 720)).start()
+        cap = VideoStream(src=0, usePiCamera=True, resolution=(640, 480)).start()
         time.sleep(0.3)  # startup
         while True:
             # Read frame from the camera
@@ -57,7 +57,6 @@ class Saving(object):
 
             # Show the created image
             cv2.imshow('Spider Cum 3000', mask_cropped)
-            cv2.imshow('Original', img)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
