@@ -50,10 +50,6 @@ class Recognize(object):
             if self.saved_buildings:
                 self.recognize_building(valid_contours, image_width, building_center, building_width)
 
-            # Show the created image
-            cv2.imshow('Spider Cam 3000', mask_cropped)
-            cv2.imshow('Spider Cam 2000', img)
-
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
@@ -91,6 +87,7 @@ class Recognize(object):
         if found:
             # Use audio to state the recognized building
             print("[INFO] At time: " + str(datetime.datetime.now().time()) + " Found: ", result)
+
             self.recognized = True
 
         # Return whether a building has been found
@@ -139,8 +136,3 @@ class Recognize(object):
 
         # Notify settings that the current frame is handled
         self.settings.update = True
-
-    @staticmethod
-    def get_real_distance(building_width):
-        distance = -0.0006027224509476651 * building_width ** 2 - 0.227689996661844 * building_width + 53.74910055265013
-        return distance
