@@ -7,7 +7,6 @@ sys.path.insert(0, '../../../src')
 
 from imutils.video import VideoStream
 from entities.vision.recognize import Recognize
-from entities.vision.obstacle_settings import ObstacleSettings
 from entities.vision.helpers.vision_helper import *
 
 
@@ -34,6 +33,7 @@ def run(name, control):
     shared_object = control.shared_object
     speed_factor = control.speed_factor
     dead_zone = control.dead_zone
+    settings = control.vision.obstacle_settings
 
     print("[RUN] " + str(name))
     stairdetector(shared_object)
@@ -49,8 +49,26 @@ def run(name, control):
     print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
 
+    movement(shared_object, movement, settings)
+
 
 def stairdetector(frame, width, height):
+def movement(shared_object, movement, settings):
+    while not shared_object.has_to_stop():
+        if settings.update:
+            if settings.stairs:
+                movement.tracks.forward(90, 90, 0.5, 0.5)
+            else:
+                print("boven")
+
+def stairdetector(frame, width, height, settings):
+    frame = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+    time.sleep(0.3)  # startup
+
+    sample = frame.read()
+    height, width, channel = sample.shape
+    print("[INFO] w:" + str(width) + ", h: " + str(height))
+
     vertices = [
         (0, (height / 2) + 28),
         (width, (height / 2 + 28)),
