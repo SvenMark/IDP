@@ -63,7 +63,7 @@ def run(name, control):
             else:
                 right -= offset
         if line_detected:
-            movement.tracks.forward(duty_cycle_track_left=40, duty_cycle_track_right=50,
+            movement.tracks.forward(duty_cycle_track_left=40, duty_cycle_track_right=55,
                                     delay=0, acceleration=0)
 
         time.sleep(0.1)
@@ -96,6 +96,7 @@ def line_detection(shared_object):
     while not shared_object.has_to_stop():
         # Get current frame from picamera and make a cropped image with the vertices above with set_region
         img = cap.read()
+        img = cv2.flip(img, 0)
         img_cropped = set_region(img, np.array([vertices], np.int32))
 
         # Add blur to the cropped image
