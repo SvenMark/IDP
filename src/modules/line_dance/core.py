@@ -1,4 +1,6 @@
 import time
+from threading import Timer
+
 import RPi.GPIO as GPIO
 import pyaudio
 import numpy as np
