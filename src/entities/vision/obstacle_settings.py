@@ -4,11 +4,17 @@ sys.path.insert(0, '../../../src')
 
 class ObstacleSettings(object):
     def __init__(self):
-        # Als je een frame verwerkt hebt
+        # For each frame update
         self.update = False
 
-        # Als je de beker hebt gedetecteerd
-        self.cup_detected = False
+        # If stairs are still visible
+        self.stairs = False
 
-        # Positie van de beker
+        # If bridge is detected
+        self.bridge = False
+        self.bridge_position = 50
+
+        # If the cup is detected
+        self.cup_detected = False
         self.cup_position = 50
+        self.cup_size = 10

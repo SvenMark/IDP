@@ -49,7 +49,8 @@ def run():
         cv2.imshow('hsv-picker', output)
 
         if cv2.waitKey(1) & 0xFF == ord('s'):
-            print("Saved settings")
+            print("([" + str(lowh) + ", " + str(lows) + ", " + str(lowv) + "], [" + str(highh) + ", "
+                  + str(highs) + ", " + str(highv) + "])")
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -87,13 +88,6 @@ def createtrackbars(name):
     cv2.createTrackbar('High H', name, 120, 180, nothing)
     cv2.createTrackbar('High S', name, 255, 255, nothing)
     cv2.createTrackbar('High V', name, 255, 255, nothing)
-
-
-def savehigherlower(lowh, lows, lowv, highh, highs, highv):
-    text_file = open("Output.txt", "a")
-    text_file.write("([" + str(lowh) + ", " + str(lows) + ", " + str(lowv) + "], "
-                    "[" + str(highh) + ", " + str(highs) + ", " + str(highv) + "])")
-    text_file.close()
 
 
 def nothing(x):
