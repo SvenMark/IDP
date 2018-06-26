@@ -1,11 +1,10 @@
 import sys
-
+import datetime
+import time
 from imutils.video import VideoStream
 
 sys.path.insert(0, '../../../src')
 
-import datetime
-import time
 from entities.vision.helpers.vision_helper import *
 
 

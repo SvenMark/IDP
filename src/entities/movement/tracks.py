@@ -3,7 +3,6 @@ import sys
 
 sys.path.insert(0, '../../../src')
 
-from entities.movement.limb.joints.dcmotor import DCMotor
 from entities.movement.limb.track import Track
 
 

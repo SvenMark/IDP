@@ -3,7 +3,6 @@ import time
 import datetime
 from imutils.video import VideoStream
 from tkinter import *
-from threading import Thread
 
 sys.path.insert(0, '../../../src')
 

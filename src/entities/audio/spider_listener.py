@@ -1,8 +1,6 @@
-import sys, os
+import os
 from pocketsphinx.pocketsphinx import *
-from sphinxbase.sphinxbase import *
 import pyaudio
-
 import sys
 
 sys.path.insert(0, '../../../src')

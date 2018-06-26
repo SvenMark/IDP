@@ -1,12 +1,9 @@
 import datetime
-import time
 import sys
-from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
 from entities.movement.limb.joints.servo import Servo
-from entities.movement.sequences.sequences import *
 
 
 class Grabber(object):

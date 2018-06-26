@@ -6,6 +6,7 @@ import pyaudio
 import numpy as np
 import sys
 import random
+from entities.movement.sequences.dance_sequence import *
 from entities.movement.sequences.sequences import *
 
 sys.path.insert(0, '../../../src')

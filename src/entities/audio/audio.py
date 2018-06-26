@@ -1,10 +1,8 @@
 import os
-import platform
 import sys
 import pygame
 from gtts import gTTS
 import threading
-import time
 
 sys.path.insert(0, '../../../src')
 

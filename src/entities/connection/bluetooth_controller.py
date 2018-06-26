@@ -11,6 +11,7 @@ from entities.movement.movement import Movement
 from entities.vision.vision import Vision
 from entities.visual.emotion import Emotion
 
+
 class BluetoothController(object):
     """
     Base class for the bluetooth smart controller

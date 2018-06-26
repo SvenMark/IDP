@@ -7,8 +7,6 @@ from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
-from entities.audio.audio import Audio
-
 
 class Emotion(object):
 
@@ -172,13 +170,4 @@ class Emotion(object):
                 time.sleep(0.05)
                 self.pixels.show()
 
-
-if __name__ == '__main__':
-    audio = Audio()
-    emote = Emotion(audio)
-
-    emote.appear_from_back()
-    # Always start emotions in a thread. Unless you are testing this part.
-    while True:
-        emote.set_emotion("searching")
 
