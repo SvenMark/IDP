@@ -1,12 +1,12 @@
 import sys
 import threading
 
-from entities.audio.audio import Audio
 
 sys.path.insert(0, '../../src')
 
 from entities.vision.helpers.json_handler import JsonHandler
 from entities.vision.helpers.vision_helper import Color
+from entities.audio.audio import Audio
 
 from entities.threading.utils import SharedObject
 from entities.vision.vision import Vision
