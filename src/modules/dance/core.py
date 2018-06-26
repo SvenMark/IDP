@@ -30,8 +30,6 @@ def run(name, control):
 
     routine()
 
-    # Gebruik emotion.set_emotion("confused") of "shutdown"
-
     print("[RUN] " + str(name))
 
     while not shared_object.has_to_stop():
@@ -39,40 +37,51 @@ def run(name, control):
         prev = 0
         print(str(seconds))
         if seconds < 5:
-            print("Part 1")
+            print("Dums")
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=drum)
         elif seconds < 13:
-            print("Part 2")
+            print("Clap")
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=clap)
         elif seconds < 21:
-            print("Part 3")
+            print("Clap and move")
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=clap)
-            if forwards and prev < seconds + 2:
+            if forwards and prev < seconds + 1:
                 movement.tracks.forward(50, 50, 0, 0)
                 forwards = False
                 prev = seconds
-            elif not forwards and prev < seconds + 2:
+            elif not forwards and prev < seconds + 1:
                 movement.tracks.backward(50, 50, 0, 0)
                 forwards = True
                 prev = seconds
         elif seconds < 36:
-            print("Part 4")
+            print("Ballerina pirouette")
             movement.tracks.turn_left(50, 50, 0, 0)
-            movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=ballerina)
+            movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=ballerina)
         elif seconds < 48:
-            print("Part 5")
-            movement.tracks.turn_right(50, 50, 0, 0)
+            print("Pirouette wave")
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=wave)
+            movement.tracks.turn_right(50, 50, 0, 0)
         elif seconds < 54:
+            print("Hey hey hey")
             movement.tracks.stop()
         elif seconds < 61:
-            pass
+            print("Whats goin on?")
+            emotion.set_emotion("confused")
+            movement.tracks.turn_right(35, 35, 0.2, 0)
+            movement.tracks.turn_left(35, 35, 0.2, 0)
         elif seconds < 93:
             pass
+        elif seconds < 98:
+            print("Fast ballerina pirouette")
+            movement.tracks.turn_left(80, 80, 0, 0)
+            movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=ballerina)
         elif seconds < 102:
-            pass
+            print("Fast pirouette wave")
+            movement.tracks.turn_left(80, 80, 0, 0)
+            movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=wave)
         elif seconds < 105:
-            pass
+            movement.tracks.stop()
+            emotion.set_emotion("shutdown")
         elif seconds < 120:
             pass
         else:
