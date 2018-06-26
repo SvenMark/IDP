@@ -89,9 +89,9 @@ def line_detection(shared_object):
     height, width, channel = sample.shape
 
     vertices = [
-        (0, height),
+        (20, height),
         (width / 2, height / 2),
-        (width, height),
+        (width - 20, height - 20),
     ]
 
     while True:
