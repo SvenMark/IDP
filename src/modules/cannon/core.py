@@ -55,7 +55,7 @@ def run(name, control):
             time.sleep(30)
             red = False
         else:
-            # emotion.set_emotion("searching")
+            emotion.set_emotion("searching")
             left = 60
             right = 60
             if offset < 0:
@@ -80,7 +80,7 @@ def line_detection(shared_object):
     :return: None
     """
     # Get view of picamera and do a small warmup of 0.3s
-    cap = VideoStream(src=0, usePiCamera=False, resolution=(320, 240)).start()
+    cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
     time.sleep(0.3)
 
     # Get width and height of the frame and make vertices for a traingle shaped region
