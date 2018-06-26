@@ -119,7 +119,7 @@ def line_detection(shared_object):
         # Set variables and get lines with Houghlines function on the mask of black
         theta = np.pi / 180
         threshold = 150
-        min_line_length = 40
+        min_line_length = 10
         max_line_gap = 25
 
         lines = cv2.HoughLinesP(mask, 2, theta, threshold, np.array([]),
