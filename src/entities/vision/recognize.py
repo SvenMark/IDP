@@ -50,6 +50,8 @@ class Recognize(object):
             if self.saved_buildings:
                 print(self.recognize_building(valid_contours, image_width, building_center, building_width))
 
+            cv2.imshow("gay", mask_cropped)
+
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
