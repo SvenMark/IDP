@@ -39,13 +39,8 @@ class Saving(object):
             # Apply gaussian blue to the image
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
-            # # Calculate the masks
-            mask, _ = self.helper.calculate_mask(img, color_range)
-
-            img_crop, _, _, _ = self.helper.crop_to_contours(mask, img)
-
             # Calculate new cropped masks
-            mask_cropped, valid_contours = self.helper.calculate_mask(img_crop, color_range, set_contour=True)
+            mask_cropped, valid_contours = self.helper.calculate_mask(img, color_range, set_contour=True)
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 self.show_input_fields()
