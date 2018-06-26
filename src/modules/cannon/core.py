@@ -55,7 +55,7 @@ def run(name, control):
             time.sleep(30)
             red = False
         else:
-            emotion.set_emotion("searching")
+            # emotion.set_emotion("searching")
             left = 60
             right = 60
             if offset < 0:
