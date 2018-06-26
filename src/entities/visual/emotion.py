@@ -69,6 +69,7 @@ class Emotion(object):
             while self.blinking:
                 self.rotate_color(255, 165, 0, 1)
         elif emotion == "shutdown":
+            self.audio.play("powerdown.mp3")
             for i in range(20):
                 self.set_brightness(-15)
                 time.sleep(0.2)
