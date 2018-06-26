@@ -70,7 +70,7 @@ class Recognize(object):
         :return: True if a building is recognized
         """
         result = None
-        found = True
+        found = False
 
         # If there are no blocks in view return false
         if not len(positions) > 0:
