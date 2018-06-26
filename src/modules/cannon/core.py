@@ -52,7 +52,7 @@ def run(name, control):
             emotion.set_emotion("confirmed")
             print("[INFO] Red detected!")
             movement.tracks.stop()
-            time.sleep(30)
+            time.sleep(5)
             red = False
         else:
             if not emotion.blinking:
@@ -90,7 +90,7 @@ def line_detection(shared_object):
 
     vertices = [
         (20, height),
-        (width / 2, height / 2 - 40),
+        (width / 2, height / 2 + 40),
         (width - 20, height - 20),
     ]
 
