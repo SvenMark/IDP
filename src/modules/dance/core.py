@@ -30,6 +30,8 @@ def run(name, control):
 
     routine()
 
+    # Gebruik emotion.set_emotion("confused") of "shutdown"
+
     print("[RUN] " + str(name))
 
     while not shared_object.has_to_stop():
