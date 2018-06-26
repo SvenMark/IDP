@@ -38,7 +38,7 @@ def run(name, control):
         if GPIO.input(beat_pin):
             print("Beat detected")
             if hasattr(movement, 'legs'):
-                legs_not_ready = [elem for elem in movement.legs if not elem.ready()]
+                legs_not_ready = [elem for elem in movement.legs.legs if not elem.ready()]
                 if len(legs_not_ready) > 0:
                     print("Not all legs ready so do nothing")
                 else:
