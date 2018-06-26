@@ -66,6 +66,7 @@ class Servo(object):
             step = (self.goal - self.start_position) * delta * self.current_speed
 
         if self.last_position + step > 1024 or self.last_position + step < 0:
+            self.last_position = self.goal
             print(str(self.last_position + step) + " not in range " + str(self.servo_id) + "speed "
                   + str(self.current_speed) + "delta " + str(delta))
             return
