@@ -159,7 +159,7 @@ class Helper:
         center = (x + extremes[1]) / 2
 
         # Resize to new size
-        img = self.image_resize(img, width=500)
+        img = self.image_resize(img, height=700)
 
         # Return the resized image
         return img, center, image_width, w
