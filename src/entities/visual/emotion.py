@@ -8,7 +8,6 @@ from threading import Thread
 sys.path.insert(0, '../../../src')
 
 from entities.audio.audio import Audio
-from entities.threading.utils import SharedObject
 
 
 class Emotion(object):
@@ -25,7 +24,7 @@ class Emotion(object):
         self.pixels.clear()
         self.pixels.show()  # Make sure to call show() after changing any pixels!
         self.busy = False
-        self.blinking=False
+        self.blinking = False
 
     def set_emotion(self, emotion):
         """
