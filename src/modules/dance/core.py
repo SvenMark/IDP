@@ -34,7 +34,6 @@ def run(name, control):
 
     while not shared_object.has_to_stop():
         forwards = True
-        print("test")
         print(str(seconds))
         if seconds < 5:
             print("Part 1")
@@ -46,10 +45,10 @@ def run(name, control):
             print("Part 3")
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=clap)
             if forwards:
-                movement.tracks.forward(50, 50, 0.1, 0)
+                movement.tracks.forward(50, 50, 0, 0)
                 forwards = False
             else:
-                movement.tracks.backward(50, 50, 0.1, 0)
+                movement.tracks.backward(50, 50, 0, 0)
                 forwards = True
         elif seconds < 36:
             print("Part 4")
@@ -57,8 +56,8 @@ def run(name, control):
             movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=ballerina)
         elif seconds < 48:
             print("Part 5")
-            movement.tracks.turn_right(50, 50, 0, 0)
-            movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=wave)
+            # movement.tracks.turn_right(50, 50, 0, 0)
+            movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=wave)
         elif seconds < 54:
             movement.tracks.stop()
         elif seconds < 61:
