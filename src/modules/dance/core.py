@@ -56,6 +56,7 @@ def run(name, control):
             movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=ballerina)
         elif seconds < 48:
             print("Part 5")
+            movement.tracks.stop()
             # movement.tracks.turn_right(50, 50, 0, 0)
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=wave)
         elif seconds < 54:
