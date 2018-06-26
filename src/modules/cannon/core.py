@@ -56,12 +56,12 @@ def run(name, control):
             red = False
         else:
             emotion.set_emotion("searching")
-            left = 75
+            left = 70
             right = 60
             if offset < 0:
-                left += offset
+                left += offset * 1.2
             else:
-                right -= offset
+                right -= offset * 1.2
             if line_detected:
                 movement.tracks.forward(duty_cycle_track_left=right, duty_cycle_track_right=left,
                                         delay=0, acceleration=0)
