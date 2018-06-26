@@ -16,7 +16,7 @@ def run(name, control):
     print("[RUN] " + str(name))
 
     if hasattr(movement, 'legs'):
-        movement.legs.deploy()
+        movement.legs.deploy(150)
         movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=extend_arms)
 
     while not shared_object.has_to_stop():
