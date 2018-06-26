@@ -7,7 +7,7 @@ sys.path.insert(0, '../../../src')
 
 from imutils.video import VideoStream
 from entities.vision.helpers.vision_helper import *
-from decimal import Decimal
+from entities.threading.utils import SharedObject
 from threading import Thread
 
 # Last known position of the line with left percentage
@@ -29,7 +29,8 @@ def run(name, control):
     dead_zone = control.dead_zone
 
     print("[RUN] " + str(name))
-    Thread(target=line_detection, args=(shared_object,)).start()
+    cannon_thread = SharedObject()
+    Thread(target=line_detection, args=(cannon_thread,)).start()
 
     while not shared_object.has_to_stop():
 
@@ -48,28 +49,26 @@ def run(name, control):
             while last_position == -1000:
                 time.sleep(0.1)
         print("[INFO] Driving etc. with offset: {}".format(offset))
+        if red_detected:
+            movement.tracks.forward(duty_cycle_track_left=50, duty_cycle_track_right=55,
+                                    delay=0, acceleration=0)
         if red:
             emotion.set_emotion("confirmed")
             print("[INFO] Red detected!")
             movement.tracks.stop()
-            time.sleep(30)
+            time.sleep(5)
             red = False
         else:
-            emotion.set_emotion("searching")
-            left = 60
-            right = 60
-            if offset < 0:
-                left += offset * 1.2
-            else:
-                right -= offset * 1.2
+            if not emotion.blinking:
+                emotion.set_emotion("searching")
             if line_detected:
-                movement.tracks.forward(duty_cycle_track_left=right, duty_cycle_track_right=left,
-                                        delay=0, acceleration=0)
+                movement.move_towards(offset=offset, torque=1.2)
 
         time.sleep(0.1)
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED] {}".format(name))
+    cannon_thread.stop = True
     shared_object.has_been_stopped()
 
 
@@ -80,7 +79,7 @@ def line_detection(shared_object):
     :return: None
     """
     # Get view of picamera and do a small warmup of 0.3s
-    cap = VideoStream(src=0, usePiCamera=False, resolution=(320, 240)).start()
+    cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
     time.sleep(0.3)
 
     # Get width and height of the frame and make vertices for a traingle shaped region
@@ -88,12 +87,12 @@ def line_detection(shared_object):
     height, width, channel = sample.shape
 
     vertices = [
-        (0, height),
-        (width / 2, height / 2),
-        (width, height),
+        (20, height),
+        (width / 2, height / 2 + 20),
+        (width - 20, height - 20),
     ]
 
-    while True:
+    while not shared_object.has_to_stop():
         # Get current frame from picamera and make a cropped image with the vertices above with set_region
         img = cap.read()
         img = cv2.flip(img, -1)
@@ -104,7 +103,7 @@ def line_detection(shared_object):
 
         # Generate and set a mask for a range of black (color of the line) to the cropped image
         hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-        black = Color("Black", [0, 0, 0], [50, 65, 80])
+        black = Color("Black", [0, 0, 0], [180, 40, 110])
         mask = cv2.inRange(hsv, black.lower, black.upper)
 
         # Checks if the color red is detected and calls function detect_red with the img
@@ -152,7 +151,7 @@ def line_detection(shared_object):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    cap.release()
+    cap.stop()
     cv2.destroyAllWindows()
 
 
@@ -253,6 +252,3 @@ def detect_red(img, hsv):
     else:
         return True
 
-
-if __name__ == '__main__':
-    run(name=None, movement=None, shared_object=None)  # disabled for travis

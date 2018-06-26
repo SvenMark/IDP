@@ -126,7 +126,6 @@ class Legs(object):
         self.get_delta()
         print("Undready legs: " + str(len(legs_not_ready)))
         while len(legs_not_ready) != 0:
-            print("{} legs not ready".format(len(legs_not_ready)))
             delta = self.get_delta()
             for i in range(len(legs_not_ready)):
                 legs_not_ready[i].update(delta)

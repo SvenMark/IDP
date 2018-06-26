@@ -39,12 +39,13 @@ class Emotion(object):
 
     def set_emotion_thread(self, emotion):
         self.busy = True
+        self.blinking = False
         time.sleep(0.01)
         if emotion == "neutral":
-            self.blinking = False
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
             self.blinking = True
+            self.busy = False
             while self.blinking:
                 self.blink_color(205, 0, 0, 1, 0.3)
             self.set_emotion("neutral")
@@ -62,10 +63,10 @@ class Emotion(object):
             while self.audio.playing:
                 self.blink_color(255, 105, 180, 0, 0.2)
         elif emotion == "confirmed":  # Used for building detection
-            self.blinking = False
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
             self.blinking = True
+            self.busy = False
             while self.blinking:
                 self.rotate_color(255, 165, 0, 1)
         self.busy = False

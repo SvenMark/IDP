@@ -26,7 +26,7 @@ def run(name, control):
 
     while not shared_object.has_to_stop():
         if vision_settings.update:
-            movement.move_towards(vision_settings.current_position)
+            movement.move_towards(50 - vision_settings.current_position)
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED] {}".format(name))
