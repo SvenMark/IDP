@@ -38,13 +38,13 @@ try:
         elif sys.argv[1] == "saving":
             threading.Thread(target=vision.saving.run, args=(color_range, json_handler)).start()
         elif sys.argv[1] == "recognize":
-            threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings, audio)).start()
+            threading.Thread(target=vision.recognize.run, args=(color_range, audio, saved_buildings)).start()
         else:
             print("[ERROR] Wrong argument given..")
 
     # Default no argument
     else:
-        threading.Thread(target=vision.recognize.run, args=(color_range, saved_buildings, audio)).start()
+        threading.Thread(target=vision.recognize.run, args=(color_range, audio, saved_buildings)).start()
 except AttributeError:
     print("[ERROR] Something went wrong..")
 
