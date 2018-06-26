@@ -206,7 +206,7 @@ ballerina = [
     ]
 ]
 
-extendarms = [
+extend_arms = [
     [
         [492, 334, 1011],
         [492, 334, 1011],
