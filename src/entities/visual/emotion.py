@@ -25,6 +25,7 @@ class Emotion(object):
         self.pixels.clear()
         self.pixels.show()  # Make sure to call show() after changing any pixels!
         self.busy = False
+        self.blinking=False
 
     def set_emotion(self, emotion):
         """
@@ -40,13 +41,11 @@ class Emotion(object):
         self.busy = True
         time.sleep(0.01)
         if emotion == "neutral":
-            # Boston University Red
+            self.blinking = False
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
-            self.audio.play('russiananthem.mp3')
-            time.sleep(0.5)
-            while self.audio.playing:
-                print("Blink")
+            self.blinking = True
+            while self.blinking:
                 self.blink_color(205, 0, 0, 1, 0.3)
             self.set_emotion("neutral")
         elif emotion == "success":
