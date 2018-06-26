@@ -117,11 +117,11 @@ def run(name, control):
                 print("NEW BUILDING IN VISION")
                 if not vision.settings.grab:
                     # TODO: implement this
-                    movement.move_towards(vision.settings.current_position)
+                    movement.move_towards(50 - vision.settings.current_position)
             else:
                 # TODO: implement this
                 print("Move towards contours")
-                movement.move_towards(vision.settings.current_position)
+                movement.move_towards(50 - vision.settings.current_position)
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))
