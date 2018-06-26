@@ -1,13 +1,15 @@
 import sys
 import time
 from imutils.video import VideoStream
+from threading import Timer
+import RPi.GPIO as GPIO
+
+sys.path.insert(0, '../../../src')
+
 from entities.vision.helpers.vision_helper import *
 from entities.vision.helpers.fucking_other_helper import *
-from threading import Timer
-
-import RPi.GPIO as GPIO
+from entities.movement.sequences.dance_sequence import *
 from entities.movement.sequences.sequences import *
-sys.path.insert(0, '../../../src')
 
 seconds = 0
 
@@ -30,62 +32,43 @@ def run(name, control):
 
     print("[RUN] " + str(name))
 
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-
-    beat_led_pin = 16
-    beat_detect_pin = 20
-    beat_pin = 21
-    sequences = [clap, ballerina, extend_arms, vagedraai, runningman, shakeass,
-                dabrechts, dablinks, dabrechts, dablinks, dabrechts]
-    GPIO.setup(beat_led_pin, GPIO.OUT)
-    GPIO.setup(beat_detect_pin, GPIO.OUT)
-    GPIO.setup(beat_pin, GPIO.IN)
-    GPIO.output(beat_led_pin, 1)
-    GPIO.output(beat_detect_pin, 1)
-
     while not shared_object.has_to_stop():
         forwards = True
         print("test")
-        if GPIO.input(beat_pin):
-            print(str(seconds))
-            if seconds < 5:
-                movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=clap)
-            elif seconds < 13:
-                movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=clap)
-                if forwards:
-                    movement.tracks.forward(50, 50, 0.1, 5)
-                    forwards = False
-                else:
-                    movement.tracks.backward(50, 50, 0.1, 5)
-                    forwards = True
-            elif seconds < 21:
-                movement.tracks.turn_left(50, 50, 0, 5)
-            elif seconds < 36:
-                movement.tracks.turn_left(50, 50, 0, 5)
-                movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=vagedraai)
-            elif seconds < 48:
-                movement.tracks.stop()
-            elif seconds < 54:
-                pass
-            elif seconds < 61:
-                pass
-            elif seconds < 93:
-                pass
-            elif seconds < 102:
-                pass
-            elif seconds < 105:
-                pass
-            elif seconds < 120:
-                pass
+        print(str(seconds))
+        if seconds < 5:
+            movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=drum)
+        elif seconds < 13:
+            movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=clap)
+            if forwards:
+                movement.tracks.forward(50, 50, 0.1, 5)
+                forwards = False
             else:
-                print("DONE")
-                shared_object.stop = True
+                movement.tracks.backward(50, 50, 0.1, 5)
+                forwards = True
+        elif seconds < 21:
+            movement.tracks.turn_left(50, 50, 0, 5)
+        elif seconds < 36:
+            movement.tracks.turn_left(50, 50, 0, 5)
+            movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=vagedraai)
+        elif seconds < 48:
+            movement.tracks.stop()
+        elif seconds < 54:
+            pass
+        elif seconds < 61:
+            pass
+        elif seconds < 93:
+            pass
+        elif seconds < 102:
+            pass
+        elif seconds < 105:
+            pass
+        elif seconds < 120:
+            pass
+        else:
+            print("DONE")
+            shared_object.stop = True
 
-    GPIO.output(beat_led_pin, 0)
-    GPIO.output(beat_detect_pin, 0)
-    GPIO.cleanup(beat_led_pin)
-    GPIO.cleanup(beat_detect_pin)
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
