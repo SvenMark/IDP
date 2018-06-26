@@ -57,9 +57,9 @@ class Emotion(object):
         elif emotion == "happy":
             self.rainbow_colors()
         elif emotion == "confused":
-            self.audio.play('heya.mp3')
-            time.sleep(1)
-            while self.audio.playing:
+            self.blinking = True
+            self.busy = False
+            while self.blinking:
                 self.blink_color(255, 105, 180, 0, 0.2)
         elif emotion == "confirmed":  # Used for building detection
             self.set_color(0, 205, 0)
@@ -68,6 +68,10 @@ class Emotion(object):
             self.busy = False
             while self.blinking:
                 self.rotate_color(255, 165, 0, 1)
+        elif emotion == "shutdown":
+            for i in range(20):
+                self.set_brightness(-15)
+                time.sleep(0.2)
         self.busy = False
 
     def set_color(self, r, b, g):
