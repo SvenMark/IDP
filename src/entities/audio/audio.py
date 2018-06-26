@@ -18,7 +18,9 @@ class Audio(object):
         self.resources = os.path.dirname(os.path.abspath(__file__)) + "/resources/"
         pygame.init()
         pygame.mixer.init()
+        self.playing = False
         print("Initialised Audio")
+        self.play("startup.mp3")
 
     def get_file_path(self, file_name):
         """
@@ -37,11 +39,13 @@ class Audio(object):
         threading.Thread(target=self.play_threaded, args=(file_name, )).start()
 
     def play_threaded(self, file_name):
-        print("Play")
+        print("Play " + file_name)
+        self.playing = True
         pygame.mixer.music.load(self.get_file_path(file_name))
         pygame.mixer.music.play()
         while pygame.mixer.music.get_busy():
             pygame.time.Clock().tick(10)
+        self.playing = False
 
     def tts(self, text, lan):
         """

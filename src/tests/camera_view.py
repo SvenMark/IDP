@@ -1,14 +1,14 @@
-import sys
-import time
 import cv2
 
-sys.path.insert(0, '../../../src')
-
-from imutils.video import VideoStream
-
-cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
-time.sleep(0.3)
+cam = cv2.VideoCapture(0)
 
 while True:
-    img = cap.read()
-    cv2.imshow('cam', img)
+    ret, frame = cam.read()
+    frame = cv2.flip(frame, 0)
+    cv2.imshow("test", frame)
+
+    if cv2.waitKey(10) == ord('q'):
+        break
+
+cam.release()
+cv2.destroyAllWindows()

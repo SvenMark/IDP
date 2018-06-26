@@ -192,7 +192,7 @@ class Ax12:
             error = reply[4]
 
             if (error != 0):
-                print("Error from servo: " + Ax12.dict_errors[error] + ' (code  ' + hex(error) + ')')
+                # print("Error from servo: " + Ax12.dict_errors[error] + ' (code  ' + hex(error) + ')')
                 return -error
             # just reading error bit
             elif (length == 0):

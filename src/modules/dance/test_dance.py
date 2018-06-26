@@ -20,18 +20,30 @@ m = 60
 
 parts = [0.21, 20.66, 36.04, 51.35, 58.17, m + 29.24, m + 42.91, m + 43.21, m + 59.43]
 current_part = -1
+time_elapsed = 0
 
 
 def routine():
-    global current_part
+    global current_part, time_elapsed
     current_part += 1
-    t = Timer(parts[current_part], routine)
+    t = Timer(parts[current_part] - time_elapsed, routine)
+    time_elapsed += parts[current_part]
     t.start()
 
 
-routine()
-
 audio = Audio()
+
+time.sleep(0.5)
+
+while audio.playing:
+    pass
+
+audio.play('Rasputin.mp3')
+
+while not audio.playing:
+    pass
+
+routine()
 
 while True:
     print(str(current_part))

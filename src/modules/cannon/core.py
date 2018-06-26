@@ -210,8 +210,8 @@ def average_distance(lines, width):
             count += 1
 
     # Calculate average to sides (x-as)
-    percentage_left = Decimal((Decimal(Decimal(totaldl) / Decimal(count)) / Decimal(width)) * Decimal(100))
-    percentage_right = Decimal((Decimal(Decimal(totaldr) / Decimal(count)) / Decimal(width)) * Decimal(100))
+    percentage_left = (totaldl / count) / width * 100
+    percentage_right = (totaldr / count) / width * 100
 
     return percentage_left, percentage_right
 
