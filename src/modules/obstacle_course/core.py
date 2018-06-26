@@ -15,6 +15,7 @@ def run(name, control):
     shared_object = control.shared_object
     speed_factor = control.speed_factor
     dead_zone = control.dead_zone
+    settings = control.vision.obstacle_settings
 
     print("[RUN] " + str(name))
     stairdetector(shared_object)
@@ -30,8 +31,19 @@ def run(name, control):
     print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
 
+    movement(shared_object, movement, settings)
 
-def stairdetector(shared_object):
+
+def movement(shared_object, movement, settings):
+    while not shared_object.has_to_stop():
+        if settings.update:
+            if settings.stairs:
+                movement.tracks.forward(90, 90, 0.5, 0.5)
+            else:
+                print("boven")
+
+
+def stairdetector(shared_object, settings):
     frame = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
     time.sleep(0.3)  # startup
 
