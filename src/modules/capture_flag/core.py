@@ -17,6 +17,7 @@ def run(name, control):
 
     if hasattr(movement, 'legs'):
         movement.legs.deploy()
+        movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=extend_arms)
 
     while not shared_object.has_to_stop():
         grab = shared_object.bluetooth_settings.d
@@ -25,17 +26,6 @@ def run(name, control):
                                                 vertical_speed=shared_object.bluetooth_settings.h * speed_factor,
                                                 horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,
                                                 dead_zone=dead_zone)
-
-        # Extend legs to max
-        if hasattr(movement, 'legs'):
-            # TODO: add correct positions for extending
-            movement.legs.move(
-                leg_0_moves=[],
-                leg_1_moves=[],
-                leg_2_moves=[],
-                leg_3_moves=[],
-                speeds=[200, 200, 200],
-                self_update=True)
 
         if hasattr(movement, 'grabber'):
             if movement.grabber.grabbed and grab is 0:
