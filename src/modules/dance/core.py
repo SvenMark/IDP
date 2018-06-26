@@ -37,22 +37,23 @@ def run(name, control):
         print("test")
         print(str(seconds))
         if seconds < 5:
-            movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=drum)
+            movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=drum)
         elif seconds < 13:
-            movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=clap)
+            movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=clap)
+        elif seconds < 21:
+            movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=clap)
             if forwards:
                 movement.tracks.forward(50, 50, 0.1, 5)
                 forwards = False
             else:
                 movement.tracks.backward(50, 50, 0.1, 5)
                 forwards = True
-        elif seconds < 21:
-            movement.tracks.turn_left(50, 50, 0, 5)
         elif seconds < 36:
             movement.tracks.turn_left(50, 50, 0, 5)
-            movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=vagedraai)
+            movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=ballerina)
         elif seconds < 48:
-            movement.tracks.stop()
+            movement.tracks.turn_right(50, 50, 0, 5)
+            movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=wave)
         elif seconds < 54:
             pass
         elif seconds < 61:
