@@ -63,7 +63,7 @@ def run(name, control):
             else:
                 right -= offset
         if line_detected:
-            movement.tracks.forward(duty_cycle_track_left=40, duty_cycle_track_right=40,
+            movement.tracks.forward(duty_cycle_track_left=40, duty_cycle_track_right=50,
                                     delay=0, acceleration=0)
 
         time.sleep(0.1)
@@ -145,7 +145,7 @@ def line_detection(shared_object):
         else:
             line_detected = False
 
-        # cv2.imshow('camservice-lijn', img_clone)
+        cv2.imshow('camservice-lijn', img_clone)
 
         # If q is pressed, break while loop
         if cv2.waitKey(1) & 0xFF == ord('q'):
