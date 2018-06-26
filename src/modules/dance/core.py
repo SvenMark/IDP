@@ -54,10 +54,10 @@ def run(name, control):
             elif seconds < 13:
                 movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=clap)
                 if forwards:
-                    movement.tracks.forward(50, 50, 0.5, 5)
+                    movement.tracks.forward(50, 50, 0.1, 5)
                     forwards = False
                 else:
-                    movement.tracks.backward(50, 50, 0.5, 5)
+                    movement.tracks.backward(50, 50, 0.1, 5)
                     forwards = True
             elif seconds < 21:
                 movement.tracks.turn_left(50, 50, 0, 5)
