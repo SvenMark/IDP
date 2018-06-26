@@ -15,10 +15,10 @@ def run(name, control):
     shared_object = control.shared_object
     speed_factor = control.speed_factor
     dead_zone = control.dead_zone
-    settings = control.vision.obstacle_settings
+    vision = control.vision
 
     print("[RUN] " + str(name))
-    stairdetector(shared_object)
+    stairdetector(shared_object, vision.settings)
 
     while not shared_object.has_to_stop():
         movement.tracks.handle_controller_input(stop_motors=shared_object.bluetooth_settings.s,
@@ -31,7 +31,7 @@ def run(name, control):
     print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
 
-    movement(shared_object, movement, settings)
+    movement(shared_object, movement, vision.settings)
 
 
 def movement(shared_object, movement, settings):
