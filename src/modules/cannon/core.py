@@ -7,7 +7,7 @@ sys.path.insert(0, '../../../src')
 
 from imutils.video import VideoStream
 from entities.vision.helpers.vision_helper import *
-from decimal import Decimal
+from entities.threading.utils import SharedObject
 from threading import Thread
 
 # Last known position of the line with left percentage
@@ -29,7 +29,8 @@ def run(name, control):
     dead_zone = control.dead_zone
 
     print("[RUN] " + str(name))
-    Thread(target=line_detection, args=(shared_object,)).start()
+    cannon_thread = SharedObject()
+    Thread(target=line_detection, args=(cannon_thread,)).start()
 
     while not shared_object.has_to_stop():
 
@@ -67,6 +68,7 @@ def run(name, control):
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED] {}".format(name))
+    cannon_thread.stop = True
     shared_object.has_been_stopped()
 
 
