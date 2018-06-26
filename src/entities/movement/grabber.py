@@ -62,6 +62,17 @@ class Grabber(object):
         self.grabbed = True
         self.grabbing = False
 
+    def grab_flag(self, speed):
+        """
+        Function for grabbing the flag
+        :param speed: Speed to move with
+        :return: None
+        """
+        positions = [160, 490, 75]  # The servo positions for grabbing flag
+        self.servos[0].move(positions[0], speed)
+        self.servos[1].move(positions[1], speed)
+        self.update()
+
     def loosen(self, speed):
         """
         Function that contains commands top open grabber
