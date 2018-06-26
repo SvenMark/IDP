@@ -56,7 +56,7 @@ def run(name, control):
             red = False
         else:
             emotion.set_emotion("searching")
-            left = 70
+            left = 60
             right = 60
             if offset < 0:
                 left += offset * 1.2
