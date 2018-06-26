@@ -62,8 +62,8 @@ def run(name, control):
                 left += offset
             else:
                 right -= offset
-
-            movement.tracks.forward(duty_cycle_track_left=left, duty_cycle_track_right=right,
+        if line_detected:
+            movement.tracks.forward(duty_cycle_track_left=40, duty_cycle_track_right=40,
                                     delay=0, acceleration=0)
 
         time.sleep(0.1)
