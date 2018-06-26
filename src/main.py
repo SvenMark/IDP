@@ -100,8 +100,8 @@ def main():
                    track_0_backward=27,
                    track_1_forward=19,
                    track_1_backward=26),
-            Grabber(servos=[1, 53, 43],
-                    initial_positions=[465, 198, 200])
+            Grabber(servos=[1, 23, 43],
+                    initial_positions=[445, 800, 120])
         ]
     # If no servos are connected
     else:
