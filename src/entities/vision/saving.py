@@ -28,7 +28,7 @@ class Saving(object):
         print("[RUN] Starting saving...")
 
         # Initialize camera
-        cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+        cap = VideoStream(src=0, usePiCamera=True, resolution=(1088, 720)).start()
         time.sleep(0.3)  # startup
         while True:
             # Read frame from the camera
