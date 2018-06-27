@@ -27,13 +27,14 @@ def run(name, control):
     speed_factor = control.speed_factor
     dead_zone = control.dead_zone
 
+    forwards = True
+    prev = 0
+
     routine()
 
     print("[RUN] " + str(name))
 
     while not shared_object.has_to_stop():
-        forwards = True
-        prev = 0
         print(str(seconds))
         if seconds < 0:
             # COUNTDOWN
@@ -76,10 +77,12 @@ def run(name, control):
             movement.tracks.turn_right(35, 35, 0.2, 0)
             movement.tracks.turn_left(35, 35, 0.2, 0)
         elif seconds < 93:
+            emotion.set_emotion("neutral")
             movement.tracks.stop()
             movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=shake_ass)
         elif seconds < 98:
             print("Fast ballerina pirouette")
+            emotion.set_emotion("happy")
             movement.tracks.turn_left(80, 80, 0, 0)
             movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=ballerina)
         elif seconds < 102:
@@ -90,9 +93,9 @@ def run(name, control):
             movement.tracks.stop()
             emotion.set_emotion("shutdown")
         elif seconds < 120:
+            emotion.set_emotion("neutral")
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=left_dab)
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=right_dab)
-            pass
         else:
             print("DONE")
             shared_object.stop = True
