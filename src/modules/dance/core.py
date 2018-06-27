@@ -85,7 +85,7 @@ def run(name, control):
             movement.legs.run_sequence(speeds=[200, 200, 200], self_update=True, sequences=None, sequence=drum)
         elif seconds < 90:
             emotion.set_emotion("cycle")
-            movement.tracks.forward(65, 70, 0, 0)
+            movement.tracks.forward(30, 35, 0, 0)
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[0], sequence=running_man)
             movement.tracks.backward(65, 70, 0, 0)
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[1], sequence=running_man)
