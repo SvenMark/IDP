@@ -47,11 +47,11 @@ def run(name, control):
         elif seconds < 21:
             print("Clap and move")
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=clap)
-            if forwards and prev < seconds + 1:
+            if forwards and prev < seconds:
                 movement.tracks.forward(50, 50, 0, 0)
                 forwards = False
                 prev = seconds
-            elif not forwards and prev < seconds + 1:
+            elif not forwards and prev < seconds:
                 movement.tracks.backward(50, 50, 0, 0)
                 forwards = True
                 prev = seconds
