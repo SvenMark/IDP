@@ -38,6 +38,7 @@ def run(name, control):
     print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
 
+# Autonomous transport rebuild, but doesnt completely work
 # def transport_to_finish(movement, settings):
 #     # While not in finish part move backwards
 #     while not settings.black_detected:

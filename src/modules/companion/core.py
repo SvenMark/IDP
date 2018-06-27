@@ -1,6 +1,5 @@
 import sys
 import threading
-import time
 
 sys.path.insert(0, '../../../src')
 
@@ -15,28 +14,20 @@ def run(name, control):
     dead_zone = control.dead_zone
     vision = control.vision
     vision_settings = control.vision.settings
-    emotion = control.emotion
-
 
     print("[RUN] " + str(name))
 
-    # while not shared_object.has_to_stop():
-    emotion.set_emotion("mad")
-    #if hasattr(movement, 'grabber'):
-    #    movement.grabber.grab(150, True)
-    #    movement.grabber.loosen(150)
-    time.sleep(5)
-    emotion.set_emotion("happy")
-    time.sleep(5)
-    emotion.set_emotion("sad")
-    time.sleep(11)
-    emotion.set_emotion("pain")
-    time.sleep(5)
-    emotion.set_emotion("confused")
-    time.sleep(5)
-    emotion.set_emotion("searching")
-    time.sleep(5)
+    shoe = [Color("red", [167, 116, 89], [180, 255, 255])]
+
+    json_handler = JsonHandler(shoe, "shoe_ranges")
+    color_range = json_handler.get_color_range()
+
+    threading.Thread(target=vision.recognize.run, args=(color_range,)).start()
+
+    while not shared_object.has_to_stop():
+        if vision_settings.update:
+            movement.move_towards(vision_settings.current_position)
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED] {}".format(name))
-    shared_object.has_been_stopped()
+shared_object.has_been_stopped()
