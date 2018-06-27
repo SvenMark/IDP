@@ -102,9 +102,8 @@ class Servo(object):
         result = self.ax12.read_position(self.servo_id)
 
         # In case servo position is not read the first time, keep trying
-        while result is None:
-            print("Can't read servo " + str(self.servo_id) + " position, trying again")
-            result = self.ax12.read_position(self.servo_id)
+        if result is None:
+            result = 0
 
         return result
 
