@@ -58,7 +58,7 @@ class Emotion(object):
             self.blinking = True
             self.busy = False
             while self.blinking:
-                self.blink_color(255, 105, 180, 0, 0.2)
+                self.blink_color(255, 105, 180, 1, 0.2)
         elif emotion == "confirmed":  # Used for building detection
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
