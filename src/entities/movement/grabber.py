@@ -42,7 +42,7 @@ class Grabber(object):
         :return: None
         """
         self.grabbing = True
-        positions = [770, 580, 130]  # The servo positions for grabbing
+        positions = [790, 560, 130]  # The servo positions for grabbing
 
         if pick_up_vertical:
             self.servos[0].move(positions[0], speed)
