@@ -62,8 +62,8 @@ def main():
             Legs(
                 leg_0_servos=[21, 41, 52],  # L voor
                 leg_1_servos=[16, 17, 18],  # R Voor
-                leg_2_servos=[61, 62, 63],  # L achter
-                leg_3_servos=[6, 53, 15]  # r achter
+                leg_2_servos=[6, 53, 15],  # L achter
+                leg_3_servos=[61, 62, 63] # r achter
             ),
             Tracks(track_0_pin=13,
                    track_1_pin=18,
@@ -79,10 +79,10 @@ def main():
         print("Initialise limbs with Legs and Tracks")
         limbs = [
             Legs(
-                leg_0_servos=[21, 41, 52],
-                leg_1_servos=[16, 17, 18],
-                leg_2_servos=[61, 62, 63],
-                leg_3_servos=[6, 53, 15]
+                leg_0_servos=[21, 41, 52],  # L voor
+                leg_1_servos=[16, 17, 18],  # R Voor
+                leg_2_servos=[6, 53, 15],  # L achter
+                leg_3_servos=[61, 62, 63] # r achter
             ),
             Tracks(track_0_pin=13,
                    track_1_pin=18,
