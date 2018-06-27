@@ -46,15 +46,28 @@ class Emotion(object):
             while self.blinking:
                 self.blink_color(205, 0, 0, 1, 0.3)
             self.set_emotion("neutral")
+        elif emotion == "mad":
+            self.blinking = True
+            self.busy = False
+            self.audio.play('cyka.mp3')
+            while self.blinking:
+                self.blink_color(205, 0, 0, 1, 0.3)
         elif emotion == "success":
             self.set_color(0, 205, 0)
             self.audio.play('success.mp3')
-        elif emotion == "mad":
-            self.set_brightness(-255)
-            self.audio.play('cyka.mp3')
         elif emotion == "happy":
-            self.rainbow_colors()
-            #NIEUW
+            self.blinking = True
+            self.busy = False
+            self.audio.play('success.mp3')
+            while self.blinking:
+                self.rainbow_colors()
+        elif emotion == "sad":
+            self.audio.play("sad.mp3")
+            self.set_color(0, 0, 255)
+        elif emotion == "pain":
+            self.set_color(205, 0, 0)
+            self.audio.play("OOF.mp3")
+            self.set_brightness(-255)
         elif emotion == "cycle":
             self.blinking = True
             self.busy = False
