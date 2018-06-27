@@ -23,8 +23,9 @@ def run(name, control):
                                                 horizontal_speed=shared_object.bluetooth_settings.v * speed_factor,
                                                 dead_zone=dead_zone)
         if hasattr(movement, 'legs'):
-            movement.legs.run_sequence([150, 150, 150], True, None, march)
+            movement.legs.run_sequence([100, 100, 100], True, None, march)
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
+

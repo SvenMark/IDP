@@ -57,7 +57,7 @@ def run(name, control):
             emotion.set_emotion("confirmed")
             print("[INFO] Red detected!")
             movement.tracks.stop()
-            time.sleep(5)
+            time.sleep(30)
             red = False
         else:
             if not emotion.blinking:
@@ -104,7 +104,7 @@ def line_detection(shared_object):
 
         # Generate and set a mask for a range of black (color of the line) to the cropped image
         hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-        black = Color("Black", [0, 0, 0], [180, 40, 110])
+        black = Color("Black", [0, 0, 0], [180, 92, 90])
         mask = cv2.inRange(hsv, black.lower, black.upper)
 
         # Checks if the color red is detected and calls function detect_red with the img
@@ -146,7 +146,7 @@ def line_detection(shared_object):
         else:
             line_detected = False
 
-        cv2.imshow('camservice-lijn', img_clone)
+        # cv2.imshow('camservice-lijn', img_clone)
 
         # If q is pressed, break while loop
         if cv2.waitKey(1) & 0xFF == ord('q'):

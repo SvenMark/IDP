@@ -42,7 +42,7 @@ class Grabber(object):
         :return: None
         """
         self.grabbing = True
-        positions = [770, 580, 130]  # The servo positions for grabbing
+        positions = [800, 550, 130]  # The servo positions for grabbing
 
         if pick_up_vertical:
             self.servos[0].move(positions[0], speed)
@@ -65,10 +65,16 @@ class Grabber(object):
         :param speed: Speed to move with
         :return: None
         """
-        positions = [874, 500, 122]  # The servo positions for grabbing flag
+        self.grabbing = True
+        positions = [1000, 490, 120]  # The servo positions for grabbing flag
         self.servos[0].move(positions[0], speed)
         self.servos[1].move(positions[1], speed)
+        self.servos[3].move(positions[2], speed)
+
         self.update()
+
+        self.grabbed = True
+        self.grabbing = False
 
     def loosen(self, speed):
         """
@@ -77,7 +83,7 @@ class Grabber(object):
         :return: None
         """
         self.grabbing = False
-        positions = [445, 800, 120]  # The servo positions for loosening
+        positions = [560, 750, 120]  # The servo positions for loosening
         for i in range(len(self.servos)):
             self.servos[i].move(positions[i], speed)
         self.update()
@@ -107,7 +113,7 @@ class Grabber(object):
             for i in range(len(self.servos)):
                 if not self.servos[i].is_ready():
                     # print("Servo " + str(self.servos[i].servo_id) + " Load: " + str(self.servos[i].read_load()))
-                    if total_time > 0.4 and self.servos[i].read_load() > 1200 and self.grabbing:
+                    if total_time > 1 and self.servos[i].read_load() > 1200 and self.grabbing:
                         print("Load to high, loosening: " + str(self.servos[i].read_load()))
                         self.loosen(100)
                         self.reposition = True
