@@ -66,10 +66,10 @@ def run(name, control):
             movement.tracks.turn_right(70, 80, 0, 0)
         elif seconds < 53:
             print("Running man")
-            movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[0], sequence=running_man)
             movement.tracks.forward(70, 75, 0, 0)
-            movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[1], sequence=running_man)
+            movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[0], sequence=running_man)
             movement.tracks.backward(70, 75, 0, 0)
+            movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[1], sequence=running_man)
         elif seconds < 59:
             print("Whats goin on?")
             emotion.set_emotion("confused")
@@ -86,18 +86,18 @@ def run(name, control):
             movement.legs.run_sequence(speeds=[200, 200, 200], self_update=True, sequences=None, sequence=drum)
         elif seconds < 90:
             emotion.set_emotion("cycle")
+            movement.tracks.forward(70, 75, 0, 0)
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[0], sequence=running_man)
-            movement.tracks.forward(80, 85, 0, 0)
+            movement.tracks.backward(70, 75, 0, 0)
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[1], sequence=running_man)
-            movement.tracks.backward(80, 85, 0, 0)
         elif seconds < 98:
             print("Fast ballerina pirouette")
             emotion.set_emotion("happy")
-            movement.tracks.turn_left(95, 100, 0, 0)
+            movement.tracks.turn_right(95, 100, 0, 0)
             movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=ballerina)
         elif seconds < 102:
             print("Fast pirouette wave")
-            movement.tracks.turn_left(95, 100, 0, 0)
+            movement.tracks.turn_right(95, 100, 0, 0)
             movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=wave)
         elif seconds < 104:
             movement.tracks.stop()
