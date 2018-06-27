@@ -31,13 +31,14 @@ class Emotion(object):
         :param emotion: string with the kind of emotion you want
         :return:
         """
-        if not self.busy:
-            Thread(target=self.set_emotion_thread, args=(emotion,)).start()
+        Thread(target=self.set_emotion_thread(emotion)).start()
+        #if not self.busy:
+            #Thread(target=self.set_emotion_thread, args=(emotion,)).start()
 
     def set_emotion_thread(self, emotion):
-        self.busy = True
+        #self.busy = True
         self.blinking = False
-        time.sleep(0.01)
+        time.sleep(0.1)
         if emotion == "neutral":
             self.set_color(205, 0, 0)
         elif emotion == "anthem":

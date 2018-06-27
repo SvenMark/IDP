@@ -32,7 +32,6 @@ def run(name, control):
         emotion.set_emotion("confused")
         time.sleep(5)
 
-
     # Notify shared object that this thread has been stopped
     print("[STOPPED] {}".format(name))
     shared_object.has_been_stopped()
