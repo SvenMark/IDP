@@ -10,7 +10,7 @@ from entities.vision.helpers.vision_helper import *
 from entities.vision.helpers.fucking_other_helper import *
 from entities.movement.sequences.dance_sequence import *
 
-seconds = 0
+seconds = -3
 
 
 def routine():
@@ -35,7 +35,10 @@ def run(name, control):
         forwards = True
         prev = 0
         print(str(seconds))
-        if seconds < 5:
+        if seconds < 0:
+            # COUNTDOWN
+            print(str(abs(seconds)))
+        elif seconds < 5:
             print("Dums")
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=drum)
         elif seconds < 13:
