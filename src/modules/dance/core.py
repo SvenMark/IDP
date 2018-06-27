@@ -92,7 +92,7 @@ def run(name, control):
         elif seconds < 98:
             print("Fast ballerina pirouette")
             emotion.set_emotion("happy")
-            movement.tracks.turn_right(95, 100, 0, 1)
+            movement.tracks.turn_right(95, 100, 0, 2)
             movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=ballerina)
         elif seconds < 102:
             print("Fast pirouette wave")
