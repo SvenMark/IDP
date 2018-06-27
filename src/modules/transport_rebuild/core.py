@@ -29,7 +29,7 @@ def run(name, control):
             if movement.grabber.grabbed and grab is 0:
                 movement.grabber.loosen(100)
             if not movement.grabber.grabbed and grab is 1:
-                movement.grabber.grab_flag(80)
+                movement.grabber.grab(80)
 
     if hasattr(movement, 'legs'):
         movement.legs.retract()
