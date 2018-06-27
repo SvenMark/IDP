@@ -58,46 +58,44 @@ def run(name, control):
                 prev = seconds
         elif seconds < 35:
             print("Ballerina pirouette")
-            movement.tracks.turn_left(70, 80, 0, 0)
+            movement.tracks.turn_right(40, 50, 0, 0)
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=ballerina)
         elif seconds < 46:
             print("Pirouette wave")
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=None, sequence=wave)
-            movement.tracks.turn_right(70, 80, 0, 0)
         elif seconds < 53:
             print("Running man")
-            movement.tracks.forward(70, 75, 0, 0)
+            movement.tracks.forward(65, 70, 0, 0)
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[0], sequence=running_man)
-            movement.tracks.backward(70, 75, 0, 0)
+            movement.tracks.backward(65, 70, 0, 0)
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[1], sequence=running_man)
         elif seconds < 59:
             print("Whats goin on?")
             emotion.set_emotion("confused")
-            movement.tracks.turn_right(70, 75, 0.2, 0)
-            movement.tracks.turn_left(70, 75, 0.2, 0)
+            movement.tracks.turn_right(50, 55, 0.2, 0)
+            movement.tracks.turn_left(50, 55, 0.2, 0)
         elif seconds < 70:
             emotion.set_emotion("neutral")
             movement.legs.run_sequence(speeds=[200, 200, 200], self_update=True, sequences=None, sequence=clap)
-            movement.tracks.turn_right(70, 75, 0.4, 0)
-            movement.tracks.turn_left(70, 75, 0.4, 0)
+            movement.tracks.turn_right(65, 70, 0.4, 0)
+            movement.tracks.turn_left(65, 70, 0.4, 0)
         elif seconds < 80:
             movement.tracks.stop()
             emotion.set_emotion("searching")
             movement.legs.run_sequence(speeds=[200, 200, 200], self_update=True, sequences=None, sequence=drum)
         elif seconds < 90:
             emotion.set_emotion("cycle")
-            movement.tracks.forward(70, 75, 0, 0)
+            movement.tracks.forward(65, 70, 0, 0)
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[0], sequence=running_man)
-            movement.tracks.backward(70, 75, 0, 0)
+            movement.tracks.backward(65, 70, 0, 0)
             movement.legs.run_sequence(speeds=[100, 100, 100], self_update=True, sequences=[1], sequence=running_man)
         elif seconds < 98:
             print("Fast ballerina pirouette")
             emotion.set_emotion("happy")
-            movement.tracks.turn_right(95, 100, 0, 0)
+            movement.tracks.turn_right(95, 100, 0, 1)
             movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=ballerina)
         elif seconds < 102:
             print("Fast pirouette wave")
-            movement.tracks.turn_right(95, 100, 0, 0)
             movement.legs.run_sequence(speeds=[150, 150, 150], self_update=True, sequences=None, sequence=wave)
         elif seconds < 104:
             movement.tracks.stop()
