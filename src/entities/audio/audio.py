@@ -18,7 +18,7 @@ class Audio(object):
         pygame.mixer.init()
         self.playing = False
         print("Initialised Audio")
-        self.play("startup.mp3")
+        # self.play("startup.mp3")
 
     def get_file_path(self, file_name):
         """
