@@ -57,7 +57,7 @@ def run(name, control):
             emotion.set_emotion("confirmed")
             print("[INFO] Red detected!")
             movement.tracks.stop()
-            time.sleep(5)
+            time.sleep(30)
             red = False
         else:
             if not emotion.blinking:
