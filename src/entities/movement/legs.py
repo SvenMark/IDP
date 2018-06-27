@@ -34,14 +34,14 @@ class Legs(object):
 
         # Initialise a leg for each corner of the robot
         if self.all_Legs:
-            self.leg_front_left = Leg(leg_0_servos, [530, 790, 520])
+            # self.leg_front_left = Leg(leg_0_servos, [530, 790, 520])
             self.leg_front_right = Leg(leg_1_servos, [530, 790, 520])
         self.leg_rear_left = Leg(leg_2_servos, [530, 790, 520])
         self.leg_rear_right = Leg(leg_3_servos, [530, 790, 520])
 
         if self.all_Legs:
             self.legs = [
-                self.leg_front_left,
+                # self.leg_front_left,
                 self.leg_front_right,
                 self.leg_rear_left,
                 self.leg_rear_right
@@ -76,7 +76,7 @@ class Legs(object):
         """
 
         if self.all_Legs:
-            self.leg_front_left.move(leg_0_moves, speeds)
+            # self.leg_front_left.move(leg_0_moves, speeds)
             self.leg_front_right.move(leg_1_moves, speeds)
         self.leg_rear_left.move(leg_2_moves, speeds)
         self.leg_rear_right.move(leg_3_moves, speeds)
