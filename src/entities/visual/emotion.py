@@ -54,6 +54,14 @@ class Emotion(object):
             self.audio.play('cyka.mp3')
         elif emotion == "happy":
             self.rainbow_colors()
+            #NIEUW
+        elif emotion == "cycle":
+            self.blinking = True
+            self.busy = False
+            while self.blinking:
+                self.rainbow_cycle()
+        elif emotion == "appear":
+            self.appear_from_back()
         elif emotion == "confused":
             self.blinking = True
             self.busy = False
@@ -146,7 +154,7 @@ class Emotion(object):
             if wait > 0:
                 time.sleep(wait)
 
-    def appear_from_back(self, color=(0, 255, 0)):
+    def appear_from_back(self, color=(0, 0, 255)):
         pos = 0
         for i in range(self.pixels.count()):
 
