@@ -20,22 +20,22 @@ def run(name, control):
 
     print("[RUN] " + str(name))
 
-    while not shared_object.has_to_stop():
-        emotion.set_emotion("mad")
-        #if hasattr(movement, 'grabber'):
-        #    movement.grabber.grab(150, True)
-        #    movement.grabber.loosen(150)
-        time.sleep(5)
-        emotion.set_emotion("happy")
-        time.sleep(5)
-        emotion.set_emotion("sad")
-        time.sleep(11)
-        emotion.set_emotion("pain")
-        time.sleep(5)
-        emotion.set_emotion("confused")
-        time.sleep(5)
-        emotion.set_emotion("searching")
-        time.sleep(5)
+    # while not shared_object.has_to_stop():
+    emotion.set_emotion("mad")
+    if hasattr(movement, 'grabber'):
+        movement.grabber.grab(150, True)
+        movement.grabber.loosen(150)
+    time.sleep(5)
+    emotion.set_emotion("happy")
+    time.sleep(5)
+    emotion.set_emotion("sad")
+    time.sleep(11)
+    emotion.set_emotion("pain")
+    time.sleep(5)
+    emotion.set_emotion("confused")
+    time.sleep(5)
+    emotion.set_emotion("searching")
+    time.sleep(5)
 
     # Notify shared object that this thread has been stopped
     print("[STOPPED] {}".format(name))
