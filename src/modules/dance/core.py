@@ -10,7 +10,7 @@ from entities.vision.helpers.vision_helper import *
 from entities.vision.helpers.fucking_other_helper import *
 from entities.movement.sequences.dance_sequence import *
 
-seconds = -3
+seconds = -4
 
 
 def routine():
