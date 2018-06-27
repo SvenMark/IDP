@@ -22,9 +22,9 @@ def run(name, control):
 
     # while not shared_object.has_to_stop():
     emotion.set_emotion("mad")
-    if hasattr(movement, 'grabber'):
-        movement.grabber.grab(150, True)
-        movement.grabber.loosen(150)
+    #if hasattr(movement, 'grabber'):
+    #    movement.grabber.grab(150, True)
+    #    movement.grabber.loosen(150)
     time.sleep(5)
     emotion.set_emotion("happy")
     time.sleep(5)
