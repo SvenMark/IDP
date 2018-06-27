@@ -114,6 +114,7 @@ class BluetoothController(object):
 
             # Check if different module is selected
             if m is not self.current_module:
+                self.movement.legs.retract()
                 self.emotion.set_emotion("neutral")
                 self.shared_object.stop = True  # Notify last module thread to stop
 

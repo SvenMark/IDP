@@ -28,3 +28,4 @@ def run(name, control):
     # Notify shared object that this thread has been stopped
     print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
+
