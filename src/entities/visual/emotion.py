@@ -21,8 +21,13 @@ class Emotion(object):
                                                    gpio=GPIO)
         self.pixels.clear()
         self.pixels.show()  # Make sure to call show() after changing any pixels!
-        self.busy = False
+        self.busy = True
         self.blinking = False
+        self.mad = False
+        self.happy = False
+        self.cycle = False
+        self.confused = False
+        self.searching = False
 
     def set_emotion(self, emotion):
         """
@@ -36,8 +41,13 @@ class Emotion(object):
             #Thread(target=self.set_emotion_thread, args=(emotion,)).start()
 
     def set_emotion_thread(self, emotion):
-        #self.busy = True
+        self.busy = True
         self.blinking = False
+        self.mad = False
+        self.happy = False
+        self.cycle = False
+        self.confused = False
+        self.searching = False
         time.sleep(0.1)
         if emotion == "neutral":
             self.set_color(205, 0, 0)
@@ -48,45 +58,46 @@ class Emotion(object):
                 self.blink_color(205, 0, 0, 1, 0.3)
             self.set_emotion("neutral")
         elif emotion == "mad":
-            self.blinking = True
+            self.mad = True
             self.busy = False
             self.audio.play('cyka.mp3')
-            while self.blinking:
+            while self.mad:
                 self.blink_color(205, 0, 0, 1, 0.3)
         elif emotion == "success":
             self.set_color(0, 205, 0)
             self.audio.play('success.mp3')
         elif emotion == "happy":
-            self.blinking = True
+            self.happy = True
             self.busy = False
             self.audio.play('success.mp3')
-            while self.blinking:
+            while self.happy:
                 self.rainbow_colors()
         elif emotion == "sad":
-            self.audio.play("sad.mp3")
+            self.audio.play('sad.mp3')
             self.set_color(0, 0, 255)
         elif emotion == "pain":
             self.set_color(205, 0, 0)
-            self.audio.play("OOF.mp3")
+            self.audio.play('OOF.mp3')
+            time.sleep(2)
             self.set_brightness(-255)
         elif emotion == "cycle":
-            self.blinking = True
+            self.cycle = True
             self.busy = False
-            while self.blinking:
+            while self.cycle:
                 self.rainbow_cycle()
         elif emotion == "appear":
             self.appear_from_back()
         elif emotion == "confused":
-            self.blinking = True
+            self.confused = True
             self.busy = False
-            while self.blinking:
+            while self.confused:
                 self.blink_color(255, 105, 180, 1, 0.2)
         elif emotion == "confirmed":  # Used for building detection
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
-            self.blinking = True
+            self.searching = True
             self.busy = False
-            while self.blinking:
+            while self.searching:
                 self.rotate_color(255, 165, 0, 1)
         elif emotion == "shutdown":
             self.audio.play("powerdown.mp3")
