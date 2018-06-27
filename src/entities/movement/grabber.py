@@ -69,7 +69,7 @@ class Grabber(object):
         positions = [1000, 490, 120]  # The servo positions for grabbing flag
         self.servos[0].move(positions[0], speed)
         self.servos[1].move(positions[1], speed)
-        self.servos[3].move(positions[2], speed)
+        self.servos[2].move(positions[2], speed)
 
         self.update()
 
