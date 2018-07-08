@@ -2,6 +2,9 @@ import sys
 
 sys.path.insert(0, '../../../../src')
 
+
+# List of move sequences for the dance
+
 drum = [
     [
         [350, 180, 1000],

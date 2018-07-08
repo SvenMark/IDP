@@ -5,8 +5,6 @@ from imutils.video import VideoStream
 
 sys.path.insert(0, '../../../src')
 
-from entities.vision.helpers.vision_helper import *
-
 
 class Recognize(object):
 

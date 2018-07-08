@@ -1,13 +1,10 @@
 import sys
-import time
-import numpy as np
 import cv2
 
 sys.path.insert(0, '../../../src')
 
 from imutils.video import VideoStream
-from entities.vision.helpers.vision_helper import *
-from entities.vision.helpers.fucking_other_helper import *
+from entities.vision.helpers.cannon_helper import *
 from entities.threading.utils import SharedObject
 from threading import Thread
 

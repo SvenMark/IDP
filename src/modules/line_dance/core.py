@@ -1,10 +1,5 @@
 import time
-from threading import Timer
-
 import RPi.GPIO as GPIO
-import pyaudio
-import numpy as np
-import sys
 import random
 from entities.movement.sequences.dance_sequence import *
 from entities.movement.sequences.sequences import *

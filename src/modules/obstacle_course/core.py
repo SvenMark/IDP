@@ -1,11 +1,10 @@
 import sys
 import time
 import cv2
-import numpy as np
+from imutils.video import VideoStream
 
 sys.path.insert(0, '../../../src')
 
-from imutils.video import VideoStream
 from entities.vision.recognize import Recognize
 from entities.vision.helpers.vision_helper import *
 
@@ -187,7 +186,3 @@ def set_region(img, vertices):
     cv2.bitwise_not(bg, bg, mask=new_mask)
 
     return masked_img
-
-
-if __name__ == '__main__':
-    run(shared_object=None)  # disabled for travis

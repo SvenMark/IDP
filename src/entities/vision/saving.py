@@ -6,8 +6,6 @@ from tkinter import *
 
 sys.path.insert(0, '../../../src')
 
-from entities.vision.helpers.vision_helper import *
-
 
 class Saving(object):
 

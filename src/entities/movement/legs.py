@@ -7,7 +7,6 @@ sys.path.insert(0, '../../../src')
 
 from helpers.servo_scanner import scan
 from entities.movement.limb.leg import Leg
-from entities.movement.sequences.sequences import *
 
 
 class Legs(object):
