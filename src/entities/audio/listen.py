@@ -49,12 +49,3 @@ class Listen(Audio):
         """
         file_location = self.resources + file_name
         sf.write(file_location, recording, self.sample_rate)
-
-
-def main():
-    listen = Listen(duration=5, channels=2)
-    listen.record(play_recording=False, save=False, file_name='kevin_plz.wav')
-
-
-if __name__ == '__main__':
-    main()

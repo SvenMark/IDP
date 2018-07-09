@@ -3,11 +3,8 @@ import time
 import datetime
 from imutils.video import VideoStream
 from tkinter import *
-from threading import Thread
 
 sys.path.insert(0, '../../../src')
-
-from entities.vision.helpers.vision_helper import *
 
 
 class Saving(object):
@@ -22,13 +19,14 @@ class Saving(object):
         self.building_to_save = 0
         self.pickup_vertical = 0
         self.side = 0
+        self.helper.min_block_size = 300
 
     def run(self, color_range, json):
         self.building_handler = json
         print("[RUN] Starting saving...")
 
         # Initialize camera
-        cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+        cap = VideoStream(src=0, usePiCamera=True, resolution=(640, 480)).start()
         time.sleep(0.3)  # startup
         while True:
             # Read frame from the camera
@@ -38,13 +36,8 @@ class Saving(object):
             # Apply gaussian blue to the image
             img = cv2.GaussianBlur(img, (9, 9), 0)
 
-            # Calculate the masks
-            mask, _ = self.helper.calculate_mask(img, color_range)
-
-            img_cropped, _, _, _ = self.helper.crop_to_contours(mask, img)
-
             # Calculate new cropped masks
-            mask_cropped, valid_contours = self.helper.calculate_mask(img_cropped, color_range, set_contour=True)
+            mask_cropped, valid_contours = self.helper.calculate_mask(img, color_range, set_contour=True)
 
             if cv2.waitKey(1) & 0xFF == ord('s'):
                 self.show_input_fields()
@@ -57,7 +50,6 @@ class Saving(object):
 
             # Show the created image
             cv2.imshow('Spider Cum 3000', mask_cropped)
-            cv2.imshow('Original', img)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break

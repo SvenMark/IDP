@@ -1,11 +1,10 @@
 import sys
 import time
 import cv2
-import numpy as np
+from imutils.video import VideoStream
 
 sys.path.insert(0, '../../../src')
 
-from imutils.video import VideoStream
 from entities.vision.recognize import Recognize
 from entities.vision.helpers.vision_helper import *
 
@@ -15,9 +14,10 @@ def run(name, control):
     shared_object = control.shared_object
     speed_factor = control.speed_factor
     dead_zone = control.dead_zone
+    vision = control.vision
 
     print("[RUN] " + str(name))
-    stairdetector(shared_object)
+    stairdetector(shared_object, vision.settings)
 
     while not shared_object.has_to_stop():
         movement.tracks.handle_controller_input(stop_motors=shared_object.bluetooth_settings.s,
@@ -30,8 +30,19 @@ def run(name, control):
     print("[STOPPED]" + str(name))
     shared_object.has_been_stopped()
 
+    movement(shared_object, movement, vision.settings)
 
-def stairdetector(shared_object):
+
+def movement(shared_object, movement, settings):
+    while not shared_object.has_to_stop():
+        if settings.update:
+            if settings.stairs:
+                movement.tracks.forward(90, 90, 0.5, 0.5)
+            else:
+                print("boven")
+
+
+def stairdetector(shared_object, settings):
     frame = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
     time.sleep(0.3)  # startup
 
@@ -175,7 +186,3 @@ def set_region(img, vertices):
     cv2.bitwise_not(bg, bg, mask=new_mask)
 
     return masked_img
-
-
-if __name__ == '__main__':
-    run(shared_object=None)  # disabled for travis

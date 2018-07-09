@@ -63,7 +63,7 @@ def main():
                 leg_0_servos=[21, 41, 52],  # L voor
                 leg_1_servos=[16, 17, 18],  # R Voor
                 leg_2_servos=[61, 62, 63],  # L achter
-                leg_3_servos=[6, 14, 15]  # r achter
+                leg_3_servos=[6, 53, 15]  # r achter
             ),
             Tracks(track_0_pin=13,
                    track_1_pin=18,
@@ -71,7 +71,7 @@ def main():
                    track_0_backward=27,
                    track_1_forward=19,
                    track_1_backward=26),
-            Grabber(servos=[1, 53, 43],
+            Grabber(servos=[1, 23, 43],
                     initial_positions=[465, 198, 200])
         ]
     # If only leg servos are connected
@@ -82,7 +82,7 @@ def main():
                 leg_0_servos=[21, 41, 52],
                 leg_1_servos=[16, 17, 18],
                 leg_2_servos=[61, 62, 63],
-                leg_3_servos=[6, 14, 15]
+                leg_3_servos=[6, 53, 15]
             ),
             Tracks(track_0_pin=13,
                    track_1_pin=18,
@@ -100,8 +100,8 @@ def main():
                    track_0_backward=27,
                    track_1_forward=19,
                    track_1_backward=26),
-            Grabber(servos=[1, 53, 43],
-                    initial_positions=[465, 198, 200])
+            Grabber(servos=[1, 23, 43],
+                    initial_positions=[445, 800, 120])
         ]
     # If no servos are connected
     else:

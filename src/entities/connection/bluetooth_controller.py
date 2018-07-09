@@ -45,10 +45,6 @@ class BluetoothController(object):
 
         self.emotion.set_emotion('neutral')  # Set led lights and audio
 
-        # Start the leg update class if legs are connected
-        if hasattr(self.movement, 'legs'):
-            self.movement.legs.update_thread.start()
-
         self.data = ""  # Initialise data string
 
     def receive_data(self):
@@ -118,6 +114,9 @@ class BluetoothController(object):
 
             # Check if different module is selected
             if m is not self.current_module:
+                if hasattr(self.movement, 'legs'):
+                    self.movement.legs.retract()
+                self.emotion.set_emotion("neutral")
                 self.shared_object.stop = True  # Notify last module thread to stop
 
                 # Wait for previous module to stop

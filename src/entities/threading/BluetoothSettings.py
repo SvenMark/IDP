@@ -4,6 +4,10 @@ sys.path.insert(0, '../../../src')
 
 
 class BluetoothSettings(object):
+    """
+    Class for saving data from bluetooth for use in modules
+    """
+
     def __init__(self):
         self.s = 0
         self.v = 0

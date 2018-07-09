@@ -7,9 +7,6 @@ from threading import Thread
 
 sys.path.insert(0, '../../../src')
 
-from entities.audio.audio import Audio
-from entities.threading.utils import SharedObject
-
 
 class Emotion(object):
 
@@ -24,6 +21,13 @@ class Emotion(object):
                                                    gpio=GPIO)
         self.pixels.clear()
         self.pixels.show()  # Make sure to call show() after changing any pixels!
+        self.busy = True
+        self.blinking = False
+        self.mad = False
+        self.happy = False
+        self.cycle = False
+        self.confused = False
+        self.searching = False
 
     def set_emotion(self, emotion):
         """
@@ -32,34 +36,75 @@ class Emotion(object):
         :param emotion: string with the kind of emotion you want
         :return:
         """
-        time.sleep(0.01)
+        self.busy = True
+        self.blinking = False
+        self.mad = False
+        self.happy = False
+        self.cycle = False
+        self.confused = False
+        self.searching = False
+        time.sleep(0.1)
+        Thread(target=self.set_emotion_thread(emotion)).start()
+        #if not self.busy:
+            #Thread(target=self.set_emotion_thread, args=(emotion,)).start()
+
+    def set_emotion_thread(self, emotion):
         if emotion == "neutral":
-            # Boston University Red
             self.set_color(205, 0, 0)
         elif emotion == "anthem":
-            self.audio.play('russiananthem.mp3')
-            time.sleep(1)
-            while self.audio.playing:
-                print("Blink")
+            self.blinking = True
+            self.busy = False
+            while self.blinking:
                 self.blink_color(205, 0, 0, 1, 0.3)
             self.set_emotion("neutral")
+        elif emotion == "mad":
+            self.mad = True
+            self.busy = False
+            self.audio.play('cyka.mp3')
+            while self.mad:
+                self.blink_color(205, 0, 0, 1, 0.3)
         elif emotion == "success":
             self.set_color(0, 205, 0)
             self.audio.play('success.mp3')
-        elif emotion == "mad":
-            self.set_brightness(-255)
-            self.audio.play('cyka.mp3')
         elif emotion == "happy":
-            self.rainbow_colors()
+            self.happy = True
+            self.busy = False
+            self.audio.play('success.mp3')
+            while self.happy:
+                self.rainbow_colors()
+        elif emotion == "sad":
+            self.audio.play('sad.mp3')
+            self.set_color(0, 0, 255)
+        elif emotion == "pain":
+            self.set_color(205, 0, 0)
+            self.audio.play('OOF.mp3')
+            time.sleep(2)
+            self.set_brightness(-255)
+        elif emotion == "cycle":
+            self.cycle = True
+            self.busy = False
+            while self.cycle:
+                self.rainbow_cycle()
+        elif emotion == "appear":
+            self.appear_from_back()
         elif emotion == "confused":
-            self.audio.play('heya.mp3')
-            time.sleep(1)
-            while self.audio.playing:
-                self.blink_color(255, 105, 180, 0, 0.2)
+            self.confused = True
+            self.busy = False
+            while self.confused:
+                self.blink_color(255, 105, 180, 1, 0.2)
         elif emotion == "confirmed":  # Used for building detection
             self.set_color(0, 205, 0)
         elif emotion == "searching":  # Used for building detection
-            self.rotate_color(255, 165, 0, 0)
+            self.searching = True
+            self.busy = False
+            while self.searching:
+                self.rotate_color(255, 165, 0, 1)
+        elif emotion == "shutdown":
+            self.audio.play("powerdown.mp3")
+            for i in range(20):
+                self.set_brightness(-15)
+                time.sleep(0.2)
+        self.busy = False
 
     def set_color(self, r, b, g):
         """
@@ -134,7 +179,7 @@ class Emotion(object):
             if wait > 0:
                 time.sleep(wait)
 
-    def appear_from_back(self, color=(0, 255, 0)):
+    def appear_from_back(self, color=(0, 0, 255)):
         pos = 0
         for i in range(self.pixels.count()):
 
@@ -158,13 +203,4 @@ class Emotion(object):
                 time.sleep(0.05)
                 self.pixels.show()
 
-
-if __name__ == '__main__':
-    audio = Audio()
-    emote = Emotion(audio)
-
-    emote.appear_from_back()
-    # Always start emotions in a thread. Unless you are testing this part.
-    while True:
-        emote.set_emotion("searching")
 

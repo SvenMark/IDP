@@ -7,7 +7,6 @@ sys.path.insert(0, '../../../src')
 
 from helpers.servo_scanner import scan
 from entities.movement.limb.leg import Leg
-from entities.movement.sequences.sequences import *
 
 
 class Legs(object):
@@ -34,10 +33,10 @@ class Legs(object):
 
         # Initialise a leg for each corner of the robot
         if self.all_Legs:
-            self.leg_front_left = Leg(leg_0_servos, [820, 385, 565])
-            self.leg_front_right = Leg(leg_1_servos, [530, 210, 475])
-        self.leg_rear_left = Leg(leg_2_servos, [530, 210, 475])
-        self.leg_rear_right = Leg(leg_3_servos, [530, 210, 475])
+            self.leg_front_left = Leg(leg_0_servos, [530, 790, 520])
+            self.leg_front_right = Leg(leg_1_servos, [530, 790, 520])
+        self.leg_rear_left = Leg(leg_2_servos, [530, 790, 520])
+        self.leg_rear_right = Leg(leg_3_servos, [530, 790, 520])
 
         if self.all_Legs:
             self.legs = [
@@ -87,7 +86,7 @@ class Legs(object):
         if self_update:
             self.update_legs()
 
-    def deploy(self, speed):
+    def deploy(self, speed=100):
         """
         Deploys the legs so they can be used for walking
         :param speed: The speed at which the servo moves
@@ -102,7 +101,7 @@ class Legs(object):
         self.deployed = True
         self.update_legs()
 
-    def retract(self, speed):
+    def retract(self, speed=100):
         """
         Retracts the legs to they are not in the way
         :param speed: The speed at which the servo moves
@@ -126,7 +125,6 @@ class Legs(object):
         self.get_delta()
         print("Undready legs: " + str(len(legs_not_ready)))
         while len(legs_not_ready) != 0:
-            print("{} legs not ready".format(len(legs_not_ready)))
             delta = self.get_delta()
             for i in range(len(legs_not_ready)):
                 legs_not_ready[i].update(delta)
@@ -201,14 +199,14 @@ class Legs(object):
                     self.run_sequence(speeds=[100, 100, 100],
                                       self_update=False,
                                       sequences=[self.sequence],
-                                      sequence=forward)
+                                      sequence=None)
                     # Update which part of the current movement sequence is being ran
                     self.update_sequence()
                 if y_axis < 500:
                     self.run_sequence(speeds=[100, 100, 100],
                                       self_update=False,
                                       sequences=[self.sequence],
-                                      sequence=backward)
+                                      sequence=None)
                     self.update_sequence()
                 self.get_delta()  # Update the delta time
 
@@ -244,7 +242,7 @@ class Legs(object):
         :return: None
         """
         if sequence is None:
-            sequence = forward
+            sequence = None
         if sequences is None:
             sequences = []
             seq_len = len(sequence)

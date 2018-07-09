@@ -7,13 +7,13 @@ from libs.ax12 import Ax12
 tester = Ax12()
 
 legs = [
-    [6, 14, 15],
-    [16, 17, 18],
     [21, 41, 52],
-    [61, 62, 63]
+    [16, 17, 18],
+    [61, 62, 63],
+    [6, 14, 15]
 ]
 
-sequence = []
+i = 0
 for leg in legs:
     leg_positions = []
     for ax_id in leg:
@@ -23,5 +23,5 @@ for leg in legs:
         except:
             print("Servo with id: {}, has not responded".format(ax_id))
         leg_positions.append(positions)
-    sequence.append(leg_positions)
-print("NAME = {}".format(sequence))
+        i = i + 1
+    print("Leg " +  str(i) + " servos: " + str(leg_positions))

@@ -66,17 +66,13 @@ class Servo(object):
             step = (self.goal - self.start_position) * delta * self.current_speed
 
         if self.last_position + step > 1024 or self.last_position + step < 0:
+            self.last_position = self.goal
             print(str(self.last_position + step) + " not in range " + str(self.servo_id) + "speed "
                   + str(self.current_speed) + "delta " + str(delta))
             return
 
         self.last_position = self.last_position + step
         self.ax12.move(self.servo_id, round(self.last_position))
-
-        # print("Updating servo: " + str(self.servo_id) + " Last pos: " + str(self.last_position) + " Goal: " + str(self.goal))
-
-        # if self.is_ready():
-        #     Thread(target=self.lock_thread, args=(self,)).start()  # Lock the servo if the move is finished
 
     def move(self, degrees, speed):
         """
@@ -106,9 +102,8 @@ class Servo(object):
         result = self.ax12.read_position(self.servo_id)
 
         # In case servo position is not read the first time, keep trying
-        while result is None:
-            print("Can't read servo " + str(self.servo_id) + " position, trying again")
-            result = self.ax12.read_position(self.servo_id)
+        if result is None:
+            result = 0
 
         return result
 

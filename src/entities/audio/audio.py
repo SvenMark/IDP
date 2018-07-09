@@ -1,10 +1,8 @@
 import os
-import platform
 import sys
 import pygame
 from gtts import gTTS
 import threading
-import time
 
 sys.path.insert(0, '../../../src')
 
@@ -20,7 +18,7 @@ class Audio(object):
         pygame.mixer.init()
         self.playing = False
         print("Initialised Audio")
-        self.play("startup.mp3")
+        # self.play("startup.mp3")
 
     def get_file_path(self, file_name):
         """
@@ -55,7 +53,9 @@ class Audio(object):
         """
         # using google text to speech api
         tts = gTTS(text=text, lang=lan)
-        filename = "tts.wav"
+        filename = "tts.mp3"
         tts.save(filename)
         self.play(filename)
 
+
+Audio().tts('Gay shit', 'nl')

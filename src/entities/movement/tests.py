@@ -37,9 +37,9 @@ class CommonTestClass(unittest.TestCase):
 
     def test_forward(self):
         # test if implemented
-        self.assertIsNone(self.movement.forward())
-        self.assertIsNone(self.movement.backward())
+        self.assertIsNone(self.movement.tracks.forward(20, 20, 0, 0))
+        self.assertIsNone(self.movement.tracks.backward(20, 20, 0, 0))
         self.assertIsNone(self.movement.legs.run_sequence([250, 250, 250],
                                                           self_update=True,
                                                           sequences=None,
-                                                          sequence=forward))
+                                                          sequence=None))

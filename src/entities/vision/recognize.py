@@ -1,12 +1,9 @@
 import sys
-
+import datetime
+import time
 from imutils.video import VideoStream
 
 sys.path.insert(0, '../../../src')
-
-import datetime
-import time
-from entities.vision.helpers.vision_helper import *
 
 
 class Recognize(object):
@@ -21,13 +18,13 @@ class Recognize(object):
         self.start_recognize = False
         self.shared_object = shared_object
 
-    def run(self, color_range, saved_buildings=None):
+    def run(self, color_range, audio, saved_buildings=None):
         if saved_buildings is not None:
             self.saved_buildings = saved_buildings
         print("[RUN] Starting recognize...")
 
         # Initialize camera
-        cap = VideoStream(src=0, usePiCamera=True, resolution=(320, 240)).start()
+        cap = VideoStream(src=0, usePiCamera=True, resolution=(640, 480)).start()
         time.sleep(0.3)  # startup
 
         while not self.shared_object.has_to_stop():
@@ -44,15 +41,11 @@ class Recognize(object):
             img_crop, building_center, image_width, building_width = self.helper.crop_to_contours(mask, img)
 
             # Calculate new cropped masks
-            mask_cropped, valid_contours = self.helper.calculate_mask(img_crop, color_range, set_contour=True)
+            mask_cropped, valid_contours = self.helper.calculate_mask(img, color_range, set_contour=True)
 
             # Recognize building
             if self.saved_buildings:
-                self.recognize_building(valid_contours, image_width, building_center, building_width)
-
-            # Show the created image
-            cv2.imshow('Spider Cam 3000', mask_cropped)
-            cv2.imshow('Spider Cam 2000', img)
+                print(self.recognize_building(valid_contours, image_width, building_center, building_width, audio))
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -60,7 +53,7 @@ class Recognize(object):
         cap.stop()
         cv2.destroyAllWindows()
 
-    def recognize_building(self, positions, image_width, building_center, building_width):
+    def recognize_building(self, positions, image_width, building_center, building_width, audio):
         """
         Checks if the currents positions of the blocks matches any saved building
         :param building_width: Width of the building
@@ -70,7 +63,7 @@ class Recognize(object):
         :return: True if a building is recognized
         """
         result = None
-        found = True
+        found = False
 
         # If there are no blocks in view return false
         if not len(positions) > 0:
@@ -90,7 +83,8 @@ class Recognize(object):
 
         if found:
             # Use audio to state the recognized building
-            print("[INFO] At time: " + str(datetime.datetime.now().time()) + " Found: ", result)
+            print("[INFO] At time: " + str(datetime.datetime.now().time()) + " Found: ", result.number)
+            audio.tts("building {} detected {} side".format(result.number, result.side_number), 'nl')
             self.recognized = True
 
         # Return whether a building has been found
@@ -116,7 +110,7 @@ class Recognize(object):
         # Set min block size according to the distance of the building
         if recognize_distance_max > building_width > recognize_distance_min:
             # Start recognizing
-            self.helper.min_block_size = 300
+            self.helper.min_block_size = 1000
             self.start_recognize = True
         else:
             self.helper.min_block_size = 5
@@ -139,8 +133,3 @@ class Recognize(object):
 
         # Notify settings that the current frame is handled
         self.settings.update = True
-
-    @staticmethod
-    def get_real_distance(building_width):
-        distance = -0.0006027224509476651 * building_width ** 2 - 0.227689996661844 * building_width + 53.74910055265013
-        return distance
